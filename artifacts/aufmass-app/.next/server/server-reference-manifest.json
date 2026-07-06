@@ -1,9 +1,9 @@
 {
   "node": {
-    "00008a333337993879830daabe83ca2d6b6e727120": {
+    "0058d11dd8f5342fc706a88271b95a1623085bf3d9": {
       "workers": {
         "app/(auth)/login/page": {
-          "moduleId": "(action-browser)/../../node_modules/.pnpm/next@15.5.20_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Frunner%2Fworkspace%2Fartifacts%2Faufmass-app%2Flib%2Fauth%2Factions.ts%22%2C%5B%7B%22id%22%3A%2200008a333337993879830daabe83ca2d6b6e727120%22%2C%22exportedName%22%3A%22logoutAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%2C%7B%22id%22%3A%2260b97628187a2d6005356a952988b94d59787d5fca%22%2C%22exportedName%22%3A%22registerAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%2C%7B%22id%22%3A%2260f2ecf0910877996756bb852898b1d33483a97520%22%2C%22exportedName%22%3A%22loginAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/../../node_modules/.pnpm/next@15.5.20_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Frunner%2Fworkspace%2Fartifacts%2Faufmass-app%2Flib%2Fauth%2Factions.ts%22%2C%5B%7B%22id%22%3A%220058d11dd8f5342fc706a88271b95a1623085bf3d9%22%2C%22exportedName%22%3A%22logoutAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%2C%7B%22id%22%3A%22607f997b684ae49018315b9e064f1d888bd18d066b%22%2C%22exportedName%22%3A%22registerAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%2C%7B%22id%22%3A%2260e398a8b7bf2b5291f1e0805d646a33d6821a3ca8%22%2C%22exportedName%22%3A%22loginAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -13,10 +13,10 @@
       "filename": "lib/auth/actions.ts",
       "exportedName": "logoutAction"
     },
-    "60b97628187a2d6005356a952988b94d59787d5fca": {
+    "607f997b684ae49018315b9e064f1d888bd18d066b": {
       "workers": {
         "app/(auth)/login/page": {
-          "moduleId": "(action-browser)/../../node_modules/.pnpm/next@15.5.20_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Frunner%2Fworkspace%2Fartifacts%2Faufmass-app%2Flib%2Fauth%2Factions.ts%22%2C%5B%7B%22id%22%3A%2200008a333337993879830daabe83ca2d6b6e727120%22%2C%22exportedName%22%3A%22logoutAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%2C%7B%22id%22%3A%2260b97628187a2d6005356a952988b94d59787d5fca%22%2C%22exportedName%22%3A%22registerAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%2C%7B%22id%22%3A%2260f2ecf0910877996756bb852898b1d33483a97520%22%2C%22exportedName%22%3A%22loginAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/../../node_modules/.pnpm/next@15.5.20_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Frunner%2Fworkspace%2Fartifacts%2Faufmass-app%2Flib%2Fauth%2Factions.ts%22%2C%5B%7B%22id%22%3A%220058d11dd8f5342fc706a88271b95a1623085bf3d9%22%2C%22exportedName%22%3A%22logoutAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%2C%7B%22id%22%3A%22607f997b684ae49018315b9e064f1d888bd18d066b%22%2C%22exportedName%22%3A%22registerAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%2C%7B%22id%22%3A%2260e398a8b7bf2b5291f1e0805d646a33d6821a3ca8%22%2C%22exportedName%22%3A%22loginAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -26,10 +26,10 @@
       "filename": "lib/auth/actions.ts",
       "exportedName": "registerAction"
     },
-    "60f2ecf0910877996756bb852898b1d33483a97520": {
+    "60e398a8b7bf2b5291f1e0805d646a33d6821a3ca8": {
       "workers": {
         "app/(auth)/login/page": {
-          "moduleId": "(action-browser)/../../node_modules/.pnpm/next@15.5.20_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Frunner%2Fworkspace%2Fartifacts%2Faufmass-app%2Flib%2Fauth%2Factions.ts%22%2C%5B%7B%22id%22%3A%2200008a333337993879830daabe83ca2d6b6e727120%22%2C%22exportedName%22%3A%22logoutAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%2C%7B%22id%22%3A%2260b97628187a2d6005356a952988b94d59787d5fca%22%2C%22exportedName%22%3A%22registerAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%2C%7B%22id%22%3A%2260f2ecf0910877996756bb852898b1d33483a97520%22%2C%22exportedName%22%3A%22loginAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/../../node_modules/.pnpm/next@15.5.20_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2Fhome%2Frunner%2Fworkspace%2Fartifacts%2Faufmass-app%2Flib%2Fauth%2Factions.ts%22%2C%5B%7B%22id%22%3A%220058d11dd8f5342fc706a88271b95a1623085bf3d9%22%2C%22exportedName%22%3A%22logoutAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%2C%7B%22id%22%3A%22607f997b684ae49018315b9e064f1d888bd18d066b%22%2C%22exportedName%22%3A%22registerAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%2C%7B%22id%22%3A%2260e398a8b7bf2b5291f1e0805d646a33d6821a3ca8%22%2C%22exportedName%22%3A%22loginAction%22%2C%22filename%22%3A%22lib%2Fauth%2Factions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -41,5 +41,5 @@
     }
   },
   "edge": {},
-  "encryptionKey": "dQ8OCMi5IQ/1EYxjvvS7l1gbKaZY4HTs8idknepA+NQ="
+  "encryptionKey": "cZMg+zBLSkB2qe9xdYWcHHNSTGCPgLn0bhIH9fFG2RA="
 }
