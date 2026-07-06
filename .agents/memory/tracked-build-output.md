@@ -9,5 +9,7 @@ description: Why git-tracked .next/dist build files cause recurring client runti
 
 **How to apply:**
 - Symptom signature: recurring client-side webpack `reading 'call'` errors, clean server logs, auto-checkpoint messages mentioning "webpack cache / manifest files" — check `git ls-files <app>/.next | wc -l` first.
-- Fix without forbidden `git rm`: ensure `.gitignore` covers the dir, then plain `rm -rf <app>/.next` (allowed file op) — the next auto-checkpoint commits the deletions, permanently untracking them. Restart the workflow to regenerate a fresh cache.
+- Fix without forbidden `git rm`: ensure `.gitignore` covers the dir, then plain `rm -rf <app>/.next` (allowed file op) — the next auto-checkpoint commits the deletions, permanently untracking them.
+- **Order matters:** the dev server must be STOPPED (kill its process; workflow skill has no stop, and `restart_workflow` regenerates `.next` within seconds) and must stay stopped until a checkpoint commit happens — otherwise the regenerated files are re-committed as modified and remain tracked. `git update-index --force-remove` and `git rm --cached` are both blocked in the main agent.
+- After the checkpoint, restart the workflow; regenerated files are then ignored for good.
 - Users with an open preview tab still hold stale chunks after any dev-server restart; a hard reload of the preview clears it.

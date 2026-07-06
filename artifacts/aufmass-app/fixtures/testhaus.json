@@ -1,0 +1,544 @@
+{
+  "meta": {
+    "land": "DE",
+    "einheit": "mm",
+    "schema_version": "1.0",
+    "fotos": [],
+    "hinweise": [
+      "Handgeschriebenes Test-Haus für Etappe 2 – keine echten Messdaten.",
+      "Satteldach freistehend, 2 Geschosse: Footprint 10000 x 8000 mm, Traufe 5500 mm, First 8000 mm exakt; Neigung ergibt sich geometrisch zu atan(2500/4000) = 32.005383208083494 Grad.",
+      "Konvention: D-1 = strassenseitige Dachfläche, D-2 = gartenseitige Dachfläche. First verläuft entlang der 10-m-Achse.",
+      "Konvention Ortgänge: K-4 = links/strassenseitig, K-5 = links/gartenseitig, K-6 = rechts/strassenseitig, K-7 = rechts/gartenseitig.",
+      "Konvention Außenecken: K-8 vorne-links, K-9 vorne-rechts, K-10 hinten-rechts, K-11 hinten-links (im Uhrzeigersinn ab linker vorderer Ecke, wie footprint.punkte)."
+    ]
+  },
+  "referenzen": [],
+  "gebaeude": {
+    "gebaeudetyp": "freistehend",
+    "geschosse": 2,
+    "dachform": "satteldach",
+    "footprint": {
+      "punkte": [
+        [0, 0],
+        [10000, 0],
+        [10000, 8000],
+        [0, 8000]
+      ],
+      "breite_mm": {
+        "wert": 10000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "tiefe_mm": {
+        "wert": 8000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "umfang_mm": null,
+      "flaeche_mm2": null
+    },
+    "hoehen": {
+      "traufhoehe_mm": {
+        "wert": 5500,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "firsthoehe_mm": {
+        "wert": 8000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "attikahoehe_mm": null
+    },
+    "geteilte_waende": []
+  },
+  "faces": [
+    {
+      "id": "W-1",
+      "face_class": "wand",
+      "fassade": "strassenseite",
+      "material": "putz",
+      "flaeche_mm2": {
+        "wert": 55000000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "flaeche_netto_mm2": null,
+      "neigung": null,
+      "ausrichtung_grad": null
+    },
+    {
+      "id": "W-2",
+      "face_class": "wand",
+      "fassade": "gartenseite",
+      "material": "putz",
+      "flaeche_mm2": {
+        "wert": 55000000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "flaeche_netto_mm2": null,
+      "neigung": null,
+      "ausrichtung_grad": null
+    },
+    {
+      "id": "W-3",
+      "face_class": "wand",
+      "fassade": "links",
+      "material": "putz",
+      "flaeche_mm2": {
+        "wert": 54000000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "flaeche_netto_mm2": null,
+      "neigung": null,
+      "ausrichtung_grad": null
+    },
+    {
+      "id": "W-4",
+      "face_class": "wand",
+      "fassade": "rechts",
+      "material": "putz",
+      "flaeche_mm2": {
+        "wert": 54000000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "flaeche_netto_mm2": null,
+      "neigung": null,
+      "ausrichtung_grad": null
+    },
+    {
+      "id": "D-1",
+      "face_class": "dachflaeche",
+      "fassade": "dach",
+      "material": null,
+      "flaeche_mm2": {
+        "wert": 47169905.66028302,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "flaeche_netto_mm2": null,
+      "neigung": {
+        "original_grad": 32.005383208083494,
+        "gerundet_grad": 32
+      },
+      "ausrichtung_grad": null
+    },
+    {
+      "id": "D-2",
+      "face_class": "dachflaeche",
+      "fassade": "dach",
+      "material": null,
+      "flaeche_mm2": {
+        "wert": 47169905.66028302,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "flaeche_netto_mm2": null,
+      "neigung": {
+        "original_grad": 32.005383208083494,
+        "gerundet_grad": 32
+      },
+      "ausrichtung_grad": null
+    }
+  ],
+  "edges": [
+    {
+      "id": "K-1",
+      "edge_class": "first",
+      "laenge_mm": {
+        "wert": 10000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "gehoert_zu_fassade": "dach"
+    },
+    {
+      "id": "K-2",
+      "edge_class": "traufe",
+      "laenge_mm": {
+        "wert": 10000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "gehoert_zu_fassade": "strassenseite"
+    },
+    {
+      "id": "K-3",
+      "edge_class": "traufe",
+      "laenge_mm": {
+        "wert": 10000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "gehoert_zu_fassade": "gartenseite"
+    },
+    {
+      "id": "K-4",
+      "edge_class": "ortgang",
+      "laenge_mm": {
+        "wert": 4716.990566028302,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "gehoert_zu_fassade": "links"
+    },
+    {
+      "id": "K-5",
+      "edge_class": "ortgang",
+      "laenge_mm": {
+        "wert": 4716.990566028302,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "gehoert_zu_fassade": "links"
+    },
+    {
+      "id": "K-6",
+      "edge_class": "ortgang",
+      "laenge_mm": {
+        "wert": 4716.990566028302,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "gehoert_zu_fassade": "rechts"
+    },
+    {
+      "id": "K-7",
+      "edge_class": "ortgang",
+      "laenge_mm": {
+        "wert": 4716.990566028302,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "gehoert_zu_fassade": "rechts"
+    },
+    {
+      "id": "K-8",
+      "edge_class": "aussenecke",
+      "laenge_mm": {
+        "wert": 5500,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "gehoert_zu_fassade": null
+    },
+    {
+      "id": "K-9",
+      "edge_class": "aussenecke",
+      "laenge_mm": {
+        "wert": 5500,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "gehoert_zu_fassade": null
+    },
+    {
+      "id": "K-10",
+      "edge_class": "aussenecke",
+      "laenge_mm": {
+        "wert": 5500,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "gehoert_zu_fassade": null
+    },
+    {
+      "id": "K-11",
+      "edge_class": "aussenecke",
+      "laenge_mm": {
+        "wert": 5500,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "gehoert_zu_fassade": null
+    }
+  ],
+  "openings": [
+    {
+      "id": "F-1",
+      "typ": "fenster",
+      "fassade": "strassenseite",
+      "breite_mm": {
+        "wert": 1200,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "hoehe_mm": {
+        "wert": 1400,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "bruestung_mm": {
+        "wert": 900,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "position_mm": { "x": 5400, "y": 900 },
+      "flaeche_mm2": null,
+      "umfang_mm": null,
+      "hinweis": "Richtmaß, kein Bestellmaß"
+    },
+    {
+      "id": "F-2",
+      "typ": "fenster",
+      "fassade": "strassenseite",
+      "breite_mm": {
+        "wert": 1000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "hoehe_mm": {
+        "wert": 1200,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "bruestung_mm": {
+        "wert": 3300,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "position_mm": { "x": 7400, "y": 3300 },
+      "flaeche_mm2": null,
+      "umfang_mm": null,
+      "hinweis": "Richtmaß, kein Bestellmaß"
+    },
+    {
+      "id": "F-3",
+      "typ": "fenster",
+      "fassade": "gartenseite",
+      "breite_mm": {
+        "wert": 1200,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "hoehe_mm": {
+        "wert": 1400,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "bruestung_mm": {
+        "wert": 900,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "position_mm": { "x": 2000, "y": 900 },
+      "flaeche_mm2": null,
+      "umfang_mm": null,
+      "hinweis": "Richtmaß, kein Bestellmaß"
+    },
+    {
+      "id": "F-4",
+      "typ": "fenster",
+      "fassade": "gartenseite",
+      "breite_mm": {
+        "wert": 1000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "hoehe_mm": {
+        "wert": 1200,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "bruestung_mm": {
+        "wert": 3300,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "position_mm": { "x": 6500, "y": 3300 },
+      "flaeche_mm2": null,
+      "umfang_mm": null,
+      "hinweis": "Richtmaß, kein Bestellmaß"
+    },
+    {
+      "id": "F-5",
+      "typ": "fenster",
+      "fassade": "links",
+      "breite_mm": {
+        "wert": 1200,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "hoehe_mm": {
+        "wert": 1400,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "bruestung_mm": {
+        "wert": 900,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "position_mm": { "x": 1500, "y": 900 },
+      "flaeche_mm2": null,
+      "umfang_mm": null,
+      "hinweis": "Richtmaß, kein Bestellmaß"
+    },
+    {
+      "id": "F-6",
+      "typ": "fenster",
+      "fassade": "links",
+      "breite_mm": {
+        "wert": 1000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "hoehe_mm": {
+        "wert": 1200,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "bruestung_mm": {
+        "wert": 3300,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "position_mm": { "x": 4500, "y": 3300 },
+      "flaeche_mm2": null,
+      "umfang_mm": null,
+      "hinweis": "Richtmaß, kein Bestellmaß"
+    },
+    {
+      "id": "F-7",
+      "typ": "fenster",
+      "fassade": "rechts",
+      "breite_mm": {
+        "wert": 1200,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "hoehe_mm": {
+        "wert": 1400,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "bruestung_mm": {
+        "wert": 900,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "position_mm": { "x": 1800, "y": 900 },
+      "flaeche_mm2": null,
+      "umfang_mm": null,
+      "hinweis": "Richtmaß, kein Bestellmaß"
+    },
+    {
+      "id": "F-8",
+      "typ": "fenster",
+      "fassade": "rechts",
+      "breite_mm": {
+        "wert": 1000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "hoehe_mm": {
+        "wert": 1200,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "bruestung_mm": {
+        "wert": 3300,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "position_mm": { "x": 5000, "y": 3300 },
+      "flaeche_mm2": null,
+      "umfang_mm": null,
+      "hinweis": "Richtmaß, kein Bestellmaß"
+    },
+    {
+      "id": "T-1",
+      "typ": "tuer",
+      "fassade": "strassenseite",
+      "breite_mm": {
+        "wert": 1000,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "hoehe_mm": {
+        "wert": 2100,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "bruestung_mm": null,
+      "position_mm": { "x": 3600, "y": 0 },
+      "flaeche_mm2": null,
+      "umfang_mm": null,
+      "hinweis": "Richtmaß, kein Bestellmaß"
+    },
+    {
+      "id": "G-1",
+      "typ": "garagentor",
+      "fassade": "strassenseite",
+      "breite_mm": {
+        "wert": 2500,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "hoehe_mm": {
+        "wert": 2200,
+        "confidence": "high",
+        "source": "measured",
+        "reference_used": null
+      },
+      "bruestung_mm": null,
+      "position_mm": { "x": 500, "y": 0 },
+      "flaeche_mm2": null,
+      "umfang_mm": null,
+      "hinweis": "Richtmaß, kein Bestellmaß"
+    }
+  ],
+  "anbauten": [],
+  "qualitaet": null
+}

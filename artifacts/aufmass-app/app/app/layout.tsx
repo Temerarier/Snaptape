@@ -11,9 +11,17 @@ export default function AppLayout({
     <div className="min-h-screen bg-neutral-50">
       <header className="border-b border-neutral-200 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link href="/app" className="font-semibold tracking-tight">
-            {de.common.appName}
-          </Link>
+          <div className="flex items-center gap-5">
+            <Link href="/app" className="font-semibold tracking-tight">
+              {de.common.appName}
+            </Link>
+            <Link
+              href="/app/viewer"
+              className="text-sm font-medium text-neutral-600 transition hover:text-neutral-900"
+            >
+              {de.viewer.navLink}
+            </Link>
+          </div>
           <form action={logoutAction}>
             <button
               type="submit"

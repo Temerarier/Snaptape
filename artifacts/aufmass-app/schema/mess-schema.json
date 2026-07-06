@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mess-JSON v1.0 (ganzes Gebäude)",
+  "description": "Vollständiges Haus: Listen für Flächen, Kanten, Öffnungen. Struktur folgt dem im Hover-Live-Account verifizierten Datenmodell, aber metrisch (mm) und mit confidence/source je Wert.",
+  "type": "object",
+  "required": ["meta", "gebaeude", "referenzen", "faces", "edges", "openings"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["land", "einheit"],
+      "properties": {
+        "land": { "enum": ["DE", "AT", "CH", "US"] },
+        "einheit": { "const": "mm" },
+        "schema_version": { "const": "1.0" },
+        "fotos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["nr", "blickwinkel"],
+            "properties": {
+              "nr": { "type": "integer" },
+              "zeigt_fassade": { "enum": ["strassenseite", "gartenseite", "links", "rechts", "dach", "mehrere", "unbekannt"] },
+              "blickwinkel": { "enum": ["frontal", "leicht_schraeg", "stark_schraeg"] },
+              "perspektive_korrigiert": { "type": "boolean" }
+            }
+          }
+        },
+        "hinweise": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "gebaeude": {
+      "type": "object",
+      "required": ["dachform"],
+      "properties": {
+        "gebaeudetyp": { "enum": ["freistehend", "doppelhaus", "reihenhaus_mitte", "reihenhaus_ende", "unbekannt"] },
+        "geschosse": { "type": ["integer", "null"] },
+        "dachform": { "enum": ["satteldach", "walmdach", "flachdach", "pultdach", "mansarddach", "kruppelwalm", "sonstige", "unbekannt"] },
+        "footprint": {
+          "type": ["object", "null"],
+          "description": "Grundriss-Umriss. Punkte als [x,y] in mm im Uhrzeigersinn ab linker vorderer Ecke; oder vereinfacht breite/tiefe.",
+          "properties": {
+            "punkte": { "type": "array", "items": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 } },
+            "breite_mm": { "$ref": "#/$defs/messwert_oder_null" },
+            "tiefe_mm": { "$ref": "#/$defs/messwert_oder_null" },
+            "umfang_mm": { "$ref": "#/$defs/messwert_oder_null" },
+            "flaeche_mm2": { "$ref": "#/$defs/messwert_oder_null" }
+          }
+        },
+        "hoehen": {
+          "type": "object",
+          "properties": {
+            "traufhoehe_mm": { "$ref": "#/$defs/messwert_oder_null" },
+            "firsthoehe_mm": { "$ref": "#/$defs/messwert_oder_null" },
+            "attikahoehe_mm": { "$ref": "#/$defs/messwert_oder_null" }
+          }
+        },
+        "geteilte_waende": {
+          "type": "array",
+          "description": "Nur bei Reihen-/Doppelhaus: welche Fassadenseite eine gemeinsame Wand ist.",
+          "items": { "enum": ["strassenseite", "gartenseite", "links", "rechts"] }
+        }
+      }
+    },
+    "referenzen": {
+      "type": "array",
+      "description": "Eine Skala je Foto. Eine Skala gilt nie über Fotos hinweg.",
+      "items": {
+        "type": "object",
+        "required": ["foto_nr", "skala_art"],
+        "properties": {
+          "foto_nr": { "type": "integer" },
+          "skala_art": { "enum": ["eigenes_referenzobjekt", "uebertragen", "keine"] },
+          "objekt": { "type": ["string", "null"] },
+          "bounding_box": { "type": ["array", "null"], "items": { "type": "number" } },
+          "angenommenes_mass_mm": { "type": ["number", "null"] },
+          "zuverlaessigkeit": { "enum": ["hoch", "mittel", "niedrig", null] },
+          "ebene": { "enum": ["fassadenebene", "davor", "dahinter", "unbekannt", null] },
+          "uebertragen_via": { "type": ["string", "null"] },
+          "vom_nutzer_bestaetigt": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "faces": {
+      "type": "array",
+      "description": "Alle Flächen des Gebäudes (Dachflächen, Wände, Untersichten, Blenden).",
+      "items": {
+        "type": "object",
+        "required": ["id", "face_class", "flaeche_mm2"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^(D|W|U|B)-[0-9]+$", "description": "D=Dachfläche, W=Wand, U=Untersicht/Soffit, B=Blende/Fascia" },
+          "face_class": { "enum": ["dachflaeche", "wand", "untersicht", "blende"] },
+          "fassade": { "enum": ["strassenseite", "gartenseite", "links", "rechts", "dach", "unbekannt"] },
+          "material": { "enum": ["putz", "klinker", "wdvs", "holz", "sichtbeton", "sonstige", "unbekannt", null] },
+          "flaeche_mm2": { "$ref": "#/$defs/messwert" },
+          "flaeche_netto_mm2": { "$ref": "#/$defs/messwert_oder_null" },
+          "neigung": {
+            "type": ["object", "null"],
+            "description": "Nur bei Dachflächen. Grad, doppelt gespeichert.",
+            "properties": {
+              "original_grad": { "type": "number" },
+              "gerundet_grad": { "type": "number" }
+            }
+          },
+          "ausrichtung_grad": { "type": ["number", "null"], "description": "Azimut, nur Dach. Kommt später aus der Adresse, im Foto null." }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "description": "Alle Kanten mit Typ und Länge.",
+      "items": {
+        "type": "object",
+        "required": ["id", "edge_class", "laenge_mm"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^K-[0-9]+$" },
+          "edge_class": { "enum": ["first", "grat", "kehle", "traufe", "ortgang", "aussenecke", "innenecke", "sockel", "sturz", "fensterbank", "leibung", "unklassifiziert"] },
+          "laenge_mm": { "$ref": "#/$defs/messwert" },
+          "gehoert_zu_fassade": { "enum": ["strassenseite", "gartenseite", "links", "rechts", "dach", "unbekannt", null] }
+        }
+      }
+    },
+    "openings": {
+      "type": "array",
+      "description": "Alle Fenster, Türen, Garagentore am ganzen Gebäude.",
+      "items": {
+        "type": "object",
+        "required": ["id", "typ", "fassade", "breite_mm", "hoehe_mm"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^(F|T|G)-[0-9]+$", "description": "F=Fenster, T=Tür, G=Garagentor" },
+          "typ": { "enum": ["fenster", "tuer", "garagentor", "sonstige"] },
+          "fassade": { "enum": ["strassenseite", "gartenseite", "links", "rechts", "unbekannt"] },
+          "breite_mm": { "$ref": "#/$defs/messwert" },
+          "hoehe_mm": { "$ref": "#/$defs/messwert" },
+          "bruestung_mm": { "$ref": "#/$defs/messwert_oder_null" },
+          "position_mm": {
+            "type": ["object", "null"],
+            "description": "x/y der linken unteren Öffnungsecke, ab linker unterer Ecke der jeweiligen Fassade.",
+            "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+          },
+          "flaeche_mm2": { "$ref": "#/$defs/messwert_oder_null" },
+          "umfang_mm": { "$ref": "#/$defs/messwert_oder_null" },
+          "hinweis": { "type": "string", "default": "Richtmaß, kein Bestellmaß" }
+        }
+      }
+    },
+    "anbauten": {
+      "type": "array",
+      "description": "Optionale Zusatz-Volumen für den Baukasten (Gaube, Erker, Balkon, Vordach, Anbau).",
+      "items": {
+        "type": "object",
+        "required": ["id", "typ"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^A-[0-9]+$" },
+          "typ": { "enum": ["gaube", "erker", "balkon", "vordach", "anbau", "sonstige"] },
+          "fassade": { "enum": ["strassenseite", "gartenseite", "links", "rechts", "dach", "unbekannt"] },
+          "breite_mm": { "$ref": "#/$defs/messwert_oder_null" },
+          "hoehe_mm": { "$ref": "#/$defs/messwert_oder_null" },
+          "tiefe_mm": { "$ref": "#/$defs/messwert_oder_null" }
+        }
+      }
+    },
+    "qualitaet": {
+      "type": ["object", "null"],
+      "properties": {
+        "anzahl_referenzen_genutzt": { "type": "integer" },
+        "streuung_prozent": { "type": "number" },
+        "warnungen": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "$defs": {
+    "messwert": {
+      "type": "object",
+      "required": ["wert", "confidence", "source"],
+      "properties": {
+        "wert": { "type": "number", "description": "ungerundet, mm bzw. mm²" },
+        "confidence": { "enum": ["high", "medium", "low"] },
+        "source": { "enum": ["measured", "scaled", "estimated"] },
+        "reference_used": { "type": ["string", "null"] },
+        "grund_bei_low": { "type": ["string", "null"] }
+      }
+    },
+    "messwert_oder_null": {
+      "oneOf": [
+        { "$ref": "#/$defs/messwert" },
+        { "type": "null" }
+      ]
+    }
+  }
+}
