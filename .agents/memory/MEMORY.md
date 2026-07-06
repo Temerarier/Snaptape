@@ -1,1 +1,2 @@
 - [Aufmaß-App conventions](aufmass-app-conventions.md) — fixed stack + 9 iron rules in replit.md; Next.js artifact quirks (artifact.toml validation, allowedDevOrigins, tsconfig auto-rewrite).
+- [Tracked build output crashes dev server](tracked-build-output.md) — git-tracked .next files let checkpoints rewrite the live webpack cache → "reading 'call'" client crashes; fix via .gitignore + rm on disk.
