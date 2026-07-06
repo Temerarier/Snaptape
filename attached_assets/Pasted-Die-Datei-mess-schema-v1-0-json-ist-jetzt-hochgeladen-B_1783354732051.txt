@@ -1,0 +1,49 @@
+Die Datei mess-schema-v1-0.json ist jetzt hochgeladen. Baue NUR diese Etappe:
+
+Ziel: Der 3D-Viewer zeigt ein KOMPLETTES Haus – mit handgeschriebenen
+Testdaten, bevor irgendeine KI angeschlossen wird.
+
+1. Speichere das hochgeladene mess-schema-v1-0.json als
+   schema/mess-schema.json – das ist ab jetzt der Vertrag (Eiserne Regel
+   2). Exakt übernehmen, nichts erfinden. Baue dazu eine Zod-Validierung
+   (lib/messung/schema.ts) und DB-Tabellen für gebaeude, faces, edges,
+   openings, anbauten, measure_runs – Felder folgen dem Schema.
+
+2. Test-Haus als Fixture (fixtures/testhaus.json): ein VOLLSTÄNDIGES,
+   gültiges Mess-JSON nach dem Schema, alle Werte in mm, mit IDs:
+   - Satteldachhaus, freistehend, 2 Geschosse
+   - footprint ca. 10 × 8 m, Traufhöhe 5,5 m, Firsthöhe 8 m
+   - 4 Fassaden (strassenseite, gartenseite, links, rechts) als faces
+     (face_class wand)
+   - 2 Dachflächen (face_class dachflaeche) mit Neigung ~42°
+   - Kanten: 1 First, 2 Traufen, 2 Ortgänge, 4 Außenecken
+   - ca. 8 Fenster verteilt auf die 4 Fassaden (mit position_mm),
+     1 Haustür auf strassenseite, 1 Garagentor
+   - jede Öffnung mit Hinweis „Richtmaß, kein Bestellmaß"
+
+3. Gebäude-Aufbau als VOLUMEN-Baukasten (lib/viewer/): Hauptkörper aus
+   footprint extrudiert + Satteldach konstruiert; Flächen und Kanten
+   entstehen aus dem Volumen; Öffnungen als Rechtecke per position_mm auf
+   der jeweiligen Fassade. Baukasten so anlegen, dass später Anbauten und
+   Gauben (anbauten-Liste) als weitere Volumen dazukommen können – jetzt
+   noch NICHT bauen.
+
+4. Viewer-Interaktion (three.js):
+   - Orbit/Zoom/Pan, alle 4 Seiten + Dach begehbar
+   - Klick auf Fläche/Öffnung/Kante → farbige Hervorhebung + Maße im
+     rechten Panel (Anzeige gerundet auf cm, Roh-mm im Tooltip)
+   - Panel-Kategorien Dach / Wände / Öffnungen mit Summen, „Alle
+     auswählen" je Kategorie, Liste ↔ Modell synchron, Doppelklick zoomt
+   - Schalter „Maße anzeigen": Maß-Labels an den Kanten ein/aus
+   - Messlinien-Werkzeug: zwei Punkte klicken → Länge; Endpunkte rasten
+     an Kanten ein; Linien löschbar
+
+5. Berechnungsschicht v1 (lib/berechnung/): Fassadenfläche brutto/netto
+   (Öffnungsabzug) je Fassade, Dachfläche gesamt, Summen je Kategorie –
+   Unit-Tests gegen handgerechnete Werte des Test-Hauses.
+
+Akzeptanzkriterien: Das komplette Haus steht korrekt in 3D und ist von
+allen Seiten drehbar; Klick auf ein Fenster zeigt B × H; Maße-Schalter +
+Messlinien funktionieren; Netto-Wandfläche stimmt mit Handrechnung
+überein (Test grün). KEINE KI-Calls. Nicht bauen: Edit-Modus, Versionen,
+Anbauten/Gauben.
