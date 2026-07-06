@@ -11,10 +11,13 @@
   "dependencies": {
     "@google-cloud/storage": "^7.14.0",
     "@workspace/db": "workspace:*",
+    "bcryptjs": "^3.0.3",
+    "drizzle-orm": "catalog:",
     "next": "^15.5.0",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "three": "^0.178.0"
+    "three": "^0.178.0",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.14",
