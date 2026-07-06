@@ -1,0 +1,25 @@
+kind = "web"
+previewPath = "/"
+title = "Aufmaß-App"
+version = "1.0.0"
+id = "artifacts/aufmass-app"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22421
+
+[services.development]
+run = "pnpm --filter @workspace/aufmass-app run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/aufmass-app", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/aufmass-app", "run", "start" ]
+
+[services.env]
+PORT = "22421"

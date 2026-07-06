@@ -1,0 +1,1 @@
+- [Aufmaß-App conventions](aufmass-app-conventions.md) — fixed stack + 9 iron rules in replit.md; Next.js artifact quirks (artifact.toml validation, allowedDevOrigins, tsconfig auto-rewrite).

@@ -1,45 +1,69 @@
-# [Project name]
+# Projekt: Aufmaß-App (Fotos/Pläne rein → Messwerte + 3D-Modell raus)
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+## Stack (fix, nicht ändern)
 
-## Run & Operate
+- Next.js (App Router) + TypeScript, Tailwind
+- PostgreSQL (Replit-DB), Replit Object Storage für Dateien
+- three.js für den 3D-Viewer
+- Anthropic API für Bildanalyse (Secret: ANTHROPIC_API_KEY)
+- Stripe für Bezahlung (erst Etappe 6)
+- Hosting/Datenspeicherung: US-Region (Zielmarkt USA)
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
-- `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+## Eiserne Regeln
 
-## Stack
+1. Alle Maße intern IMMER in Millimetern, ungerundet als Zahl speichern.
+   Gerundet wird nur in der Anzeige. Keine Ausnahmen.
+2. Die Datei schema/mess-schema.json ist der Vertrag zwischen Messung,
+   Datenbank, Viewer und Report. Änderungen nur auf ausdrückliche
+   Anweisung.
+3. Jedes Bauteil hat eine feste ID (F-1 = Fenster, T-1 = Tür, K-1 =
+   Kante, D-1 = Dachfläche). Dieselbe ID überall: 3D, Tabelle, PDF.
+4. Jeder Messwert trägt: wert, confidence (high/medium/low), source
+   (measured/scaled/estimated), reference_used.
+5. Öffnungsmaße zeigen immer den Hinweis „Richtmaß, kein Bestellmaß".
+6. Fehler dem Nutzer IMMER vor einer Bezahlung anzeigen, nie danach.
+7. Berechnete Werte (brutto/netto, Verschnitt) leben in lib/berechnung/,
+   nie im Mess-JSON.
+8. UI-Texte zentral in einer Sprachdatei (Start: Deutsch; Englisch
+   vorbereitet, da Zielmarkt USA).
+9. Fassaden heißen strassenseite / gartenseite / links / rechts (von
+   der Straße aus gesehen) – niemals Himmelsrichtungen raten. Die
+   Himmelsrichtung kommt später deterministisch aus der Adresse.
 
-- pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+## Architektur-Überblick
 
-## Where things live
+Upload → Qualitätscheck (Sonnet) → Messung (Fable, JSON, 2–3 Läufe) →
+Edge-Case-Warnungen (Code) → 3D-Viewer + Report. Der Nutzer KANN
+optional ein eigenes Referenzmaß angeben (übersteuert Annahmen), muss
+aber nicht. Kein Pflicht-Review, kein Edit-Modus im MVP.
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+## Projektstruktur & Betrieb
 
-## Architecture decisions
+Die Next.js-App lebt als eigenes Paket im pnpm-Monorepo unter
+`artifacts/aufmass-app/`:
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- `app/` — Next.js App Router (aktuell: Healthcheck-Seite unter `/`)
+- `lib/berechnung/` — berechnete Werte (brutto/netto, Verschnitt)
+- `lib/messung/` — Mess-Pipeline (später)
+- `lib/storage/` — Replit Object Storage Client (Sidecar-Auth)
+- `schema/` — `mess-schema.json` (Vertrag, noch leer)
+- `components/` — React-Komponenten
+- `i18n/` — zentrale Sprachdatei(en), Start: `de.ts`
 
-## Product
+Befehle:
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- `pnpm --filter @workspace/aufmass-app run dev` — Dev-Server starten (Workflow "artifacts/aufmass-app: web")
+- `pnpm --filter @workspace/aufmass-app run build` / `run start` — Produktion
+- `pnpm --filter @workspace/db run push` — DB-Schema-Änderungen pushen (Drizzle, Dev)
+- DB-Zugriff über `@workspace/db` (Drizzle + pg, `DATABASE_URL`)
+
+Hinweis: Die Workspace-Pakete `artifacts/api-server` und
+`artifacts/mockup-sandbox` gehören nicht zur Aufmaß-App.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
-
-## Gotchas
-
-_Populate as you build — sharp edges, "always run X before Y" rules._
-
-## Pointers
-
-- See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
+- Setup-Anweisung des Users: nur Setup + replit.md, danach NICHTS
+  weiterbauen (keine Mess-Pipeline, kein 3D-Viewer, keine Anthropic-Calls,
+  kein Stripe).
+- Stack ist fix und darf nicht geändert werden.
+- Kommunikation auf Deutsch.
