@@ -14,7 +14,6 @@ import {
 import type { MessJson } from "@/lib/messung/schema";
 import {
   formatBreiteHoeheCm,
-  formatCm,
   formatMeter,
   formatMm2Roh,
   formatMmRoh,
@@ -156,7 +155,20 @@ function SummenZeile({ label, wert, wertTitel }: { label: string; wert: string; 
   );
 }
 
-// Detailkasten für das zuletzt ausgewählte Bauteil
+// Auswahl-Liste: zeigt ALLE ausgewählten Bauteile (Reihenfolge = Klick-
+// Reihenfolge des Sets) mit Einzelwert je Zeile sowie fetten Summen
+// oben – Flächen (m²) und Kanten (m) getrennt, niemals gemischt.
+// Summen werden aus den ungerundeten mm-Werten gebildet; gerundet wird
+// nur für die Anzeige, Roh-Werte stehen im Tooltip (Eiserne Regel 1).
+type AuswahlEintrag = {
+  id: string;
+  label: string;
+  wert: string;
+  wertTitel: string;
+  art: "flaeche" | "laenge";
+  rohWert: number; // mm² bei Flächen, mm bei Kanten
+};
+
 function AuswahlDetail({
   mess,
   modell,
@@ -166,100 +178,132 @@ function AuswahlDetail({
   modell: HausModell;
   auswahl: ReadonlySet<string>;
 }) {
-  const letzteId = [...auswahl].at(-1);
-  if (!letzteId) {
+  if (auswahl.size === 0) {
     return <p className="text-xs text-neutral-400">{t.keineAuswahl}</p>;
   }
 
-  const oeffnung = mess.openings.find((o) => o.id === letzteId);
-  if (oeffnung) {
-    const flaeche = oeffnungsFlaecheMm2(oeffnung);
-    return (
-      <div className="space-y-1 text-sm">
-        <p className="font-semibold text-white">
-          {mitPunkt(letzteId, t.typen[oeffnung.typ], fassadeName(oeffnung.fassade))}
-        </p>
-        <p
-          className="tabular-nums text-neutral-300"
-          title={`${formatMmRoh(oeffnung.breite_mm.wert)} × ${formatMmRoh(oeffnung.hoehe_mm.wert)}`}
-        >
-          {t.breiteXHoehe}:{" "}
-          {formatBreiteHoeheCm(oeffnung.breite_mm.wert, oeffnung.hoehe_mm.wert)}
-        </p>
-        <p className="tabular-nums text-neutral-300" title={formatMm2Roh(flaeche)}>
-          {t.flaeche}: {formatQuadratmeter(flaeche)}
-        </p>
-        {oeffnung.bruestung_mm ? (
+  const eintraege: AuswahlEintrag[] = [];
+  let hatOeffnung = false;
+
+  for (const id of auswahl) {
+    const oeffnung = mess.openings.find((o) => o.id === id);
+    if (oeffnung) {
+      hatOeffnung = true;
+      const flaeche = oeffnungsFlaecheMm2(oeffnung);
+      eintraege.push({
+        id,
+        label: mitPunkt(t.typen[oeffnung.typ], fassadeName(oeffnung.fassade)),
+        wert: formatQuadratmeter(flaeche),
+        wertTitel: `${formatMm2Roh(flaeche)} · ${formatBreiteHoeheCm(oeffnung.breite_mm.wert, oeffnung.hoehe_mm.wert)} · ${oeffnung.hinweis}`,
+        art: "flaeche",
+        rohWert: flaeche,
+      });
+      continue;
+    }
+
+    const face = mess.faces.find((f) => f.id === id);
+    if (face) {
+      const istWand = face.face_class === "wand";
+      eintraege.push({
+        id,
+        label: mitPunkt(
+          istWand ? t.kategorien.waende : t.kategorien.dach,
+          fassadeName(face.fassade),
+        ),
+        wert: formatQuadratmeter(face.flaeche_mm2.wert),
+        wertTitel: formatMm2Roh(face.flaeche_mm2.wert),
+        art: "flaeche",
+        rohWert: face.flaeche_mm2.wert,
+      });
+      continue;
+    }
+
+    const messKante = mess.edges.find((e) => e.id === id);
+    if (messKante) {
+      const kante = modell.kanten.find((k) => k.id === id);
+      eintraege.push({
+        id,
+        label: mitPunkt(
+          kantenKlasseName(kante ? kante.edgeClass : messKante.edge_class),
+          fassadeName(messKante.gehoert_zu_fassade),
+        ),
+        wert: formatMeter(messKante.laenge_mm.wert),
+        wertTitel: formatMmRoh(messKante.laenge_mm.wert),
+        art: "laenge",
+        rohWert: messKante.laenge_mm.wert,
+      });
+    }
+  }
+
+  if (eintraege.length === 0) {
+    return <p className="text-xs text-neutral-400">{t.keineAuswahl}</p>;
+  }
+
+  const flaechen = eintraege.filter((e) => e.art === "flaeche");
+  const kanten = eintraege.filter((e) => e.art === "laenge");
+  const summeFlaechenMm2 = flaechen.reduce((s, e) => s + e.rohWert, 0);
+  const summeKantenMm = kanten.reduce((s, e) => s + e.rohWert, 0);
+
+  return (
+    <div className="space-y-2 text-sm">
+      <div className="space-y-0.5">
+        {flaechen.length > 0 ? (
           <p
-            className="tabular-nums text-neutral-300"
-            title={formatMmRoh(oeffnung.bruestung_mm.wert)}
+            className="font-bold tabular-nums text-white"
+            title={formatMm2Roh(summeFlaechenMm2)}
           >
-            {t.bruestung}: {formatCm(oeffnung.bruestung_mm.wert)}
+            {flaechen.length}{" "}
+            {flaechen.length === 1
+              ? t.auswahlFlaecheEinzahl
+              : t.auswahlFlaecheMehrzahl}{" "}
+            · {formatQuadratmeter(summeFlaechenMm2)}
           </p>
         ) : null}
+        {kanten.length > 0 ? (
+          <p
+            className="font-bold tabular-nums text-white"
+            title={formatMmRoh(summeKantenMm)}
+          >
+            {kanten.length}{" "}
+            {kanten.length === 1
+              ? t.auswahlKanteEinzahl
+              : t.auswahlKanteMehrzahl}{" "}
+            · {formatMeter(summeKantenMm)}
+          </p>
+        ) : null}
+      </div>
+
+      <ul className="space-y-1 border-t border-white/10 pt-2">
+        {eintraege.map((eintrag) => (
+          <li
+            key={eintrag.id}
+            className="flex items-baseline justify-between gap-2"
+          >
+            <span className="min-w-0 truncate">
+              <span className="font-medium text-white">{eintrag.id}</span>
+              {eintrag.label ? (
+                <span className="ml-1.5 text-xs text-neutral-400">
+                  {eintrag.label}
+                </span>
+              ) : null}
+            </span>
+            <span
+              className="shrink-0 tabular-nums text-neutral-300"
+              title={eintrag.wertTitel}
+            >
+              {eintrag.wert}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      {hatOeffnung ? (
         <p className="text-xs font-medium text-amber-400">
-          {oeffnung.hinweis}
+          {t.hinweisRichtmass}
         </p>
-      </div>
-    );
-  }
-
-  const face = mess.faces.find((f) => f.id === letzteId);
-  if (face) {
-    const istWand = face.face_class === "wand";
-    const netto = istWand
-      ? wandflaechenJeFassade(mess).find((w) => w.fassade === face.fassade)
-      : undefined;
-    return (
-      <div className="space-y-1 text-sm">
-        <p className="font-semibold text-white">
-          {mitPunkt(
-            letzteId,
-            istWand ? t.kategorien.waende : t.kategorien.dach,
-            fassadeName(face.fassade),
-          )}
-        </p>
-        <p
-          className="tabular-nums text-neutral-300"
-          title={formatMm2Roh(face.flaeche_mm2.wert)}
-        >
-          {t.flaecheBrutto}: {formatQuadratmeter(face.flaeche_mm2.wert)}
-        </p>
-        {netto ? (
-          <p
-            className="tabular-nums text-neutral-300"
-            title={formatMm2Roh(netto.nettoMm2)}
-          >
-            {t.flaecheNetto}: {formatQuadratmeter(netto.nettoMm2)}
-          </p>
-        ) : null}
-      </div>
-    );
-  }
-
-  const kante = modell.kanten.find((k) => k.id === letzteId);
-  const messKante = mess.edges.find((e) => e.id === letzteId);
-  if (kante && messKante) {
-    return (
-      <div className="space-y-1 text-sm">
-        <p className="font-semibold text-white">
-          {mitPunkt(
-            letzteId,
-            kantenKlasseName(kante.edgeClass),
-            fassadeName(messKante.gehoert_zu_fassade),
-          )}
-        </p>
-        <p
-          className="tabular-nums text-neutral-300"
-          title={formatMmRoh(messKante.laenge_mm.wert)}
-        >
-          {t.laenge}: {formatMeter(messKante.laenge_mm.wert)}
-        </p>
-      </div>
-    );
-  }
-
-  return <p className="text-xs text-neutral-400">{t.keineAuswahl}</p>;
+      ) : null}
+    </div>
+  );
 }
 
 export function BauteilPanel({

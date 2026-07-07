@@ -91,6 +91,10 @@ export const de = {
     auswahlTitel: "Auswahl",
     keineAuswahl:
       "Kein Bauteil ausgewählt. Klicken Sie im Modell oder in der Liste.",
+    auswahlFlaecheEinzahl: "Fläche",
+    auswahlFlaecheMehrzahl: "Flächen",
+    auswahlKanteEinzahl: "Kante",
+    auswahlKanteMehrzahl: "Kanten",
     breiteXHoehe: "B × H",
     flaeche: "Fläche",
     flaecheBrutto: "Fläche brutto",
