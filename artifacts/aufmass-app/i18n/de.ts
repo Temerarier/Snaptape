@@ -19,10 +19,12 @@ export const de = {
     storageMissing: "Object Storage nicht konfiguriert",
   },
   auth: {
-    loginTitle: "Anmelden",
-    loginSubtitle: "Willkommen zurück bei Snaptape.",
-    registerTitle: "Konto erstellen",
-    registerSubtitle: "Registrieren Sie sich, um Projekte anzulegen.",
+    loginTitle: "Willkommen zurück.",
+    loginSubtitle: "Melden Sie sich an – für Ihre Projekte und Berichte.",
+    registerTitle: "Häuser aus Fotos vermessen.",
+    registerSubtitle:
+      "Erstellen Sie ein kostenloses Konto – Messwerte und 3D-Modell aus den Fotos, die Sie ohnehin auf der Baustelle machen.",
+    heroCaption: "Ihr nächstes Projekt, in 3D – aus wenigen Fotos",
     emailLabel: "E-Mail",
     emailPlaceholder: "name@firma.de",
     passwordLabel: "Passwort",

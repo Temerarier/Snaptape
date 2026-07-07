@@ -43,19 +43,22 @@ const MESS_FARBE = 0xdc2626;
 const SNAP_ABSTAND_M = 0.15;
 const KLICK_TOLERANZ_PX = 6;
 
-const FLAECHEN_FARBEN: Record<string, number> = {
+// Materialfarben des Hausmodells – auch von der Showcase-Bühne
+// (lib/viewer/buehne.ts) genutzt, damit beide Darstellungen identisch
+// aussehen.
+export const FLAECHEN_FARBEN: Record<string, number> = {
   wand: 0xdedad2,
   dachflaeche: 0xa4553f,
 };
 
-const OEFFNUNGS_FARBEN: Record<string, number> = {
+export const OEFFNUNGS_FARBEN: Record<string, number> = {
   fenster: 0x93b8d8,
   tuer: 0x8a6248,
   garagentor: 0x9aa0a6,
   sonstige: 0xb0aba3,
 };
 
-const KANTEN_FARBE = 0x57534e;
+export const KANTEN_FARBE = 0x57534e;
 
 function zuMeter(p: Punkt3): THREE.Vector3 {
   return new THREE.Vector3(p[0] * MM, p[1] * MM, p[2] * MM);
@@ -86,7 +89,8 @@ export function istMassLabelSichtbar(
 }
 
 // Baut aus einem planaren 3D-Polygon (mm) eine BufferGeometry in Metern.
-function polygonGeometrie(polygonMm: Punkt3[]): THREE.BufferGeometry {
+// Exportiert, damit die Showcase-Bühne dieselbe Geometrie-Erzeugung nutzt.
+export function polygonGeometrie(polygonMm: Punkt3[]): THREE.BufferGeometry {
   const punkte = polygonMm.map(zuMeter);
   const ursprung = punkte[0]!.clone();
   const u = punkte[1]!.clone().sub(ursprung).normalize();
