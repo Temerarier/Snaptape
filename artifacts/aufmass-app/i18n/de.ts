@@ -6,6 +6,7 @@ export const de = {
     logout: "Abmelden",
     cancel: "Abbrechen",
     back: "Zurück zur Übersicht",
+    schliessen: "Schließen",
   },
   healthcheck: {
     title: "Aufmaß-App",

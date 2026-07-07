@@ -1,5 +1,46 @@
 @import "tailwindcss";
 
+/*
+ * Design-System „Technical-Clean" – ZENTRALE Stelle für alle Tokens.
+ * Werte hier ändern = App-weit ändern. Dokumentiert in replit.md
+ * (Abschnitt „Design-System"). Nutzung über Tailwind-Klassen, z. B.
+ * bg-hintergrund, bg-flaeche, text-akzent, text-schrift,
+ * text-schrift-sekundaer, border-linie, rounded-eingabe, rounded-karte,
+ * shadow-karte, shadow-akzent, font-sans, font-mono.
+ */
+@theme {
+  /* Farben */
+  --color-hintergrund: #fafbfc; /* Seitenhintergrund */
+  --color-flaeche: #ffffff; /* Karten/Oberflächen */
+  --color-akzent: #2563eb; /* Primär-Akzent (Buttons, Links) */
+  --color-schrift: #16233a; /* Text primär */
+  --color-schrift-sekundaer: #43536e; /* Text sekundär */
+  --color-schrift-tertiaer: #6b7a93; /* Text gedämpft/tertiär */
+  --color-linie: #e3e8ef; /* Rahmen/Hairlines */
+
+  /* Statusfarben: Text auf zugehöriger Fläche */
+  --color-ok: #157f3d;
+  --color-ok-flaeche: #e7f6ec;
+  --color-warnung: #b45309;
+  --color-warnung-flaeche: #fdf3e1;
+  --color-fehler: #b91c1c;
+  --color-fehler-flaeche: #fbe9e9;
+
+  /* Radien: 12px Bedienelemente/Inputs, 16–20px Karten, Pills rounded-full */
+  --radius-eingabe: 12px;
+  --radius-karte: 16px;
+  --radius-karte-gross: 20px;
+
+  /* Schatten */
+  --shadow-karte: 0 4px 16px rgba(20, 30, 50, 0.05);
+  --shadow-akzent: 0 2px 8px rgba(37, 99, 235, 0.25);
+
+  /* Schriften: IBM Plex Sans (UI/Überschriften), IBM Plex Mono
+     (Zahlen, IDs, Messwerte). Variablen kommen aus next/font im Layout. */
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
+}
+
 /* Indeterminierte, schmale Fortschrittsleiste des 3D-Ladescreens. */
 @keyframes ladebalken {
   0% {

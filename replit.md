@@ -28,6 +28,34 @@
    der Straße aus gesehen) – niemals Himmelsrichtungen raten. Die
    Himmelsrichtung kommt später deterministisch aus der Adresse.
 
+## Design-System (Technical-Clean)
+Zentrale Tokens in `artifacts/aufmass-app/app/globals.css` (`@theme`),
+Fonts in `app/layout.tsx`, Basis-Komponenten in `components/ui/`
+(Button, Card, Input, Badge, Modal). ALLE neuen Screens nutzen diese
+Tokens/Komponenten – keine eigenen Hex-Farben oder Ad-hoc-Styles.
+
+Werte (verbindlich):
+- Hintergrund: #FAFBFC (`bg-hintergrund`)
+- Fläche/Karte: #FFFFFF (`bg-flaeche`)
+- Akzent: #2563EB (`bg-akzent` / `text-akzent`)
+- Text primär: #16233A (`text-schrift`)
+- Text sekundär: #43536E (`text-schrift-sekundaer`);
+  gedämpft/tertiär: #6B7A93 (`text-schrift-tertiaer`)
+- Rahmen/Hairline: #E3E8EF (`border-linie`)
+- Schriften: IBM Plex Sans (UI + Überschriften, `font-sans`),
+  IBM Plex Mono (Zahlen, IDs, Messwerte, `font-mono`)
+- Eckenradius: 12px Bedienelemente/Inputs (`rounded-eingabe`),
+  16–20px Karten (`rounded-karte` / `rounded-karte-gross`),
+  999px Pills (`rounded-full`)
+- Schatten: 0 4px 16px rgba(20,30,50,0.05) für Karten (`shadow-karte`);
+  0 2px 8px rgba(37,99,235,0.25) auf Akzent-Buttons (`shadow-akzent`)
+- Abstände: 4px-Raster – 8/12 eng, 16/20 Karten-Innenabstand,
+  24–28 Abschnittsabstände
+- Statusfarben (Text auf Fläche): ok #157F3D auf #E7F6EC
+  (`text-ok` / `bg-ok-flaeche`), warn #B45309 auf #FDF3E1
+  (`text-warnung` / `bg-warnung-flaeche`), error #B91C1C auf #FBE9E9
+  (`text-fehler` / `bg-fehler-flaeche`)
+
 ## Architektur-Überblick
 Upload → Qualitätscheck (Sonnet) → Messung (Fable, JSON, 2–3 Läufe) →
 Edge-Case-Warnungen (Code) → 3D-Viewer + Report. Der Nutzer KANN
