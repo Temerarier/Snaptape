@@ -17,7 +17,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Aufmaß-App",
+  title: "Snaptape",
   description: "Fotos/Pläne rein → Messwerte + 3D-Modell raus",
 };
 

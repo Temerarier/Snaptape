@@ -41,6 +41,18 @@
   --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
+/* Schraffierte Platzhalter-Fläche (3D-Thumbnail in Projektkarten). */
+.schraffur {
+  background-color: var(--color-hintergrund);
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--color-linie) 0px,
+    var(--color-linie) 1.5px,
+    transparent 1.5px,
+    transparent 11px
+  );
+}
+
 /* Indeterminierte, schmale Fortschrittsleiste des 3D-Ladescreens. */
 @keyframes ladebalken {
   0% {

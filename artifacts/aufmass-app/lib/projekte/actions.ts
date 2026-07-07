@@ -2,12 +2,11 @@
 
 import { and, eq, isNull, isNotNull } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { db, projectsTable } from "@workspace/db";
 import { de } from "@/i18n/de";
 import { requireUser } from "@/lib/auth/session";
 
-export type ProjectFormState = { error?: string };
+export type ProjectFormState = { error?: string; success?: boolean };
 
 const MAX_NAME_LENGTH = 200;
 const MAX_ADRESSE_LENGTH = 300;
@@ -38,7 +37,10 @@ export async function createProjectAction(
   });
 
   revalidatePath("/app");
-  redirect("/app");
+  // Erfolg als Status zurückgeben (kein Redirect): Der Dialog in der
+  // Kopfzeile bleibt über Navigationen hinweg gemountet und schließt
+  // sich client-seitig, sobald success gesetzt ist.
+  return { success: true };
 }
 
 export async function archiveProjectAction(formData: FormData): Promise<void> {

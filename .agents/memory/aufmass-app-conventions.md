@@ -17,6 +17,11 @@ description: Fixed stack, iron rules, and artifact quirks for the Aufmaß-App (N
   **How to apply:** any toggle/thinning of Maß-Labels in `lib/viewer/szene.ts` must set `CSS2DObject.visible` (group flag alone also works for all-off).
 - Headless verification: neither the E2E test browser nor local tooling has WebGL — `erstelleSzene` throws and the fallback shows. Keep viewer logic testable by extracting pure functions (see `szene.ts` exports + `szene.test.ts`); visual 3D checks only the user's preview can confirm.
 
+# Form validation convention
+
+- Forms with i18n error texts must set `noValidate` and rely on the server action's German message; native browser `required` tooltips are locale-dependent (English in tests) and violate iron rule 8.
+  **How to apply:** any new form with a required field — return the i18n error from the action, render it via role="alert", keep `required` only as a semantic hint.
+
 # Artifact.toml lessons (platform)
 
 - `verifyAndReplaceArtifactToml` rejects: (a) unknown keys like `serve = "run"` — for a server-rendered production service just give `build` + `run` arrays with no `serve` key; (b) any change to the `[[integratedSkills]]` block — keep it verbatim even if semantically stale (e.g. react-vite skill on a Next.js app).
