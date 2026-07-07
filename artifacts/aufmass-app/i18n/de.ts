@@ -123,7 +123,6 @@ export const de = {
       links: "Links",
       rechts: "Rechts",
       dach: "Dach",
-      unbekannt: "Unbekannt",
     },
     kantenKlassen: {
       first: "First",

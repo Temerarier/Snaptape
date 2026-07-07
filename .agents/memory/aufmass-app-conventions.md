@@ -11,6 +11,12 @@ description: Fixed stack, iron rules, and artifact quirks for the Aufmaß-App (N
 - The app lives at `artifacts/aufmass-app/` (previewPath "/"); it is a Next.js app inside a mostly Vite/Express monorepo. `artifacts/api-server` and `artifacts/mockup-sandbox` are NOT part of this product.
 - User communicates in German; UI starts German, English prepared.
 
+# Viewer (three.js) lessons
+
+- CSS2DRenderer (three ~0.178) rewrites each label's `element.style.display` every frame from `object.visible` (+frustum/layers), and skips whole subtrees whose parent has `visible === false`. Control CSS2D label visibility via the `.visible` flag — manual `style.display` writes get clobbered next frame.
+  **How to apply:** any toggle/thinning of Maß-Labels in `lib/viewer/szene.ts` must set `CSS2DObject.visible` (group flag alone also works for all-off).
+- Headless verification: neither the E2E test browser nor local tooling has WebGL — `erstelleSzene` throws and the fallback shows. Keep viewer logic testable by extracting pure functions (see `szene.ts` exports + `szene.test.ts`); visual 3D checks only the user's preview can confirm.
+
 # Artifact.toml lessons (platform)
 
 - `verifyAndReplaceArtifactToml` rejects: (a) unknown keys like `serve = "run"` — for a server-rendered production service just give `build` + `run` arrays with no `serve` key; (b) any change to the `[[integratedSkills]]` block — keep it verbatim even if semantically stale (e.g. react-vite skill on a Next.js app).

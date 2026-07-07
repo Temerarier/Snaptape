@@ -28,11 +28,19 @@ const t = de.viewer;
 type FassadenName = keyof typeof t.fassaden;
 type KantenKlasse = keyof typeof t.kantenKlassen;
 
-function fassadeName(fassade: string | null | undefined): string {
+// „unbekannt"/null wird UI-weit komplett weggelassen: kein Platzhalter-
+// Text, keine Zeile. null bedeutet hier „nicht anzeigen".
+function fassadeName(fassade: string | null | undefined): string | null {
   if (fassade && fassade in t.fassaden) {
     return t.fassaden[fassade as FassadenName];
   }
-  return t.fassaden.unbekannt;
+  return null;
+}
+
+// Verbindet nur vorhandene Teile mit „ · " – leere Felder fallen weg,
+// ohne hängende Trennzeichen.
+function mitPunkt(...teile: (string | null | undefined)[]): string {
+  return teile.filter((teil): teil is string => Boolean(teil)).join(" · ");
 }
 
 function kantenKlasseName(klasse: string): string {
@@ -169,8 +177,7 @@ function AuswahlDetail({
     return (
       <div className="space-y-1 text-sm">
         <p className="font-semibold text-neutral-900">
-          {letzteId} · {t.typen[oeffnung.typ]} ·{" "}
-          {fassadeName(oeffnung.fassade)}
+          {mitPunkt(letzteId, t.typen[oeffnung.typ], fassadeName(oeffnung.fassade))}
         </p>
         <p
           className="tabular-nums text-neutral-700"
@@ -206,9 +213,11 @@ function AuswahlDetail({
     return (
       <div className="space-y-1 text-sm">
         <p className="font-semibold text-neutral-900">
-          {letzteId} ·{" "}
-          {istWand ? t.kategorien.waende : t.kategorien.dach} ·{" "}
-          {fassadeName(face.fassade)}
+          {mitPunkt(
+            letzteId,
+            istWand ? t.kategorien.waende : t.kategorien.dach,
+            fassadeName(face.fassade),
+          )}
         </p>
         <p
           className="tabular-nums text-neutral-700"
@@ -234,8 +243,11 @@ function AuswahlDetail({
     return (
       <div className="space-y-1 text-sm">
         <p className="font-semibold text-neutral-900">
-          {letzteId} · {kantenKlasseName(kante.edgeClass)} ·{" "}
-          {fassadeName(messKante.gehoert_zu_fassade)}
+          {mitPunkt(
+            letzteId,
+            kantenKlasseName(kante.edgeClass),
+            fassadeName(messKante.gehoert_zu_fassade),
+          )}
         </p>
         <p
           className="tabular-nums text-neutral-700"
@@ -404,7 +416,7 @@ export function BauteilPanel({
                 onToggle={onToggle}
                 onZoom={onZoom}
                 haupt={f.id}
-                neben={fassadeName(f.fassade)}
+                neben={fassadeName(f.fassade) ?? undefined}
                 wert={
                   netto
                     ? `${formatQuadratmeter(f.flaeche_mm2.wert)} / ${formatQuadratmeter(netto.nettoMm2)}`
@@ -448,7 +460,7 @@ export function BauteilPanel({
               onToggle={onToggle}
               onZoom={onZoom}
               haupt={o.id}
-              neben={`${t.typen[o.typ]} · ${fassadeName(o.fassade)}`}
+              neben={mitPunkt(t.typen[o.typ], fassadeName(o.fassade))}
               wert={formatBreiteHoeheCm(o.breite_mm.wert, o.hoehe_mm.wert)}
               wertTitel={`${formatMmRoh(o.breite_mm.wert)} × ${formatMmRoh(o.hoehe_mm.wert)} · ${o.hinweis}`}
             />
@@ -481,7 +493,10 @@ export function BauteilPanel({
               onToggle={onToggle}
               onZoom={onZoom}
               haupt={e.id}
-              neben={`${kantenKlasseName(e.edge_class)} · ${fassadeName(e.gehoert_zu_fassade)}`}
+              neben={mitPunkt(
+                kantenKlasseName(e.edge_class),
+                fassadeName(e.gehoert_zu_fassade),
+              )}
               wert={formatMeter(e.laenge_mm.wert)}
               wertTitel={formatMmRoh(e.laenge_mm.wert)}
             />

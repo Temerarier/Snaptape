@@ -61,6 +61,30 @@ function zuMeter(p: Punkt3): THREE.Vector3 {
   return new THREE.Vector3(p[0] * MM, p[1] * MM, p[2] * MM);
 }
 
+// Text eines Kanten-Maßlabels: Bauteil-ID + Länge, z. B. „K-9 · 5,50 m"
+// (Eiserne Regel 3: dieselbe ID überall). Reine Funktion, damit sie ohne
+// WebGL testbar ist.
+export function massLabelText(
+  id: string,
+  laengeMm: number,
+  formatLaenge: (mm: number) => string,
+): string {
+  return `${id} · ${formatLaenge(laengeMm)}`;
+}
+
+// Ausdünnung bei kleinem Zoom: Ein Label bleibt nur sichtbar, wenn seine
+// Kante aus der aktuellen Kameradistanz groß genug erscheint. Längere
+// Kanten haben dadurch automatisch Vorrang; beim Herauszoomen
+// verschwinden kurze Labels zuerst, beim Hineinzoomen kehren sie zurück.
+// Reine Funktion, damit sie ohne WebGL testbar ist.
+export const LABEL_SICHT_FAKTOR = 0.15;
+export function istMassLabelSichtbar(
+  laengeM: number,
+  kameraAbstandM: number,
+): boolean {
+  return laengeM / Math.max(kameraAbstandM, 0.001) >= LABEL_SICHT_FAKTOR;
+}
+
 // Baut aus einem planaren 3D-Polygon (mm) eine BufferGeometry in Metern.
 function polygonGeometrie(polygonMm: Punkt3[]): THREE.BufferGeometry {
   const punkte = polygonMm.map(zuMeter);
@@ -176,6 +200,8 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
   );
 
   const teile = new Map<string, THREE.Object3D>();
+  // Maß-Labels der Kanten inkl. Länge (in m) für die Zoom-Ausdünnung.
+  const massLabels: { label: CSS2DObject; laengeM: number }[] = [];
 
   for (const flaeche of modell.flaechen) {
     const basisFarbe = FLAECHEN_FARBEN[flaeche.faceClass] ?? 0xcccccc;
@@ -215,14 +241,29 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
     gruppeKanten.add(linie);
     teile.set(kante.id, linie);
 
-    // Maß-Label am Kantenmittelpunkt (per Schalter einblendbar)
+    // Maß-Label am Kantenmittelpunkt (per Schalter einblendbar):
+    // Bauteil-ID + Länge, z. B. „K-9 · 5,50 m" (Eiserne Regel 3).
     const mitte = zuMeter(kante.start).add(zuMeter(kante.ende)).multiplyScalar(0.5);
-    const el = labelElement(formatLaenge(kante.laengeMm));
+    const el = labelElement(massLabelText(kante.id, kante.laengeMm, formatLaenge));
     const label = new CSS2DObject(el);
     label.position.copy(mitte);
     gruppeMassLabels.add(label);
+    massLabels.push({ label, laengeM: kante.laengeMm * MM });
   }
   gruppeMassLabels.visible = false;
+
+  // Sichtbarkeit der Maß-Labels: Schalter „Maße anzeigen" UND Ausdünnung
+  // (istMassLabelSichtbar) müssen beide zustimmen. CSS2D-Labels sind
+  // DOM-Overlays und damit immer zur Kamera gerichtet.
+  let masseAn = false;
+  function aktualisiereMassLabels() {
+    for (const { label, laengeM } of massLabels) {
+      const abstand = kamera.position.distanceTo(label.position);
+      const sichtbar = masseAn && istMassLabelSichtbar(laengeM, abstand);
+      label.visible = sichtbar;
+      label.element.style.display = sichtbar ? "" : "none";
+    }
+  }
 
   // Messlinien-Werkzeug
   let messModus = false;
@@ -377,9 +418,18 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
 
   // Render-Schleife
   let rafId = 0;
+  const letzteLabelKameraPos = new THREE.Vector3(Infinity, Infinity, Infinity);
   function rendern() {
     rafId = requestAnimationFrame(rendern);
     steuerung.update();
+    // Ausdünnung nur neu berechnen, wenn die Kamera sich bewegt hat.
+    if (
+      masseAn &&
+      kamera.position.distanceToSquared(letzteLabelKameraPos) > 1e-4
+    ) {
+      letzteLabelKameraPos.copy(kamera.position);
+      aktualisiereMassLabels();
+    }
     renderer.render(szene, kamera);
     labelRenderer.render(szene, kamera);
   }
@@ -415,12 +465,9 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
       }
     },
     setMasseSichtbar(sichtbar) {
+      masseAn = sichtbar;
       gruppeMassLabels.visible = sichtbar;
-      gruppeMassLabels.traverse((obj) => {
-        if (obj instanceof CSS2DObject) {
-          obj.element.style.display = sichtbar ? "" : "none";
-        }
-      });
+      aktualisiereMassLabels();
     },
     setMessModus(aktiv) {
       messModus = aktiv;
