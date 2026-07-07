@@ -53,6 +53,28 @@
   );
 }
 
+/* Maß-Chips der 3D-Ansicht (CSS2D-Labels in lib/viewer/szene.ts):
+   weiße Pille mit Mono-Schrift, z. B. „K-9 · 5,50 m". Nur Tokens. */
+.mass-chip {
+  background: var(--color-flaeche);
+  border: 1px solid var(--color-linie);
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 11px;
+  color: var(--color-schrift);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  box-shadow: var(--shadow-karte);
+}
+
+/* Variante für Messlinien-Labels (rot, passend zur Messlinie). */
+.mass-chip-mess {
+  border-color: color-mix(in srgb, var(--color-fehler) 35%, transparent);
+  color: var(--color-fehler);
+}
+
 /* Indeterminierte, schmale Fortschrittsleiste des 3D-Ladescreens. */
 @keyframes ladebalken {
   0% {

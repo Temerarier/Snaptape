@@ -22,12 +22,23 @@ export default async function ProjektViewerSeite({
   if (!UUID_PATTERN.test(id)) notFound();
 
   const rows = await db
-    .select({ id: projectsTable.id })
+    .select({
+      id: projectsTable.id,
+      name: projectsTable.name,
+      adresse: projectsTable.adresse,
+    })
     .from(projectsTable)
     .where(and(eq(projectsTable.id, id), eq(projectsTable.userId, user.id)))
     .limit(1);
-  if (!rows[0]) notFound();
+  const project = rows[0];
+  if (!project) notFound();
 
   const mess = ladeTesthaus();
-  return <ModellViewer mess={mess} />;
+  return (
+    <ModellViewer
+      mess={mess}
+      projektName={project.name}
+      projektAdresse={project.adresse}
+    />
+  );
 }

@@ -87,19 +87,28 @@ export const de = {
   },
   viewer: {
     title: "3D-Viewer",
-    subtitle: "Test-Haus (handgeschriebene Messdaten)",
     navLink: "3D-Viewer (Testhaus)",
+    zurueckProjekte: "Projekte",
+    statusBadge: "Modell bereit · Testdaten",
+    steuerungHinweis:
+      "Ziehen zum Drehen · Scrollen zum Zoomen · Fläche anklicken",
+    leerenKurz: "Leeren",
+    entfernen: "Aus der Auswahl entfernen:",
+    ausgewaehlt: "Ausgewählt",
+    gesamt: "gesamt",
+    summary: {
+      dach: "Dachfläche",
+      wand: "Wandfläche (netto)",
+      oeffnungen: "Öffnungen",
+    },
     masseAnzeigen: "Maße anzeigen",
     messWerkzeug: "Messlinie",
     messHinweis:
       "Zwei Punkte im Modell anklicken – Endpunkte rasten an Kanten ein.",
     messLinien: "Messlinien",
-    keineMessLinien: "Noch keine Messlinien.",
     loeschen: "Löschen",
     alleAuswaehlen: "Alle auswählen",
     alleAbwaehlen: "Alle abwählen",
-    auswahlLeeren: "Auswahl aufheben",
-    auswahlTitel: "Auswahl",
     keineAuswahl:
       "Kein Bauteil ausgewählt. Klicken Sie im Modell oder in der Liste.",
     auswahlFlaecheEinzahl: "Fläche",

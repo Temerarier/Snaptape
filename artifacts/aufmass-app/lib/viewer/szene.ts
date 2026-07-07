@@ -118,14 +118,16 @@ export function polygonGeometrie(polygonMm: Punkt3[]): THREE.BufferGeometry {
   return geometrie;
 }
 
-function labelElement(text: string): HTMLDivElement {
+// Chip-Optik kommt aus app/globals.css (.mass-chip, Token-basiert);
+// hier wird nur die Klasse gesetzt – reines Styling, keine Logik.
+function labelElement(
+  text: string,
+  variante: "mass" | "mess" = "mass",
+): HTMLDivElement {
   const el = document.createElement("div");
   el.textContent = text;
-  el.style.cssText =
-    "background:rgba(255,255,255,0.92);border:1px solid #d6d3d1;" +
-    "border-radius:6px;padding:1px 6px;font-size:11px;color:#1c1917;" +
-    "font-family:ui-sans-serif,system-ui,sans-serif;white-space:nowrap;" +
-    "pointer-events:none;user-select:none;";
+  el.className =
+    variante === "mess" ? "mass-chip mass-chip-mess" : "mass-chip";
   return el;
 }
 
@@ -520,9 +522,7 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
         endpunktB.position.copy(b);
         objekt.add(endpunkte, endpunktB);
 
-        const el = labelElement(formatLaenge(linie.laengeMm));
-        el.style.borderColor = "#fca5a5";
-        el.style.color = "#b91c1c";
+        const el = labelElement(formatLaenge(linie.laengeMm), "mess");
         const label = new CSS2DObject(el);
         label.position.copy(a.clone().add(b).multiplyScalar(0.5));
         objekt.add(label);
