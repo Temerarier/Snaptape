@@ -1,6 +1,6 @@
 "use client";
 
-// Rechtes Panel des 3D-Viewers: Werkzeuge, Auswahl-Detail und die
+// Linkes Panel des 3D-Viewers: Werkzeuge, Auswahl-Detail und die
 // Bauteil-Kategorien Dach / Wände / Öffnungen / Kanten mit Summen.
 // Anzeige gerundet (cm bzw. m²), Roh-mm im Tooltip (Eiserne Regel 1);
 // Öffnungen tragen immer den Hinweis „Richtmaß, kein Bestellmaß“
@@ -95,18 +95,18 @@ function Zeile({
       title={de.viewer.zoomHinweis}
       className={`flex w-full items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left text-sm transition ${
         ausgewaehlt
-          ? "border-blue-300 bg-blue-50"
-          : "border-transparent hover:bg-neutral-100"
+          ? "border-sky-400/60 bg-sky-400/15"
+          : "border-transparent hover:bg-white/10"
       }`}
     >
       <span className="min-w-0">
-        <span className="font-medium text-neutral-900">{haupt}</span>
+        <span className="font-medium text-white">{haupt}</span>
         {neben ? (
-          <span className="ml-1.5 text-xs text-neutral-500">{neben}</span>
+          <span className="ml-1.5 text-xs text-neutral-400">{neben}</span>
         ) : null}
       </span>
       <span
-        className="shrink-0 tabular-nums text-neutral-700"
+        className="shrink-0 tabular-nums text-neutral-300"
         title={wertTitel}
       >
         {wert}
@@ -131,13 +131,13 @@ function KategorieKopf({
   const alleGewaehlt = ids.length > 0 && ids.every((id) => auswahl.has(id));
   return (
     <div className="mb-1.5 flex items-center justify-between">
-      <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-400">
         {titel}
       </h3>
       <button
         type="button"
         onClick={() => onKategorieToggle(ids)}
-        className="text-xs font-medium text-blue-700 hover:underline"
+        className="text-xs font-medium text-sky-300 hover:underline"
       >
         {alleGewaehlt ? t.alleAbwaehlen : t.alleAuswaehlen}
       </button>
@@ -147,9 +147,9 @@ function KategorieKopf({
 
 function SummenZeile({ label, wert, wertTitel }: { label: string; wert: string; wertTitel?: string }) {
   return (
-    <div className="flex items-center justify-between border-t border-neutral-200 px-2.5 pt-1.5 text-sm">
-      <span className="font-medium text-neutral-600">{label}</span>
-      <span className="font-semibold tabular-nums text-neutral-900" title={wertTitel}>
+    <div className="flex items-center justify-between border-t border-white/10 px-2.5 pt-1.5 text-sm">
+      <span className="font-medium text-neutral-300">{label}</span>
+      <span className="font-semibold tabular-nums text-white" title={wertTitel}>
         {wert}
       </span>
     </div>
@@ -168,7 +168,7 @@ function AuswahlDetail({
 }) {
   const letzteId = [...auswahl].at(-1);
   if (!letzteId) {
-    return <p className="text-xs text-neutral-500">{t.keineAuswahl}</p>;
+    return <p className="text-xs text-neutral-400">{t.keineAuswahl}</p>;
   }
 
   const oeffnung = mess.openings.find((o) => o.id === letzteId);
@@ -176,28 +176,28 @@ function AuswahlDetail({
     const flaeche = oeffnungsFlaecheMm2(oeffnung);
     return (
       <div className="space-y-1 text-sm">
-        <p className="font-semibold text-neutral-900">
+        <p className="font-semibold text-white">
           {mitPunkt(letzteId, t.typen[oeffnung.typ], fassadeName(oeffnung.fassade))}
         </p>
         <p
-          className="tabular-nums text-neutral-700"
+          className="tabular-nums text-neutral-300"
           title={`${formatMmRoh(oeffnung.breite_mm.wert)} × ${formatMmRoh(oeffnung.hoehe_mm.wert)}`}
         >
           {t.breiteXHoehe}:{" "}
           {formatBreiteHoeheCm(oeffnung.breite_mm.wert, oeffnung.hoehe_mm.wert)}
         </p>
-        <p className="tabular-nums text-neutral-700" title={formatMm2Roh(flaeche)}>
+        <p className="tabular-nums text-neutral-300" title={formatMm2Roh(flaeche)}>
           {t.flaeche}: {formatQuadratmeter(flaeche)}
         </p>
         {oeffnung.bruestung_mm ? (
           <p
-            className="tabular-nums text-neutral-700"
+            className="tabular-nums text-neutral-300"
             title={formatMmRoh(oeffnung.bruestung_mm.wert)}
           >
             {t.bruestung}: {formatCm(oeffnung.bruestung_mm.wert)}
           </p>
         ) : null}
-        <p className="text-xs font-medium text-amber-700">
+        <p className="text-xs font-medium text-amber-400">
           {oeffnung.hinweis}
         </p>
       </div>
@@ -212,7 +212,7 @@ function AuswahlDetail({
       : undefined;
     return (
       <div className="space-y-1 text-sm">
-        <p className="font-semibold text-neutral-900">
+        <p className="font-semibold text-white">
           {mitPunkt(
             letzteId,
             istWand ? t.kategorien.waende : t.kategorien.dach,
@@ -220,14 +220,14 @@ function AuswahlDetail({
           )}
         </p>
         <p
-          className="tabular-nums text-neutral-700"
+          className="tabular-nums text-neutral-300"
           title={formatMm2Roh(face.flaeche_mm2.wert)}
         >
           {t.flaecheBrutto}: {formatQuadratmeter(face.flaeche_mm2.wert)}
         </p>
         {netto ? (
           <p
-            className="tabular-nums text-neutral-700"
+            className="tabular-nums text-neutral-300"
             title={formatMm2Roh(netto.nettoMm2)}
           >
             {t.flaecheNetto}: {formatQuadratmeter(netto.nettoMm2)}
@@ -242,7 +242,7 @@ function AuswahlDetail({
   if (kante && messKante) {
     return (
       <div className="space-y-1 text-sm">
-        <p className="font-semibold text-neutral-900">
+        <p className="font-semibold text-white">
           {mitPunkt(
             letzteId,
             kantenKlasseName(kante.edgeClass),
@@ -250,7 +250,7 @@ function AuswahlDetail({
           )}
         </p>
         <p
-          className="tabular-nums text-neutral-700"
+          className="tabular-nums text-neutral-300"
           title={formatMmRoh(messKante.laenge_mm.wert)}
         >
           {t.laenge}: {formatMeter(messKante.laenge_mm.wert)}
@@ -259,7 +259,7 @@ function AuswahlDetail({
     );
   }
 
-  return <p className="text-xs text-neutral-500">{t.keineAuswahl}</p>;
+  return <p className="text-xs text-neutral-400">{t.keineAuswahl}</p>;
 }
 
 export function BauteilPanel({
@@ -290,18 +290,18 @@ export function BauteilPanel({
   return (
     <div className="space-y-5 p-4">
       <div>
-        <h2 className="text-base font-semibold text-neutral-900">{t.title}</h2>
-        <p className="text-xs text-neutral-500">{t.subtitle}</p>
+        <h2 className="text-base font-semibold text-white">{t.title}</h2>
+        <p className="text-xs text-neutral-400">{t.subtitle}</p>
       </div>
 
       {/* Werkzeuge */}
-      <div className="space-y-2 rounded-xl border border-neutral-200 bg-neutral-50 p-3">
-        <label className="flex cursor-pointer items-center gap-2 text-sm text-neutral-800">
+      <div className="space-y-2 rounded-xl border border-white/10 bg-white/5 p-3">
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-neutral-200">
           <input
             type="checkbox"
             checked={masseSichtbar}
             onChange={(e) => onMasseChange(e.target.checked)}
-            className="h-4 w-4 accent-blue-600"
+            className="h-4 w-4 accent-sky-400"
           />
           {t.masseAnzeigen}
         </label>
@@ -310,8 +310,8 @@ export function BauteilPanel({
           onClick={() => onMessModusChange(!messModus)}
           className={`w-full rounded-lg border px-3 py-1.5 text-sm font-medium transition ${
             messModus
-              ? "border-red-300 bg-red-50 text-red-700"
-              : "border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-100"
+              ? "border-red-400/60 bg-red-500/15 text-red-300"
+              : "border-white/15 bg-white/5 text-neutral-200 hover:bg-white/10"
           }`}
         >
           {t.messWerkzeug}
@@ -321,10 +321,10 @@ export function BauteilPanel({
             {messLinien.map((linie) => (
               <li
                 key={linie.id}
-                className="flex items-center justify-between gap-2 rounded-lg bg-white px-2.5 py-1 text-sm"
+                className="flex items-center justify-between gap-2 rounded-lg bg-white/10 px-2.5 py-1 text-sm"
               >
                 <span
-                  className="tabular-nums text-neutral-800"
+                  className="tabular-nums text-neutral-200"
                   title={formatMmRoh(linie.laengeMm)}
                 >
                   {linie.id}: {formatMeter(linie.laengeMm)}
@@ -332,7 +332,7 @@ export function BauteilPanel({
                 <button
                   type="button"
                   onClick={() => onMessLinieLoeschen(linie.id)}
-                  className="text-xs font-medium text-red-600 hover:underline"
+                  className="text-xs font-medium text-red-400 hover:underline"
                 >
                   {t.loeschen}
                 </button>
@@ -340,21 +340,21 @@ export function BauteilPanel({
             ))}
           </ul>
         ) : (
-          <p className="text-xs text-neutral-500">{t.keineMessLinien}</p>
+          <p className="text-xs text-neutral-400">{t.keineMessLinien}</p>
         )}
       </div>
 
       {/* Auswahl */}
-      <div className="rounded-xl border border-neutral-200 p-3">
+      <div className="rounded-xl border border-white/10 p-3">
         <div className="mb-1.5 flex items-center justify-between">
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-400">
             {t.auswahlTitel}
           </h3>
           {auswahl.size > 0 ? (
             <button
               type="button"
               onClick={onAuswahlLeeren}
-              className="text-xs font-medium text-blue-700 hover:underline"
+              className="text-xs font-medium text-sky-300 hover:underline"
             >
               {t.auswahlLeeren}
             </button>
@@ -471,7 +471,7 @@ export function BauteilPanel({
           wert={formatQuadratmeter(summen.oeffnungenMm2)}
           wertTitel={formatMm2Roh(summen.oeffnungenMm2)}
         />
-        <p className="mt-1.5 px-2.5 text-xs font-medium text-amber-700">
+        <p className="mt-1.5 px-2.5 text-xs font-medium text-amber-400">
           {t.hinweisRichtmass}
         </p>
       </section>

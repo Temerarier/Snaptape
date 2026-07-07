@@ -147,6 +147,9 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(container.clientWidth, container.clientHeight);
+  // Weiche Schatten für den „Modell auf hellem Tisch"-Look.
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.domElement.style.cssText = "position:absolute;inset:0;display:block;";
   container.appendChild(renderer.domElement);
 
@@ -168,22 +171,34 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
   szene.add(new THREE.HemisphereLight(0xffffff, 0x9c9890, 1.0));
   const sonne = new THREE.DirectionalLight(0xffffff, 1.4);
   sonne.position.set(14, 22, 18);
-  szene.add(sonne);
+  // Die Sonne wirft den weichen Schlagschatten des Hauses auf den Boden.
+  sonne.castShadow = true;
+  sonne.target.position.set(breite / 2, 0, tiefe / 2);
+  const schattenRadius = Math.max(breite, tiefe) * 1.8;
+  sonne.shadow.camera.left = -schattenRadius;
+  sonne.shadow.camera.right = schattenRadius;
+  sonne.shadow.camera.top = schattenRadius;
+  sonne.shadow.camera.bottom = -schattenRadius;
+  sonne.shadow.camera.near = 1;
+  sonne.shadow.camera.far = 80;
+  sonne.shadow.mapSize.set(2048, 2048);
+  sonne.shadow.bias = -0.0003;
+  sonne.shadow.normalBias = 0.03;
+  szene.add(sonne, sonne.target);
   const gegenlicht = new THREE.DirectionalLight(0xffffff, 0.45);
   gegenlicht.position.set(-12, 8, -14);
   szene.add(gegenlicht);
 
-  // Boden + Raster
+  // Heller Boden („Tisch"): weiße Fläche, die nur den Schatten trägt –
+  // bewusst ohne Raster, damit das Modell ruhig aufliegt.
   const boden = new THREE.Mesh(
-    new THREE.PlaneGeometry(60, 60),
-    new THREE.MeshStandardMaterial({ color: 0xe9e7e2 }),
+    new THREE.PlaneGeometry(120, 120),
+    new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.95 }),
   );
   boden.rotation.x = -Math.PI / 2;
   boden.position.set(breite / 2, -0.005, tiefe / 2);
+  boden.receiveShadow = true;
   szene.add(boden);
-  const raster = new THREE.GridHelper(60, 60, 0xd0ccc4, 0xdcd8d0);
-  raster.position.set(breite / 2, 0.001, tiefe / 2);
-  szene.add(raster);
 
   // Bauteile
   const gruppeFlaechen = new THREE.Group();
@@ -213,6 +228,7 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
       polygonOffsetUnits: 1,
     });
     const mesh = new THREE.Mesh(polygonGeometrie(flaeche.polygon), material);
+    mesh.castShadow = true;
     mesh.userData = { bauteilId: flaeche.id, basisFarbe };
     gruppeFlaechen.add(mesh);
     teile.set(flaeche.id, mesh);

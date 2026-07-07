@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+/* Indeterminierte, schmale Fortschrittsleiste des 3D-Ladescreens. */
+@keyframes ladebalken {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+.ladebalken {
+  animation: ladebalken 1.4s ease-in-out infinite;
+}

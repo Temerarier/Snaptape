@@ -103,8 +103,9 @@ export const de = {
     anzahlKurz: "Stück",
     hinweisRichtmass: "Richtmaß, kein Bestellmaß",
     zoomHinweis: "Doppelklick zoomt auf das Bauteil.",
+    laden: "3D wird geladen",
     webglFehler:
-      "Die 3D-Ansicht konnte nicht gestartet werden. Ihr Browser oder Gerät unterstützt kein WebGL. Die Messwerte im Panel rechts bleiben verfügbar.",
+      "Die 3D-Ansicht konnte nicht gestartet werden. Ihr Browser oder Gerät unterstützt kein WebGL. Die Messwerte im Panel bleiben verfügbar.",
     kategorien: {
       dach: "Dach",
       waende: "Wände",
@@ -145,21 +146,19 @@ export const de = {
       "Dieses Projekt existiert nicht oder gehört nicht zu Ihrem Konto.",
     placeholderHint: "Verfügbar in einer späteren Etappe",
     cards: {
-      fotos: {
-        title: "Fotos",
-        text: "Hier laden Sie später Fotos und Pläne hoch.",
-      },
-      modell: {
+      modell3d: {
         title: "3D-Modell",
-        text: "Hier erscheint später das interaktive 3D-Modell.",
+        oeffnen: "3D öffnen",
       },
       messwerte: {
         title: "Messwerte",
-        text: "Hier erscheinen später alle Messwerte in Millimetern.",
-      },
-      report: {
-        title: "Report",
-        text: "Hier erstellen Sie später den Aufmaß-Report als PDF.",
+        quelle: "Werte aus dem Test-Haus-Modell",
+        dachflaeche: "Dachfläche",
+        wandflaeche: "Wandfläche (netto)",
+        fenster: "Fenster",
+        gesamt: "Gesamtübersicht",
+        gesamtText: "Alle Messwerte im 3D-Viewer",
+        pdf: "PDF",
       },
     },
   },
