@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Snaptape Measurement Schema v1.2 (whole building, US/English)",
+  "description": "Full building: lists of faces, edges, openings. Internal units are millimeters (unrounded); display converts to imperial (ft-in, sq ft, pitch x/12). US construction terms. v1.2 adds Hover-proven elements: roof flashing/step-flashing edges, three-stage pitch (original/rounded/snapped), soffit depth, window group_id, patio_door/skylight, chimney attachment, user_provided reference. Calculated values (waste, united inches, squares, gutter runs) stay in the calculation layer, NOT here. ID MIGRATION MAP from v1.0 (German): D-→RF-, W-→WL-, U-→SF-, B-→FC-, K-→E-, F-→W-, T-→D-, G-→G-, A-→AT-. CAUTION: new 'D-' = door (old 'D-' was roof face), new 'W-' = window (old 'W-' was wall). Never mix v1.0 and v1.2 IDs in one project.",
+  "type": "object",
+  "required": ["meta", "building", "references", "faces", "edges", "openings"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["country", "unit"],
+      "properties": {
+        "country": { "enum": ["US", "DE", "AT", "CH"] },
+        "unit": { "const": "mm", "description": "Internal storage unit, unrounded. Display layer converts to imperial (ft-in, sq ft, pitch x/12); raw mm shown in tooltips." },
+        "schema_version": { "const": "1.2" },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["index", "view_angle"],
+            "properties": {
+              "index": { "type": "integer", "minimum": 1, "description": "1-based, matches the photo numbering used in prompts." },
+              "shows_elevation": { "enum": ["front", "back", "left", "right", "roof", "multiple", "unknown"], "description": "front = street-facing side, as seen from the street. Never guess compass directions." },
+              "view_angle": { "enum": ["frontal", "slightly_angled", "steeply_angled"] },
+              "perspective_corrected": { "type": "boolean" }
+            }
+          }
+        },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "building": {
+      "type": "object",
+      "required": ["roof_type"],
+      "description": "Elevations are named functionally: front = street-facing side, back = garden side, left/right as seen FROM the street. Compass orientation is derived deterministically from the address later, never guessed from photos.",
+      "properties": {
+        "building_type": { "enum": ["detached", "duplex", "townhouse_middle", "townhouse_end", "unknown"] },
+        "stories": { "type": ["integer", "null"] },
+        "roof_type": { "enum": ["gable", "hip", "flat", "shed", "mansard", "gambrel", "jerkinhead", "other", "unknown"] },
+        "footprint": {
+          "type": ["object", "null"],
+          "description": "Outline. Points as [x,y] mm clockwise from front-left corner; or simplified width/depth.",
+          "properties": {
+            "points": { "type": "array", "items": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 } },
+            "width_mm": { "$ref": "#/$defs/measurement_or_null" },
+            "depth_mm": { "$ref": "#/$defs/measurement_or_null" },
+            "perimeter_mm": { "$ref": "#/$defs/measurement_or_null" },
+            "area_mm2": { "$ref": "#/$defs/measurement_or_null" }
+          }
+        },
+        "heights": {
+          "type": "object",
+          "properties": {
+            "eave_height_mm": { "$ref": "#/$defs/measurement_or_null" },
+            "ridge_height_mm": { "$ref": "#/$defs/measurement_or_null" },
+            "parapet_height_mm": { "$ref": "#/$defs/measurement_or_null" }
+          }
+        },
+        "shared_walls": {
+          "type": "array",
+          "description": "For duplex/townhouse: which elevation is a shared (party) wall.",
+          "items": { "enum": ["front", "back", "left", "right"] }
+        }
+      }
+    },
+    "references": {
+      "type": "array",
+      "description": "One scale per photo. A scale never carries across photos. Priority order: user_provided (overrides everything) > own_reference (tier-3 normed object) > transferred.",
+      "items": {
+        "type": "object",
+        "required": ["photo_index", "scale_type"],
+        "properties": {
+          "photo_index": { "type": "integer", "minimum": 1 },
+          "scale_type": { "enum": ["user_provided", "own_reference", "transferred", "none"], "description": "user_provided = a measurement entered by the user; it overrides ALL assumptions." },
+          "object": { "type": ["string", "null"], "description": "e.g. 'entry door', 'brick course', 'license plate'" },
+          "bounding_box": { "type": ["array", "null"], "items": { "type": "number" } },
+          "assumed_size_mm": { "type": ["number", "null"] },
+          "reliability": { "enum": ["high", "medium", "low", null] },
+          "plane": { "enum": ["facade_plane", "in_front", "behind", "unknown", null] },
+          "transferred_via": { "type": ["string", "null"], "description": "Only if scale_type=transferred: shared element + source photo, e.g. 'window W-2 width from photo 1'" },
+          "user_confirmed": { "type": "boolean", "default": false, "description": "True if the user confirmed a DETECTED reference. Not the same as scale_type=user_provided." }
+        }
+      }
+    },
+    "faces": {
+      "type": "array",
+      "description": "All building faces (roof faces, walls, soffits, fascia).",
+      "items": {
+        "type": "object",
+        "required": ["id", "face_class", "area_mm2"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^(RF|WL|SF|FC)-[0-9]+$", "description": "RF=roof face, WL=wall, SF=soffit, FC=fascia" },
+          "face_class": { "enum": ["roof_face", "wall", "soffit", "fascia"] },
+          "elevation": { "enum": ["front", "back", "left", "right", "roof", "unknown"], "description": "front = street-facing side." },
+          "material": { "enum": ["stucco", "brick", "siding", "wood", "concrete", "eifs", "other", "unknown", null] },
+          "area_mm2": { "$ref": "#/$defs/measurement" },
+          "net_area_mm2": { "$ref": "#/$defs/measurement_or_null" },
+          "soffit_depth_mm": { "$ref": "#/$defs/measurement_or_null", "description": "Only for soffit/fascia faces (roofline overhang depth). Hover-style." },
+          "pitch": {
+            "type": ["object", "null"],
+            "description": "Roof faces only. Three-stage like Hover: exact, rounded, and snapped to a common pitch.",
+            "properties": {
+              "degrees_original": { "type": "number" },
+              "degrees_rounded": { "type": "number" },
+              "rise_over_12_snapped": { "type": "number", "description": "US pitch snapped to a common value, rise per 12 run (e.g. 6 = 6/12)" }
+            }
+          },
+          "orientation_deg": { "type": ["number", "null"], "description": "Azimuth, roof only. Derived from address later; null from photos." }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "description": "All edges with class and length. US roofing/siding terms. Roof-metal edges (flashing, step_flashing) included. 'unclassified' is kept and shown, never silently dropped (completeness signal). Note: gutter/downspout runs are DERIVED from eave edges in the calculation layer, not stored here.",
+      "items": {
+        "type": "object",
+        "required": ["id", "edge_class", "length_mm"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^E-[0-9]+$" },
+          "edge_class": { "enum": ["ridge", "hip", "valley", "eave", "rake", "flashing", "step_flashing", "outside_corner", "inside_corner", "base", "head", "sill", "jamb", "unclassified"] },
+          "length_mm": { "$ref": "#/$defs/measurement" },
+          "belongs_to_elevation": { "enum": ["front", "back", "left", "right", "roof", "unknown", null] }
+        }
+      }
+    },
+    "openings": {
+      "type": "array",
+      "description": "All windows, doors, garage doors, skylights across the building. patio_door is separate because US siding-waste rules treat garage/patio doors differently (<20 sq ft excl. vs <33 sq ft incl.).",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "elevation", "width_mm", "height_mm"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^(W|D|G|SK)-[0-9]+$", "description": "W=window, D=door, G=garage door, SK=skylight. CAUTION vs v1.0: old D- was roof face, old W- was wall." },
+          "type": { "enum": ["window", "door", "patio_door", "garage_door", "skylight", "other"] },
+          "elevation": { "enum": ["front", "back", "left", "right", "roof", "unknown"], "description": "roof only for skylights." },
+          "width_mm": { "$ref": "#/$defs/measurement" },
+          "height_mm": { "$ref": "#/$defs/measurement" },
+          "sill_height_mm": { "$ref": "#/$defs/measurement_or_null" },
+          "group_id": { "type": ["string", "null"], "description": "Optional window group (shared trim), Hover-style WG-x. Group metrics (group width/height, united inches) live in the calculation layer." },
+          "position_mm": {
+            "type": ["object", "null"],
+            "description": "x/y of the opening's lower-left corner, from the lower-left corner of its elevation.",
+            "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+          },
+          "area_mm2": { "$ref": "#/$defs/measurement_or_null" },
+          "perimeter_mm": { "$ref": "#/$defs/measurement_or_null" },
+          "note": { "type": "string", "default": "Reference only, not for ordering", "description": "Single source of truth for this text is the app config; keep in sync." }
+        }
+      }
+    },
+    "attachments": {
+      "type": "array",
+      "description": "Optional extra volumes/obstacles for the massing kit (dormer, bay, balcony, awning, addition, chimney).",
+      "items": {
+        "type": "object",
+        "required": ["id", "type"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^AT-[0-9]+$" },
+          "type": { "enum": ["dormer", "bay", "balcony", "awning", "addition", "chimney", "other"] },
+          "elevation": { "enum": ["front", "back", "left", "right", "roof", "unknown"] },
+          "width_mm": { "$ref": "#/$defs/measurement_or_null" },
+          "height_mm": { "$ref": "#/$defs/measurement_or_null" },
+          "depth_mm": { "$ref": "#/$defs/measurement_or_null" }
+        }
+      }
+    },
+    "quality": {
+      "type": ["object", "null"],
+      "properties": {
+        "references_used": { "type": "integer" },
+        "spread_percent": { "type": "number" },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "$defs": {
+    "measurement": {
+      "type": "object",
+      "required": ["value", "confidence", "source"],
+      "properties": {
+        "value": { "type": "number", "description": "unrounded, mm or mm2" },
+        "confidence": { "enum": ["high", "medium", "low"] },
+        "source": { "enum": ["measured", "scaled", "estimated"] },
+        "reference_used": { "type": ["string", "null"] },
+        "low_reason": { "type": ["string", "null"] }
+      }
+    },
+    "measurement_or_null": {
+      "oneOf": [
+        { "$ref": "#/$defs/measurement" },
+        { "type": "null" }
+      ]
+    }
+  }
+}

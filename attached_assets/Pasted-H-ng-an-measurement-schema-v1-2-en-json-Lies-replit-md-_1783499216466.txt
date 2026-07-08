@@ -1,0 +1,57 @@
+Häng an: measurement-schema-v1-2-en.json
+
+Lies replit.md. Baue NUR diese Etappe:
+
+Ziel: Das Mess-Schema wird von der deutschen v1-0 auf die englische v1-2
+umgestellt (Zielmarkt USA). Die angehängte Datei ist der neue verbindliche
+Vertrag (Eiserne Regel 2). Intern bleibt ALLES in mm, ungerundet.
+
+1. schema/mess-schema.json durch die angehängte v1-2 ersetzen (englische
+   Feld-/Enum-Namen, US-Begriffe: front/back/left/right, ridge/hip/valley/
+   eave/rake/flashing/step_flashing, pitch dreistufig inkl. x/12).
+
+2. ID-Mapping alt → neu EXAKT so anwenden:
+   D-→RF- · W-→WL- · U-→SF- · B-→FC- · K-→E- · F-→W- · T-→D- ·
+   G-→G- · A-→AT-
+   ACHTUNG Verwechslungsgefahr: das NEUE D- ist eine Tür (alt: Dachfläche),
+   das NEUE W- ist ein Fenster (alt: Wand). Niemals alte und neue IDs
+   mischen. Neu dazu: SK- (Skylight).
+
+3. Datenstrategie: Bestehende DB-Inhalte sind reine Testdaten. Tabellen
+   nach neuem Schema NEU aufsetzen (drop & recreate). KEINE
+   Migrationsskripte, keine Migrations-Infrastruktur bauen.
+   Status-Enum in der DB dabei umbenennen:
+   entwurf→draft · in_pruefung→reviewing · fertig→ready · fehler→failed.
+
+4. Auf die neuen Namen migrieren: Zod-Validierung (lib/messung/schema.ts),
+   DB-Tabellen/Spalten, 3D-Viewer (lib/viewer/), Berechnungsschicht
+   (lib/berechnung/).
+
+5. Test-Haus-Fixture ins neue Schema übersetzen (gleiches Haus, gleiche
+   Werte, neue Feldnamen/IDs), weiterhin komplett gültig – zusätzlich:
+   2 flashing-Kanten und pitch dreistufig (degrees_original /
+   degrees_rounded / rise_over_12_snapped, z. B. 42° → 11/12).
+
+6. Anzeige (NUR Anzeige-Layer, Daten bleiben mm):
+   - Längen als ft-in im Format 14' 11"
+   - Flächen als ganze ft²
+   - Dachneigung als x/12 (snapped), exakter Wert im Tooltip
+   - Roh-mm bleibt wie bisher im Tooltip sichtbar
+
+7. replit.md aktualisieren:
+   - Regel 3: neue ID-Präfixe (RF/WL/SF/FC, E, W/D/G/SK, AT)
+   - Regel 9: Fassaden heißen front / back / left / right (front =
+     street-facing, von der Straße aus gesehen) – Himmelsrichtungen
+     weiterhin niemals raten
+   - Schema-Verweis: schema/mess-schema.json = v1.2 (englisch)
+
+Akzeptanzkriterien: Test-Haus lädt und steht korrekt in 3D; Klick auf
+Fenster zeigt B × H in ft-in, Tooltip zeigt Roh-mm; Unit-Tests der
+Berechnungsschicht grün mit denselben handgerechneten Werten (nur Anzeige-
+Einheit neu); Projektliste zeigt Status draft/reviewing/ready/failed;
+eine Volltextsuche im Code nach "K-1", "F-1", "dachflaeche", "traufe"
+liefert KEINE Treffer mehr (außer in Kommentaren zur Migration).
+
+Nicht bauen: keine neuen Features, keine UI-Text-Übersetzung (kommt als
+eigene Etappe), Design-System/Design-Tokens aus der Projektlisten-
+Umstellung NICHT anfassen.
