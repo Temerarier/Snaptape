@@ -6,7 +6,8 @@
 // Anzeige imperial (ft-in bzw. ft², Pitch x/12), Roh-mm im Tooltip
 // (Eiserne Regel 1); Öffnungen tragen immer den Hinweis „Richtmaß,
 // kein Bestellmaß" (Eiserne Regel 5).
-import { de } from "@/i18n/de";
+import type { Dictionary } from "@/i18n";
+import { useDictionary } from "@/i18n/LocaleProvider";
 import {
   kategorieSummen,
   oeffnungsFlaecheMm2,
@@ -25,7 +26,9 @@ import {
 import type { HausModell } from "@/lib/viewer/baukasten";
 import type { MessLinie } from "@/lib/viewer/szene";
 
-const t = de.viewer;
+// Texte kommen aus dem Sprach-Kontext (useDictionary); reine Helfer
+// bekommen das Viewer-Wörterbuch als Parameter.
+type ViewerDict = Dictionary["viewer"];
 
 export type KategorieTab = "roof" | "walls" | "openings" | "edges";
 
@@ -36,12 +39,15 @@ const KATEGORIE_TABS: readonly KategorieTab[] = [
   "edges",
 ];
 
-type ElevationName = keyof typeof t.elevations;
-type KantenKlasse = keyof typeof t.kantenKlassen;
+type ElevationName = keyof ViewerDict["elevations"];
+type KantenKlasse = keyof ViewerDict["kantenKlassen"];
 
 // „unknown"/null wird UI-weit komplett weggelassen: kein Platzhalter-
 // Text, keine Zeile. null bedeutet hier „nicht anzeigen".
-function fassadeName(elevation: string | null | undefined): string | null {
+function fassadeName(
+  t: ViewerDict,
+  elevation: string | null | undefined,
+): string | null {
   if (elevation && elevation in t.elevations) {
     return t.elevations[elevation as ElevationName];
   }
@@ -54,7 +60,7 @@ function mitPunkt(...teile: (string | null | undefined)[]): string {
   return teile.filter((teil): teil is string => Boolean(teil)).join(" · ");
 }
 
-function kantenKlasseName(klasse: string): string {
+function kantenKlasseName(t: ViewerDict, klasse: string): string {
   if (klasse in t.kantenKlassen) {
     return t.kantenKlassen[klasse as KantenKlasse];
   }
@@ -119,6 +125,7 @@ function Zeile({
   wert,
   wertTitel,
 }: ZeileProps) {
+  const t = useDictionary().viewer;
   return (
     <button
       type="button"
@@ -205,6 +212,7 @@ function AuswahlPanel({
   auswahl: ReadonlySet<string>;
   onToggle: (id: string) => void;
 }) {
+  const t = useDictionary().viewer;
   const eintraege: AuswahlEintrag[] = [];
   let hatOeffnung = false;
 
@@ -215,7 +223,10 @@ function AuswahlPanel({
       const flaeche = oeffnungsFlaecheMm2(oeffnung);
       eintraege.push({
         id,
-        label: mitPunkt(t.typen[oeffnung.type], fassadeName(oeffnung.elevation)),
+        label: mitPunkt(
+          t.typen[oeffnung.type],
+          fassadeName(t, oeffnung.elevation),
+        ),
         wert: formatQuadratfuss(flaeche),
         wertTitel: `${formatMm2Roh(flaeche)} · ${formatMmRoh(oeffnung.width_mm.value)} × ${formatMmRoh(oeffnung.height_mm.value)} · ${t.hinweisRichtmass}`,
         art: "flaeche",
@@ -231,7 +242,7 @@ function AuswahlPanel({
         id,
         label: mitPunkt(
           istWand ? t.kategorien.walls : t.kategorien.roof,
-          fassadeName(face.elevation),
+          fassadeName(t, face.elevation),
         ),
         wert: formatQuadratfuss(face.area_mm2.value),
         wertTitel: formatMm2Roh(face.area_mm2.value),
@@ -247,8 +258,8 @@ function AuswahlPanel({
       eintraege.push({
         id,
         label: mitPunkt(
-          kantenKlasseName(kante ? kante.edgeClass : messKante.edge_class),
-          fassadeName(messKante.belongs_to_elevation),
+          kantenKlasseName(t, kante ? kante.edgeClass : messKante.edge_class),
+          fassadeName(t, messKante.belongs_to_elevation),
         ),
         wert: formatFtIn(messKante.length_mm.value),
         wertTitel: formatMmRoh(messKante.length_mm.value),
@@ -359,6 +370,7 @@ export function BauteilPanel({
   messLinien,
   onMessLinieLoeschen,
 }: BauteilPanelProps) {
+  const t = useDictionary().viewer;
   const daecher = mess.faces.filter((f) => f.face_class === "roof_face");
   const waende = mess.faces.filter((f) => f.face_class === "wall");
   const wandDaten = wandflaechenJeFassade(mess);
@@ -473,7 +485,7 @@ export function BauteilPanel({
                   ausgewaehlt={auswahl.has(f.id)}
                   onToggle={onToggle}
                   onZoom={onZoom}
-                  neben={fassadeName(f.elevation) ?? undefined}
+                  neben={fassadeName(t, f.elevation) ?? undefined}
                   wert={
                     netto
                       ? `${formatQuadratfuss(f.area_mm2.value)} / ${formatQuadratfuss(netto.nettoMm2)}`
@@ -507,7 +519,7 @@ export function BauteilPanel({
                 ausgewaehlt={auswahl.has(o.id)}
                 onToggle={onToggle}
                 onZoom={onZoom}
-                neben={mitPunkt(t.typen[o.type], fassadeName(o.elevation))}
+                neben={mitPunkt(t.typen[o.type], fassadeName(t, o.elevation))}
                 wert={formatBreiteHoeheFtIn(o.width_mm.value, o.height_mm.value)}
                 wertTitel={`${formatMmRoh(o.width_mm.value)} × ${formatMmRoh(o.height_mm.value)} · ${t.hinweisRichtmass}`}
               />
@@ -530,8 +542,8 @@ export function BauteilPanel({
               onToggle={onToggle}
               onZoom={onZoom}
               neben={mitPunkt(
-                kantenKlasseName(e.edge_class),
-                fassadeName(e.belongs_to_elevation),
+                kantenKlasseName(t, e.edge_class),
+                fassadeName(t, e.belongs_to_elevation),
               )}
               wert={formatFtIn(e.length_mm.value)}
               wertTitel={formatMmRoh(e.length_mm.value)}

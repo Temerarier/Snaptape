@@ -2,14 +2,15 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { RegisterForm } from "@/components/auth/RegisterForm";
-import { de } from "@/i18n/de";
+import { DEFAULT_LOCALE, getDictionary } from "@/i18n";
 import { getCurrentUser } from "@/lib/auth/session";
 
 export default async function RegisterPage() {
   const user = await getCurrentUser();
   if (user) redirect("/app");
 
-  const t = de.auth;
+  // Vor dem Login gilt die Standardsprache (en-US).
+  const t = getDictionary(DEFAULT_LOCALE).auth;
 
   return (
     <AuthShell headline={t.registerTitle} intro={t.registerSubtitle}>

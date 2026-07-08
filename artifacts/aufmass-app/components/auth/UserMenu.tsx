@@ -1,11 +1,13 @@
 "use client";
 
 // Nutzer-Menü in der Kopfzeile: Initialen-Avatar + Name, aufklappbares
-// Menü mit Link zum Testhaus-Viewer und Abmelden.
+// Menü mit Link zum Testhaus-Viewer, Sprachumschalter (en-US/de-DE,
+// gespeichert am Nutzer) und Abmelden.
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { de } from "@/i18n/de";
-import { logoutAction } from "@/lib/auth/actions";
+import { LOCALES, type Locale } from "@/i18n";
+import { useDictionary, useLocale } from "@/i18n/LocaleProvider";
+import { logoutAction, setLocaleAction } from "@/lib/auth/actions";
 
 function initialen(email: string): string {
   const lokal = email.split("@")[0] ?? "";
@@ -16,6 +18,13 @@ export function UserMenu({ email }: { email: string }) {
   const [offen, setOffen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const anzeigeName = email.split("@")[0] ?? email;
+  const dict = useDictionary();
+  const locale = useLocale();
+
+  const spracheLabel: Record<Locale, string> = {
+    "en-US": dict.common.spracheEnglisch,
+    "de-DE": dict.common.spracheDeutsch,
+  };
 
   useEffect(() => {
     if (!offen) return;
@@ -40,7 +49,7 @@ export function UserMenu({ email }: { email: string }) {
       <button
         type="button"
         onClick={() => setOffen((v) => !v)}
-        aria-label={de.common.benutzerMenue}
+        aria-label={dict.common.benutzerMenue}
         aria-expanded={offen}
         aria-haspopup="menu"
         className="flex items-center gap-2 rounded-full p-1 pr-2 transition hover:bg-hintergrund focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-akzent/50"
@@ -77,17 +86,46 @@ export function UserMenu({ email }: { email: string }) {
             onClick={() => setOffen(false)}
             className="block rounded-lg px-2.5 py-1.5 text-sm text-schrift transition hover:bg-hintergrund"
           >
-            {de.viewer.navLink}
+            {dict.viewer.navLink}
           </Link>
-          <form action={logoutAction}>
-            <button
-              type="submit"
-              role="menuitem"
-              className="block w-full rounded-lg px-2.5 py-1.5 text-left text-sm text-schrift transition hover:bg-hintergrund"
-            >
-              {de.common.logout}
-            </button>
-          </form>
+          {/* Sprachumschalter: speichert die Wahl per Server-Action am
+              Nutzer (users.locale); revalidatePath rendert alles neu. */}
+          <div className="mt-1 border-t border-linie pt-1.5">
+            <p className="px-2.5 pb-1 text-[11px] font-medium uppercase tracking-wide text-schrift-tertiaer">
+              {dict.common.sprache}
+            </p>
+            <form action={setLocaleAction} className="flex gap-1 px-2.5 pb-1">
+              {LOCALES.map((wert) => (
+                <button
+                  key={wert}
+                  type="submit"
+                  name="locale"
+                  value={wert}
+                  role="menuitemradio"
+                  aria-checked={locale === wert}
+                  disabled={locale === wert}
+                  className={`flex-1 rounded-lg border px-2 py-1 text-xs font-medium transition ${
+                    locale === wert
+                      ? "border-akzent/50 bg-akzent/10 text-akzent"
+                      : "border-linie bg-flaeche text-schrift-sekundaer hover:bg-hintergrund hover:text-schrift"
+                  }`}
+                >
+                  {spracheLabel[wert]}
+                </button>
+              ))}
+            </form>
+          </div>
+          <div className="mt-1 border-t border-linie pt-1">
+            <form action={logoutAction}>
+              <button
+                type="submit"
+                role="menuitem"
+                className="block w-full rounded-lg px-2.5 py-1.5 text-left text-sm text-schrift transition hover:bg-hintergrund"
+              >
+                {dict.common.logout}
+              </button>
+            </form>
+          </div>
         </div>
       ) : null}
     </div>

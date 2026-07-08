@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { and, eq } from "drizzle-orm";
 import { db, projectsTable } from "@workspace/db";
-import { de } from "@/i18n/de";
+import { getDictionary, toLocale } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
 import { StatusBadge } from "@/components/projekte/StatusBadge";
 import { kategorieSummen } from "@/lib/berechnung/flaechen";
@@ -54,7 +54,8 @@ export default async function ProjectDetailPage({
   const project = rows[0];
   if (!project) notFound();
 
-  const t = de.projectDetail;
+  const dict = getDictionary(toLocale(user.locale));
+  const t = dict.projectDetail;
   const mess = ladeTesthaus();
   const summen = kategorieSummen(mess);
   const anzahlFenster = mess.openings.filter(
@@ -67,16 +68,16 @@ export default async function ProjectDetailPage({
         href="/app"
         className="text-sm font-medium text-neutral-500 underline-offset-4 transition hover:text-neutral-900 hover:underline"
       >
-        ← {de.common.back}
+        ← {dict.common.back}
       </Link>
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <h1 className="text-2xl font-semibold tracking-tight">
           {project.name}
         </h1>
-        <StatusBadge status={project.status} />
+        <StatusBadge status={project.status} labels={dict.projects.status} />
         {project.archivedAt ? (
           <span className="inline-flex items-center rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-0.5 text-xs font-medium text-neutral-500">
-            {de.projects.archivedBadge}
+            {dict.projects.archivedBadge}
           </span>
         ) : null}
       </div>

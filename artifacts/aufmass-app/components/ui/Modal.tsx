@@ -5,7 +5,7 @@
 // Schließen-Knopf. Schließt per Escape, Klick auf den Hintergrund
 // oder den Schließen-Knopf.
 import { useEffect, type ReactNode } from "react";
-import { de } from "@/i18n/de";
+import { useDictionary } from "@/i18n/LocaleProvider";
 import { cn } from "./hilfen";
 
 export interface ModalProps {
@@ -25,6 +25,7 @@ export function Modal({
   fussbereich,
   className,
 }: ModalProps) {
+  const dict = useDictionary();
   useEffect(() => {
     if (!offen) {
       return;
@@ -74,7 +75,7 @@ export function Modal({
           <button
             type="button"
             onClick={onSchliessen}
-            aria-label={de.common.schliessen}
+            aria-label={dict.common.schliessen}
             className="rounded-full p-1 text-schrift-tertiaer transition hover:bg-schrift/5 hover:text-schrift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-akzent/50"
           >
             <svg

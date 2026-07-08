@@ -1,13 +1,13 @@
 "use client";
 
 // Registrieren-Formular im Design-System „Technical-Clean": Input/Button
-// aus components/ui, Fehler kommen als deutsche Texte aus der
-// Server-Action (noValidate unterdrückt die englischen Browser-Meldungen).
+// aus components/ui, Fehler kommen als Texte aus der Server-Action
+// (noValidate unterdrückt die Browser-Meldungen).
 import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { useDictionary } from "@/i18n/LocaleProvider";
 import { registerAction, type AuthState } from "@/lib/auth/actions";
-import { de } from "@/i18n/de";
 
 const initialState: AuthState = {};
 
@@ -16,7 +16,7 @@ export function RegisterForm() {
     registerAction,
     initialState,
   );
-  const t = de.auth;
+  const t = useDictionary().auth;
 
   return (
     <form action={formAction} noValidate className="space-y-4">

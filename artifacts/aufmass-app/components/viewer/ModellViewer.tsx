@@ -7,7 +7,7 @@
 // per Effekten in die imperative three.js-Szene (lib/viewer/szene.ts).
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { de } from "@/i18n/de";
+import { useDictionary } from "@/i18n/LocaleProvider";
 import type { MeasureJson } from "@/lib/messung/schema";
 import { formatFtIn } from "@/lib/viewer/anzeige";
 import { baueHausModell } from "@/lib/viewer/baukasten";
@@ -19,8 +19,6 @@ import {
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { BauteilPanel, type KategorieTab } from "./BauteilPanel";
-
-const t = de.viewer;
 
 // Höhe der App-Kopfzeile (app/app/layout.tsx): h-9 Logo + 2×py-3 + Border.
 const APP_KOPF_HOEHE = "h-[calc(100dvh-61px)]";
@@ -36,6 +34,7 @@ export function ModellViewer({
   projektName,
   projektAdresse,
 }: ModellViewerProps) {
+  const t = useDictionary().viewer;
   const modell = useMemo(() => baueHausModell(mess), [mess]);
   const containerRef = useRef<HTMLDivElement>(null);
   const handleRef = useRef<SzenenHandle | null>(null);

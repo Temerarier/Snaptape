@@ -1,24 +1,33 @@
 // Projektkarte im Snaptape-Stil: 3D-Thumbnail-Platzhalter, Name +
 // Status-Badge, Adresse, Datum. Klick auf die Karte öffnet direkt das
 // 3D-Modell; Archivieren steckt im kleinen Karten-Menü (⋯).
+// Server-Komponente: Sprache und Texte kommen als Props von der Seite.
 import Link from "next/link";
 import type { Project } from "@workspace/db";
-import { de } from "@/i18n/de";
+import type { Dictionary, Locale } from "@/i18n";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { ProjectCardMenu } from "./ProjectCardMenu";
 import { StatusBadge } from "./StatusBadge";
 
-function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat("de-DE", {
+// Datumsformat je Sprache: en-US → MM/DD/YYYY, de-DE → DD.MM.YYYY.
+function formatDate(date: Date, locale: Locale): string {
+  return new Intl.DateTimeFormat(locale, {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
   }).format(date);
 }
 
-export function ProjectCard({ project }: { project: Project }) {
-  const t = de.projects;
+export function ProjectCard({
+  project,
+  locale,
+  t,
+}: {
+  project: Project;
+  locale: Locale;
+  t: Dictionary["projects"];
+}) {
   const isArchived = project.archivedAt !== null;
 
   return (
@@ -40,7 +49,7 @@ export function ProjectCard({ project }: { project: Project }) {
             {project.name}
           </h2>
           <div className="relative z-10 flex shrink-0 items-center gap-1">
-            <StatusBadge status={project.status} />
+            <StatusBadge status={project.status} labels={t.status} />
             <ProjectCardMenu projektId={project.id} archiviert={isArchived} />
           </div>
         </div>
@@ -55,7 +64,7 @@ export function ProjectCard({ project }: { project: Project }) {
           </div>
         ) : null}
         <p className="mt-auto pt-3 text-xs text-schrift-tertiaer">
-          {formatDate(project.createdAt)}
+          {formatDate(project.createdAt, locale)}
         </p>
       </Card>
     </li>

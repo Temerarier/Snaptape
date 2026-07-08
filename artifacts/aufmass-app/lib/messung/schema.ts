@@ -9,6 +9,7 @@
 // neue "D-" ist eine Tür (alt: Dachfläche), das neue "W-" ein Fenster
 // (alt: Wand). Alte und neue IDs niemals mischen.
 import { z } from "zod/v4";
+import { HINWEIS_RICHTMASS_EN } from "@/lib/config/hinweis";
 
 // Elevations funktional benannt: front = zur Straße gerichtete Seite,
 // left/right von der Straße aus gesehen. Himmelsrichtungen werden nie
@@ -188,7 +189,7 @@ export const openingSchema = z.object({
     .optional(),
   area_mm2: measurementOderNull.optional(),
   perimeter_mm: measurementOderNull.optional(),
-  note: z.string().optional().default("Reference only, not for ordering"),
+  note: z.string().optional().default(HINWEIS_RICHTMASS_EN),
 });
 
 export const attachmentSchema = z.object({

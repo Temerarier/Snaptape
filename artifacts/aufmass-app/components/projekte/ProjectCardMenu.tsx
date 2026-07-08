@@ -4,7 +4,7 @@
 // Wiederherstellen – liegt über dem Karten-Link (z-10).
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { de } from "@/i18n/de";
+import { useDictionary } from "@/i18n/LocaleProvider";
 import {
   archiveProjectAction,
   restoreProjectAction,
@@ -19,7 +19,7 @@ export function ProjectCardMenu({
 }) {
   const [offen, setOffen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const t = de.projects;
+  const t = useDictionary().projects;
 
   useEffect(() => {
     if (!offen) return;

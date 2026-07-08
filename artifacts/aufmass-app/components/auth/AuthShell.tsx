@@ -3,9 +3,10 @@
 // Intro, Formular) und der 3D-Haus-Bühne rechts. Die Bühne ist rein
 // dekorativ und wird auf kleinen Bildschirmen ausgeblendet.
 // Server-Komponente: lädt das Testhaus-Fixture und reicht es an die
-// Client-Bühne weiter.
+// Client-Bühne weiter. Nur auf den Auth-Seiten (vor dem Login) im
+// Einsatz – Texte daher in der Standardsprache (en-US).
 import type { ReactNode } from "react";
-import { de } from "@/i18n/de";
+import { DEFAULT_LOCALE, getDictionary } from "@/i18n";
 import { ladeTesthaus } from "@/lib/messung/testhaus";
 import { HausBuehne } from "./HausBuehne";
 
@@ -17,6 +18,7 @@ export interface AuthShellProps {
 
 export function AuthShell({ headline, intro, children }: AuthShellProps) {
   const mess = ladeTesthaus();
+  const dict = getDictionary(DEFAULT_LOCALE);
 
   return (
     <main className="flex min-h-screen items-center justify-center p-4 sm:p-6">
@@ -24,10 +26,10 @@ export function AuthShell({ headline, intro, children }: AuthShellProps) {
         <div className="flex w-full flex-col p-8 sm:p-10 lg:w-[26rem] lg:shrink-0">
           <div className="flex items-center gap-2.5">
             <span className="flex h-9 w-9 items-center justify-center rounded-full border border-linie bg-hintergrund font-mono text-sm font-medium text-schrift-tertiaer">
-              {de.common.appName.charAt(0)}
+              {dict.common.appName.charAt(0)}
             </span>
             <span className="text-sm font-semibold text-schrift">
-              {de.common.appName}
+              {dict.common.appName}
             </span>
           </div>
           <div className="flex flex-1 flex-col justify-center py-10">
@@ -43,7 +45,7 @@ export function AuthShell({ headline, intro, children }: AuthShellProps) {
         <div className="relative hidden flex-1 border-l border-linie lg:block">
           <HausBuehne mess={mess} />
           <p className="pointer-events-none absolute inset-x-0 bottom-5 text-center font-mono text-xs text-schrift-tertiaer">
-            {de.auth.heroCaption}
+            {dict.auth.heroCaption}
           </p>
         </div>
       </div>

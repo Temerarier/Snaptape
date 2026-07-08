@@ -5,7 +5,7 @@
 import { useRouter } from "next/navigation";
 import { useId } from "react";
 import type { ProjectStatus } from "@workspace/db";
-import { de } from "@/i18n/de";
+import { useDictionary } from "@/i18n/LocaleProvider";
 
 export function SortSelect({
   q,
@@ -20,7 +20,7 @@ export function SortSelect({
 }) {
   const router = useRouter();
   const selectId = useId();
-  const t = de.projects;
+  const t = useDictionary().projects;
 
   function beiWechsel(neuerSort: string) {
     const p = new URLSearchParams();

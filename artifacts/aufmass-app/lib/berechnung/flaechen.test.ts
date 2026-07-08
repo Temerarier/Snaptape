@@ -8,6 +8,7 @@
 //               back 2.88, left 2.88, right 2.88 = 19.12 m^2
 //   Netto: front 44.52 / back 52.12 / left 51.12 / right 51.12 = 198.88 m^2
 import { describe, expect, it } from "vitest";
+import { HINWEIS_RICHTMASS_EN } from "../config/hinweis";
 import { ladeTesthaus } from "../messung/testhaus";
 import {
   dachGesamtMm2,
@@ -33,9 +34,9 @@ describe("Fixture-Vertrag", () => {
     );
   });
 
-  it("trägt an jeder Öffnung den Hinweis „Reference only, not for ordering“ (Regel 5)", () => {
+  it("trägt an jeder Öffnung den Richtmaß-Hinweis aus lib/config/hinweis.ts (Regel 5)", () => {
     for (const o of mess.openings) {
-      expect(o.note).toBe("Reference only, not for ordering");
+      expect(o.note).toBe(HINWEIS_RICHTMASS_EN);
     }
   });
 

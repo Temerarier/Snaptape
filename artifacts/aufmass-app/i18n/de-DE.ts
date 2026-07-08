@@ -1,6 +1,11 @@
-// Zentrale Sprachdatei (Start: Deutsch; Englisch vorbereitet, siehe replit.md).
-// Alle UI-Texte gehören hierher – niemals hart im Component-Code.
-export const de = {
+// Zentrale Sprachdatei Deutsch (zweite Sprache, pro Nutzer umschaltbar;
+// siehe replit.md Regel 8). Muss exakt dieselben Schlüssel liefern wie
+// en-US.ts – der Typ Dictionary erzwingt das.
+// Einheiten bleiben auch auf Deutsch imperial (ft-in, ft², Pitch x/12).
+import { HINWEIS_RICHTMASS_DE } from "@/lib/config/hinweis";
+import type { Dictionary } from "./en-US";
+
+export const deDE: Dictionary = {
   common: {
     appName: "Snaptape",
     logout: "Abmelden",
@@ -8,6 +13,9 @@ export const de = {
     back: "Zurück zur Übersicht",
     schliessen: "Schließen",
     benutzerMenue: "Benutzermenü",
+    sprache: "Sprache",
+    spracheEnglisch: "English",
+    spracheDeutsch: "Deutsch",
   },
   healthcheck: {
     title: "Snaptape",
@@ -125,7 +133,7 @@ export const de = {
     summeBrutto: "Summe brutto",
     summeNetto: "Summe netto",
     anzahlKurz: "Stück",
-    hinweisRichtmass: "Richtmaß, kein Bestellmaß",
+    hinweisRichtmass: HINWEIS_RICHTMASS_DE,
     zoomHinweis: "Doppelklick zoomt auf das Bauteil.",
     laden: "3D wird geladen",
     webglFehler:
@@ -190,6 +198,4 @@ export const de = {
       },
     },
   },
-} as const;
-
-export type Dictionary = typeof de;
+};

@@ -2,16 +2,21 @@
 
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db, usersTable } from "@workspace/db";
-import { de } from "@/i18n/de";
-import { createSession, destroySession } from "./session";
+import { DEFAULT_LOCALE, getDictionary, isLocale } from "@/i18n";
+import { createSession, destroySession, requireUser } from "./session";
 
 export type AuthState = { error?: string };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_PASSWORD_LENGTH = 8;
 const BCRYPT_COST = 12;
+
+// Vor dem Login gibt es kein Nutzer-Locale – Fehlermeldungen der
+// Auth-Formulare erscheinen daher in der Standardsprache (en-US).
+const t = getDictionary(DEFAULT_LOCALE).auth;
 
 // Konstante Vergleichsdauer beim Login, auch wenn der Nutzer nicht existiert
 // (verhindert Timing-basiertes User-Enumeration).
@@ -36,10 +41,10 @@ export async function registerAction(
   const password = String(formData.get("password") ?? "");
 
   if (!EMAIL_PATTERN.test(email)) {
-    return { error: de.auth.errorEmailInvalid };
+    return { error: t.errorEmailInvalid };
   }
   if (password.length < MIN_PASSWORD_LENGTH) {
-    return { error: de.auth.errorPasswordTooShort };
+    return { error: t.errorPasswordTooShort };
   }
 
   const existing = await db
@@ -48,7 +53,7 @@ export async function registerAction(
     .where(eq(usersTable.email, email))
     .limit(1);
   if (existing.length > 0) {
-    return { error: de.auth.errorEmailTaken };
+    return { error: t.errorEmailTaken };
   }
 
   const passwordHash = await bcrypt.hash(password, BCRYPT_COST);
@@ -61,13 +66,13 @@ export async function registerAction(
     user = inserted[0];
   } catch (err) {
     if (isUniqueViolation(err)) {
-      return { error: de.auth.errorEmailTaken };
+      return { error: t.errorEmailTaken };
     }
     throw err;
   }
 
   if (!user) {
-    return { error: de.auth.errorGeneric };
+    return { error: t.errorGeneric };
   }
 
   await createSession(user.id);
@@ -84,7 +89,7 @@ export async function loginAction(
   const password = String(formData.get("password") ?? "");
 
   if (!EMAIL_PATTERN.test(email) || password.length === 0) {
-    return { error: de.auth.errorInvalidCredentials };
+    return { error: t.errorInvalidCredentials };
   }
 
   const rows = await db
@@ -100,7 +105,7 @@ export async function loginAction(
   );
 
   if (!user || !passwordMatches) {
-    return { error: de.auth.errorInvalidCredentials };
+    return { error: t.errorInvalidCredentials };
   }
 
   await createSession(user.id);
@@ -110,4 +115,20 @@ export async function loginAction(
 export async function logoutAction(): Promise<void> {
   await destroySession();
   redirect("/login");
+}
+
+// Sprachumschalter (Benutzermenü): speichert die Auswahl am Nutzer
+// (users.locale), damit sie Reload und erneuten Login überlebt.
+export async function setLocaleAction(formData: FormData): Promise<void> {
+  const user = await requireUser();
+  const wert = String(formData.get("locale") ?? "");
+  if (!isLocale(wert) || wert === user.locale) return;
+
+  await db
+    .update(usersTable)
+    .set({ locale: wert })
+    .where(eq(usersTable.id, user.id));
+
+  // Gesamtes Layout neu rendern – die Sprache betrifft alle Seiten.
+  revalidatePath("/", "layout");
 }

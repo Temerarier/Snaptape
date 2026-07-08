@@ -7,7 +7,7 @@ import {
   createProjectAction,
   type ProjectFormState,
 } from "@/lib/projekte/actions";
-import { de } from "@/i18n/de";
+import { useDictionary } from "@/i18n/LocaleProvider";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
@@ -21,7 +21,8 @@ export function NewProjectDialog({ ctaLabel }: { ctaLabel?: string }) {
     initialState,
   );
   const formRef = useRef<HTMLFormElement>(null);
-  const t = de.projects;
+  const dict = useDictionary();
+  const t = dict.projects;
 
   useEffect(() => {
     if (!open) {
@@ -50,7 +51,7 @@ export function NewProjectDialog({ ctaLabel }: { ctaLabel?: string }) {
         titel={t.newProject}
       >
         {/* noValidate: statt der (lokalabhängigen) Browser-Validierung
-            zeigt die Server-Action die deutsche Fehlermeldung. */}
+            zeigt die Server-Action die Fehlermeldung in der Nutzersprache. */}
         <form
           ref={formRef}
           action={formAction}
@@ -86,7 +87,7 @@ export function NewProjectDialog({ ctaLabel }: { ctaLabel?: string }) {
               onClick={() => setOpen(false)}
               disabled={pending}
             >
-              {de.common.cancel}
+              {dict.common.cancel}
             </Button>
             <Button type="submit" disabled={pending}>
               {pending ? t.createPending : t.createButton}

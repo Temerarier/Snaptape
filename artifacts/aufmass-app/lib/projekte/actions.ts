@@ -3,7 +3,7 @@
 import { and, eq, isNull, isNotNull } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db, projectsTable } from "@workspace/db";
-import { de } from "@/i18n/de";
+import { getDictionary, toLocale } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
 
 export type ProjectFormState = { error?: string; success?: boolean };
@@ -18,6 +18,8 @@ export async function createProjectAction(
   formData: FormData,
 ): Promise<ProjectFormState> {
   const user = await requireUser();
+  // Fehlermeldungen in der Sprache des angemeldeten Nutzers.
+  const t = getDictionary(toLocale(user.locale)).projects;
 
   const name = String(formData.get("name") ?? "")
     .trim()
@@ -27,7 +29,7 @@ export async function createProjectAction(
     .slice(0, MAX_ADRESSE_LENGTH);
 
   if (name.length === 0) {
-    return { error: de.projects.errorNameRequired };
+    return { error: t.errorNameRequired };
   }
 
   await db.insert(projectsTable).values({

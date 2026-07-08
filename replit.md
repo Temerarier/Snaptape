@@ -1,4 +1,4 @@
-# Projekt: Aufmaß-App (Fotos/Pläne rein → Messwerte + 3D-Modell raus)
+# Projekt: Snaptape (Fotos/Pläne rein → Messwerte + 3D-Modell raus)
 
 ## Stack (fix, nicht ändern)
 - Next.js (App Router) + TypeScript, Tailwind
@@ -25,11 +25,18 @@
    (measured/scaled/estimated), reference_used.
 5. Öffnungsmaße zeigen immer den Hinweis „Reference only, not for
    ordering" (deutsch angezeigt als „Richtmaß, kein Bestellmaß").
+   EINZIGE Quelle für beide Texte: lib/config/hinweis.ts
+   (HINWEIS_RICHTMASS_EN / HINWEIS_RICHTMASS_DE) – nirgends
+   hart codieren.
 6. Fehler dem Nutzer IMMER vor einer Bezahlung anzeigen, nie danach.
 7. Berechnete Werte (brutto/netto, Verschnitt) leben in lib/berechnung/,
    nie im Mess-JSON.
-8. UI-Texte zentral in einer Sprachdatei (Start: Deutsch; Englisch
-   vorbereitet, da Zielmarkt USA).
+8. UI-Texte zentral in den Sprachdateien unter i18n/ (en-US.ts +
+   de-DE.ts, identische Struktur via Dictionary-Typ). Standard ist
+   US-Englisch (en-US); Deutsch (de-DE) ist pro Nutzer umschaltbar
+   (users.locale, überlebt Reload/Login). Datumsformat je Sprache
+   (EN MM/DD/YYYY, DE DD.MM.YYYY); Einheiten bleiben in BEIDEN
+   Sprachen imperial (Regel 9).
 9. Elevations heißen front / back / left / right (von der Straße aus
    gesehen; front = zur Straße gerichtete Seite) – niemals
    Himmelsrichtungen raten. Die Himmelsrichtung kommt später

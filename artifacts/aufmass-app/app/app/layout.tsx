@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { de } from "@/i18n/de";
+import { getDictionary, toLocale } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
 import { HeaderSuche } from "@/components/projekte/HeaderSuche";
 import { NewProjectDialog } from "@/components/projekte/NewProjectDialog";
@@ -12,6 +12,7 @@ export default async function AppLayout({
   children: React.ReactNode;
 }) {
   const user = await requireUser();
+  const dict = getDictionary(toLocale(user.locale));
 
   return (
     <div className="min-h-screen bg-hintergrund">
@@ -22,10 +23,10 @@ export default async function AppLayout({
               aria-hidden="true"
               className="flex h-9 w-9 items-center justify-center rounded-full border border-linie bg-hintergrund font-mono text-sm font-medium text-schrift-tertiaer"
             >
-              {de.common.appName.charAt(0)}
+              {dict.common.appName.charAt(0)}
             </span>
             <span className="text-lg font-bold tracking-tight text-schrift">
-              {de.common.appName}
+              {dict.common.appName}
             </span>
           </Link>
           <div className="min-w-0 flex-1">

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { and, asc, desc, eq, ilike, isNull, isNotNull, or } from "drizzle-orm";
 import { db, projectsTable, type ProjectStatus } from "@workspace/db";
-import { de } from "@/i18n/de";
+import { getDictionary, toLocale } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
 import { NewProjectDialog } from "@/components/projekte/NewProjectDialog";
 import { ProjectCard } from "@/components/projekte/ProjectCard";
@@ -50,7 +50,8 @@ export default async function ProjectListPage({
     ? (params.status as ProjectStatus)
     : null;
   const sort: SortWert = params.sort === "aelteste" ? "aelteste" : "neueste";
-  const t = de.projects;
+  const locale = toLocale(user.locale);
+  const t = getDictionary(locale).projects;
 
   const conditions = [
     eq(projectsTable.userId, user.id),
@@ -185,7 +186,12 @@ export default async function ProjectListPage({
       ) : (
         <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard
+              key={project.id}
+              project={project}
+              locale={locale}
+              t={t}
+            />
           ))}
         </ul>
       )}

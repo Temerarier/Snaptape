@@ -1,5 +1,5 @@
 import { pool } from "@workspace/db";
-import { de } from "@/i18n/de";
+import { DEFAULT_LOCALE, getDictionary } from "@/i18n";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +32,8 @@ function StatusRow({ ok, label, detail }: { ok: boolean; label: string; detail?:
 }
 
 export default async function HealthcheckPage() {
-  const t = de.healthcheck;
+  // System-Status-Seite (ohne Login erreichbar): Standardsprache.
+  const t = getDictionary(DEFAULT_LOCALE).healthcheck;
   const db = await checkDatabase();
   const storageConfigured = Boolean(
     process.env.DEFAULT_OBJECT_STORAGE_BUCKET_ID &&
