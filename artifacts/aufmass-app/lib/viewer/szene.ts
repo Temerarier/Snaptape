@@ -38,7 +38,9 @@ export interface SzenenHandle {
 }
 
 const MM = 1 / 1000;
-const AUSWAHL_FARBE = 0x2563eb;
+// Helles, entsättigtes Blau – bewusst heller als das UI-Akzentblau,
+// damit ausgewählte Bauteile freundlich wirken und Chips lesbar bleiben.
+const AUSWAHL_FARBE = 0x93c5fd;
 const MESS_FARBE = 0xdc2626;
 const SNAP_ABSTAND_M = 0.15;
 const KLICK_TOLERANZ_PX = 6;
@@ -140,7 +142,8 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
   const first = modell.firsthoeheMm * MM;
 
   const szene = new THREE.Scene();
-  szene.background = new THREE.Color(0xf5f5f4);
+  // Reines Weiß, damit Boden und Bühnen-Karte nahtlos verschmelzen.
+  szene.background = new THREE.Color(0xffffff);
 
   const kamera = new THREE.PerspectiveCamera(
     50,
@@ -195,11 +198,12 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
   gegenlicht.position.set(-12, 8, -14);
   szene.add(gegenlicht);
 
-  // Heller Boden („Tisch"): weiße Fläche, die nur den Schatten trägt –
-  // bewusst ohne Raster, damit das Modell ruhig aufliegt.
+  // Boden („Tisch"): ShadowMaterial zeigt NUR den weichen Schatten –
+  // die Fläche selbst ist unsichtbar, darunter scheint der reinweiße
+  // Hintergrund durch (kein Grauschleier durch Licht-Shading).
   const boden = new THREE.Mesh(
     new THREE.PlaneGeometry(120, 120),
-    new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.95 }),
+    new THREE.ShadowMaterial({ opacity: 0.16 }),
   );
   boden.rotation.x = -Math.PI / 2;
   boden.position.set(breite / 2, -0.005, tiefe / 2);
