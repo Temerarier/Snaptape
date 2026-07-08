@@ -88,9 +88,9 @@ export const enUS = {
     errorGeneric: "Something went wrong. Please try again.",
     status: {
       draft: "Draft",
-      reviewing: "In review",
+      reviewing: "Reviewing",
       ready: "Ready",
-      failed: "Error",
+      failed: "Failed",
     },
   },
   viewer: {
