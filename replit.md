@@ -11,22 +11,30 @@
 ## Eiserne Regeln
 1. Alle Maße intern IMMER in Millimetern, ungerundet als Zahl speichern.
    Gerundet wird nur in der Anzeige. Keine Ausnahmen.
-2. Die Datei schema/mess-schema.json ist der Vertrag zwischen Messung,
-   Datenbank, Viewer und Report. Änderungen nur auf ausdrückliche
-   Anweisung.
-3. Jedes Bauteil hat eine feste ID (F-1 = Fenster, T-1 = Tür, K-1 =
-   Kante, D-1 = Dachfläche). Dieselbe ID überall: 3D, Tabelle, PDF.
-4. Jeder Messwert trägt: wert, confidence (high/medium/low), source
+2. Die Datei schema/mess-schema.json (v1.2, englisch) ist der Vertrag
+   zwischen Messung, Datenbank, Viewer und Report. Änderungen nur auf
+   ausdrückliche Anweisung.
+3. Jedes Bauteil hat eine feste ID (W-1 = Fenster/Window, D-1 =
+   Tür/Door, G-1 = Garagentor, SK-1 = Skylight, E-1 = Kante/Edge,
+   RF-1 = Dachfläche/Roof Face, WL-1 = Wand/Wall, SF-1 = Soffit,
+   FC-1 = Fascia, AT-1 = Anbau/Attachment). Dieselbe ID überall:
+   3D, Tabelle, PDF. ACHTUNG (Migration v1.0→v1.2): das neue „D-"
+   ist eine Tür (alt: Dachfläche), das neue „W-" ein Fenster (alt:
+   Wand). Alte und neue IDs niemals mischen.
+4. Jeder Messwert trägt: value, confidence (high/medium/low), source
    (measured/scaled/estimated), reference_used.
-5. Öffnungsmaße zeigen immer den Hinweis „Richtmaß, kein Bestellmaß".
+5. Öffnungsmaße zeigen immer den Hinweis „Reference only, not for
+   ordering" (deutsch angezeigt als „Richtmaß, kein Bestellmaß").
 6. Fehler dem Nutzer IMMER vor einer Bezahlung anzeigen, nie danach.
 7. Berechnete Werte (brutto/netto, Verschnitt) leben in lib/berechnung/,
    nie im Mess-JSON.
 8. UI-Texte zentral in einer Sprachdatei (Start: Deutsch; Englisch
    vorbereitet, da Zielmarkt USA).
-9. Fassaden heißen strassenseite / gartenseite / links / rechts (von
-   der Straße aus gesehen) – niemals Himmelsrichtungen raten. Die
-   Himmelsrichtung kommt später deterministisch aus der Adresse.
+9. Elevations heißen front / back / left / right (von der Straße aus
+   gesehen; front = zur Straße gerichtete Seite) – niemals
+   Himmelsrichtungen raten. Die Himmelsrichtung kommt später
+   deterministisch aus der Adresse. Anzeige imperial (ft-in wie
+   „14' 11"", ganze ft², Pitch x/12); intern bleiben ungerundete mm.
 
 ## Design-System (Technical-Clean)
 Zentrale Tokens in `artifacts/aufmass-app/app/globals.css` (`@theme`),

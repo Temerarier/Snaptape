@@ -8,10 +8,10 @@ import { ProjectCard } from "@/components/projekte/ProjectCard";
 import { SortSelect } from "@/components/projekte/SortSelect";
 
 const STATUS_WERTE: readonly ProjectStatus[] = [
-  "entwurf",
-  "in_pruefung",
-  "fertig",
-  "fehler",
+  "draft",
+  "reviewing",
+  "ready",
+  "failed",
 ];
 
 type SortWert = "neueste" | "aelteste";

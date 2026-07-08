@@ -1,8 +1,8 @@
 // Tabellen für Messläufe nach dem Vertrag schema/mess-schema.json
-// (Mess-JSON v1.0). Messwerte (wert/confidence/source/reference_used,
-// Eiserne Regel 4) werden als jsonb gespeichert; alle Zahlen ungerundet
-// in mm bzw. mm² (Eiserne Regel 1). Bauteil-IDs wie "W-1"/"K-1"/"F-1"
-// sind überall dieselben (Eiserne Regel 3).
+// (Measure-JSON v1.2, englisch, US-Markt). Messwerte (value/confidence/
+// source/reference_used, Eiserne Regel 4) werden als jsonb gespeichert;
+// alle Zahlen ungerundet in mm bzw. mm² (Eiserne Regel 1). Component-IDs
+// wie "WL-1"/"E-1"/"W-1" sind überall dieselben (Eiserne Regel 3).
 import {
   doublePrecision,
   integer,
@@ -16,89 +16,96 @@ import {
 } from "drizzle-orm/pg-core";
 import { projectsTable } from "./projects";
 
-export const gebaeudetypEnum = pgEnum("gebaeudetyp", [
-  "freistehend",
-  "doppelhaus",
-  "reihenhaus_mitte",
-  "reihenhaus_ende",
-  "unbekannt",
+export const buildingTypeEnum = pgEnum("building_type", [
+  "detached",
+  "duplex",
+  "townhouse_middle",
+  "townhouse_end",
+  "unknown",
 ]);
 
-export const dachformEnum = pgEnum("dachform", [
-  "satteldach",
-  "walmdach",
-  "flachdach",
-  "pultdach",
-  "mansarddach",
-  "kruppelwalm",
-  "sonstige",
-  "unbekannt",
+export const roofTypeEnum = pgEnum("roof_type", [
+  "gable",
+  "hip",
+  "flat",
+  "shed",
+  "mansard",
+  "gambrel",
+  "jerkinhead",
+  "other",
+  "unknown",
 ]);
 
 export const faceClassEnum = pgEnum("face_class", [
-  "dachflaeche",
-  "wand",
-  "untersicht",
-  "blende",
+  "roof_face",
+  "wall",
+  "soffit",
+  "fascia",
 ]);
 
-export const fassadeEnum = pgEnum("fassade", [
-  "strassenseite",
-  "gartenseite",
-  "links",
-  "rechts",
-  "dach",
-  "unbekannt",
+export const elevationEnum = pgEnum("elevation", [
+  "front",
+  "back",
+  "left",
+  "right",
+  "roof",
+  "unknown",
 ]);
 
 export const materialEnum = pgEnum("material", [
-  "putz",
-  "klinker",
-  "wdvs",
-  "holz",
-  "sichtbeton",
-  "sonstige",
-  "unbekannt",
+  "stucco",
+  "brick",
+  "siding",
+  "wood",
+  "concrete",
+  "eifs",
+  "other",
+  "unknown",
 ]);
 
 export const edgeClassEnum = pgEnum("edge_class", [
-  "first",
-  "grat",
-  "kehle",
-  "traufe",
-  "ortgang",
-  "aussenecke",
-  "innenecke",
-  "sockel",
-  "sturz",
-  "fensterbank",
-  "leibung",
-  "unklassifiziert",
+  "ridge",
+  "hip",
+  "valley",
+  "eave",
+  "rake",
+  "flashing",
+  "step_flashing",
+  "outside_corner",
+  "inside_corner",
+  "base",
+  "head",
+  "sill",
+  "jamb",
+  "unclassified",
 ]);
 
-export const openingTypEnum = pgEnum("opening_typ", [
-  "fenster",
-  "tuer",
-  "garagentor",
-  "sonstige",
+export const openingTypeEnum = pgEnum("opening_type", [
+  "window",
+  "door",
+  "patio_door",
+  "garage_door",
+  "skylight",
+  "other",
 ]);
 
-export const anbauTypEnum = pgEnum("anbau_typ", [
-  "gaube",
-  "erker",
-  "balkon",
-  "vordach",
-  "anbau",
-  "sonstige",
+export const attachmentTypeEnum = pgEnum("attachment_type", [
+  "dormer",
+  "bay",
+  "balcony",
+  "awning",
+  "addition",
+  "chimney",
+  "other",
 ]);
 
 // Ein Messwert nach Eiserner Regel 4 (jsonb-Spalten).
 export interface MesswertJson {
-  wert: number;
+  value: number;
   confidence: "high" | "medium" | "low";
   source: "measured" | "scaled" | "estimated";
   reference_used?: string | null;
-  grund_bei_low?: string | null;
+  low_reason?: string | null;
 }
 
 export const measureRunsTable = pgTable("measure_runs", {
@@ -106,28 +113,28 @@ export const measureRunsTable = pgTable("measure_runs", {
   projectId: uuid("project_id")
     .notNull()
     .references(() => projectsTable.id, { onDelete: "cascade" }),
-  schemaVersion: text("schema_version").notNull().default("1.0"),
-  // Das komplette Mess-JSON des Laufs (validiert gegen den Vertrag).
-  messJson: jsonb("mess_json").notNull(),
+  schemaVersion: text("schema_version").notNull().default("1.2"),
+  // Das komplette Measure-JSON des Laufs (validiert gegen den Vertrag).
+  measureJson: jsonb("measure_json").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
 });
 
-export const gebaeudeTable = pgTable("gebaeude", {
+export const buildingsTable = pgTable("buildings", {
   id: uuid("id").primaryKey().defaultRandom(),
   measureRunId: uuid("measure_run_id")
     .notNull()
     .unique()
     .references(() => measureRunsTable.id, { onDelete: "cascade" }),
-  gebaeudetyp: gebaeudetypEnum("gebaeudetyp"),
-  geschosse: integer("geschosse"),
-  dachform: dachformEnum("dachform").notNull(),
+  buildingType: buildingTypeEnum("building_type"),
+  stories: integer("stories"),
+  roofType: roofTypeEnum("roof_type").notNull(),
   footprint: jsonb("footprint"),
-  traufhoeheMm: jsonb("traufhoehe_mm").$type<MesswertJson | null>(),
-  firsthoeheMm: jsonb("firsthoehe_mm").$type<MesswertJson | null>(),
-  attikahoeheMm: jsonb("attikahoehe_mm").$type<MesswertJson | null>(),
-  geteilteWaende: jsonb("geteilte_waende").$type<string[] | null>(),
+  eaveHeightMm: jsonb("eave_height_mm").$type<MesswertJson | null>(),
+  ridgeHeightMm: jsonb("ridge_height_mm").$type<MesswertJson | null>(),
+  parapetHeightMm: jsonb("parapet_height_mm").$type<MesswertJson | null>(),
+  sharedWalls: jsonb("shared_walls").$type<string[] | null>(),
 });
 
 export const facesTable = pgTable(
@@ -137,19 +144,22 @@ export const facesTable = pgTable(
     measureRunId: uuid("measure_run_id")
       .notNull()
       .references(() => measureRunsTable.id, { onDelete: "cascade" }),
-    bauteilId: text("bauteil_id").notNull(), // z. B. "W-1", "D-1"
+    componentId: text("component_id").notNull(), // z. B. "WL-1", "RF-1"
     faceClass: faceClassEnum("face_class").notNull(),
-    fassade: fassadeEnum("fassade"),
+    elevation: elevationEnum("elevation"),
     material: materialEnum("material"),
-    flaecheMm2: jsonb("flaeche_mm2").$type<MesswertJson>().notNull(),
-    flaecheNettoMm2: jsonb("flaeche_netto_mm2").$type<MesswertJson | null>(),
-    neigung: jsonb("neigung").$type<{
-      original_grad?: number;
-      gerundet_grad?: number;
+    areaMm2: jsonb("area_mm2").$type<MesswertJson>().notNull(),
+    areaNetMm2: jsonb("area_net_mm2").$type<MesswertJson | null>(),
+    pitch: jsonb("pitch").$type<{
+      degrees_original?: number;
+      degrees_rounded?: number;
+      rise_over_12_snapped?: number;
     } | null>(),
-    ausrichtungGrad: doublePrecision("ausrichtung_grad"),
+    orientationDeg: doublePrecision("orientation_deg"),
   },
-  (t) => [unique("faces_run_bauteil_unique").on(t.measureRunId, t.bauteilId)],
+  (t) => [
+    unique("faces_run_component_unique").on(t.measureRunId, t.componentId),
+  ],
 );
 
 export const edgesTable = pgTable(
@@ -159,12 +169,14 @@ export const edgesTable = pgTable(
     measureRunId: uuid("measure_run_id")
       .notNull()
       .references(() => measureRunsTable.id, { onDelete: "cascade" }),
-    bauteilId: text("bauteil_id").notNull(), // z. B. "K-1"
+    componentId: text("component_id").notNull(), // z. B. "E-1"
     edgeClass: edgeClassEnum("edge_class").notNull(),
-    laengeMm: jsonb("laenge_mm").$type<MesswertJson>().notNull(),
-    gehoertZuFassade: fassadeEnum("gehoert_zu_fassade"),
+    lengthMm: jsonb("length_mm").$type<MesswertJson>().notNull(),
+    belongsToElevation: elevationEnum("belongs_to_elevation"),
   },
-  (t) => [unique("edges_run_bauteil_unique").on(t.measureRunId, t.bauteilId)],
+  (t) => [
+    unique("edges_run_component_unique").on(t.measureRunId, t.componentId),
+  ],
 );
 
 export const openingsTable = pgTable(
@@ -174,46 +186,49 @@ export const openingsTable = pgTable(
     measureRunId: uuid("measure_run_id")
       .notNull()
       .references(() => measureRunsTable.id, { onDelete: "cascade" }),
-    bauteilId: text("bauteil_id").notNull(), // z. B. "F-1", "T-1", "G-1"
-    typ: openingTypEnum("typ").notNull(),
-    fassade: fassadeEnum("fassade").notNull(),
-    breiteMm: jsonb("breite_mm").$type<MesswertJson>().notNull(),
-    hoeheMm: jsonb("hoehe_mm").$type<MesswertJson>().notNull(),
-    bruestungMm: jsonb("bruestung_mm").$type<MesswertJson | null>(),
+    componentId: text("component_id").notNull(), // z. B. "W-1", "D-1", "G-1"
+    type: openingTypeEnum("type").notNull(),
+    elevation: elevationEnum("elevation").notNull(),
+    widthMm: jsonb("width_mm").$type<MesswertJson>().notNull(),
+    heightMm: jsonb("height_mm").$type<MesswertJson>().notNull(),
+    sillHeightMm: jsonb("sill_height_mm").$type<MesswertJson | null>(),
     positionMm: jsonb("position_mm").$type<{ x?: number; y?: number } | null>(),
-    flaecheMm2: jsonb("flaeche_mm2").$type<MesswertJson | null>(),
-    umfangMm: jsonb("umfang_mm").$type<MesswertJson | null>(),
+    areaMm2: jsonb("area_mm2").$type<MesswertJson | null>(),
+    perimeterMm: jsonb("perimeter_mm").$type<MesswertJson | null>(),
     // Eiserne Regel 5: Öffnungsmaße zeigen immer diesen Hinweis.
-    hinweis: text("hinweis").notNull().default("Richtmaß, kein Bestellmaß"),
+    note: text("note").notNull().default("Reference only, not for ordering"),
   },
   (t) => [
-    unique("openings_run_bauteil_unique").on(t.measureRunId, t.bauteilId),
+    unique("openings_run_component_unique").on(t.measureRunId, t.componentId),
   ],
 );
 
-export const anbautenTable = pgTable(
-  "anbauten",
+export const attachmentsTable = pgTable(
+  "attachments",
   {
     id: uuid("id").primaryKey().defaultRandom(),
     measureRunId: uuid("measure_run_id")
       .notNull()
       .references(() => measureRunsTable.id, { onDelete: "cascade" }),
-    bauteilId: text("bauteil_id").notNull(), // z. B. "A-1"
-    typ: anbauTypEnum("typ").notNull(),
-    fassade: fassadeEnum("fassade"),
-    breiteMm: jsonb("breite_mm").$type<MesswertJson | null>(),
-    hoeheMm: jsonb("hoehe_mm").$type<MesswertJson | null>(),
-    tiefeMm: jsonb("tiefe_mm").$type<MesswertJson | null>(),
+    componentId: text("component_id").notNull(), // z. B. "AT-1"
+    type: attachmentTypeEnum("type").notNull(),
+    elevation: elevationEnum("elevation"),
+    widthMm: jsonb("width_mm").$type<MesswertJson | null>(),
+    heightMm: jsonb("height_mm").$type<MesswertJson | null>(),
+    depthMm: jsonb("depth_mm").$type<MesswertJson | null>(),
   },
   (t) => [
-    unique("anbauten_run_bauteil_unique").on(t.measureRunId, t.bauteilId),
+    unique("attachments_run_component_unique").on(
+      t.measureRunId,
+      t.componentId,
+    ),
   ],
 );
 
 export type MeasureRun = typeof measureRunsTable.$inferSelect;
 export type InsertMeasureRun = typeof measureRunsTable.$inferInsert;
-export type GebaeudeRow = typeof gebaeudeTable.$inferSelect;
+export type BuildingRow = typeof buildingsTable.$inferSelect;
 export type FaceRow = typeof facesTable.$inferSelect;
 export type EdgeRow = typeof edgesTable.$inferSelect;
 export type OpeningRow = typeof openingsTable.$inferSelect;
-export type AnbauRow = typeof anbautenTable.$inferSelect;
+export type AttachmentRow = typeof attachmentsTable.$inferSelect;

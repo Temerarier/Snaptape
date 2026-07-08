@@ -35,8 +35,8 @@ export function erstelleBuehne(optionen: BuehnenOptionen): BuehnenHandle {
 
   const breite = modell.breiteMm * MM;
   const tiefe = modell.tiefeMm * MM;
-  const traufe = modell.traufhoeheMm * MM;
-  const first = modell.firsthoeheMm * MM;
+  const eave = modell.eaveHoeheMm * MM;
+  const first = modell.ridgeHoeheMm * MM;
 
   const szene = new THREE.Scene();
   // Kein Szenen-Hintergrund: Der Renderer bleibt transparent, die
@@ -53,7 +53,7 @@ export function erstelleBuehne(optionen: BuehnenOptionen): BuehnenHandle {
   const radius = 0.5 * Math.hypot(breite, tiefe, first);
   const abstand = (radius / Math.sin((kamera.fov * Math.PI) / 360)) * 1.12;
   const blickrichtung = new THREE.Vector3(1, 0.62, 1.15).normalize();
-  const ziel = new THREE.Vector3(0, traufe * 0.55, 0);
+  const ziel = new THREE.Vector3(0, eave * 0.55, 0);
   kamera.position.copy(ziel.clone().add(blickrichtung.multiplyScalar(abstand)));
   kamera.lookAt(ziel);
 

@@ -3,45 +3,47 @@
 // Rechtes Panel des 3D-Viewers im Stil „Technical-Clean": Summary-
 // Streifen oben, blaues Auswahl-Panel mit Summe, Kategorie-Tabs
 // (Dach / Wände / Öffnungen / Kanten) mit Segmentliste und Summen.
-// Anzeige gerundet (cm bzw. m²), Roh-mm im Tooltip (Eiserne Regel 1);
-// Öffnungen tragen immer den Hinweis „Richtmaß, kein Bestellmaß“
-// (Eiserne Regel 5).
+// Anzeige imperial (ft-in bzw. ft², Pitch x/12), Roh-mm im Tooltip
+// (Eiserne Regel 1); Öffnungen tragen immer den Hinweis „Richtmaß,
+// kein Bestellmaß" (Eiserne Regel 5).
 import { de } from "@/i18n/de";
 import {
   kategorieSummen,
   oeffnungsFlaecheMm2,
   wandflaechenJeFassade,
 } from "@/lib/berechnung/flaechen";
-import type { MessJson } from "@/lib/messung/schema";
+import type { MeasureJson } from "@/lib/messung/schema";
 import {
-  formatBreiteHoeheCm,
-  formatMeter,
+  formatBreiteHoeheFtIn,
+  formatFtIn,
+  formatGrad,
   formatMm2Roh,
   formatMmRoh,
-  formatQuadratmeter,
+  formatPitch,
+  formatQuadratfuss,
 } from "@/lib/viewer/anzeige";
 import type { HausModell } from "@/lib/viewer/baukasten";
 import type { MessLinie } from "@/lib/viewer/szene";
 
 const t = de.viewer;
 
-export type KategorieTab = "dach" | "waende" | "oeffnungen" | "kanten";
+export type KategorieTab = "roof" | "walls" | "openings" | "edges";
 
 const KATEGORIE_TABS: readonly KategorieTab[] = [
-  "dach",
-  "waende",
-  "oeffnungen",
-  "kanten",
+  "roof",
+  "walls",
+  "openings",
+  "edges",
 ];
 
-type FassadenName = keyof typeof t.fassaden;
+type ElevationName = keyof typeof t.elevations;
 type KantenKlasse = keyof typeof t.kantenKlassen;
 
-// „unbekannt"/null wird UI-weit komplett weggelassen: kein Platzhalter-
+// „unknown"/null wird UI-weit komplett weggelassen: kein Platzhalter-
 // Text, keine Zeile. null bedeutet hier „nicht anzeigen".
-function fassadeName(fassade: string | null | undefined): string | null {
-  if (fassade && fassade in t.fassaden) {
-    return t.fassaden[fassade as FassadenName];
+function fassadeName(elevation: string | null | undefined): string | null {
+  if (elevation && elevation in t.elevations) {
+    return t.elevations[elevation as ElevationName];
   }
   return null;
 }
@@ -56,11 +58,11 @@ function kantenKlasseName(klasse: string): string {
   if (klasse in t.kantenKlassen) {
     return t.kantenKlassen[klasse as KantenKlasse];
   }
-  return t.kantenKlassen.unklassifiziert;
+  return t.kantenKlassen.unclassified;
 }
 
 interface BauteilPanelProps {
-  mess: MessJson;
+  mess: MeasureJson;
   modell: HausModell;
   auswahl: ReadonlySet<string>;
   tab: KategorieTab;
@@ -198,7 +200,7 @@ function AuswahlPanel({
   auswahl,
   onToggle,
 }: {
-  mess: MessJson;
+  mess: MeasureJson;
   modell: HausModell;
   auswahl: ReadonlySet<string>;
   onToggle: (id: string) => void;
@@ -213,9 +215,9 @@ function AuswahlPanel({
       const flaeche = oeffnungsFlaecheMm2(oeffnung);
       eintraege.push({
         id,
-        label: mitPunkt(t.typen[oeffnung.typ], fassadeName(oeffnung.fassade)),
-        wert: formatQuadratmeter(flaeche),
-        wertTitel: `${formatMm2Roh(flaeche)} · ${formatBreiteHoeheCm(oeffnung.breite_mm.wert, oeffnung.hoehe_mm.wert)} · ${oeffnung.hinweis}`,
+        label: mitPunkt(t.typen[oeffnung.type], fassadeName(oeffnung.elevation)),
+        wert: formatQuadratfuss(flaeche),
+        wertTitel: `${formatMm2Roh(flaeche)} · ${formatMmRoh(oeffnung.width_mm.value)} × ${formatMmRoh(oeffnung.height_mm.value)} · ${t.hinweisRichtmass}`,
         art: "flaeche",
         rohWert: flaeche,
       });
@@ -224,17 +226,17 @@ function AuswahlPanel({
 
     const face = mess.faces.find((f) => f.id === id);
     if (face) {
-      const istWand = face.face_class === "wand";
+      const istWand = face.face_class === "wall";
       eintraege.push({
         id,
         label: mitPunkt(
-          istWand ? t.kategorien.waende : t.kategorien.dach,
-          fassadeName(face.fassade),
+          istWand ? t.kategorien.walls : t.kategorien.roof,
+          fassadeName(face.elevation),
         ),
-        wert: formatQuadratmeter(face.flaeche_mm2.wert),
-        wertTitel: formatMm2Roh(face.flaeche_mm2.wert),
+        wert: formatQuadratfuss(face.area_mm2.value),
+        wertTitel: formatMm2Roh(face.area_mm2.value),
         art: "flaeche",
-        rohWert: face.flaeche_mm2.wert,
+        rohWert: face.area_mm2.value,
       });
       continue;
     }
@@ -246,12 +248,12 @@ function AuswahlPanel({
         id,
         label: mitPunkt(
           kantenKlasseName(kante ? kante.edgeClass : messKante.edge_class),
-          fassadeName(messKante.gehoert_zu_fassade),
+          fassadeName(messKante.belongs_to_elevation),
         ),
-        wert: formatMeter(messKante.laenge_mm.wert),
-        wertTitel: formatMmRoh(messKante.laenge_mm.wert),
+        wert: formatFtIn(messKante.length_mm.value),
+        wertTitel: formatMmRoh(messKante.length_mm.value),
         art: "laenge",
-        rohWert: messKante.laenge_mm.wert,
+        rohWert: messKante.length_mm.value,
       });
     }
   }
@@ -278,7 +280,7 @@ function AuswahlPanel({
                 : t.auswahlFlaecheMehrzahl}{" "}
               ·{" "}
               <span className="font-mono">
-                {formatQuadratmeter(summeFlaechenMm2)}
+                {formatQuadratfuss(summeFlaechenMm2)}
               </span>
             </p>
           ) : null}
@@ -292,7 +294,7 @@ function AuswahlPanel({
                 ? t.auswahlKanteEinzahl
                 : t.auswahlKanteMehrzahl}{" "}
               ·{" "}
-              <span className="font-mono">{formatMeter(summeKantenMm)}</span>
+              <span className="font-mono">{formatFtIn(summeKantenMm)}</span>
             </p>
           ) : null}
         </div>
@@ -357,8 +359,8 @@ export function BauteilPanel({
   messLinien,
   onMessLinieLoeschen,
 }: BauteilPanelProps) {
-  const daecher = mess.faces.filter((f) => f.face_class === "dachflaeche");
-  const waende = mess.faces.filter((f) => f.face_class === "wand");
+  const daecher = mess.faces.filter((f) => f.face_class === "roof_face");
+  const waende = mess.faces.filter((f) => f.face_class === "wall");
   const wandDaten = wandflaechenJeFassade(mess);
   const summen = kategorieSummen(mess);
 
@@ -368,12 +370,12 @@ export function BauteilPanel({
       <div className="grid grid-cols-3 gap-2">
         <SummaryKachel
           label={t.summary.dach}
-          wert={formatQuadratmeter(summen.dachMm2)}
+          wert={formatQuadratfuss(summen.dachMm2)}
           wertTitel={formatMm2Roh(summen.dachMm2)}
         />
         <SummaryKachel
           label={t.summary.wand}
-          wert={formatQuadratmeter(summen.waendeNettoMm2)}
+          wert={formatQuadratfuss(summen.waendeNettoMm2)}
           wertTitel={formatMm2Roh(summen.waendeNettoMm2)}
         />
         <SummaryKachel
@@ -414,11 +416,11 @@ export function BauteilPanel({
       </div>
 
       {/* Dach */}
-      {tab === "dach" ? (
+      {tab === "roof" ? (
         <section className="space-y-2">
           <SummenZeile
-            label={`${t.kategorien.dach} ${t.gesamt}`}
-            wert={formatQuadratmeter(summen.dachMm2)}
+            label={`${t.kategorien.roof} ${t.gesamt}`}
+            wert={formatQuadratfuss(summen.dachMm2)}
             wertTitel={formatMm2Roh(summen.dachMm2)}
           />
           <div className="space-y-1.5">
@@ -430,12 +432,16 @@ export function BauteilPanel({
                 onToggle={onToggle}
                 onZoom={onZoom}
                 neben={
-                  f.neigung?.gerundet_grad !== undefined
-                    ? `${f.neigung.gerundet_grad}°`
+                  f.pitch?.rise_over_12_snapped !== undefined
+                    ? formatPitch(f.pitch.rise_over_12_snapped)
                     : undefined
                 }
-                wert={formatQuadratmeter(f.flaeche_mm2.wert)}
-                wertTitel={formatMm2Roh(f.flaeche_mm2.wert)}
+                wert={formatQuadratfuss(f.area_mm2.value)}
+                wertTitel={
+                  f.pitch?.degrees_original !== undefined
+                    ? `${formatMm2Roh(f.area_mm2.value)} · ${formatGrad(f.pitch.degrees_original)}`
+                    : formatMm2Roh(f.area_mm2.value)
+                }
               />
             ))}
           </div>
@@ -443,23 +449,23 @@ export function BauteilPanel({
       ) : null}
 
       {/* Wände */}
-      {tab === "waende" ? (
+      {tab === "walls" ? (
         <section className="space-y-2">
           <div className="space-y-1">
             <SummenZeile
               label={t.summeBrutto}
-              wert={formatQuadratmeter(summen.waendeBruttoMm2)}
+              wert={formatQuadratfuss(summen.waendeBruttoMm2)}
               wertTitel={formatMm2Roh(summen.waendeBruttoMm2)}
             />
             <SummenZeile
               label={t.summeNetto}
-              wert={formatQuadratmeter(summen.waendeNettoMm2)}
+              wert={formatQuadratfuss(summen.waendeNettoMm2)}
               wertTitel={formatMm2Roh(summen.waendeNettoMm2)}
             />
           </div>
           <div className="space-y-1.5">
             {waende.map((f) => {
-              const netto = wandDaten.find((w) => w.fassade === f.fassade);
+              const netto = wandDaten.find((w) => w.fassade === f.elevation);
               return (
                 <Zeile
                   key={f.id}
@@ -467,16 +473,16 @@ export function BauteilPanel({
                   ausgewaehlt={auswahl.has(f.id)}
                   onToggle={onToggle}
                   onZoom={onZoom}
-                  neben={fassadeName(f.fassade) ?? undefined}
+                  neben={fassadeName(f.elevation) ?? undefined}
                   wert={
                     netto
-                      ? `${formatQuadratmeter(f.flaeche_mm2.wert)} / ${formatQuadratmeter(netto.nettoMm2)}`
-                      : formatQuadratmeter(f.flaeche_mm2.wert)
+                      ? `${formatQuadratfuss(f.area_mm2.value)} / ${formatQuadratfuss(netto.nettoMm2)}`
+                      : formatQuadratfuss(f.area_mm2.value)
                   }
                   wertTitel={
                     netto
-                      ? `${t.flaecheBrutto}: ${formatMm2Roh(f.flaeche_mm2.wert)} · ${t.flaecheNetto}: ${formatMm2Roh(netto.nettoMm2)}`
-                      : formatMm2Roh(f.flaeche_mm2.wert)
+                      ? `${t.flaecheBrutto}: ${formatMm2Roh(f.area_mm2.value)} · ${t.flaecheNetto}: ${formatMm2Roh(netto.nettoMm2)}`
+                      : formatMm2Roh(f.area_mm2.value)
                   }
                 />
               );
@@ -486,11 +492,11 @@ export function BauteilPanel({
       ) : null}
 
       {/* Öffnungen */}
-      {tab === "oeffnungen" ? (
+      {tab === "openings" ? (
         <section className="space-y-2">
           <SummenZeile
             label={`${t.summe} (${summen.anzahlOeffnungen} ${t.anzahlKurz})`}
-            wert={formatQuadratmeter(summen.oeffnungenMm2)}
+            wert={formatQuadratfuss(summen.oeffnungenMm2)}
             wertTitel={formatMm2Roh(summen.oeffnungenMm2)}
           />
           <div className="space-y-1.5">
@@ -501,9 +507,9 @@ export function BauteilPanel({
                 ausgewaehlt={auswahl.has(o.id)}
                 onToggle={onToggle}
                 onZoom={onZoom}
-                neben={mitPunkt(t.typen[o.typ], fassadeName(o.fassade))}
-                wert={formatBreiteHoeheCm(o.breite_mm.wert, o.hoehe_mm.wert)}
-                wertTitel={`${formatMmRoh(o.breite_mm.wert)} × ${formatMmRoh(o.hoehe_mm.wert)} · ${o.hinweis}`}
+                neben={mitPunkt(t.typen[o.type], fassadeName(o.elevation))}
+                wert={formatBreiteHoeheFtIn(o.width_mm.value, o.height_mm.value)}
+                wertTitel={`${formatMmRoh(o.width_mm.value)} × ${formatMmRoh(o.height_mm.value)} · ${t.hinweisRichtmass}`}
               />
             ))}
           </div>
@@ -514,7 +520,7 @@ export function BauteilPanel({
       ) : null}
 
       {/* Kanten */}
-      {tab === "kanten" ? (
+      {tab === "edges" ? (
         <section className="space-y-1.5">
           {mess.edges.map((e) => (
             <Zeile
@@ -525,10 +531,10 @@ export function BauteilPanel({
               onZoom={onZoom}
               neben={mitPunkt(
                 kantenKlasseName(e.edge_class),
-                fassadeName(e.gehoert_zu_fassade),
+                fassadeName(e.belongs_to_elevation),
               )}
-              wert={formatMeter(e.laenge_mm.wert)}
-              wertTitel={formatMmRoh(e.laenge_mm.wert)}
+              wert={formatFtIn(e.length_mm.value)}
+              wertTitel={formatMmRoh(e.length_mm.value)}
             />
           ))}
         </section>
@@ -550,7 +556,7 @@ export function BauteilPanel({
                   className="font-mono tabular-nums text-schrift"
                   title={formatMmRoh(linie.laengeMm)}
                 >
-                  {linie.id}: {formatMeter(linie.laengeMm)}
+                  {linie.id}: {formatFtIn(linie.laengeMm)}
                 </span>
                 <button
                   type="button"

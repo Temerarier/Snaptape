@@ -7,9 +7,11 @@ description: Fixed stack, iron rules, and artifact quirks for the Aufmaß-App (N
 
 - The stack is FIXED per explicit user instruction (Next.js App Router + TS + Tailwind, PostgreSQL, Replit Object Storage, three.js later, Anthropic later, Stripe stage 6). Never swap it.
   **Why:** user brief says "Stack (fix, nicht ändern)".
-- The 9 "Eiserne Regeln" (mm unrounded internally, mess-schema.json contract, fixed IDs F-1/T-1/K-1/D-1, confidence/source on every value, "Richtmaß, kein Bestellmaß" hint, errors before payment, calculations only in lib/berechnung/, UI texts central in i18n, facade names strassenseite/gartenseite/links/rechts) live verbatim in root `replit.md` — read them before any feature work.
+- The 9 "Eiserne Regeln" (mm unrounded internally, mess-schema.json contract, fixed English IDs, confidence/source on every value, reference-only hint, errors before payment, calculations only in lib/berechnung/, UI texts central in i18n, elevations front/back/left/right) live verbatim in root `replit.md` — read them before any feature work.
+- Schema contract is v1.2 (English, US market) since July 2026: IDs RF-/WL-/SF-/FC-, E-, W-/D-/G-/SK-, AT-; CAUTION: D- means door (was Dach) and W- means window (was Wand) — never assume v1.0 meanings. Status enum: draft/reviewing/ready/failed. Display imperial (ft-in, whole ft², pitch x/12), data stays unrounded mm. Contract file: `artifacts/aufmass-app/schema/mess-schema.json`.
+- The internal HausModell (lib/viewer/baukasten.ts) intentionally keeps German FIELD names (typ, fassade, laengeMm) with English VALUES — do not "fix" `.typ` accesses.
 - The app lives at `artifacts/aufmass-app/` (previewPath "/"); it is a Next.js app inside a mostly Vite/Express monorepo. `artifacts/api-server` and `artifacts/mockup-sandbox` are NOT part of this product.
-- User communicates in German; UI starts German, English prepared.
+- User communicates in German; UI display texts are still German (English UI translation is its own stage, proposed as follow-up task), internal names/enums are English.
 
 # Viewer (three.js) lessons
 
@@ -21,6 +23,13 @@ description: Fixed stack, iron rules, and artifact quirks for the Aufmaß-App (N
 
 - Forms with i18n error texts must set `noValidate` and rely on the server action's German message; native browser `required` tooltips are locale-dependent (English in tests) and violate iron rule 8.
   **How to apply:** any new form with a required field — return the i18n error from the action, render it via role="alert", keep `required` only as a semantic hint.
+
+# Build/test quirks (monorepo)
+
+- After editing `lib/db/src/schema/*`, run `pnpm exec tsc -b lib/db --force` — the composite build emits `lib/db/dist/*.d.ts` that project references consume; stale declarations cause false tsc errors in the app even though exports point to src.
+  **Why:** cost >1 debugging round during the v1.2 migration.
+- Run vitest from the workspace ROOT (`pnpm exec vitest run`); running inside `artifacts/aufmass-app` finds no tests.
+- DB schema renames here are done by drop & recreate (psql drop tables/types, then `pnpm --filter @workspace/db run push-force`, then reseed via `artifacts/aufmass-app/scripts/seed-testdaten.ts`); there is deliberately no migration infrastructure.
 
 # Artifact.toml lessons (platform)
 

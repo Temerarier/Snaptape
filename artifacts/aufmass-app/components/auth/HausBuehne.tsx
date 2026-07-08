@@ -5,11 +5,11 @@
 // Ohne WebGL (z. B. Headless-Browser) bleibt still die schraffierte
 // Platzhalter-Fläche stehen – bewusst kein Fehlerkasten.
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { MessJson } from "@/lib/messung/schema";
+import type { MeasureJson } from "@/lib/messung/schema";
 import { baueHausModell } from "@/lib/viewer/baukasten";
 import { erstelleBuehne, type BuehnenHandle } from "@/lib/viewer/buehne";
 
-export function HausBuehne({ mess }: { mess: MessJson }) {
+export function HausBuehne({ mess }: { mess: MeasureJson }) {
   const modell = useMemo(() => baueHausModell(mess), [mess]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [bereit, setBereit] = useState(false);

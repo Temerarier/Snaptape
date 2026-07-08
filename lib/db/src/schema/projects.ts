@@ -11,10 +11,10 @@ import { z } from "zod/v4";
 import { usersTable } from "./users";
 
 export const projectStatusEnum = pgEnum("project_status", [
-  "entwurf",
-  "in_pruefung",
-  "fertig",
-  "fehler",
+  "draft",
+  "reviewing",
+  "ready",
+  "failed",
 ]);
 
 export const projectsTable = pgTable("projects", {
@@ -24,7 +24,7 @@ export const projectsTable = pgTable("projects", {
     .references(() => usersTable.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   adresse: text("adresse"),
-  status: projectStatusEnum("status").notNull().default("entwurf"),
+  status: projectStatusEnum("status").notNull().default("draft"),
   paid: boolean("paid").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()

@@ -53,15 +53,17 @@ const KLICK_TOLERANZ_PX = 6;
 // (lib/viewer/buehne.ts) genutzt, damit beide Darstellungen identisch
 // aussehen.
 export const FLAECHEN_FARBEN: Record<string, number> = {
-  wand: 0xdedad2,
-  dachflaeche: 0xa4553f,
+  wall: 0xdedad2,
+  roof_face: 0xa4553f,
 };
 
 export const OEFFNUNGS_FARBEN: Record<string, number> = {
-  fenster: 0x93b8d8,
-  tuer: 0x8a6248,
-  garagentor: 0x9aa0a6,
-  sonstige: 0xb0aba3,
+  window: 0x93b8d8,
+  door: 0x8a6248,
+  patio_door: 0x7fa8cf,
+  garage_door: 0x9aa0a6,
+  skylight: 0xaecbe3,
+  other: 0xb0aba3,
 };
 
 export const KANTEN_FARBE = 0x57534e;
@@ -70,7 +72,7 @@ function zuMeter(p: Punkt3): THREE.Vector3 {
   return new THREE.Vector3(p[0] * MM, p[1] * MM, p[2] * MM);
 }
 
-// Text eines Kanten-Maßlabels: Bauteil-ID + Länge, z. B. „K-9 · 5,50 m"
+// Text eines Kanten-Maßlabels: Bauteil-ID + Länge, z. B. „E-9 · 18' 1""
 // (Eiserne Regel 3: dieselbe ID überall). Reine Funktion, damit sie ohne
 // WebGL testbar ist.
 export function massLabelText(
@@ -143,7 +145,7 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
 
   const breite = modell.breiteMm * MM;
   const tiefe = modell.tiefeMm * MM;
-  const first = modell.firsthoeheMm * MM;
+  const first = modell.ridgeHoeheMm * MM;
 
   const szene = new THREE.Scene();
   // Einheitliches Off-White für Boden und Hintergrund – nahtlos, ohne
@@ -174,7 +176,7 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
   container.appendChild(labelRenderer.domElement);
 
   const steuerung = new OrbitControls(kamera, renderer.domElement);
-  steuerung.target.set(breite / 2, (modell.traufhoeheMm * MM) / 2, tiefe / 2);
+  steuerung.target.set(breite / 2, (modell.eaveHoeheMm * MM) / 2, tiefe / 2);
   steuerung.enableDamping = true;
   steuerung.dampingFactor = 0.08;
   steuerung.minDistance = 1.5;
@@ -319,7 +321,7 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
     teile.set(kante.id, linie);
 
     // Maß-Label am Kantenmittelpunkt (per Schalter einblendbar):
-    // Bauteil-ID + Länge, z. B. „K-9 · 5,50 m" (Eiserne Regel 3).
+    // Bauteil-ID + Länge, z. B. „E-9 · 18' 1"" (Eiserne Regel 3).
     const mitte = zuMeter(kante.start).add(zuMeter(kante.ende)).multiplyScalar(0.5);
     const el = labelElement(massLabelText(kante.id, kante.laengeMm, formatLaenge));
     const label = new CSS2DObject(el);
@@ -395,7 +397,7 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
     for (const t of treffer) {
       const id = t.object.userData.bauteilId as string | undefined;
       if (!id) continue;
-      const bonus = id.startsWith("K-") ? 0.08 : gruppeOeffnungen.children.includes(t.object) ? 0.05 : 0;
+      const bonus = id.startsWith("E-") ? 0.08 : gruppeOeffnungen.children.includes(t.object) ? 0.05 : 0;
       const wertung = t.distance - bonus;
       if (!bester || wertung < bester.wertung) bester = { id, wertung };
     }

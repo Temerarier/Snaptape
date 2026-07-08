@@ -8,8 +8,8 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { de } from "@/i18n/de";
-import type { MessJson } from "@/lib/messung/schema";
-import { formatMeter } from "@/lib/viewer/anzeige";
+import type { MeasureJson } from "@/lib/messung/schema";
+import { formatFtIn } from "@/lib/viewer/anzeige";
 import { baueHausModell } from "@/lib/viewer/baukasten";
 import {
   erstelleSzene,
@@ -26,7 +26,7 @@ const t = de.viewer;
 const APP_KOPF_HOEHE = "h-[calc(100dvh-61px)]";
 
 export interface ModellViewerProps {
-  mess: MessJson;
+  mess: MeasureJson;
   projektName?: string;
   projektAdresse?: string | null;
 }
@@ -42,7 +42,7 @@ export function ModellViewer({
   const messZaehler = useRef(0);
 
   const [auswahl, setAuswahl] = useState<ReadonlySet<string>>(new Set());
-  const [tab, setTab] = useState<KategorieTab>("dach");
+  const [tab, setTab] = useState<KategorieTab>("roof");
   const [masseSichtbar, setMasseSichtbar] = useState(false);
   const [messModus, setMessModus] = useState(false);
   const [messLinien, setMessLinien] = useState<MessLinie[]>([]);
@@ -53,14 +53,14 @@ export function ModellViewer({
   // (wirkt auf den aktiven Tab).
   const tabIds = useMemo<Record<KategorieTab, string[]>>(
     () => ({
-      dach: mess.faces
-        .filter((f) => f.face_class === "dachflaeche")
+      roof: mess.faces
+        .filter((f) => f.face_class === "roof_face")
         .map((f) => f.id),
-      waende: mess.faces
-        .filter((f) => f.face_class === "wand")
+      walls: mess.faces
+        .filter((f) => f.face_class === "wall")
         .map((f) => f.id),
-      oeffnungen: mess.openings.map((o) => o.id),
-      kanten: mess.edges.map((e) => e.id),
+      openings: mess.openings.map((o) => o.id),
+      edges: mess.edges.map((e) => e.id),
     }),
     [mess],
   );
@@ -76,7 +76,7 @@ export function ModellViewer({
         handle = erstelleSzene({
           container,
           modell,
-          formatLaenge: formatMeter,
+          formatLaenge: formatFtIn,
           onBauteilKlick: (id) => {
             setAuswahl((alt) => {
               if (!id) return new Set<string>();

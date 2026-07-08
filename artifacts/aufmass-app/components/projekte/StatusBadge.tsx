@@ -8,10 +8,10 @@ const VARIANTEN: Record<
   ProjectStatus,
   "neutral" | "warnung" | "ok" | "fehler"
 > = {
-  entwurf: "neutral",
-  in_pruefung: "warnung",
-  fertig: "ok",
-  fehler: "fehler",
+  draft: "neutral",
+  reviewing: "warnung",
+  ready: "ok",
+  failed: "fehler",
 };
 
 export function StatusBadge({ status }: { status: ProjectStatus }) {

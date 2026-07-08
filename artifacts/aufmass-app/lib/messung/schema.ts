@@ -1,188 +1,184 @@
-// Zod-Abbildung des Vertrags schema/mess-schema.json (Mess-JSON v1.0).
-// Eiserne Regel 2: Das JSON-Schema ist der Vertrag zwischen Messung,
-// Datenbank, Viewer und Report – diese Datei bildet ihn 1:1 ab und
-// wird nur auf ausdrückliche Anweisung geändert.
+// Zod-Abbildung des Vertrags schema/mess-schema.json (Measurement-JSON
+// v1.2, englisch, US-Markt). Eiserne Regel 2: Das JSON-Schema ist der
+// Vertrag zwischen Messung, Datenbank, Viewer und Report – diese Datei
+// bildet ihn 1:1 ab und wird nur auf ausdrückliche Anweisung geändert.
+//
+// Migration v1.0 → v1.2 (IDs): Dach D-→RF-, Wand W-→WL-, Untersicht
+// U-→SF-, Blende B-→FC-, Kante K-→E-, Fenster F-→W-, Tür T-→D-,
+// Garagentor G-→G-, Anbau A-→AT-; neu: SK- (Skylight). ACHTUNG: das
+// neue "D-" ist eine Tür (alt: Dachfläche), das neue "W-" ein Fenster
+// (alt: Wand). Alte und neue IDs niemals mischen.
 import { z } from "zod/v4";
 
-export const FASSADEN = [
-  "strassenseite",
-  "gartenseite",
-  "links",
-  "rechts",
-] as const;
+// Elevations funktional benannt: front = zur Straße gerichtete Seite,
+// left/right von der Straße aus gesehen. Himmelsrichtungen werden nie
+// geraten – sie kommen später deterministisch aus der Adresse.
+export const ELEVATIONS = ["front", "back", "left", "right"] as const;
 
-export const fassadeSchema = z.enum(FASSADEN);
+export const elevationSchema = z.enum(ELEVATIONS);
 
-export const messwertSchema = z.object({
-  wert: z.number(),
+const elevationOderRoofSchema = z.enum([
+  "front",
+  "back",
+  "left",
+  "right",
+  "roof",
+  "unknown",
+]);
+
+export const measurementSchema = z.object({
+  value: z.number(),
   confidence: z.enum(["high", "medium", "low"]),
   source: z.enum(["measured", "scaled", "estimated"]),
   reference_used: z.string().nullable().optional(),
-  grund_bei_low: z.string().nullable().optional(),
+  low_reason: z.string().nullable().optional(),
 });
 
-const messwertOderNull = messwertSchema.nullable();
+const measurementOderNull = measurementSchema.nullable();
 
-export const fotoSchema = z.object({
-  nr: z.number().int(),
-  zeigt_fassade: z
-    .enum([
-      "strassenseite",
-      "gartenseite",
-      "links",
-      "rechts",
-      "dach",
-      "mehrere",
-      "unbekannt",
-    ])
+export const photoSchema = z.object({
+  index: z.number().int(),
+  shows_elevation: z
+    .enum(["front", "back", "left", "right", "roof", "multiple", "unknown"])
     .optional(),
-  blickwinkel: z.enum(["frontal", "leicht_schraeg", "stark_schraeg"]),
-  perspektive_korrigiert: z.boolean().optional(),
+  view_angle: z.enum(["frontal", "slightly_angled", "steeply_angled"]),
+  perspective_corrected: z.boolean().optional(),
 });
 
 export const metaSchema = z.object({
-  land: z.enum(["DE", "AT", "CH", "US"]),
-  einheit: z.literal("mm"),
-  schema_version: z.literal("1.0").optional(),
-  fotos: z.array(fotoSchema).optional(),
-  hinweise: z.array(z.string()).optional(),
+  country: z.enum(["US", "DE", "AT", "CH"]),
+  unit: z.literal("mm"),
+  schema_version: z.literal("1.2").optional(),
+  photos: z.array(photoSchema).optional(),
+  notes: z.array(z.string()).optional(),
 });
 
 export const footprintSchema = z.object({
-  punkte: z.array(z.tuple([z.number(), z.number()])).optional(),
-  breite_mm: messwertOderNull.optional(),
-  tiefe_mm: messwertOderNull.optional(),
-  umfang_mm: messwertOderNull.optional(),
-  flaeche_mm2: messwertOderNull.optional(),
+  points: z.array(z.tuple([z.number(), z.number()])).optional(),
+  width_mm: measurementOderNull.optional(),
+  depth_mm: measurementOderNull.optional(),
+  perimeter_mm: measurementOderNull.optional(),
+  area_mm2: measurementOderNull.optional(),
 });
 
-export const gebaeudeSchema = z.object({
-  gebaeudetyp: z
+export const buildingSchema = z.object({
+  building_type: z
     .enum([
-      "freistehend",
-      "doppelhaus",
-      "reihenhaus_mitte",
-      "reihenhaus_ende",
-      "unbekannt",
+      "detached",
+      "duplex",
+      "townhouse_middle",
+      "townhouse_end",
+      "unknown",
     ])
     .optional(),
-  geschosse: z.number().int().nullable().optional(),
-  dachform: z.enum([
-    "satteldach",
-    "walmdach",
-    "flachdach",
-    "pultdach",
-    "mansarddach",
-    "kruppelwalm",
-    "sonstige",
-    "unbekannt",
+  stories: z.number().int().nullable().optional(),
+  roof_type: z.enum([
+    "gable",
+    "hip",
+    "flat",
+    "shed",
+    "mansard",
+    "gambrel",
+    "jerkinhead",
+    "other",
+    "unknown",
   ]),
   footprint: footprintSchema.nullable().optional(),
-  hoehen: z
+  heights: z
     .object({
-      traufhoehe_mm: messwertOderNull.optional(),
-      firsthoehe_mm: messwertOderNull.optional(),
-      attikahoehe_mm: messwertOderNull.optional(),
+      eave_height_mm: measurementOderNull.optional(),
+      ridge_height_mm: measurementOderNull.optional(),
+      parapet_height_mm: measurementOderNull.optional(),
     })
     .optional(),
-  geteilte_waende: z.array(fassadeSchema).optional(),
+  shared_walls: z.array(elevationSchema).optional(),
 });
 
-export const referenzSchema = z.object({
-  foto_nr: z.number().int(),
-  skala_art: z.enum(["eigenes_referenzobjekt", "uebertragen", "keine"]),
-  objekt: z.string().nullable().optional(),
+export const referenceSchema = z.object({
+  photo_index: z.number().int(),
+  scale_type: z.enum(["user_provided", "own_reference", "transferred", "none"]),
+  object: z.string().nullable().optional(),
   bounding_box: z.array(z.number()).nullable().optional(),
-  angenommenes_mass_mm: z.number().nullable().optional(),
-  zuverlaessigkeit: z.enum(["hoch", "mittel", "niedrig"]).nullable().optional(),
-  ebene: z
-    .enum(["fassadenebene", "davor", "dahinter", "unbekannt"])
+  assumed_size_mm: z.number().nullable().optional(),
+  reliability: z.enum(["high", "medium", "low"]).nullable().optional(),
+  plane: z
+    .enum(["facade_plane", "in_front", "behind", "unknown"])
     .nullable()
     .optional(),
-  uebertragen_via: z.string().nullable().optional(),
-  vom_nutzer_bestaetigt: z.boolean().optional().default(false),
+  transferred_via: z.string().nullable().optional(),
+  user_confirmed: z.boolean().optional().default(false),
+});
+
+// Dreistufiger Pitch (Hover-Stil): exakter Gradwert, gerundeter
+// Gradwert und auf einen gängigen US-Pitch (rise über 12 run)
+// eingerasteter Wert für die Anzeige.
+export const pitchSchema = z.object({
+  degrees_original: z.number().optional(),
+  degrees_rounded: z.number().optional(),
+  rise_over_12_snapped: z.number().optional(),
 });
 
 export const faceSchema = z.object({
-  id: z.string().regex(/^(D|W|U|B)-[0-9]+$/),
-  face_class: z.enum(["dachflaeche", "wand", "untersicht", "blende"]),
-  fassade: z
-    .enum([
-      "strassenseite",
-      "gartenseite",
-      "links",
-      "rechts",
-      "dach",
-      "unbekannt",
-    ])
-    .optional(),
+  id: z.string().regex(/^(RF|WL|SF|FC)-[0-9]+$/),
+  face_class: z.enum(["roof_face", "wall", "soffit", "fascia"]),
+  elevation: elevationOderRoofSchema.optional(),
   material: z
     .enum([
-      "putz",
-      "klinker",
-      "wdvs",
-      "holz",
-      "sichtbeton",
-      "sonstige",
-      "unbekannt",
+      "stucco",
+      "brick",
+      "siding",
+      "wood",
+      "concrete",
+      "eifs",
+      "other",
+      "unknown",
     ])
     .nullable()
     .optional(),
-  flaeche_mm2: messwertSchema,
-  flaeche_netto_mm2: messwertOderNull.optional(),
-  neigung: z
-    .object({
-      original_grad: z.number().optional(),
-      gerundet_grad: z.number().optional(),
-    })
-    .nullable()
-    .optional(),
-  ausrichtung_grad: z.number().nullable().optional(),
+  area_mm2: measurementSchema,
+  net_area_mm2: measurementOderNull.optional(),
+  soffit_depth_mm: measurementOderNull.optional(),
+  pitch: pitchSchema.nullable().optional(),
+  orientation_deg: z.number().nullable().optional(),
 });
 
 export const edgeSchema = z.object({
-  id: z.string().regex(/^K-[0-9]+$/),
+  id: z.string().regex(/^E-[0-9]+$/),
   edge_class: z.enum([
-    "first",
-    "grat",
-    "kehle",
-    "traufe",
-    "ortgang",
-    "aussenecke",
-    "innenecke",
-    "sockel",
-    "sturz",
-    "fensterbank",
-    "leibung",
-    "unklassifiziert",
+    "ridge",
+    "hip",
+    "valley",
+    "eave",
+    "rake",
+    "flashing",
+    "step_flashing",
+    "outside_corner",
+    "inside_corner",
+    "base",
+    "head",
+    "sill",
+    "jamb",
+    "unclassified",
   ]),
-  laenge_mm: messwertSchema,
-  gehoert_zu_fassade: z
-    .enum([
-      "strassenseite",
-      "gartenseite",
-      "links",
-      "rechts",
-      "dach",
-      "unbekannt",
-    ])
-    .nullable()
-    .optional(),
+  length_mm: measurementSchema,
+  belongs_to_elevation: elevationOderRoofSchema.nullable().optional(),
 });
 
 export const openingSchema = z.object({
-  id: z.string().regex(/^(F|T|G)-[0-9]+$/),
-  typ: z.enum(["fenster", "tuer", "garagentor", "sonstige"]),
-  fassade: z.enum([
-    "strassenseite",
-    "gartenseite",
-    "links",
-    "rechts",
-    "unbekannt",
+  id: z.string().regex(/^(W|D|G|SK)-[0-9]+$/),
+  type: z.enum([
+    "window",
+    "door",
+    "patio_door",
+    "garage_door",
+    "skylight",
+    "other",
   ]),
-  breite_mm: messwertSchema,
-  hoehe_mm: messwertSchema,
-  bruestung_mm: messwertOderNull.optional(),
+  elevation: elevationOderRoofSchema,
+  width_mm: measurementSchema,
+  height_mm: measurementSchema,
+  sill_height_mm: measurementOderNull.optional(),
+  group_id: z.string().nullable().optional(),
   position_mm: z
     .object({
       x: z.number().optional(),
@@ -190,50 +186,49 @@ export const openingSchema = z.object({
     })
     .nullable()
     .optional(),
-  flaeche_mm2: messwertOderNull.optional(),
-  umfang_mm: messwertOderNull.optional(),
-  hinweis: z.string().optional().default("Richtmaß, kein Bestellmaß"),
+  area_mm2: measurementOderNull.optional(),
+  perimeter_mm: measurementOderNull.optional(),
+  note: z.string().optional().default("Reference only, not for ordering"),
 });
 
-export const anbauSchema = z.object({
-  id: z.string().regex(/^A-[0-9]+$/),
-  typ: z.enum(["gaube", "erker", "balkon", "vordach", "anbau", "sonstige"]),
-  fassade: z
-    .enum([
-      "strassenseite",
-      "gartenseite",
-      "links",
-      "rechts",
-      "dach",
-      "unbekannt",
-    ])
-    .optional(),
-  breite_mm: messwertOderNull.optional(),
-  hoehe_mm: messwertOderNull.optional(),
-  tiefe_mm: messwertOderNull.optional(),
+export const attachmentSchema = z.object({
+  id: z.string().regex(/^AT-[0-9]+$/),
+  type: z.enum([
+    "dormer",
+    "bay",
+    "balcony",
+    "awning",
+    "addition",
+    "chimney",
+    "other",
+  ]),
+  elevation: elevationOderRoofSchema.optional(),
+  width_mm: measurementOderNull.optional(),
+  height_mm: measurementOderNull.optional(),
+  depth_mm: measurementOderNull.optional(),
 });
 
-export const qualitaetSchema = z.object({
-  anzahl_referenzen_genutzt: z.number().int().optional(),
-  streuung_prozent: z.number().optional(),
-  warnungen: z.array(z.string()).optional(),
+export const qualitySchema = z.object({
+  references_used: z.number().int().optional(),
+  spread_percent: z.number().optional(),
+  warnings: z.array(z.string()).optional(),
 });
 
-export const messJsonSchema = z.object({
+export const measureJsonSchema = z.object({
   meta: metaSchema,
-  gebaeude: gebaeudeSchema,
-  referenzen: z.array(referenzSchema),
+  building: buildingSchema,
+  references: z.array(referenceSchema),
   faces: z.array(faceSchema),
   edges: z.array(edgeSchema),
   openings: z.array(openingSchema),
-  anbauten: z.array(anbauSchema).optional(),
-  qualitaet: qualitaetSchema.nullable().optional(),
+  attachments: z.array(attachmentSchema).optional(),
+  quality: qualitySchema.nullable().optional(),
 });
 
-export type Messwert = z.infer<typeof messwertSchema>;
-export type Fassade = z.infer<typeof fassadeSchema>;
+export type Measurement = z.infer<typeof measurementSchema>;
+export type Elevation = z.infer<typeof elevationSchema>;
 export type Face = z.infer<typeof faceSchema>;
 export type Edge = z.infer<typeof edgeSchema>;
 export type Opening = z.infer<typeof openingSchema>;
-export type Anbau = z.infer<typeof anbauSchema>;
-export type MessJson = z.infer<typeof messJsonSchema>;
+export type Attachment = z.infer<typeof attachmentSchema>;
+export type MeasureJson = z.infer<typeof measureJsonSchema>;

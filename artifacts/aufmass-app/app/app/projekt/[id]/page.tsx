@@ -7,7 +7,7 @@ import { requireUser } from "@/lib/auth/session";
 import { StatusBadge } from "@/components/projekte/StatusBadge";
 import { kategorieSummen } from "@/lib/berechnung/flaechen";
 import { ladeTesthaus } from "@/lib/messung/testhaus";
-import { formatMm2Roh, formatQuadratmeter } from "@/lib/viewer/anzeige";
+import { formatMm2Roh, formatQuadratfuss } from "@/lib/viewer/anzeige";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -57,7 +57,9 @@ export default async function ProjectDetailPage({
   const t = de.projectDetail;
   const mess = ladeTesthaus();
   const summen = kategorieSummen(mess);
-  const anzahlFenster = mess.openings.filter((o) => o.typ === "fenster").length;
+  const anzahlFenster = mess.openings.filter(
+    (o) => o.type === "window",
+  ).length;
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
@@ -130,13 +132,13 @@ export default async function ProjectDetailPage({
           </div>
           <div className="mt-4 grid flex-1 grid-cols-2 gap-3">
             <Kachel
-              label={t.cards.messwerte.dachflaeche}
-              wert={formatQuadratmeter(summen.dachMm2)}
+              label={t.cards.messwerte.dach}
+              wert={formatQuadratfuss(summen.dachMm2)}
               wertTitel={formatMm2Roh(summen.dachMm2)}
             />
             <Kachel
               label={t.cards.messwerte.wandflaeche}
-              wert={formatQuadratmeter(summen.waendeNettoMm2)}
+              wert={formatQuadratfuss(summen.waendeNettoMm2)}
               wertTitel={formatMm2Roh(summen.waendeNettoMm2)}
             />
             <Kachel
