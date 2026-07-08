@@ -1,0 +1,48 @@
+Lies replit.md. Baue NUR diese Etappe:
+
+Ziel: Gesamte sichtbare Oberfläche auf US-Englisch als Standard; Deutsch
+bleibt als wählbare zweite Sprache vollständig erhalten. Produktname
+überall: Snaptape.
+
+1. i18n: ALLE sichtbaren Texte (Buttons, Labels, Statusnamen, Fehler-
+   meldungen, Tooltips, Panel-Überschriften, Leere-Zustände, E-Mail-
+   Betreffe falls vorhanden) in zwei zentrale Sprachdateien:
+   i18n/en-US (Default) und i18n/de-DE (vollständig gepflegt).
+   Kein hartkodierter UI-String außerhalb der Sprachdateien.
+
+2. Übersetzungen u. a.: „Dach"→„Roof", „Wände"→„Walls", „Öffnungen"→
+   „Openings", „Maße anzeigen"→„Show measurements", „Neues Projekt"→
+   „+ New project", „Archivieren"→„Archive", „Wiederherstellen"→„Restore".
+   Status-LABELS: Draft · Reviewing · Ready · Failed (die DB-Werte
+   draft/reviewing/ready/failed kommen bereits aus Etappe M1 – hier nur
+   Anzeige-Labels je Sprache).
+
+3. Sprachumschalter: kleiner Umschalter EN/DE im Nutzer-Menü; Auswahl
+   wird am User gespeichert und überlebt Reload/Login. Default en-US.
+
+4. Formate je Sprache: Datum EN = MM/DD/YYYY, DE = DD.MM.YYYY.
+   WICHTIG: Einheiten (ft-in, ft², x/12) sind SPRACHUNABHÄNGIG und kommen
+   aus Etappe M1 – die Einheiten-Formatierung hier NICHT anfassen, auch
+   in der deutschen Oberfläche imperial anzeigen.
+
+5. Disclaimer-Text „Reference only, not for ordering" (DE: „Richtmaß,
+   kein Bestellmaß") als EINE Quelle in der Config definieren; Schema-
+   Default, Viewer-Panel und Report referenzieren dieselbe Quelle.
+
+6. Produktname: alle Vorkommen alter Namen/Arbeitstitel (z. B. RoofScope)
+   durch „Snaptape" ersetzen: Header-Logo-Text, Seitentitel/Tab-Titel,
+   E-Mail-Texte, replit.md.
+
+7. replit.md aktualisieren: Regel 8 = „UI-Texte zentral in i18n;
+   Default en-US, de-DE als Option"; Projektname Snaptape.
+
+Akzeptanzkriterien: Durchklicken Registrieren → Projekt anlegen →
+Projektliste: alle Texte englisch, Badges Draft/Reviewing/Ready/Failed,
+Filter-Chips und Sortierung funktionieren weiter; Umschalter auf DE stellt
+komplette Oberfläche um und bleibt nach Reload erhalten; Volltextsuche im
+UI-Code nach ä/ö/ü/ß und deutschen Wörtern liefert Treffer NUR in
+i18n/de-DE; Header und Tab-Titel zeigen „Snaptape".
+
+Nicht bauen: keine Layout-/Designänderungen (Design-Tokens und die neue
+Projektliste bleiben exakt wie sie sind), keine neuen Features, keine
+Einheiten-Logik.
