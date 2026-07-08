@@ -38,9 +38,13 @@ export interface SzenenHandle {
 }
 
 const MM = 1 / 1000;
-// Helles, entsättigtes Blau – bewusst heller als das UI-Akzentblau,
-// damit ausgewählte Bauteile freundlich wirken und Chips lesbar bleiben.
-const AUSWAHL_FARBE = 0x93c5fd;
+// Auswahl: halbtransparente Tönung in der Akzentfarbe (#2563EB) über der
+// Basisfarbe + deckende Umrandung. Die Basisfarbe bleibt sichtbar.
+const AUSWAHL_FARBE = 0x2563eb;
+const AUSWAHL_DECKKRAFT = 0.35;
+// Sehr helles, weiches Off-White für Boden/Bühnenhintergrund –
+// bewusst nicht reines Weiß, damit nichts blendet.
+const BUEHNEN_FARBE = 0xf2f3f5;
 const MESS_FARBE = 0xdc2626;
 const SNAP_ABSTAND_M = 0.15;
 const KLICK_TOLERANZ_PX = 6;
@@ -142,8 +146,9 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
   const first = modell.firsthoeheMm * MM;
 
   const szene = new THREE.Scene();
-  // Reines Weiß, damit Boden und Bühnen-Karte nahtlos verschmelzen.
-  szene.background = new THREE.Color(0xffffff);
+  // Einheitliches Off-White für Boden und Hintergrund – nahtlos, ohne
+  // Horizontkante (der Boden selbst ist nur eine Schatten-Ebene).
+  szene.background = new THREE.Color(BUEHNEN_FARBE);
 
   const kamera = new THREE.PerspectiveCamera(
     50,
@@ -199,7 +204,7 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
   szene.add(gegenlicht);
 
   // Boden („Tisch"): ShadowMaterial zeigt NUR den weichen Schatten –
-  // die Fläche selbst ist unsichtbar, darunter scheint der reinweiße
+  // die Fläche selbst ist unsichtbar, darunter scheint der Off-White-
   // Hintergrund durch (kein Grauschleier durch Licht-Shading).
   const boden = new THREE.Mesh(
     new THREE.PlaneGeometry(120, 120),
@@ -228,6 +233,50 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
   // Maß-Labels der Kanten inkl. Länge (in m) für die Zoom-Ausdünnung.
   const massLabels: { label: CSS2DObject; laengeM: number }[] = [];
 
+  // Auswahl-Overlays für Flächen/Öffnungen: halbtransparente
+  // Akzent-Tönung über der Basisfarbe + deckende Umrandung des Polygons.
+  // Eigene Gruppe, die vom Raycasting ausgenommen ist – Klicks gehen
+  // weiterhin durch die Overlays hindurch auf die Bauteile.
+  const gruppeAuswahl = new THREE.Group();
+  szene.add(gruppeAuswahl);
+  const auswahlOverlays = new Map<string, THREE.Group>();
+
+  function baueAuswahlOverlay(
+    id: string,
+    polygon: Punkt3[],
+    geometrie: THREE.BufferGeometry,
+  ) {
+    const overlay = new THREE.Group();
+    // Tönung: gleiche (geteilte) Geometrie, unbeleuchtet, ohne
+    // Tiefen-Schreiben; negativer Polygon-Offset gegen Z-Fighting.
+    const toenung = new THREE.Mesh(
+      geometrie,
+      new THREE.MeshBasicMaterial({
+        color: AUSWAHL_FARBE,
+        transparent: true,
+        opacity: AUSWAHL_DECKKRAFT,
+        depthWrite: false,
+        side: THREE.DoubleSide,
+        polygonOffset: true,
+        polygonOffsetFactor: -1,
+        polygonOffsetUnits: -1,
+      }),
+    );
+    toenung.renderOrder = 1;
+    // Umrandung: deckende Akzentfarbe entlang des Polygonrands. Höhere
+    // renderOrder, damit sie deckungsgleiche Kanten-Linien übermalt
+    // (three.js-Default LessEqualDepth lässt gleiche Tiefe passieren).
+    const rand = new THREE.LineLoop(
+      new THREE.BufferGeometry().setFromPoints(polygon.map(zuMeter)),
+      new THREE.LineBasicMaterial({ color: AUSWAHL_FARBE }),
+    );
+    rand.renderOrder = 2;
+    overlay.add(toenung, rand);
+    overlay.visible = false;
+    gruppeAuswahl.add(overlay);
+    auswahlOverlays.set(id, overlay);
+  }
+
   for (const flaeche of modell.flaechen) {
     const basisFarbe = FLAECHEN_FARBEN[flaeche.faceClass] ?? 0xcccccc;
     const material = new THREE.MeshStandardMaterial({
@@ -242,6 +291,7 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
     mesh.userData = { bauteilId: flaeche.id, basisFarbe };
     gruppeFlaechen.add(mesh);
     teile.set(flaeche.id, mesh);
+    baueAuswahlOverlay(flaeche.id, flaeche.polygon, mesh.geometry);
   }
 
   for (const oeffnung of modell.oeffnungen) {
@@ -254,6 +304,7 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
     mesh.userData = { bauteilId: oeffnung.id, basisFarbe };
     gruppeOeffnungen.add(mesh);
     teile.set(oeffnung.id, mesh);
+    baueAuswahlOverlay(oeffnung.id, oeffnung.polygon, mesh.geometry);
   }
 
   for (const kante of modell.kanten) {
@@ -480,14 +531,19 @@ export function erstelleSzene(optionen: SzenenOptionen): SzenenHandle {
     setAuswahl(ids) {
       for (const [id, objekt] of teile) {
         const ausgewaehlt = ids.has(id);
-        const material = (objekt as THREE.Mesh | THREE.Line)
-          .material as THREE.MeshStandardMaterial | THREE.LineBasicMaterial;
+        const overlay = auswahlOverlays.get(id);
+        if (overlay) {
+          // Flächen/Öffnungen: Basisfarbe bleibt unangetastet, nur das
+          // transparente Overlay (Tönung + Umrandung) wird geschaltet.
+          overlay.visible = ausgewaehlt;
+          continue;
+        }
+        // Kanten: Linien deckend in Akzentfarbe umfärben – eine
+        // transparente Tönung ist bei Linien nicht sinnvoll.
+        const material = (objekt as THREE.Line)
+          .material as THREE.LineBasicMaterial;
         const basisFarbe = objekt.userData.basisFarbe as number;
         material.color.setHex(ausgewaehlt ? AUSWAHL_FARBE : basisFarbe);
-        if (material instanceof THREE.MeshStandardMaterial) {
-          material.emissive.setHex(ausgewaehlt ? AUSWAHL_FARBE : 0x000000);
-          material.emissiveIntensity = ausgewaehlt ? 0.25 : 0;
-        }
       }
     },
     setMasseSichtbar(sichtbar) {
