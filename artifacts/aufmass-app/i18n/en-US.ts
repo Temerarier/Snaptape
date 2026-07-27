@@ -78,6 +78,7 @@ export const enUS = {
     noSearchResultsTitle: "No results",
     noSearchResultsText:
       "No project matches your search. Try a different search term.",
+    titelPlaceholder: "Project name",
     nameLabel: "Project name",
     namePlaceholder: "e.g. Single-family home, 12 Main St",
     adresseLabel: "Address (optional)",

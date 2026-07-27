@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { getDictionary, toLocale } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
 import { HeaderSuche } from "@/components/projekte/HeaderSuche";
-import { NewProjectDialog } from "@/components/projekte/NewProjectDialog";
+import { NewProjectButton } from "@/components/projekte/NewProjectButton";
 import { UserMenu } from "@/components/auth/UserMenu";
 
 export default async function AppLayout({
@@ -35,7 +35,7 @@ export default async function AppLayout({
             </Suspense>
           </div>
           <div className="flex shrink-0 items-center gap-3">
-            <NewProjectDialog />
+            <NewProjectButton />
             <UserMenu email={user.email} />
           </div>
         </div>

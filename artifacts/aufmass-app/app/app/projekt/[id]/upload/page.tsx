@@ -8,6 +8,7 @@ import { db, projectFilesTable, projectsTable } from "@workspace/db";
 import { getDictionary, toLocale } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
 import { UploadBereich } from "@/components/upload/UploadBereich";
+import { ProjektTitelInput } from "@/components/projekte/ProjektTitelInput";
 import type { DateiInfo } from "@/lib/upload/actions";
 
 const UUID_PATTERN =
@@ -58,9 +59,11 @@ export default async function UploadPage({
       >
         ← {t.zurueckZumProjekt}
       </Link>
-      <h1 className="mt-4 text-[28px] font-bold tracking-[-0.02em] text-schrift">
-        {t.title}
-      </h1>
+      <ProjektTitelInput
+        projektId={projekt.id}
+        initialName={projekt.name}
+        placeholder={dict.projects.titelPlaceholder}
+      />
       <p className="mt-1.5 text-[15px] text-schrift-sekundaer">{t.subtitle}</p>
 
       <div className="mt-7">

@@ -78,6 +78,7 @@ export const deDE: Dictionary = {
     noSearchResultsTitle: "Keine Treffer",
     noSearchResultsText:
       "Für Ihre Suche wurde kein Projekt gefunden. Passen Sie den Suchbegriff an.",
+    titelPlaceholder: "Projektname",
     nameLabel: "Projektname",
     namePlaceholder: "z. B. Einfamilienhaus Musterstraße",
     adresseLabel: "Adresse (optional)",

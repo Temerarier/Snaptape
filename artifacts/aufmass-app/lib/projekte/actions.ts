@@ -18,24 +18,34 @@ const MAX_ADRESSE_LENGTH = 300;
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+/** Automatischer Projektname wenn kein Name übergeben wird, z. B.
+ *  "New project – Jul 27" (en-US) / "Neues Projekt – 27. Jul" (de-DE). */
+function autoName(locale: string): string {
+  const datum = new Intl.DateTimeFormat(locale, {
+    month: "short",
+    day: "numeric",
+  }).format(new Date());
+  return locale.startsWith("de")
+    ? `Neues Projekt – ${datum}`
+    : `New project – ${datum}`;
+}
+
 export async function createProjectAction(
   _prev: ProjectFormState,
   formData: FormData,
 ): Promise<ProjectFormState> {
   const user = await requireUser();
-  // Fehlermeldungen in der Sprache des angemeldeten Nutzers.
-  const t = getDictionary(toLocale(user.locale)).projects;
+  const locale = toLocale(user.locale);
 
-  const name = String(formData.get("name") ?? "")
+  const nameRoh = String(formData.get("name") ?? "")
     .trim()
     .slice(0, MAX_NAME_LENGTH);
   const adresseRaw = String(formData.get("adresse") ?? "")
     .trim()
     .slice(0, MAX_ADRESSE_LENGTH);
 
-  if (name.length === 0) {
-    return { error: t.errorNameRequired };
-  }
+  // Kein Name übergeben → automatisch generieren (Ein-Klick-Erstellung).
+  const name = nameRoh.length > 0 ? nameRoh : autoName(locale);
 
   const [zeile] = await db
     .insert(projectsTable)
@@ -47,9 +57,30 @@ export async function createProjectAction(
     .returning({ id: projectsTable.id });
 
   revalidatePath("/app");
-  // Erfolg + ID zurückgeben: Der Dialog schließt sich client-seitig und
-  // navigiert direkt zur Upload-Seite des neuen Projekts.
   return { success: true, projektId: zeile.id };
+}
+
+export async function renameProjectAction(
+  projektId: string,
+  name: string,
+): Promise<{ error?: string }> {
+  const user = await requireUser();
+  const t = getDictionary(toLocale(user.locale)).projects;
+
+  if (!UUID_PATTERN.test(projektId)) return { error: t.errorGeneric };
+  const nameTrimmed = name.trim().slice(0, MAX_NAME_LENGTH);
+  if (nameTrimmed.length === 0) return { error: t.errorNameRequired };
+
+  await db
+    .update(projectsTable)
+    .set({ name: nameTrimmed })
+    .where(
+      and(eq(projectsTable.id, projektId), eq(projectsTable.userId, user.id)),
+    );
+
+  revalidatePath("/app");
+  revalidatePath(`/app/projekt/${projektId}/upload`);
+  return {};
 }
 
 export async function archiveProjectAction(formData: FormData): Promise<void> {
