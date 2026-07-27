@@ -494,6 +494,16 @@ importers:
         specifier: ^0.31.10
         version: 0.31.10
 
+  lib/measurement:
+    dependencies:
+      ajv:
+        specifier: ^8.20.0
+        version: 8.20.0
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 25.9.4
+
   scripts:
     devDependencies:
       '@types/node':

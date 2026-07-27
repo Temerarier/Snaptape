@@ -1,0 +1,26 @@
+GOAL
+File upload per project (photos AND plan PDFs), with a processing status, a measurement-quality choice, and an optional user reference measurement.
+
+CONTEXT
+- Existing app: login + projects already work.
+- Data contract: shared/schema/measurement-v1.5.json (see meta.photos and references[] with scale_type "user_provided").
+- Visual reference: docs/upload-reference.html (checked in; Claude Design export incl. the Standard/Premium segmented toggle) - match its layout and Technical Clean styling.
+
+BUILD
+- Upload up to 10 files per project: photos (jpg/png/heic) AND plans as PDF (multi-page allowed, no page limit at upload), max 25 MB each, stored in [Replit Object Storage]; file refs on the project. (Originals are kept; downscaling for AI calls happens later in the pipeline, not here.)
+- PDFs are rendered server-side right after upload: one PNG per page (~3000px long edge), stored alongside the original. All later AI calls use these page images, never the raw PDF.
+- Project status machine: draft -> files_uploaded -> processing -> model_ready -> failed. Show the status in the projects list.
+- Quality choice at upload, stored on the project: "standard" (cheaper) or "premium" (more accurate). Neutral labels, no model names in the UI.
+- Optional reference measurement: reference object as FREE TEXT (placeholder examples: "entry door height", "garage door width"), plus structured fields for value + unit (mm/cm/m/inch/feet). No file/photo picker - the pipeline locates the object in the photos itself. Stored so the pipeline can emit a references[] entry with scale_type "user_provided".
+- Files viewable per project (thumbnails for photos, page count for PDFs).
+
+DO NOT
+- Do not build the pipeline yet - status stays at files_uploaded after upload.
+- Do not invent new data fields; if something seems missing, stop and ask.
+- Do not touch the existing viewer.
+
+DONE WHEN
+- [ ] I can upload 6 photos + 1 multi-page plan PDF, pick "premium", enter reference "entry door height, 2.03 m", and see status files_uploaded.
+- [ ] An 11th file and a 30 MB file are rejected with a clear message; a .txt file is rejected.
+- [ ] The screen matches docs/upload-reference.html (dropzone, quality toggle, reference section).
+- [ ] Reloading shows the same files and choices.

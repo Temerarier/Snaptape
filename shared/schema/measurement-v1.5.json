@@ -1,0 +1,1077 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Snaptape Measurement Schema v1.5 (whole building)",
+  "description": "Full building: lists of faces, edges, openings. Internal units are millimeters (unrounded); display converts to imperial (ft-in, sq ft, pitch x/12). US construction terms. v1.2 adds Hover-proven elements: roof flashing/step-flashing edges, three-stage pitch (original/rounded/snapped), soffit depth, window group_id, patio_door/skylight, chimney attachment, user_provided reference. Calculated values (waste, united inches, squares, gutter runs) stay in the calculation layer, NOT here. v1.3: heights.per_elevation + datum_note (sloped sites); building.footprint = MAIN BODY only, building.footprint_overall = envelope incl. attached volumes; attachments carry position_mm, parent_face_id, attached, include_in_footprint and dormer style/pitch so they can be placed and modeled. v1.4: faces carry color (hex + confidence) so the 3D viewer can render realistic surfaces; attachments add pipe/vent types so penetration counts by type (pipe boots, roof vents) are quotable; new downspouts array stores count/length/position explicitly (gutter RUNS stay derived from eave edges, downspout drops do not); new condition_areas array captures visible damage (failing paint, rot, sheathing damage) with face link, area and severity. v1.5: faces.material extended with roof covering materials (shingle_asphalt, shingle_wood, metal, tile, slate, membrane) so the covering type per roof face is quotable ($/SQ benchmark, metal-vs-shingle takeoff, tear-off type) and the viewer can group roof facets by covering material instead of color only. Conditional validation: roof_face accepts covering materials only, wall/soffit/fascia accept wall substrates only (metal valid for both) - misclassified extractions fail validation instead of reaching the viewer.",
+  "type": "object",
+  "required": [
+    "meta",
+    "building",
+    "references",
+    "faces",
+    "edges",
+    "openings"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "country",
+        "unit"
+      ],
+      "properties": {
+        "country": {
+          "enum": [
+            "US",
+            "DE"
+          ]
+        },
+        "unit": {
+          "const": "mm",
+          "description": "Internal storage unit, unrounded. Display layer converts to imperial (ft-in, sq ft, pitch x/12); raw mm shown in tooltips."
+        },
+        "schema_version": {
+          "const": "1.5"
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "index",
+              "view_angle"
+            ],
+            "properties": {
+              "index": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "1-based, matches the photo numbering used in prompts."
+              },
+              "shows_elevation": {
+                "enum": [
+                  "front",
+                  "back",
+                  "left",
+                  "right",
+                  "roof",
+                  "multiple",
+                  "unknown"
+                ],
+                "description": "front = street-facing side, as seen from the street. Never guess compass directions."
+              },
+              "view_angle": {
+                "enum": [
+                  "frontal",
+                  "slightly_angled",
+                  "steeply_angled"
+                ]
+              },
+              "perspective_corrected": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "building": {
+      "type": "object",
+      "required": [
+        "roof_type"
+      ],
+      "description": "Elevations are named functionally: front = street-facing side, back = garden side, left/right as seen FROM the street. Compass orientation is derived deterministically from the address later, never guessed from photos.",
+      "properties": {
+        "building_type": {
+          "enum": [
+            "detached",
+            "duplex",
+            "townhouse_middle",
+            "townhouse_end",
+            "unknown"
+          ]
+        },
+        "stories": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "roof_type": {
+          "enum": [
+            "gable",
+            "hip",
+            "flat",
+            "shed",
+            "mansard",
+            "gambrel",
+            "jerkinhead",
+            "other",
+            "unknown"
+          ]
+        },
+        "footprint": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "MAIN building body ONLY (principal volume). Attached annexes, garages, porches, bays are EXCLUDED here and reported as attachments; the combined envelope goes into footprint_overall. Points as [x,y] mm clockwise from front-left corner; or simplified width/depth.",
+          "properties": {
+            "points": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              }
+            },
+            "width_mm": {
+              "$ref": "#/$defs/measurement_or_null"
+            },
+            "depth_mm": {
+              "$ref": "#/$defs/measurement_or_null"
+            },
+            "perimeter_mm": {
+              "$ref": "#/$defs/measurement_or_null"
+            },
+            "area_mm2": {
+              "$ref": "#/$defs/measurement_or_null"
+            }
+          }
+        },
+        "heights": {
+          "type": "object",
+          "properties": {
+            "eave_height_mm": {
+              "$ref": "#/$defs/measurement_or_null"
+            },
+            "ridge_height_mm": {
+              "$ref": "#/$defs/measurement_or_null"
+            },
+            "parapet_height_mm": {
+              "$ref": "#/$defs/measurement_or_null"
+            },
+            "datum_note": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Where grade zero (y=0) is taken and whether the site is sloped. Building heights refer to the lowest visible grade point."
+            },
+            "per_elevation": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "description": "Per-elevation eave/ridge heights. Fill ONLY when a single building value would be wrong (sloped grade, cross-gable, jerkinhead). Flat symmetric buildings leave this null and use eave_height_mm/ridge_height_mm.",
+              "items": {
+                "type": "object",
+                "required": [
+                  "elevation"
+                ],
+                "properties": {
+                  "elevation": {
+                    "enum": [
+                      "front",
+                      "back",
+                      "left",
+                      "right"
+                    ]
+                  },
+                  "eave_height_mm": {
+                    "$ref": "#/$defs/measurement_or_null"
+                  },
+                  "ridge_height_mm": {
+                    "$ref": "#/$defs/measurement_or_null"
+                  },
+                  "grade_offset_mm": {
+                    "$ref": "#/$defs/measurement_or_null"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "shared_walls": {
+          "type": "array",
+          "description": "For duplex/townhouse: which elevation is a shared (party) wall.",
+          "items": {
+            "enum": [
+              "front",
+              "back",
+              "left",
+              "right"
+            ]
+          }
+        },
+        "footprint_overall": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Overall envelope INCLUDING attached secondary volumes (annexes, attached garages), still excluding detached structures and roof overhangs. Equals footprint when nothing is attached.",
+          "properties": {
+            "width_mm": {
+              "$ref": "#/$defs/measurement_or_null"
+            },
+            "depth_mm": {
+              "$ref": "#/$defs/measurement_or_null"
+            },
+            "note": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Which attachments are included."
+            }
+          }
+        }
+      }
+    },
+    "references": {
+      "type": "array",
+      "description": "One scale per photo. A scale never carries across photos. Priority order: user_provided (overrides everything) > own_reference (tier-3 normed object) > transferred.",
+      "items": {
+        "type": "object",
+        "required": [
+          "photo_index",
+          "scale_type"
+        ],
+        "properties": {
+          "photo_index": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "scale_type": {
+            "enum": [
+              "user_provided",
+              "own_reference",
+              "transferred",
+              "none"
+            ],
+            "description": "user_provided = a measurement entered by the user; it overrides ALL assumptions."
+          },
+          "object": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "e.g. 'entry door', 'brick course', 'license plate'"
+          },
+          "bounding_box": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "number"
+            }
+          },
+          "assumed_size_mm": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "reliability": {
+            "enum": [
+              "high",
+              "medium",
+              "low",
+              null
+            ]
+          },
+          "plane": {
+            "enum": [
+              "facade_plane",
+              "in_front",
+              "behind",
+              "unknown",
+              null
+            ]
+          },
+          "transferred_via": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Only if scale_type=transferred: shared element + source photo, e.g. 'window W-2 width from photo 1'"
+          },
+          "user_confirmed": {
+            "type": "boolean",
+            "default": false,
+            "description": "True if the user confirmed a DETECTED reference. Not the same as scale_type=user_provided."
+          }
+        }
+      }
+    },
+    "attachments": {
+      "type": "array",
+      "description": "Extra volumes/obstacles (dormer, bay, balcony, awning, addition, chimney) AND small penetrations (pipe = plumbing stack, vent = roof/wall vent, incl. exhaust caps) WITH placement, so they can be modeled and counted by type for quoting (pipe boots EA, vents EA, chimney flashing EA).",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^AT-[0-9]+$"
+          },
+          "type": {
+            "enum": [
+              "dormer",
+              "bay",
+              "balcony",
+              "awning",
+              "addition",
+              "chimney",
+              "pipe",
+              "vent",
+              "other"
+            ]
+          },
+          "elevation": {
+            "enum": [
+              "front",
+              "back",
+              "left",
+              "right",
+              "roof",
+              "unknown"
+            ]
+          },
+          "width_mm": {
+            "$ref": "#/$defs/measurement_or_null"
+          },
+          "height_mm": {
+            "$ref": "#/$defs/measurement_or_null"
+          },
+          "depth_mm": {
+            "$ref": "#/$defs/measurement_or_null"
+          },
+          "position_mm": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Lower-left corner of the attachment on its parent face, like openings: x from the lower-left corner of the elevation (for roof objects: x along the eave from its left end, y from the eave upward along the slope).",
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            }
+          },
+          "parent_face_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Face this attachment sits on (WL-n or RF-n)."
+          },
+          "attached": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "false = detached structure (e.g. free-standing garage/outbuilding)."
+          },
+          "include_in_footprint": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "true if this volume is part of footprint_overall."
+          },
+          "dormer": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Dormers only.",
+            "properties": {
+              "style": {
+                "enum": [
+                  "shed",
+                  "gable",
+                  "hip",
+                  "eyebrow",
+                  "flat",
+                  "other",
+                  null
+                ]
+              },
+              "face_pitch_deg": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "faces": {
+      "type": "array",
+      "description": "All building faces (roof faces, walls, soffits, fascia).",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "face_class",
+          "area_mm2"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^(RF|WL|SF|FC)-[0-9]+$",
+            "description": "RF=roof face, WL=wall, SF=soffit, FC=fascia"
+          },
+          "face_class": {
+            "enum": [
+              "roof_face",
+              "wall",
+              "soffit",
+              "fascia"
+            ]
+          },
+          "elevation": {
+            "enum": [
+              "front",
+              "back",
+              "left",
+              "right",
+              "roof",
+              "unknown"
+            ],
+            "description": "front = street-facing side."
+          },
+          "material": {
+            "enum": [
+              "stucco",
+              "brick",
+              "siding",
+              "wood",
+              "concrete",
+              "eifs",
+              "shingle_asphalt",
+              "shingle_wood",
+              "metal",
+              "tile",
+              "slate",
+              "membrane",
+              "other",
+              "unknown",
+              null
+            ],
+            "description": "Wall substrates (stucco\u2026eifs) for WL faces; roof coverings (shingle_asphalt, shingle_wood, metal, tile, slate, membrane) for RF faces. Drives $/SF wall rates and $/SQ roof benchmarks."
+          },
+          "area_mm2": {
+            "$ref": "#/$defs/measurement"
+          },
+          "net_area_mm2": {
+            "$ref": "#/$defs/measurement_or_null"
+          },
+          "soffit_depth_mm": {
+            "$ref": "#/$defs/measurement_or_null",
+            "description": "Only for soffit/fascia faces (roofline overhang depth). Hover-style."
+          },
+          "pitch": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Roof faces only. Three-stage like Hover: exact, rounded, and snapped to a common pitch.",
+            "properties": {
+              "degrees_original": {
+                "type": "number"
+              },
+              "degrees_rounded": {
+                "type": "number"
+              },
+              "rise_over_12_snapped": {
+                "type": "number",
+                "description": "US pitch snapped to a common value, rise per 12 run (e.g. 6 = 6/12)"
+              }
+            }
+          },
+          "orientation_deg": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Azimuth, roof only. Derived from address later; null from photos."
+          },
+          "color": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Dominant surface color for 3D-viewer rendering. From photos; white balance/shadow can shift hue - confidence reflects that. Not a paint-order color.",
+            "required": [
+              "hex",
+              "confidence"
+            ],
+            "properties": {
+              "hex": {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$",
+                "description": "sRGB hex of the dominant color, e.g. #B5651D"
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Human-readable, e.g. 'weathered wood brown'"
+              },
+              "confidence": {
+                "enum": [
+                  "high",
+                  "medium",
+                  "low"
+                ]
+              },
+              "secondary_hex": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^#[0-9A-Fa-f]{6}$",
+                "description": "Optional accent/second tone on the same face (e.g. brick mortar)."
+              },
+              "note": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "e.g. 'face in shadow in all photos', 'strong color cast'"
+              }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "face_class": {
+                  "const": "roof_face"
+                }
+              },
+              "required": [
+                "face_class"
+              ]
+            },
+            "then": {
+              "properties": {
+                "material": {
+                  "enum": [
+                    "shingle_asphalt",
+                    "shingle_wood",
+                    "metal",
+                    "tile",
+                    "slate",
+                    "membrane",
+                    "other",
+                    "unknown",
+                    null
+                  ]
+                }
+              }
+            },
+            "$comment": "Roof faces: covering materials only. metal is valid for both roof and wall."
+          },
+          {
+            "if": {
+              "properties": {
+                "face_class": {
+                  "enum": [
+                    "wall",
+                    "soffit",
+                    "fascia"
+                  ]
+                }
+              },
+              "required": [
+                "face_class"
+              ]
+            },
+            "then": {
+              "properties": {
+                "material": {
+                  "enum": [
+                    "stucco",
+                    "brick",
+                    "siding",
+                    "wood",
+                    "concrete",
+                    "eifs",
+                    "metal",
+                    "other",
+                    "unknown",
+                    null
+                  ]
+                }
+              }
+            },
+            "$comment": "Wall/soffit/fascia faces: wall substrates only."
+          }
+        ]
+      }
+    },
+    "edges": {
+      "type": "array",
+      "description": "All edges with class and length. US roofing/siding terms. Roof-metal edges (flashing, step_flashing) included. 'unclassified' is kept and shown, never silently dropped (completeness signal). Note: gutter RUNS are derived from eave edges in the calculation layer; downspout drops are stored explicitly in downspouts (v1.4).",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "edge_class",
+          "length_mm"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^E-[0-9]+$"
+          },
+          "edge_class": {
+            "enum": [
+              "ridge",
+              "hip",
+              "valley",
+              "eave",
+              "rake",
+              "flashing",
+              "step_flashing",
+              "outside_corner",
+              "inside_corner",
+              "base",
+              "head",
+              "sill",
+              "jamb",
+              "unclassified"
+            ]
+          },
+          "length_mm": {
+            "$ref": "#/$defs/measurement"
+          },
+          "belongs_to_elevation": {
+            "enum": [
+              "front",
+              "back",
+              "left",
+              "right",
+              "roof",
+              "unknown",
+              null
+            ]
+          }
+        }
+      }
+    },
+    "openings": {
+      "type": "array",
+      "description": "All windows, doors, garage doors, skylights across the building. patio_door is separate because US siding-waste rules treat garage/patio doors differently (<20 sq ft excl. vs <33 sq ft incl.).",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "elevation",
+          "width_mm",
+          "height_mm"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^(W|D|G|SK)-[0-9]+$",
+            "description": "W=window, D=door, G=garage door, SK=skylight"
+          },
+          "type": {
+            "enum": [
+              "window",
+              "door",
+              "patio_door",
+              "garage_door",
+              "skylight",
+              "other"
+            ]
+          },
+          "elevation": {
+            "enum": [
+              "front",
+              "back",
+              "left",
+              "right",
+              "roof",
+              "unknown"
+            ],
+            "description": "roof only for skylights."
+          },
+          "width_mm": {
+            "$ref": "#/$defs/measurement"
+          },
+          "height_mm": {
+            "$ref": "#/$defs/measurement"
+          },
+          "sill_height_mm": {
+            "$ref": "#/$defs/measurement_or_null"
+          },
+          "group_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional window group (shared trim), Hover-style WG-x. Group metrics (group width/height, united inches) live in the calculation layer."
+          },
+          "position_mm": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "x/y of the opening's lower-left corner, from the lower-left corner of its elevation.",
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            }
+          },
+          "area_mm2": {
+            "$ref": "#/$defs/measurement_or_null"
+          },
+          "perimeter_mm": {
+            "$ref": "#/$defs/measurement_or_null"
+          },
+          "note": {
+            "type": "string",
+            "default": "Reference only, not for ordering",
+            "description": "Single source of truth for this text is the app config; keep in sync."
+          }
+        }
+      }
+    },
+    "quality": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "references_used": {
+          "type": "integer"
+        },
+        "spread_percent": {
+          "type": "number"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "raw_estimates": {
+          "type": "array",
+          "description": "One entry per (target x reference x photo). Emitted by the model, consolidated downstream in code.",
+          "items": {
+            "type": "object",
+            "required": [
+              "target",
+              "photo_index",
+              "reference_object",
+              "assumed_size_mm",
+              "estimate_mm"
+            ],
+            "properties": {
+              "target": {
+                "enum": [
+                  "total_width",
+                  "total_depth",
+                  "eave_height",
+                  "ridge_height"
+                ]
+              },
+              "photo_index": {
+                "type": "integer"
+              },
+              "reference_object": {
+                "type": "string"
+              },
+              "assumed_size_mm": {
+                "type": "number"
+              },
+              "estimate_mm": {
+                "type": "number"
+              },
+              "reliability": {
+                "enum": [
+                  "high",
+                  "medium",
+                  "low",
+                  null
+                ]
+              },
+              "via_transfer": {
+                "type": "boolean",
+                "default": false
+              }
+            }
+          }
+        },
+        "dimension_chains": {
+          "type": "array",
+          "description": "Transcribed plan dimension chains. Sum verification runs downstream in code.",
+          "items": {
+            "type": "object",
+            "required": [
+              "page",
+              "values_mm"
+            ],
+            "properties": {
+              "page": {
+                "type": "integer"
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "values_mm": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              },
+              "stated_total_mm": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "computed_sum_mm": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "deviation_percent": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "downspouts": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "Downspout drops, stored explicitly (v1.4). Count = array length. Gutter RUNS remain derived from eave edges in the calculation layer; drops cannot be derived from eaves, so they live here.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "elevation"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^DS-[0-9]+$"
+          },
+          "elevation": {
+            "enum": [
+              "front",
+              "back",
+              "left",
+              "right",
+              "unknown"
+            ]
+          },
+          "length_mm": {
+            "$ref": "#/$defs/measurement_or_null",
+            "description": "Vertical run length; typically ~eave height of that elevation if not measurable."
+          },
+          "position_mm": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "x of the drop from the lower-left corner of its elevation.",
+            "properties": {
+              "x": {
+                "type": "number"
+              }
+            }
+          },
+          "connects_edge_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Eave edge (E-n) whose gutter this drop serves, if identifiable."
+          }
+        }
+      }
+    },
+    "condition_areas": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "Visible-damage areas from photos (v1.4). Drives prep/contingency positions (scrape/sand, prime, rot repair, sheathing allowance). Photo-visible only - hidden damage stays an on-site exclusion.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^CA-[0-9]+$"
+          },
+          "type": {
+            "enum": [
+              "failing_paint",
+              "rot",
+              "sheathing_damage",
+              "decking_damage",
+              "mold_mildew",
+              "rust",
+              "crack",
+              "missing_material",
+              "other"
+            ]
+          },
+          "parent_face_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Face the damage sits on (WL/RF/SF/FC-n)."
+          },
+          "elevation": {
+            "enum": [
+              "front",
+              "back",
+              "left",
+              "right",
+              "roof",
+              "unknown",
+              null
+            ]
+          },
+          "area_mm2": {
+            "$ref": "#/$defs/measurement_or_null"
+          },
+          "severity": {
+            "enum": [
+              "light",
+              "moderate",
+              "severe",
+              null
+            ]
+          },
+          "position_mm": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Lower-left corner of the damage patch on its parent face (like openings).",
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            }
+          },
+          "photo_index": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Photo where the damage is best visible."
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "measurement": {
+      "type": "object",
+      "required": [
+        "value",
+        "confidence",
+        "source"
+      ],
+      "properties": {
+        "value": {
+          "type": "number",
+          "description": "unrounded, mm or mm2"
+        },
+        "confidence": {
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "source": {
+          "enum": [
+            "measured",
+            "scaled",
+            "estimated"
+          ]
+        },
+        "reference_used": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "low_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "measurement_or_null": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/measurement"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}
