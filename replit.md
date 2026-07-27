@@ -76,3 +76,25 @@ Upload → Qualitätscheck (Sonnet) → Messung (Fable, JSON, 2–3 Läufe) →
 Edge-Case-Warnungen (Code) → 3D-Viewer + Report. Der Nutzer KANN
 optional ein eigenes Referenzmaß angeben (übersteuert Annahmen), muss
 aber nicht. Kein Pflicht-Review, kein Edit-Modus im MVP.
+
+### Datei-Upload (Etappe 1, umgesetzt)
+- Grenzen zentral in `lib/upload/regeln.ts`: max. 10 Dateien/Projekt,
+  25 MB/Datei, jpg/jpeg/png/heic + pdf. Client und Server nutzen
+  dieselben Regeln; verbindlich prüft der Server (Storage-Metadaten).
+- Browser lädt per signierter PUT-URL DIREKT in den Object Storage
+  (nie durch Server-Action-Bodies). Danach registriert eine Action die
+  Datei und verarbeitet sofort: PDF → 1 PNG pro Seite (~3000 px lange
+  Kante, pdftoppm), Foto → JPEG-Vorschau (vipsthumbnail, kann HEIC).
+  Spätere KI-Aufrufe nutzen NUR Seitenbilder, nie das Roh-PDF.
+- Objektpfade: `$PRIVATE_OBJECT_DIR/projekte/<projektId>/original|
+  vorschau|seiten/…`. Auslieferung über `/dateien/<id>?v=…` (Route
+  prüft Session + Eigentum). ACHTUNG: `/api/*` gehört auf dem geteilten
+  Proxy dem separaten API-Server-Artefakt – in der Next-App niemals
+  Routen unter `/api/…` anlegen.
+- Status-Maschine: draft → files_uploaded (beim „Messung starten") →
+  processing → model_ready | failed; alte Werte reviewing/ready bleiben
+  vorerst. Werden alle Dateien entfernt, fällt files_uploaded auf draft
+  zurück. Qualität (standard/premium) + optionales Referenzmaß werden
+  erst beim Start gespeichert.
+- System-Abhängigkeiten: poppler-utils (pdftoppm/pdfinfo) und vips
+  sind deklariert (auch fürs Deployment nötig).

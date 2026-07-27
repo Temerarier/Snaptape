@@ -7,8 +7,13 @@ import { NewProjectDialog } from "@/components/projekte/NewProjectDialog";
 import { ProjectCard } from "@/components/projekte/ProjectCard";
 import { SortSelect } from "@/components/projekte/SortSelect";
 
+// Reihenfolge folgt der Status-Maschine (Etappe 1); die alten Werte
+// reviewing/ready bleiben, bis der Viewer-Fluss migriert ist.
 const STATUS_WERTE: readonly ProjectStatus[] = [
   "draft",
+  "files_uploaded",
+  "processing",
+  "model_ready",
   "reviewing",
   "ready",
   "failed",

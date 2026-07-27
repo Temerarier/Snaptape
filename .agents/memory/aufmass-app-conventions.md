@@ -32,6 +32,12 @@ description: Fixed stack, iron rules, and artifact quirks for the Aufmaß-App (N
 - Run vitest from the workspace ROOT (`pnpm exec vitest run`); running inside `artifacts/aufmass-app` finds no tests.
 - DB schema renames here are done by drop & recreate (psql drop tables/types, then `pnpm --filter @workspace/db run push-force`, then reseed via `artifacts/aufmass-app/scripts/seed-testdaten.ts`); there is deliberately no migration infrastructure.
 
+# Server Actions & system deps
+
+- Every export of a `"use server"` file is a client-invocable HTTP endpoint. Never export unauthenticated read helpers from action files — inline such queries in the server component instead.
+  **Why:** an exported `ladeProjektDateien` without auth would have been callable by anyone (caught during Step-1 upload review).
+- System deps for uploads: nix names are `poppler-utils` (pdftoppm/pdfinfo; `poppler_utils` does NOT resolve) and `vips` (vipsthumbnail, has HEIF de+encode). Both are needed at runtime → also in deployment.
+
 # Artifact.toml lessons (platform)
 
 - `verifyAndReplaceArtifactToml` rejects: (a) unknown keys like `serve = "run"` — for a server-rendered production service just give `build` + `run` arrays with no `serve` key; (b) any change to the `[[integratedSkills]]` block — keep it verbatim even if semantically stale (e.g. react-vite skill on a Next.js app).

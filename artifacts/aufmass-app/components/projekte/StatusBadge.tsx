@@ -8,9 +8,12 @@ import { Badge } from "@/components/ui/Badge";
 
 const VARIANTEN: Record<
   ProjectStatus,
-  "neutral" | "warnung" | "ok" | "fehler"
+  "neutral" | "akzent" | "warnung" | "ok" | "fehler"
 > = {
   draft: "neutral",
+  files_uploaded: "akzent",
+  processing: "warnung",
+  model_ready: "ok",
   reviewing: "warnung",
   ready: "ok",
   failed: "fehler",

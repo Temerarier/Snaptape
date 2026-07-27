@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { and, eq } from "drizzle-orm";
-import { db, projectsTable } from "@workspace/db";
+import { and, count, eq } from "drizzle-orm";
+import { db, projectFilesTable, projectsTable } from "@workspace/db";
 import { getDictionary, toLocale } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
 import { StatusBadge } from "@/components/projekte/StatusBadge";
@@ -54,6 +54,12 @@ export default async function ProjectDetailPage({
   const project = rows[0];
   if (!project) notFound();
 
+  const [dateiZeile] = await db
+    .select({ anzahl: count() })
+    .from(projectFilesTable)
+    .where(eq(projectFilesTable.projectId, project.id));
+  const dateiAnzahl = dateiZeile?.anzahl ?? 0;
+
   const dict = getDictionary(toLocale(user.locale));
   const t = dict.projectDetail;
   const mess = ladeTesthaus();
@@ -86,6 +92,32 @@ export default async function ProjectDetailPage({
       ) : null}
 
       <div className="mt-10 grid gap-4 lg:grid-cols-2">
+        {/* Fotos & Pläne (Etappe 1: Einstieg in den Upload) */}
+        <section className="flex flex-col rounded-xl border border-neutral-200 bg-white p-6">
+          <h2 className="font-semibold text-neutral-900">
+            {t.cards.dateien.title}
+          </h2>
+          <p className="mt-1 flex-1 text-sm text-neutral-500">
+            {dateiAnzahl === 0
+              ? t.cards.dateien.leer
+              : `${dateiAnzahl} ${
+                  dateiAnzahl === 1
+                    ? t.cards.dateien.anzahlEinzahl
+                    : t.cards.dateien.anzahlMehrzahl
+                }`}
+          </p>
+          <div className="mt-4">
+            <Link
+              href={`/app/projekt/${project.id}/upload`}
+              className="inline-flex items-center rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-neutral-700"
+            >
+              {dateiAnzahl === 0
+                ? t.cards.dateien.ctaLeer
+                : t.cards.dateien.cta}
+            </Link>
+          </div>
+        </section>
+
         {/* 3D-Modell */}
         <section className="flex flex-col rounded-xl border border-neutral-200 bg-white p-6">
           <h2 className="font-semibold text-neutral-900">
