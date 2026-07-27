@@ -3,6 +3,7 @@
 // Dialog „Neues Projekt" auf Basis der Design-System-Komponenten
 // (Modal, Input, Button).
 import { useActionState, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   createProjectAction,
   type ProjectFormState,
@@ -20,6 +21,7 @@ export function NewProjectDialog({ ctaLabel }: { ctaLabel?: string }) {
     createProjectAction,
     initialState,
   );
+  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const dict = useDictionary();
   const t = dict.projects;
@@ -30,13 +32,14 @@ export function NewProjectDialog({ ctaLabel }: { ctaLabel?: string }) {
     }
   }, [open]);
 
-  // Nach erfolgreichem Anlegen schließt sich der Dialog; die Liste
-  // aktualisiert sich über revalidatePath in der Server-Action.
+  // Nach erfolgreichem Anlegen: Dialog schließen und direkt zur
+  // Upload-Seite des neuen Projekts navigieren.
   useEffect(() => {
-    if (state.success) {
+    if (state.success && state.projektId) {
       setOpen(false);
+      router.push(`/app/projekt/${state.projektId}/upload`);
     }
-  }, [state]);
+  }, [state, router]);
 
   return (
     <>

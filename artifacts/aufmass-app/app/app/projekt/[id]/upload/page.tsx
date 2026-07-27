@@ -53,7 +53,7 @@ export default async function UploadPage({
   return (
     <main className="mx-auto w-full max-w-[760px] px-6 py-10 sm:px-8">
       <Link
-        href={`/app/projekt/${projekt.id}`}
+        href="/app"
         className="text-sm font-medium text-schrift-tertiaer underline-offset-4 transition hover:text-schrift hover:underline"
       >
         ← {t.zurueckZumProjekt}

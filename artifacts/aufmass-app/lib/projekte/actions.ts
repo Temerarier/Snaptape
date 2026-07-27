@@ -6,7 +6,12 @@ import { db, projectsTable } from "@workspace/db";
 import { getDictionary, toLocale } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
 
-export type ProjectFormState = { error?: string; success?: boolean };
+export type ProjectFormState = {
+  error?: string;
+  success?: boolean;
+  /** ID des neu angelegten Projekts – für die Navigation zur Upload-Seite. */
+  projektId?: string;
+};
 
 const MAX_NAME_LENGTH = 200;
 const MAX_ADRESSE_LENGTH = 300;
@@ -32,17 +37,19 @@ export async function createProjectAction(
     return { error: t.errorNameRequired };
   }
 
-  await db.insert(projectsTable).values({
-    userId: user.id,
-    name,
-    adresse: adresseRaw.length > 0 ? adresseRaw : null,
-  });
+  const [zeile] = await db
+    .insert(projectsTable)
+    .values({
+      userId: user.id,
+      name,
+      adresse: adresseRaw.length > 0 ? adresseRaw : null,
+    })
+    .returning({ id: projectsTable.id });
 
   revalidatePath("/app");
-  // Erfolg als Status zurückgeben (kein Redirect): Der Dialog in der
-  // Kopfzeile bleibt über Navigationen hinweg gemountet und schließt
-  // sich client-seitig, sobald success gesetzt ist.
-  return { success: true };
+  // Erfolg + ID zurückgeben: Der Dialog schließt sich client-seitig und
+  // navigiert direkt zur Upload-Seite des neuen Projekts.
+  return { success: true, projektId: zeile.id };
 }
 
 export async function archiveProjectAction(formData: FormData): Promise<void> {

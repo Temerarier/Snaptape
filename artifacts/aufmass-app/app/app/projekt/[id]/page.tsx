@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { and, count, eq } from "drizzle-orm";
 import { db, projectFilesTable, projectsTable } from "@workspace/db";
 import { getDictionary, toLocale } from "@/i18n";
@@ -53,6 +53,19 @@ export default async function ProjectDetailPage({
     .limit(1);
   const project = rows[0];
   if (!project) notFound();
+
+  // Statusabhängige Navigation: draft/files_uploaded/failed → Upload,
+  // model_ready → Viewer. processing und Legacy-Status bleiben hier.
+  if (
+    project.status === "draft" ||
+    project.status === "files_uploaded" ||
+    project.status === "failed"
+  ) {
+    redirect(`/app/projekt/${id}/upload`);
+  }
+  if (project.status === "model_ready") {
+    redirect(`/app/projekt/${id}/viewer`);
+  }
 
   const [dateiZeile] = await db
     .select({ anzahl: count() })
