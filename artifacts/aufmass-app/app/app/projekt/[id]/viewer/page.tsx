@@ -1,6 +1,6 @@
-// 3D-Modell eines Projekts: prüft die Zugehörigkeit des Projekts zum
-// angemeldeten Nutzer und zeigt den Viewer (aktuell mit den
-// Test-Haus-Messdaten, bis echte Messungen vorliegen).
+// 3D-Modell eines Projekts: nur für model_ready-Projekte; alle anderen
+// Status geben 404 zurück, damit der Viewer nie mit Testdaten für
+// ein Entwurfs- oder Verarbeitungsprojekt erscheint.
 import { notFound } from "next/navigation";
 import { and, eq } from "drizzle-orm";
 import { db, projectsTable } from "@workspace/db";
@@ -26,12 +26,15 @@ export default async function ProjektViewerSeite({
       id: projectsTable.id,
       name: projectsTable.name,
       adresse: projectsTable.adresse,
+      status: projectsTable.status,
     })
     .from(projectsTable)
     .where(and(eq(projectsTable.id, id), eq(projectsTable.userId, user.id)))
     .limit(1);
   const project = rows[0];
   if (!project) notFound();
+  // Viewer nur für fertig gemessene Projekte freigeben.
+  if (project.status !== "model_ready") notFound();
 
   const mess = ladeTesthaus();
   return (

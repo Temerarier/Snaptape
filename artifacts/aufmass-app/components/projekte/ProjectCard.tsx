@@ -33,9 +33,10 @@ export function ProjectCard({
   return (
     <li className="list-none">
       <Card className="relative flex h-full flex-col transition hover:shadow-md">
-        {/* Unsichtbarer Flächen-Link: ganze Karte öffnet das 3D-Modell. */}
+        {/* Unsichtbarer Flächen-Link: ganze Karte öffnet das Projekt;
+            die Detailseite leitet statusabhängig weiter (Upload/Viewer). */}
         <Link
-          href={`/app/projekt/${project.id}/viewer`}
+          href={`/app/projekt/${project.id}`}
           aria-label={project.name}
           className="absolute inset-0 rounded-karte"
         />
