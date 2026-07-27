@@ -1,0 +1,1784 @@
+{
+  "meta": {
+    "country": "US",
+    "unit": "mm",
+    "schema_version": "1.5",
+    "photos": [
+      {
+        "index": 1,
+        "shows_elevation": "front",
+        "view_angle": "frontal",
+        "perspective_corrected": true
+      },
+      {
+        "index": 2,
+        "shows_elevation": "front",
+        "view_angle": "slightly_angled",
+        "perspective_corrected": true
+      },
+      {
+        "index": 3,
+        "shows_elevation": "back",
+        "view_angle": "slightly_angled",
+        "perspective_corrected": true
+      },
+      {
+        "index": 4,
+        "shows_elevation": "left",
+        "view_angle": "frontal",
+        "perspective_corrected": false
+      },
+      {
+        "index": 5,
+        "shows_elevation": "right",
+        "view_angle": "steeply_angled",
+        "perspective_corrected": false
+      }
+    ],
+    "notes": [
+      "Fixture house: two-story main body (40x28 ft, gable 8/12) with front cross-gable and attached 2-car garage (22x22 ft, gable 6/12, brick front).",
+      "Fixture for viewer/report development - values are internally consistent, not from a real capture."
+    ]
+  },
+  "building": {
+    "building_type": "detached",
+    "stories": 2,
+    "roof_type": "gable",
+    "footprint": {
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          12192,
+          0
+        ],
+        [
+          12192,
+          8534.4
+        ],
+        [
+          0,
+          8534.4
+        ]
+      ],
+      "width_mm": {
+        "value": 12192.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "depth_mm": {
+        "value": 8534.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 41452.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "area_mm2": {
+        "value": 104051404.8,
+        "confidence": "high",
+        "source": "scaled"
+      }
+    },
+    "footprint_overall": {
+      "width_mm": {
+        "value": 18897.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "depth_mm": {
+        "value": 8534.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Includes attached 2-car garage (AT-7)."
+    },
+    "heights": {
+      "eave_height_mm": {
+        "value": 5486.4,
+        "confidence": "high",
+        "source": "scaled",
+        "reference_used": "entry door photo 1"
+      },
+      "ridge_height_mm": {
+        "value": 8330.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "parapet_height_mm": null,
+      "datum_note": "Flat site; grade zero at front-left corner.",
+      "per_elevation": null
+    },
+    "shared_walls": []
+  },
+  "references": [
+    {
+      "photo_index": 1,
+      "scale_type": "own_reference",
+      "object": "entry door",
+      "bounding_box": null,
+      "assumed_size_mm": 2032.0,
+      "reliability": "high",
+      "plane": "facade_plane",
+      "user_confirmed": true
+    },
+    {
+      "photo_index": 2,
+      "scale_type": "transferred",
+      "object": null,
+      "assumed_size_mm": null,
+      "reliability": "medium",
+      "plane": null,
+      "transferred_via": "window W-1 width from photo 1"
+    },
+    {
+      "photo_index": 3,
+      "scale_type": "own_reference",
+      "object": "patio door",
+      "assumed_size_mm": 1828.8,
+      "reliability": "medium",
+      "plane": "facade_plane",
+      "user_confirmed": false
+    },
+    {
+      "photo_index": 4,
+      "scale_type": "transferred",
+      "object": null,
+      "assumed_size_mm": null,
+      "reliability": "medium",
+      "plane": null,
+      "transferred_via": "eave height from photo 1"
+    },
+    {
+      "photo_index": 5,
+      "scale_type": "none",
+      "object": null,
+      "assumed_size_mm": null,
+      "reliability": null,
+      "plane": null
+    }
+  ],
+  "faces": [
+    {
+      "id": "RF-1",
+      "face_class": "roof_face",
+      "elevation": "front",
+      "material": "shingle_asphalt",
+      "area_mm2": {
+        "value": 62523745.9,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "net_area_mm2": null,
+      "soffit_depth_mm": null,
+      "pitch": {
+        "degrees_original": 34.089999999999996,
+        "degrees_rounded": 33.69,
+        "rise_over_12_snapped": 8
+      },
+      "orientation_deg": null,
+      "color": {
+        "hex": "#4A4E55",
+        "name": "charcoal",
+        "confidence": "medium",
+        "secondary_hex": null,
+        "note": null
+      }
+    },
+    {
+      "id": "RF-2",
+      "face_class": "roof_face",
+      "elevation": "back",
+      "material": "shingle_asphalt",
+      "area_mm2": {
+        "value": 62523745.9,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "net_area_mm2": null,
+      "soffit_depth_mm": null,
+      "pitch": {
+        "degrees_original": 34.089999999999996,
+        "degrees_rounded": 33.69,
+        "rise_over_12_snapped": 8
+      },
+      "orientation_deg": null,
+      "color": {
+        "hex": "#4A4E55",
+        "name": "charcoal",
+        "confidence": "medium",
+        "secondary_hex": null,
+        "note": null
+      }
+    },
+    {
+      "id": "RF-3",
+      "face_class": "roof_face",
+      "elevation": "front",
+      "material": "shingle_asphalt",
+      "area_mm2": {
+        "value": 9754819.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "net_area_mm2": null,
+      "soffit_depth_mm": null,
+      "pitch": {
+        "degrees_original": 34.089999999999996,
+        "degrees_rounded": 33.69,
+        "rise_over_12_snapped": 8
+      },
+      "orientation_deg": null,
+      "color": {
+        "hex": "#4A4E55",
+        "name": "charcoal",
+        "confidence": "medium",
+        "secondary_hex": null,
+        "note": null
+      }
+    },
+    {
+      "id": "RF-4",
+      "face_class": "roof_face",
+      "elevation": "front",
+      "material": "shingle_asphalt",
+      "area_mm2": {
+        "value": 9754819.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "net_area_mm2": null,
+      "soffit_depth_mm": null,
+      "pitch": {
+        "degrees_original": 34.089999999999996,
+        "degrees_rounded": 33.69,
+        "rise_over_12_snapped": 8
+      },
+      "orientation_deg": null,
+      "color": {
+        "hex": "#4A4E55",
+        "name": "charcoal",
+        "confidence": "medium",
+        "secondary_hex": null,
+        "note": null
+      }
+    },
+    {
+      "id": "RF-5",
+      "face_class": "roof_face",
+      "elevation": "front",
+      "material": "shingle_asphalt",
+      "area_mm2": {
+        "value": 25176723.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "net_area_mm2": null,
+      "soffit_depth_mm": null,
+      "pitch": {
+        "degrees_original": 26.97,
+        "degrees_rounded": 26.57,
+        "rise_over_12_snapped": 6
+      },
+      "orientation_deg": null,
+      "color": {
+        "hex": "#4A4E55",
+        "name": "charcoal",
+        "confidence": "medium",
+        "secondary_hex": null,
+        "note": null
+      }
+    },
+    {
+      "id": "RF-6",
+      "face_class": "roof_face",
+      "elevation": "back",
+      "material": "shingle_asphalt",
+      "area_mm2": {
+        "value": 25083820.8,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "net_area_mm2": null,
+      "soffit_depth_mm": null,
+      "pitch": {
+        "degrees_original": 26.97,
+        "degrees_rounded": 26.57,
+        "rise_over_12_snapped": 6
+      },
+      "orientation_deg": null,
+      "color": {
+        "hex": "#4A4E55",
+        "name": "charcoal",
+        "confidence": "medium",
+        "secondary_hex": null,
+        "note": null
+      }
+    },
+    {
+      "id": "WL-1",
+      "face_class": "wall",
+      "elevation": "front",
+      "material": "siding",
+      "area_mm2": {
+        "value": 72464371.2,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "net_area_mm2": {
+        "value": 62152133.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "soffit_depth_mm": null,
+      "pitch": null,
+      "orientation_deg": null,
+      "color": {
+        "hex": "#C9BFAF",
+        "name": "warm beige",
+        "confidence": "high",
+        "secondary_hex": null,
+        "note": null
+      }
+    },
+    {
+      "id": "WL-2",
+      "face_class": "wall",
+      "elevation": "back",
+      "material": "siding",
+      "area_mm2": {
+        "value": 70606310.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "net_area_mm2": {
+        "value": 59922460.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "soffit_depth_mm": null,
+      "pitch": null,
+      "orientation_deg": null,
+      "color": {
+        "hex": "#C9BFAF",
+        "name": "warm beige",
+        "confidence": "high",
+        "secondary_hex": null,
+        "note": null
+      }
+    },
+    {
+      "id": "WL-3",
+      "face_class": "wall",
+      "elevation": "left",
+      "material": "siding",
+      "area_mm2": {
+        "value": 52025702.4,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "net_area_mm2": {
+        "value": 47845065.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "soffit_depth_mm": null,
+      "pitch": null,
+      "orientation_deg": null,
+      "color": {
+        "hex": "#C9BFAF",
+        "name": "warm beige",
+        "confidence": "high",
+        "secondary_hex": null,
+        "note": null
+      }
+    },
+    {
+      "id": "WL-4",
+      "face_class": "wall",
+      "elevation": "right",
+      "material": "siding",
+      "area_mm2": {
+        "value": 50167641.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "net_area_mm2": {
+        "value": 47380550.4,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "soffit_depth_mm": null,
+      "pitch": null,
+      "orientation_deg": null,
+      "color": {
+        "hex": "#C9BFAF",
+        "name": "warm beige",
+        "confidence": "high",
+        "secondary_hex": null,
+        "note": null
+      }
+    },
+    {
+      "id": "WL-5",
+      "face_class": "wall",
+      "elevation": "front",
+      "material": "brick",
+      "area_mm2": {
+        "value": 18394801.9,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "net_area_mm2": {
+        "value": 7989661.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "soffit_depth_mm": null,
+      "pitch": null,
+      "orientation_deg": null,
+      "color": {
+        "hex": "#9B5E42",
+        "name": "red brick",
+        "confidence": "high",
+        "secondary_hex": "#8A8378",
+        "note": null
+      }
+    },
+    {
+      "id": "WL-6",
+      "face_class": "wall",
+      "elevation": "right",
+      "material": "brick",
+      "area_mm2": {
+        "value": 21460602.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "net_area_mm2": {
+        "value": 21460602.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "soffit_depth_mm": null,
+      "pitch": null,
+      "orientation_deg": null,
+      "color": {
+        "hex": "#9B5E42",
+        "name": "red brick",
+        "confidence": "high",
+        "secondary_hex": "#8A8378",
+        "note": null
+      }
+    },
+    {
+      "id": "SF-1",
+      "face_class": "soffit",
+      "elevation": "front",
+      "material": "other",
+      "area_mm2": {
+        "value": 14585777.3,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "net_area_mm2": null,
+      "soffit_depth_mm": {
+        "value": 406.4,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "pitch": null,
+      "orientation_deg": null,
+      "color": {
+        "hex": "#F4F2ED",
+        "name": "off-white",
+        "confidence": "high",
+        "secondary_hex": null,
+        "note": null
+      }
+    },
+    {
+      "id": "FC-1",
+      "face_class": "fascia",
+      "elevation": "front",
+      "material": "wood",
+      "area_mm2": {
+        "value": 9940625.3,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "net_area_mm2": null,
+      "soffit_depth_mm": null,
+      "pitch": null,
+      "orientation_deg": null,
+      "color": {
+        "hex": "#F4F2ED",
+        "name": "off-white",
+        "confidence": "high",
+        "secondary_hex": null,
+        "note": null
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "E-1",
+      "edge_class": "ridge",
+      "length_mm": {
+        "value": 12192.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-2",
+      "edge_class": "ridge",
+      "length_mm": {
+        "value": 2438.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-3",
+      "edge_class": "ridge",
+      "length_mm": {
+        "value": 6705.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-4",
+      "edge_class": "valley",
+      "length_mm": {
+        "value": 3099.8,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-5",
+      "edge_class": "valley",
+      "length_mm": {
+        "value": 3099.8,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-6",
+      "edge_class": "eave",
+      "length_mm": {
+        "value": 12192.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-7",
+      "edge_class": "eave",
+      "length_mm": {
+        "value": 12192.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-8",
+      "edge_class": "eave",
+      "length_mm": {
+        "value": 2438.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-9",
+      "edge_class": "eave",
+      "length_mm": {
+        "value": 6705.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-10",
+      "edge_class": "eave",
+      "length_mm": {
+        "value": 2438.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-11",
+      "edge_class": "rake",
+      "length_mm": {
+        "value": 5129.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "left"
+    },
+    {
+      "id": "E-12",
+      "edge_class": "rake",
+      "length_mm": {
+        "value": 5129.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "left"
+    },
+    {
+      "id": "E-13",
+      "edge_class": "rake",
+      "length_mm": {
+        "value": 5129.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "right"
+    },
+    {
+      "id": "E-14",
+      "edge_class": "rake",
+      "length_mm": {
+        "value": 5129.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "right"
+    },
+    {
+      "id": "E-15",
+      "edge_class": "rake",
+      "length_mm": {
+        "value": 2712.7,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-16",
+      "edge_class": "rake",
+      "length_mm": {
+        "value": 2712.7,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-17",
+      "edge_class": "rake",
+      "length_mm": {
+        "value": 3749.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "right"
+    },
+    {
+      "id": "E-18",
+      "edge_class": "rake",
+      "length_mm": {
+        "value": 3749.0,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "right"
+    },
+    {
+      "id": "E-19",
+      "edge_class": "flashing",
+      "length_mm": {
+        "value": 3810.0,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-20",
+      "edge_class": "step_flashing",
+      "length_mm": {
+        "value": 3048.0,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-21",
+      "edge_class": "step_flashing",
+      "length_mm": {
+        "value": 2490.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-22",
+      "edge_class": "outside_corner",
+      "length_mm": {
+        "value": 5486.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-23",
+      "edge_class": "outside_corner",
+      "length_mm": {
+        "value": 5486.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-24",
+      "edge_class": "outside_corner",
+      "length_mm": {
+        "value": 5486.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-25",
+      "edge_class": "outside_corner",
+      "length_mm": {
+        "value": 5486.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-26",
+      "edge_class": "outside_corner",
+      "length_mm": {
+        "value": 2743.2,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-27",
+      "edge_class": "outside_corner",
+      "length_mm": {
+        "value": 2743.2,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "right"
+    },
+    {
+      "id": "E-28",
+      "edge_class": "inside_corner",
+      "length_mm": {
+        "value": 5486.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-29",
+      "edge_class": "inside_corner",
+      "length_mm": {
+        "value": 5486.4,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-30",
+      "edge_class": "base",
+      "length_mm": {
+        "value": 12192.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-31",
+      "edge_class": "base",
+      "length_mm": {
+        "value": 12192.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-32",
+      "edge_class": "base",
+      "length_mm": {
+        "value": 8534.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "left"
+    },
+    {
+      "id": "E-33",
+      "edge_class": "base",
+      "length_mm": {
+        "value": 8534.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "right"
+    },
+    {
+      "id": "E-34",
+      "edge_class": "base",
+      "length_mm": {
+        "value": 3657.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "belongs_to_elevation": "front"
+    }
+  ],
+  "openings": [
+    {
+      "id": "W-1",
+      "type": "window",
+      "elevation": "front",
+      "width_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1524.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": "WG-1",
+      "position_mm": null,
+      "area_mm2": {
+        "value": 1393545.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4876.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-2",
+      "type": "window",
+      "elevation": "front",
+      "width_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1524.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": "WG-1",
+      "position_mm": null,
+      "area_mm2": {
+        "value": 1393545.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4876.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-3",
+      "type": "window",
+      "elevation": "front",
+      "width_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1524.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 1393545.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4876.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-4",
+      "type": "window",
+      "elevation": "front",
+      "width_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1524.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 1393545.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4876.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-5",
+      "type": "window",
+      "elevation": "back",
+      "width_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1524.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 1393545.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4876.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-6",
+      "type": "window",
+      "elevation": "back",
+      "width_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1524.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 1393545.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4876.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-7",
+      "type": "window",
+      "elevation": "back",
+      "width_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1524.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 1393545.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4876.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-8",
+      "type": "window",
+      "elevation": "back",
+      "width_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1524.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 1393545.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4876.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-9",
+      "type": "window",
+      "elevation": "left",
+      "width_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1524.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 1393545.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4876.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-10",
+      "type": "window",
+      "elevation": "left",
+      "width_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1524.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 1393545.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4876.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-11",
+      "type": "window",
+      "elevation": "front",
+      "width_mm": {
+        "value": 812.9,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1219.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 1066.8,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 991089.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4064.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-12",
+      "type": "window",
+      "elevation": "front",
+      "width_mm": {
+        "value": 812.9,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1219.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 1066.8,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 991089.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4064.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-13",
+      "type": "window",
+      "elevation": "left",
+      "width_mm": {
+        "value": 812.9,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1219.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 1066.8,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 991089.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4064.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-14",
+      "type": "window",
+      "elevation": "right",
+      "width_mm": {
+        "value": 812.9,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1219.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 1066.8,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 991089.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4064.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-15",
+      "type": "window",
+      "elevation": "right",
+      "width_mm": {
+        "value": 812.9,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1219.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 1066.8,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 991089.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4064.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "W-16",
+      "type": "window",
+      "elevation": "back",
+      "width_mm": {
+        "value": 812.9,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1219.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 1066.8,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 991089.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 4064.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "D-1",
+      "type": "door",
+      "elevation": "front",
+      "width_mm": {
+        "value": 914.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 2133.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 0.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 1950963.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 6096.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "D-2",
+      "type": "patio_door",
+      "elevation": "back",
+      "width_mm": {
+        "value": 1828.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 2032.1,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 0.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 3716307.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 7721.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "G-1",
+      "type": "garage_door",
+      "elevation": "front",
+      "width_mm": {
+        "value": 4876.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 2133.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "sill_height_mm": {
+        "value": 0.0,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 10405140.5,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 14020.8,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    },
+    {
+      "id": "SK-1",
+      "type": "skylight",
+      "elevation": "roof",
+      "width_mm": {
+        "value": 609.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 1219.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "sill_height_mm": null,
+      "group_id": null,
+      "position_mm": null,
+      "area_mm2": {
+        "value": 743224.3,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "perimeter_mm": {
+        "value": 3657.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "note": "Reference only, not for ordering"
+    }
+  ],
+  "attachments": [
+    {
+      "id": "AT-1",
+      "type": "chimney",
+      "elevation": "roof",
+      "width_mm": {
+        "value": 609.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 2286.0,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "depth_mm": {
+        "value": 609.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "position_mm": {
+        "x": 8839.2,
+        "y": 2743.2000000000003
+      },
+      "parent_face_id": "RF-2",
+      "attached": true,
+      "include_in_footprint": false,
+      "dormer": null
+    },
+    {
+      "id": "AT-2",
+      "type": "pipe",
+      "elevation": "roof",
+      "width_mm": {
+        "value": 76,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "height_mm": null,
+      "depth_mm": null,
+      "position_mm": {
+        "x": 7010.400000000001,
+        "y": 2743.2000000000003
+      },
+      "parent_face_id": "RF-2",
+      "attached": true,
+      "include_in_footprint": false,
+      "dormer": null
+    },
+    {
+      "id": "AT-3",
+      "type": "pipe",
+      "elevation": "roof",
+      "width_mm": {
+        "value": 76,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "height_mm": null,
+      "depth_mm": null,
+      "position_mm": {
+        "x": 4267.2,
+        "y": 3048.0
+      },
+      "parent_face_id": "RF-2",
+      "attached": true,
+      "include_in_footprint": false,
+      "dormer": null
+    },
+    {
+      "id": "AT-4",
+      "type": "pipe",
+      "elevation": "roof",
+      "width_mm": {
+        "value": 76,
+        "confidence": "low",
+        "source": "scaled",
+        "low_reason": "small object, steep photo angle"
+      },
+      "height_mm": null,
+      "depth_mm": null,
+      "position_mm": {
+        "x": 2133.6,
+        "y": 2438.4
+      },
+      "parent_face_id": "RF-2",
+      "attached": true,
+      "include_in_footprint": false,
+      "dormer": null
+    },
+    {
+      "id": "AT-5",
+      "type": "vent",
+      "elevation": "roof",
+      "width_mm": {
+        "value": 356.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "height_mm": null,
+      "depth_mm": null,
+      "position_mm": {
+        "x": 10972.800000000001,
+        "y": 1828.8000000000002
+      },
+      "parent_face_id": "RF-1",
+      "attached": true,
+      "include_in_footprint": false,
+      "dormer": null
+    },
+    {
+      "id": "AT-6",
+      "type": "vent",
+      "elevation": "roof",
+      "width_mm": {
+        "value": 356.6,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "height_mm": null,
+      "depth_mm": null,
+      "position_mm": {
+        "x": 5486.400000000001,
+        "y": 2133.6
+      },
+      "parent_face_id": "RF-1",
+      "attached": true,
+      "include_in_footprint": false,
+      "dormer": null
+    },
+    {
+      "id": "AT-7",
+      "type": "addition",
+      "elevation": "right",
+      "width_mm": {
+        "value": 6705.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "height_mm": {
+        "value": 2743.2,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "depth_mm": {
+        "value": 6705.6,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "position_mm": null,
+      "parent_face_id": null,
+      "attached": true,
+      "include_in_footprint": true,
+      "dormer": null
+    }
+  ],
+  "downspouts": [
+    {
+      "id": "DS-1",
+      "elevation": "front",
+      "length_mm": {
+        "value": 5486.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "position_mm": {
+        "x": 152.4
+      },
+      "connects_edge_id": "E-6"
+    },
+    {
+      "id": "DS-2",
+      "elevation": "front",
+      "length_mm": {
+        "value": 5486.4,
+        "confidence": "high",
+        "source": "scaled"
+      },
+      "position_mm": {
+        "x": 12039.6
+      },
+      "connects_edge_id": "E-6"
+    },
+    {
+      "id": "DS-3",
+      "elevation": "back",
+      "length_mm": {
+        "value": 5486.4,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "position_mm": {
+        "x": 152.4
+      },
+      "connects_edge_id": "E-7"
+    },
+    {
+      "id": "DS-4",
+      "elevation": "front",
+      "length_mm": {
+        "value": 2743.2,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "position_mm": {
+        "x": 6553.2
+      },
+      "connects_edge_id": "E-9"
+    }
+  ],
+  "condition_areas": [
+    {
+      "id": "CA-1",
+      "type": "failing_paint",
+      "parent_face_id": "WL-3",
+      "elevation": "left",
+      "area_mm2": {
+        "value": 4180636.8,
+        "confidence": "medium",
+        "source": "scaled"
+      },
+      "severity": "moderate",
+      "position_mm": {
+        "x": 1828.8000000000002,
+        "y": 1219.2
+      },
+      "photo_index": 4,
+      "note": "Peeling paint band below left gable."
+    },
+    {
+      "id": "CA-2",
+      "type": "rot",
+      "parent_face_id": "WL-2",
+      "elevation": "back",
+      "area_mm2": {
+        "value": 557418.2,
+        "confidence": "low",
+        "source": "scaled",
+        "low_reason": "shadow over sill area in photo 3"
+      },
+      "severity": "light",
+      "position_mm": {
+        "x": 3352.8,
+        "y": 914.4000000000001
+      },
+      "photo_index": 3,
+      "note": "Suspected rot at sill of W-9 - verify on site."
+    }
+  ],
+  "quality": {
+    "references_used": 2,
+    "spread_percent": 4.2,
+    "warnings": [
+      "Photo 5 (right elevation) steeply angled - right-side widths carry medium confidence.",
+      "Garage back roof facet partially occluded in photo 3."
+    ]
+  }
+}
