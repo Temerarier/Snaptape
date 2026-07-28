@@ -1,0 +1,23 @@
+GOAL
+Add a classification step: every file (and every PDF page) gets classified, unusable uploads are rejected with a clear reason. This is the only quality gate - warnings appear ONLY when measurement is impossible.
+
+CONTEXT
+- Attached: docs/pipeline/classify-prompt.md (use it VERBATIM) and docs/pipeline/reference-catalog.md.
+- Model: Claude Sonnet via the Anthropic API (model id "claude-sonnet-4-5"); key via the ANTHROPIC_API_KEY secret. Same classifier for both quality levels.
+
+BUILD
+- Classification runs when the user clicks "Start measurement". Flow: click -> brief checking state ("Checking your files...") -> classification of each image / each PDF page: type (photo_exterior / plan_elevation / plan_floorplan / plan_other / no_building) and, for exterior photos, the elevation shown (front/back/left/right/multiple/unknown).
+- Store the classification on the project (needed later for pipeline routing: photo / plan / mixed).
+- The per-page classification doubles as a FILTER: only usable pages proceed to measurement. If a project yields more than 15 usable plan pages, keep the 15 most relevant (priority: dimensioned elevations > dimensioned floor plans > other usable plans) and show a small note ('22 pages classified, 15 used for measurement'). Never reject an upload for having too many pages.
+- Decision logic: if measurement is NOT possible with the usable files -> ABORT: status goes back to files_uploaded and a modal appears, exactly per docs/rejection-reference.html: headline "These photos can't be measured", listing ONLY the problem files (thumbnail + short plain-language reason from the classification output, e.g. "Too blurry to detect edges.", "The building is mostly hidden behind trees."), subtitle "The rest of your photos are fine - replace these and start again." (adapt if ALL files are unusable), and one primary button "Remove & upload new" which removes the listed files and returns to the upload screen. Do not invent extra checks beyond the classification output. No measurement is started, nothing is charged. Otherwise the flow continues automatically into the measurement (for now, until the pipeline exists in the next prompts: mark the project "classification passed" and stop there). NO warnings for merely imperfect sets - the modal exists only for the abort case.
+- "Start measurement" is enabled as soon as at least one file is uploaded.
+
+DO NOT
+- Do not add extra quality scoring, sharpness checks, or advisory warnings - measurement-impossible is the only blocker.
+- Do not run any measurement extraction here.
+
+DONE WHEN
+- [ ] Clicking "Start measurement" on a mixed upload (photos + plan PDF) shows the checking state, then per-file types; PDF pages are classified individually (using the rendered page images).
+- [ ] A 25-page PDF is accepted; at most 15 usable plan pages are marked for measurement, with a visible note.
+- [ ] Clicking "Start measurement" with only an interior photo aborts with the modal (thumbnail + reason); "Remove & upload new" removes it and returns to the upload screen; the project stays at files_uploaded.
+- [ ] A usable set passes with zero warnings shown.
