@@ -63,6 +63,34 @@ export async function renderePdfSeiten(pdf: Buffer): Promise<Buffer[]> {
   });
 }
 
+// Verkleinert ein Bild (Foto-Original oder gerenderte PDF-Seite) für
+// KI-Aufrufe: JPEG, lange Kante ~1400 px. Wirft bei Fehlern – der
+// Klassifizierer darf nie stillschweigend ohne Bild weiterlaufen.
+const KI_KANTE_PX = 1400;
+
+export async function verkleinereFuerKI(
+  bild: Buffer,
+  dateiEndung: string,
+): Promise<Buffer> {
+  const endung = dateiEndung.replace(/[^a-z0-9]/gi, "").toLowerCase() || "bin";
+  return inTempVerzeichnis(async (verzeichnis) => {
+    const eingabe = `eingabe.${endung}`;
+    await writeFile(join(verzeichnis, eingabe), bild);
+    await execFileAsync(
+      "vipsthumbnail",
+      [
+        eingabe,
+        "--size",
+        `${KI_KANTE_PX}x${KI_KANTE_PX}`,
+        "-o",
+        "ki.jpg[Q=80]",
+      ],
+      { cwd: verzeichnis, timeout: 60_000 },
+    );
+    return readFile(join(verzeichnis, "ki.jpg"));
+  });
+}
+
 // Erzeugt eine JPEG-Vorschau für ein Foto. Liefert null, wenn die
 // Konvertierung nicht möglich ist (z. B. exotisches HEIC-Profil) – die
 // UI zeigt dann einen Platzhalter; das Original bleibt unangetastet.

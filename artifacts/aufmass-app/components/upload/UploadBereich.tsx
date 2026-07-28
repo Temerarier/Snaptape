@@ -11,11 +11,14 @@ import { useRef, useState } from "react";
 import type { Dictionary } from "@/i18n";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/components/ui/hilfen";
+import { AblehnungsModal } from "@/components/upload/AblehnungsModal";
 import {
   entferneDateiAction,
+  entferneDateienAction,
   holeUploadZieleAction,
   registriereDateiAction,
   starteMessungAction,
+  type AblehnungsPayload,
   type DateiInfo,
 } from "@/lib/upload/actions";
 import { pruefeNeueDateien, type AblehnungsGrund } from "@/lib/upload/regeln";
@@ -102,6 +105,8 @@ export function UploadBereich({
   );
   const [startFehler, setStartFehler] = useState<string | null>(null);
   const [startLaeuft, setStartLaeuft] = useState(false);
+  const [ablehnung, setAblehnung] = useState<AblehnungsPayload | null>(null);
+  const [entfernenLaeuft, setEntfernenLaeuft] = useState(false);
 
   const grundText = (grund: AblehnungsGrund): string =>
     grund === "typ"
@@ -235,7 +240,37 @@ export function UploadBereich({
       setStartLaeuft(false);
       return;
     }
+    if (!ergebnis.bestanden) {
+      // Messung unmöglich: Modal mit den Problemdateien, Status bleibt
+      // files_uploaded – nichts wird gemessen, nichts berechnet.
+      setAblehnung(ergebnis.ablehnung);
+      setStartLaeuft(false);
+      return;
+    }
     router.push(`/app/projekt/${projektId}`);
+    router.refresh();
+  }
+
+  // „Entfernen & neu hochladen": löscht genau die gelisteten
+  // Problemdateien und bleibt auf dem Upload-Screen.
+  async function problemDateienEntfernen() {
+    if (!ablehnung) return;
+    const ids = ablehnung.dateien.map((d) => d.id);
+    if (ids.length === 0) {
+      // Set-weite Ablehnung ohne einzelne Problemdatei (z. B. fehlende
+      // Referenz): nichts zu löschen, nur zurück zum Upload-Screen.
+      setAblehnung(null);
+      return;
+    }
+    setEntfernenLaeuft(true);
+    const ergebnis = await entferneDateienAction(projektId, ids);
+    setEntfernenLaeuft(false);
+    if ("error" in ergebnis) {
+      setStartFehler(ergebnis.error);
+      return;
+    }
+    setDateien((liste) => liste.filter((d) => !ids.includes(d.id)));
+    setAblehnung(null);
     router.refresh();
   }
 
@@ -492,9 +527,16 @@ export function UploadBereich({
             onClick={() => void starten()}
             className="px-7 py-3.5 text-[15px]"
           >
-            {startLaeuft ? t.startLaeuft : t.startButton}
+            {startLaeuft ? t.pruefungLaeuft : t.startButton}
           </Button>
         </div>
+        <AblehnungsModal
+          ablehnung={ablehnung}
+          entfernenLaeuft={entfernenLaeuft}
+          onEntfernen={() => void problemDateienEntfernen()}
+          onSchliessen={() => setAblehnung(null)}
+          t={t}
+        />
       </div>
     </div>
   );

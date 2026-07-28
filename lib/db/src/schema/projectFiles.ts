@@ -20,6 +20,21 @@ export const projectFileKindEnum = pgEnum("project_file_kind", [
   "pdf",
 ]);
 
+// Klassifizierung einer Bildeinheit (Foto = 1 Eintrag, PDF = 1 pro Seite).
+export interface FileClassificationEntry {
+  // 1-basierte Seitennummer (Fotos immer 1).
+  page: number;
+  // Klasse laut Klassifizierer (photo_exterior/plan_*/no_building bzw.
+  // PDF-Seiten: elevation/floor_plan/section/site_plan/detail).
+  class: string;
+  usable: boolean;
+  elevation: string | null;
+  occludedPercent: number | null;
+  hasDimensions: boolean | null;
+  // Von der 15-Seiten-Auswahl für die Messung markiert.
+  selectedForMeasurement: boolean;
+}
+
 export const projectFilesTable = pgTable("project_files", {
   id: uuid("id").primaryKey().defaultRandom(),
   projectId: uuid("project_id")
@@ -41,6 +56,10 @@ export const projectFilesTable = pgTable("project_files", {
   // Nur PDFs: Seitenzahl und gerenderte Seitenbilder in Seitenreihenfolge.
   pageCount: integer("page_count"),
   pageImagePaths: jsonb("page_image_paths").$type<string[] | null>(),
+  // Klassifizierung pro Bildeinheit (null solange nicht klassifiziert).
+  classification: jsonb("classification").$type<
+    FileClassificationEntry[] | null
+  >(),
   sortOrder: integer("sort_order").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()

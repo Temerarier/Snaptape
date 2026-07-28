@@ -95,6 +95,7 @@ export const enUS = {
       files_uploaded: "Files uploaded",
       processing: "Measuring",
       model_ready: "Model ready",
+      classified: "Files checked",
     },
   },
   upload: {
@@ -133,6 +134,21 @@ export const enUS = {
     },
     startButton: "Start measurement",
     startLaeuft: "Saving …",
+    pruefungLaeuft: "Checking your files …",
+    ablehnung: {
+      titel: "These photos can't be measured",
+      untertitel:
+        "The rest of your photos are fine – replace these and start again.",
+      untertitelAlle: "Replace these photos and start again.",
+      button: "Remove & upload new",
+      buttonLaeuft: "Removing …",
+      gruende: {
+        keinGebaeude: "Doesn't show the building from the outside.",
+        verdeckt: "The building is mostly hidden in this image.",
+        planUnbrauchbar: "This plan can't be used for measurement.",
+        allgemein: "Not usable for measurement.",
+      },
+    },
     fehler: {
       typ: "Only JPG, PNG or HEIC photos and PDF plans are allowed.",
       zuGross: "Files larger than 25 MB can't be uploaded.",
@@ -145,6 +161,8 @@ export const enUS = {
         "A measurement can't be started in this project's current state.",
       referenzUnvollstaendig:
         "Please fill in reference object, value and unit — or leave all three empty.",
+      klassifizierung:
+        "The file check failed. Please try again in a moment.",
       generisch: "Something went wrong. Please try again.",
     },
   },
@@ -233,6 +251,9 @@ export const enUS = {
     notFoundText:
       "This project does not exist or does not belong to your account.",
     placeholderHint: "Available in a later stage",
+    klassifizierungBestanden:
+      "File check passed – measurement starts in a later stage.",
+    seitenNote: "{classified} pages classified, {used} used for measurement",
     cards: {
       dateien: {
         title: "Photos & plans",

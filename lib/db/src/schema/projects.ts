@@ -1,6 +1,7 @@
 import {
   boolean,
   doublePrecision,
+  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -23,7 +24,26 @@ export const projectStatusEnum = pgEnum("project_status", [
   "files_uploaded",
   "processing",
   "model_ready",
+  // Klassifizierung bestanden ("classification passed") – Zwischenzustand
+  // vor der eigentlichen Messpipeline (Etappe 2 hängt hier ein).
+  "classified",
 ]);
+
+// Ergebnis der Datei-Klassifizierung (Sonnet-Qualitätscheck) auf
+// Projektebene. Rohantwort + abgeleitete Werte für Pipeline-Routing.
+export interface ProjectClassification {
+  // "photo" | "plan" | "mixed" laut Klassifizierer.
+  projectType: string;
+  depthBasis: string;
+  expectedAccuracy: string;
+  referenceObjectsFound: string[];
+  // Seitenauswahl-Regel: >15 nutzbare Planseiten → die 15 relevantesten.
+  planPagesUsable: number;
+  planPagesSelected: number;
+  // Vollständige, unveränderte Klassifizierer-Antwort (Audit/Debug).
+  raw: unknown;
+  classifiedAt: string;
+}
 
 // Messqualität (neutrale Labels, keine Modellnamen in der UI).
 export const measureQualityEnum = pgEnum("measure_quality", [
@@ -58,6 +78,8 @@ export const projectsTable = pgTable("projects", {
   referenceObject: text("reference_object"),
   referenceValue: doublePrecision("reference_value"),
   referenceUnit: referenceUnitEnum("reference_unit"),
+  // Ergebnis des Klassifizierungs-Schritts (null solange nicht gelaufen).
+  classification: jsonb("classification").$type<ProjectClassification | null>(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

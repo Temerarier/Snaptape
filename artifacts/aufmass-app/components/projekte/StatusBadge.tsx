@@ -14,6 +14,7 @@ const VARIANTEN: Record<
   files_uploaded: "akzent",
   processing: "warnung",
   model_ready: "ok",
+  classified: "ok",
   reviewing: "warnung",
   ready: "ok",
   failed: "fehler",

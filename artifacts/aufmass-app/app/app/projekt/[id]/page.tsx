@@ -94,6 +94,26 @@ export default async function ProjectDetailPage({
           {project.name}
         </h1>
         <StatusBadge status={project.status} labels={dict.projects.status} />
+        {project.status === "classified" ? (
+          <span className="text-sm text-neutral-500">
+            {t.klassifizierungBestanden}
+          </span>
+        ) : null}
+        {project.classification &&
+        project.classification.planPagesSelected <
+          project.classification.planPagesUsable ? (
+          <span className="inline-flex items-center rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-0.5 text-xs font-medium text-neutral-500">
+            {t.seitenNote
+              .replace(
+                "{classified}",
+                String(project.classification.planPagesUsable),
+              )
+              .replace(
+                "{used}",
+                String(project.classification.planPagesSelected),
+              )}
+          </span>
+        ) : null}
         {project.archivedAt ? (
           <span className="inline-flex items-center rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-0.5 text-xs font-medium text-neutral-500">
             {dict.projects.archivedBadge}

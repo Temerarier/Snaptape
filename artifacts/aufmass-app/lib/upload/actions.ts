@@ -30,6 +30,10 @@ import {
   type NeueDatei,
 } from "@/lib/upload/regeln";
 import { erzeugeFotoVorschau, renderePdfSeiten } from "@/lib/upload/verarbeitung";
+import {
+  klassifiziereDateien,
+  type KlassifizierungsEinheit,
+} from "@/lib/klassifizierung/service";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -95,6 +99,27 @@ async function zaehleDateien(projektId: string): Promise<number> {
 
 function originalPrefix(projektId: string): string {
   return `${getPrivateObjectDir()}/projekte/${projektId}/original/`;
+}
+
+// Ändert sich der Dateibestand eines bereits geprüften Projekts
+// ("classified"), ist das Klassifizierungs-Ergebnis ungültig: Status
+// zurück auf files_uploaded, gespeichertes Ergebnis löschen. Liefert
+// den danach gültigen Status.
+async function invalidiereKlassifizierung(projekt: {
+  id: string;
+  status: ProjectStatus;
+}): Promise<ProjectStatus> {
+  if (projekt.status !== "classified") return projekt.status;
+  await db
+    .update(projectsTable)
+    .set({ status: "files_uploaded", classification: null })
+    .where(
+      and(
+        eq(projectsTable.id, projekt.id),
+        eq(projectsTable.status, "classified"),
+      ),
+    );
+  return "files_uploaded";
 }
 
 function revalidiereProjekt(projektId: string): void {
@@ -242,6 +267,9 @@ export async function registriereDateiAction(
   }
   const zeile = einfuegung.zeile;
 
+  // Neue Datei nach bestandener Prüfung → Ergebnis ist nicht mehr gültig.
+  await invalidiereKlassifizierung(projekt);
+
   try {
     if (art === "pdf") {
       // PDF sofort rendern: ein PNG pro Seite (~3000 px lange Kante),
@@ -324,10 +352,11 @@ export async function entferneDateiAction(
   ];
   await Promise.allSettled(pfade.map((pfad) => loescheObjekt(pfad)));
 
-  // Ohne Dateien fällt ein hochgeladenes Projekt zurück auf Entwurf.
-  let status: ProjectStatus = projekt.status;
+  // Ohne Dateien fällt ein hochgeladenes Projekt zurück auf Entwurf;
+  // ein geprüftes Projekt verliert sein Klassifizierungs-Ergebnis.
+  let status: ProjectStatus = await invalidiereKlassifizierung(projekt);
   const verbleibend = await zaehleDateien(projektId);
-  if (verbleibend === 0 && projekt.status === "files_uploaded") {
+  if (verbleibend === 0 && status === "files_uploaded") {
     await db
       .update(projectsTable)
       .set({ status: "draft" })
@@ -339,9 +368,52 @@ export async function entferneDateiAction(
   return { ok: true, status };
 }
 
-// „Messung starten": speichert Qualität + optionales Referenzmaß und
-// setzt den Status auf files_uploaded. Die Pipeline (Etappe 2) hängt
-// später genau hier ein – bis dahin bleibt der Status stehen.
+// Ablehnungs-Payload für das Modal: NUR die Problemdateien, mit kurzem
+// Klartext-Grund (abgeleitet aus der Klassifizierer-Ausgabe, keine
+// eigenen Zusatzprüfungen).
+export type AblehnungsGrundKey =
+  | "keinGebaeude"
+  | "verdeckt"
+  | "planUnbrauchbar"
+  | "allgemein";
+
+export interface AblehnungsDatei {
+  id: string;
+  originalName: string;
+  kind: "photo" | "pdf";
+  hatVorschau: boolean;
+  grund: AblehnungsGrundKey;
+}
+
+export interface AblehnungsPayload {
+  grundSatz: string | null;
+  alleUnbrauchbar: boolean;
+  dateien: AblehnungsDatei[];
+}
+
+export type StartErgebnis =
+  | { ok: true; bestanden: true }
+  | { ok: true; bestanden: false; ablehnung: AblehnungsPayload }
+  | { error: string };
+
+function ablehnungsGrund(
+  einheiten: KlassifizierungsEinheit[],
+  kind: "photo" | "pdf",
+): AblehnungsGrundKey {
+  const erste = einheiten.find((e) => !e.usable);
+  if (!erste) return "allgemein";
+  if ((erste.occludedPercent ?? 0) > 50) return "verdeckt";
+  if (erste.class === "no_building") {
+    return kind === "pdf" ? "planUnbrauchbar" : "keinGebaeude";
+  }
+  return kind === "pdf" ? "planUnbrauchbar" : "allgemein";
+}
+
+// „Messung starten": speichert Qualität + optionales Referenzmaß,
+// setzt den Status auf files_uploaded und lässt dann JEDE Datei / JEDE
+// PDF-Seite klassifizieren (einziges Qualitäts-Gate). Bestanden →
+// Status "classified" (die Messpipeline hängt in Etappe 2 hier ein);
+// abgelehnt → Status bleibt files_uploaded, Modal-Payload zurück.
 export async function starteMessungAction(
   projektId: string,
   eingabe: {
@@ -350,7 +422,7 @@ export async function starteMessungAction(
     referenceValue: string;
     referenceUnit: string;
   },
-): Promise<{ ok: true } | { error: string }> {
+): Promise<StartErgebnis> {
   const { user, t } = await uploadWoerterbuch();
   const projekt = await ladeEigenesProjekt(projektId, user.id);
   if (!projekt) return { error: t.fehler.generisch };
@@ -432,6 +504,149 @@ export async function starteMessungAction(
     return { error: t.fehler.statusUngueltig };
   }
 
+  // Klassifizierung (einziges Qualitäts-Gate). Fehler werden explizit
+  // gemeldet; der Status bleibt dann auf files_uploaded – kein stiller
+  // Fallback, nichts wird gemessen oder berechnet.
+  const dateien = await db
+    .select()
+    .from(projectFilesTable)
+    .where(eq(projectFilesTable.projectId, projektId))
+    .orderBy(projectFilesTable.sortOrder, projectFilesTable.createdAt);
+  if (dateien.length === 0) {
+    revalidiereProjekt(projektId);
+    return { error: t.fehler.keineDateien };
+  }
+
+  let ergebnis: Awaited<ReturnType<typeof klassifiziereDateien>>;
+  try {
+    ergebnis = await klassifiziereDateien(dateien);
+  } catch (fehler) {
+    console.error("Klassifizierung fehlgeschlagen:", fehler);
+    revalidiereProjekt(projektId);
+    return { error: t.fehler.klassifizierung };
+  }
+
+  // Ergebnis pro Datei speichern (auch bei Ablehnung: Audit/Anzeige).
+  const proDatei = new Map<string, KlassifizierungsEinheit[]>();
+  for (const e of ergebnis.einheiten) {
+    const liste = proDatei.get(e.dateiId) ?? [];
+    liste.push(e);
+    proDatei.set(e.dateiId, liste);
+  }
+  for (const [dateiId, einheiten] of proDatei) {
+    await db
+      .update(projectFilesTable)
+      .set({
+        classification: einheiten.map(({ dateiId: _weg, ...rest }) => rest),
+      })
+      .where(eq(projectFilesTable.id, dateiId));
+  }
+
+  if (ergebnis.overall === "rejected") {
+    // Problemdateien: Dateien ohne eine einzige nutzbare Bildeinheit.
+    const problemDateien = dateien.filter((d) =>
+      (proDatei.get(d.id) ?? []).every((e) => !e.usable),
+    );
+    revalidiereProjekt(projektId);
+    return {
+      ok: true,
+      bestanden: false,
+      ablehnung: {
+        grundSatz: ergebnis.rejectionReason,
+        alleUnbrauchbar: problemDateien.length === dateien.length,
+        dateien: problemDateien.map((d) => ({
+          id: d.id,
+          originalName: d.originalName,
+          kind: d.kind,
+          hatVorschau: d.previewPath !== null || (d.pageCount ?? 0) > 0,
+          grund: ablehnungsGrund(proDatei.get(d.id) ?? [], d.kind),
+        })),
+      },
+    };
+  }
+
+  // Bestanden: Ergebnis am Projekt speichern, Status "classified".
+  // Guard im WHERE wie oben – nur aus files_uploaded heraus.
+  const abgeschlossen = await db
+    .update(projectsTable)
+    .set({
+      status: "classified",
+      classification: {
+        projectType: ergebnis.projectType,
+        depthBasis: ergebnis.depthBasis,
+        expectedAccuracy: ergebnis.expectedAccuracy,
+        referenceObjectsFound: ergebnis.referenceObjectsFound,
+        planPagesUsable: ergebnis.planSeitenNutzbar,
+        planPagesSelected: ergebnis.planSeitenGewaehlt,
+        raw: ergebnis.raw,
+        classifiedAt: new Date().toISOString(),
+      },
+    })
+    .where(
+      and(
+        eq(projectsTable.id, projektId),
+        eq(projectsTable.status, "files_uploaded"),
+      ),
+    )
+    .returning({ id: projectsTable.id });
+  if (abgeschlossen.length === 0) {
+    revalidiereProjekt(projektId);
+    return { error: t.fehler.statusUngueltig };
+  }
+
   revalidiereProjekt(projektId);
-  return { ok: true };
+  return { ok: true, bestanden: true };
+}
+
+// „Entfernen & neu hochladen" im Ablehnungs-Modal: löscht genau die
+// gelisteten Problemdateien und bleibt auf dem Upload-Screen.
+export async function entferneDateienAction(
+  projektId: string,
+  dateiIds: string[],
+): Promise<{ ok: true; status: ProjectStatus } | { error: string }> {
+  const { user, t } = await uploadWoerterbuch();
+  const projekt = await ladeEigenesProjekt(projektId, user.id);
+  if (!projekt) return { error: t.fehler.generisch };
+
+  const ids = dateiIds
+    .slice(0, MAX_DATEIEN_PRO_PROJEKT)
+    .filter((id) => UUID_PATTERN.test(id));
+  if (ids.length === 0) return { error: t.fehler.generisch };
+
+  const zeilen = await db
+    .select()
+    .from(projectFilesTable)
+    .where(
+      and(
+        inArray(projectFilesTable.id, ids),
+        eq(projectFilesTable.projectId, projektId),
+      ),
+    );
+  if (zeilen.length === 0) return { error: t.fehler.generisch };
+
+  await db.delete(projectFilesTable).where(
+    inArray(
+      projectFilesTable.id,
+      zeilen.map((z) => z.id),
+    ),
+  );
+  const pfade = zeilen.flatMap((z) => [
+    z.storagePath,
+    ...(z.previewPath ? [z.previewPath] : []),
+    ...(z.pageImagePaths ?? []),
+  ]);
+  await Promise.allSettled(pfade.map((pfad) => loescheObjekt(pfad)));
+
+  let status: ProjectStatus = await invalidiereKlassifizierung(projekt);
+  const verbleibend = await zaehleDateien(projektId);
+  if (verbleibend === 0 && status === "files_uploaded") {
+    await db
+      .update(projectsTable)
+      .set({ status: "draft" })
+      .where(eq(projectsTable.id, projektId));
+    status = "draft";
+  }
+
+  revalidiereProjekt(projektId);
+  return { ok: true, status };
 }

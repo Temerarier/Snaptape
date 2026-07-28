@@ -95,6 +95,7 @@ export const deDE: Dictionary = {
       files_uploaded: "Dateien hochgeladen",
       processing: "In Vermessung",
       model_ready: "Modell bereit",
+      classified: "Dateien geprüft",
     },
   },
   upload: {
@@ -134,6 +135,21 @@ export const deDE: Dictionary = {
     },
     startButton: "Messung starten",
     startLaeuft: "Wird gespeichert …",
+    pruefungLaeuft: "Ihre Dateien werden geprüft …",
+    ablehnung: {
+      titel: "Diese Fotos können nicht vermessen werden",
+      untertitel:
+        "Die übrigen Fotos sind in Ordnung – ersetzen Sie diese und starten Sie erneut.",
+      untertitelAlle: "Ersetzen Sie diese Fotos und starten Sie erneut.",
+      button: "Entfernen & neu hochladen",
+      buttonLaeuft: "Wird entfernt …",
+      gruende: {
+        keinGebaeude: "Zeigt das Gebäude nicht von außen.",
+        verdeckt: "Das Gebäude ist auf diesem Bild überwiegend verdeckt.",
+        planUnbrauchbar: "Dieser Plan ist für die Vermessung nicht nutzbar.",
+        allgemein: "Für die Vermessung nicht nutzbar.",
+      },
+    },
     fehler: {
       typ: "Nur Fotos (JPG, PNG, HEIC) und Pläne als PDF sind erlaubt.",
       zuGross: "Dateien über 25 MB können nicht hochgeladen werden.",
@@ -147,6 +163,8 @@ export const deDE: Dictionary = {
         "Im aktuellen Projektstatus kann keine Messung gestartet werden.",
       referenzUnvollstaendig:
         "Bitte Referenzobjekt, Wert und Einheit vollständig ausfüllen – oder alle drei Felder leer lassen.",
+      klassifizierung:
+        "Die Dateiprüfung ist fehlgeschlagen. Bitte versuchen Sie es gleich erneut.",
       generisch: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     },
   },
@@ -238,6 +256,9 @@ export const deDE: Dictionary = {
     notFoundText:
       "Dieses Projekt existiert nicht oder gehört nicht zu Ihrem Konto.",
     placeholderHint: "Verfügbar in einer späteren Etappe",
+    klassifizierungBestanden:
+      "Dateiprüfung bestanden – die Vermessung startet in einer späteren Etappe.",
+    seitenNote: "{classified} Seiten klassifiziert, {used} für die Messung verwendet",
     cards: {
       dateien: {
         title: "Fotos & Pläne",
