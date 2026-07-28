@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { getDictionary, toLocale } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
+import { istStaff } from "@/lib/auth/staff";
 import { HeaderSuche } from "@/components/projekte/HeaderSuche";
 import { NewProjectButton } from "@/components/projekte/NewProjectButton";
 import { UserMenu } from "@/components/auth/UserMenu";
@@ -35,6 +36,14 @@ export default async function AppLayout({
             </Suspense>
           </div>
           <div className="flex shrink-0 items-center gap-3">
+            {istStaff(user.email) ? (
+              <Link
+                href="/admin/measurements"
+                className="text-sm font-medium text-schrift-sekundaer hover:text-schrift"
+              >
+                {dict.admin.navLink}
+              </Link>
+            ) : null}
             <NewProjectButton />
             <UserMenu email={user.email} />
           </div>

@@ -286,6 +286,35 @@ export const enUS = {
       },
     },
   },
+  admin: {
+    navLink: "Admin",
+    zurueckZurApp: "Back to app",
+    measurements: {
+      title: "Measurement runs",
+      subtitle: "All runs across all accounts, newest first.",
+      leer: "No measurement runs yet.",
+      spalten: {
+        zeitpunkt: "Time",
+        projekt: "Project",
+        kunde: "Customer",
+        qualitaet: "Quality",
+        dauer: "Duration",
+        ausgang: "Outcome",
+        warnungen: "Warnings",
+        fehler: "Errors",
+        links: "Stored result",
+      },
+      ausgangModelReady: "Model ready",
+      ausgangFailed: "Failed",
+      jsonLink: "JSON",
+      viewerLink: "Viewer",
+      keinErgebnis: "none stored",
+    },
+    json: {
+      title: "Stored measurement JSON",
+      zurueck: "Back to runs",
+    },
+  },
 };
 
 export type Dictionary = typeof enUS;

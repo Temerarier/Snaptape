@@ -291,4 +291,33 @@ export const deDE: Dictionary = {
       },
     },
   },
+  admin: {
+    navLink: "Admin",
+    zurueckZurApp: "Zurück zur App",
+    measurements: {
+      title: "Messläufe",
+      subtitle: "Alle Läufe über alle Konten, neueste zuerst.",
+      leer: "Noch keine Messläufe.",
+      spalten: {
+        zeitpunkt: "Zeitpunkt",
+        projekt: "Projekt",
+        kunde: "Kunde",
+        qualitaet: "Qualität",
+        dauer: "Dauer",
+        ausgang: "Ausgang",
+        warnungen: "Warnungen",
+        fehler: "Fehler",
+        links: "Gespeichertes Ergebnis",
+      },
+      ausgangModelReady: "Modell fertig",
+      ausgangFailed: "Fehlgeschlagen",
+      jsonLink: "JSON",
+      viewerLink: "Viewer",
+      keinErgebnis: "nicht vorhanden",
+    },
+    json: {
+      title: "Gespeichertes Measurement-JSON",
+      zurueck: "Zurück zu den Läufen",
+    },
+  },
 };
