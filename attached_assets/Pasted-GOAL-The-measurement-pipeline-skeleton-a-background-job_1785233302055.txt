@@ -1,0 +1,24 @@
+GOAL
+The measurement pipeline skeleton: a background job that takes a project's files, calls the extraction (stubbed for now), validates the result, and stores it.
+
+CONTEXT
+- Data contract: shared/schema/measurement-v1.5.json + validateMeasurement from Prompt 0.
+- Fixture: fixtures/garage-house.json (the stub result).
+
+BUILD
+- EXTEND the existing "Start measurement" flow (do not rebuild the classification): where it currently stops at "classification passed", continue automatically -> status processing -> background extraction job. The existing classification abort stays as is and never starts the job.
+- Pluggable extractor interface: extract(files, classification, options) -> measurement JSON. Stub: returns the fixture after 10s.
+- options carries the quality choice ("standard" | "premium") - passed through, unused by the stub.
+- On result: run it through the EXISTING validateMeasurement utility (built in the foundation prompt, used here for the first time). Valid -> store on project, status model_ready. Invalid -> status failed with readable errors.
+- Save a log record in the app's database for every run: timestamp, project, quality level, duration, outcome, warnings. (No UI for this yet - the staff admin view that displays these records is the NEXT prompt.)
+- The existing viewer (v2) opens the stored JSON for model_ready projects (if v2 expects old field names, add a minimal read-only adapter that translates v1.5 for display - do not change v2 internals, do not modify the stored JSON. This adapter is throwaway: it gets deleted together with v2 later.)
+
+DO NOT
+- Do not implement real LLM extraction yet.
+- Do not modify the schema.
+
+DONE WHEN
+- [ ] Start -> processing -> model_ready with the fixture stored, and v2 displays it.
+- [ ] Forcing broken stub JSON leads to failed with readable errors.
+- [ ] Each run creates a log record in the DB (verified via the DB, the admin view comes in the next prompt).
+- [ ] Two parallel projects don't mix results.
