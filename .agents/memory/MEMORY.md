@@ -1,3 +1,4 @@
 - [Aufmaß-App conventions](aufmass-app-conventions.md) — fixed stack + 9 iron rules in replit.md; app on schema v1.2 (D-/W- swap!) with shared v1.5 contract in parallel; monorepo + Next.js quirks.
 - [Tracked build output crashes dev server](tracked-build-output.md) — git-tracked .next files let checkpoints rewrite the live webpack cache → "reading 'call'" client crashes; fix via .gitignore + rm on disk.
+- [Viewer v1.2 Baukasten strictness](viewer-v12-baukasten-strictness.md) — 3D viewer throws on anything beyond an exact simple-gable set; reduce richer JSON via display adapter, don't touch viewer.
 - [Artifact path routing traps](artifact-path-routing.md) — /api/* on the shared proxy belongs to the api-server artifact; Next routes under app/api/ are unreachable (Express 404), use another prefix.

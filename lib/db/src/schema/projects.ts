@@ -80,6 +80,14 @@ export const projectsTable = pgTable("projects", {
   referenceUnit: referenceUnitEnum("reference_unit"),
   // Ergebnis des Klassifizierungs-Schritts (null solange nicht gelaufen).
   classification: jsonb("classification").$type<ProjectClassification | null>(),
+  // Ergebnis der Messpipeline: gespeichertes v1.5-Measurement-JSON für
+  // model_ready; Klartext-Validierungsfehler für failed. currentRunId
+  // koppelt das Projekt an den jüngsten Messlauf – Hintergrund-Jobs
+  // dürfen nur schreiben, wenn ihre Run-ID noch aktuell ist (Guard
+  // gegen veraltete Läufe und Vermischung paralleler Projekte).
+  measurement: jsonb("measurement"),
+  measurementErrors: jsonb("measurement_errors").$type<string[] | null>(),
+  currentRunId: uuid("current_run_id"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

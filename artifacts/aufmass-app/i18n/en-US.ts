@@ -149,6 +149,11 @@ export const enUS = {
         allgemein: "Not usable for measurement.",
       },
     },
+    messFehler: {
+      titel: "Measurement failed",
+      hinweis:
+        "The last measurement did not produce a valid result. Check your files and start the measurement again.",
+    },
     fehler: {
       typ: "Only JPG, PNG or HEIC photos and PDF plans are allowed.",
       zuGross: "Files larger than 25 MB can't be uploaded.",
@@ -253,6 +258,8 @@ export const enUS = {
     placeholderHint: "Available in a later stage",
     klassifizierungBestanden:
       "File check passed – measurement starts in a later stage.",
+    messungLaeuft:
+      "Measuring your building… this page updates automatically.",
     seitenNote: "{classified} pages classified, {used} used for measurement",
     cards: {
       dateien: {

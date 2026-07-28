@@ -4,6 +4,7 @@ import { and, count, eq } from "drizzle-orm";
 import { db, projectFilesTable, projectsTable } from "@workspace/db";
 import { getDictionary, toLocale } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
+import { AutoRefresh } from "@/components/projekte/AutoRefresh";
 import { StatusBadge } from "@/components/projekte/StatusBadge";
 import { kategorieSummen } from "@/lib/berechnung/flaechen";
 import { ladeTesthaus } from "@/lib/messung/testhaus";
@@ -98,6 +99,12 @@ export default async function ProjectDetailPage({
           <span className="text-sm text-neutral-500">
             {t.klassifizierungBestanden}
           </span>
+        ) : null}
+        {project.status === "processing" ? (
+          <>
+            <span className="text-sm text-neutral-500">{t.messungLaeuft}</span>
+            <AutoRefresh />
+          </>
         ) : null}
         {project.classification &&
         project.classification.planPagesSelected <

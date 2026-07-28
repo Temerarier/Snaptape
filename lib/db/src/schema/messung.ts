@@ -14,7 +14,14 @@ import {
   unique,
   uuid,
 } from "drizzle-orm/pg-core";
-import { projectsTable } from "./projects";
+import { measureQualityEnum, projectsTable } from "./projects";
+
+// Ausgang eines Messlaufs (Pipeline-Skelett Etappe 2): valide →
+// model_ready, sonst failed (inkl. Extraktor-Fehler).
+export const measureRunOutcomeEnum = pgEnum("measure_run_outcome", [
+  "model_ready",
+  "failed",
+]);
 
 export const buildingTypeEnum = pgEnum("building_type", [
   "detached",
@@ -114,8 +121,16 @@ export const measureRunsTable = pgTable("measure_runs", {
     .notNull()
     .references(() => projectsTable.id, { onDelete: "cascade" }),
   schemaVersion: text("schema_version").notNull().default("1.2"),
-  // Das komplette Measure-JSON des Laufs (validiert gegen den Vertrag).
-  measureJson: jsonb("measure_json").notNull(),
+  // Das komplette Measure-JSON des Laufs. Null nur, wenn der Extraktor
+  // selbst scheiterte (dann steht der Grund in errors).
+  measureJson: jsonb("measure_json"),
+  // Protokoll je Lauf (Etappe 2): Qualität, Dauer, Ausgang, Warnungen,
+  // Klartext-Fehler. Nullable, weil Alt-Zeilen sie nicht haben.
+  quality: measureQualityEnum("quality"),
+  durationMs: integer("duration_ms"),
+  outcome: measureRunOutcomeEnum("outcome"),
+  warnings: jsonb("warnings").$type<string[] | null>(),
+  errors: jsonb("errors").$type<string[] | null>(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

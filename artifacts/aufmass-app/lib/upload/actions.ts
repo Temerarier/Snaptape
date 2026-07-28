@@ -3,6 +3,8 @@
 import { randomUUID } from "node:crypto";
 import { and, count, eq, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
+import { fuehreMessLaufAus } from "@/lib/messung/pipeline";
 import {
   db,
   projectFilesTable,
@@ -109,17 +111,22 @@ async function invalidiereKlassifizierung(projekt: {
   id: string;
   status: ProjectStatus;
 }): Promise<ProjectStatus> {
-  if (projekt.status !== "classified") return projekt.status;
-  await db
+  // Immer gegen den DB-Status guarden, nie gegen den zu Request-Beginn
+  // geladenen (der kann veraltet sein, wenn parallel eine Messung
+  // startet). currentRunId mit zurücksetzen: ein noch laufender
+  // Hintergrund-Messlauf greift dann ins Leere (Guard in der Pipeline)
+  // und kann kein Ergebnis für inzwischen geänderte Dateien speichern.
+  const zurueckgesetzt = await db
     .update(projectsTable)
-    .set({ status: "files_uploaded", classification: null })
+    .set({ status: "files_uploaded", classification: null, currentRunId: null })
     .where(
       and(
         eq(projectsTable.id, projekt.id),
-        eq(projectsTable.status, "classified"),
+        inArray(projectsTable.status, ["classified", "processing"]),
       ),
-    );
-  return "files_uploaded";
+    )
+    .returning({ id: projectsTable.id });
+  return zurueckgesetzt.length > 0 ? "files_uploaded" : projekt.status;
 }
 
 function revalidiereProjekt(projektId: string): void {
@@ -565,22 +572,28 @@ export async function starteMessungAction(
     };
   }
 
-  // Bestanden: Ergebnis am Projekt speichern, Status "classified".
-  // Guard im WHERE wie oben – nur aus files_uploaded heraus.
+  // Bestanden: Klassifizierung speichern und direkt weiter in die
+  // Messpipeline – Status "processing" + frische Run-ID (Guard gegen
+  // veraltete Läufe). Guard im WHERE wie oben – nur aus files_uploaded.
+  const runId = randomUUID();
+  const klassifizierung = {
+    projectType: ergebnis.projectType,
+    depthBasis: ergebnis.depthBasis,
+    expectedAccuracy: ergebnis.expectedAccuracy,
+    referenceObjectsFound: ergebnis.referenceObjectsFound,
+    planPagesUsable: ergebnis.planSeitenNutzbar,
+    planPagesSelected: ergebnis.planSeitenGewaehlt,
+    raw: ergebnis.raw,
+    classifiedAt: new Date().toISOString(),
+  };
   const abgeschlossen = await db
     .update(projectsTable)
     .set({
-      status: "classified",
-      classification: {
-        projectType: ergebnis.projectType,
-        depthBasis: ergebnis.depthBasis,
-        expectedAccuracy: ergebnis.expectedAccuracy,
-        referenceObjectsFound: ergebnis.referenceObjectsFound,
-        planPagesUsable: ergebnis.planSeitenNutzbar,
-        planPagesSelected: ergebnis.planSeitenGewaehlt,
-        raw: ergebnis.raw,
-        classifiedAt: new Date().toISOString(),
-      },
+      status: "processing",
+      classification: klassifizierung,
+      currentRunId: runId,
+      measurement: null,
+      measurementErrors: null,
     })
     .where(
       and(
@@ -593,6 +606,19 @@ export async function starteMessungAction(
     revalidiereProjekt(projektId);
     return { error: t.fehler.statusUngueltig };
   }
+
+  // Messlauf im Hintergrund, nachdem die Antwort raus ist. Bewusst
+  // after() statt nacktem void-Promise: Next hält den Prozess bis zum
+  // Ende des Callbacks am Leben.
+  after(() =>
+    fuehreMessLaufAus({
+      projektId,
+      runId,
+      quality,
+      klassifizierung,
+      dateien,
+    }),
+  );
 
   revalidiereProjekt(projektId);
   return { ok: true, bestanden: true };

@@ -66,6 +66,22 @@ export default async function UploadPage({
       />
       <p className="mt-1.5 text-[15px] text-schrift-sekundaer">{t.subtitle}</p>
 
+      {projekt.status === "failed" && projekt.measurementErrors ? (
+        <div className="mt-5 rounded-lg border border-fehler/30 bg-fehler/5 px-4 py-3">
+          <p className="text-sm font-semibold text-fehler">
+            {t.messFehler.titel}
+          </p>
+          <p className="mt-1 text-sm text-schrift-sekundaer">
+            {t.messFehler.hinweis}
+          </p>
+          <ul className="mt-2 list-disc space-y-0.5 pl-5 text-[13px] text-schrift-tertiaer">
+            {projekt.measurementErrors.map((fehler, i) => (
+              <li key={i}>{fehler}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       <div className="mt-7">
         <UploadBereich
           projektId={projekt.id}

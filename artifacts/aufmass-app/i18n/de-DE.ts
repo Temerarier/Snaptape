@@ -150,6 +150,11 @@ export const deDE: Dictionary = {
         allgemein: "Für die Vermessung nicht nutzbar.",
       },
     },
+    messFehler: {
+      titel: "Messung fehlgeschlagen",
+      hinweis:
+        "Die letzte Messung hat kein gültiges Ergebnis geliefert. Prüfen Sie Ihre Dateien und starten Sie die Messung erneut.",
+    },
     fehler: {
       typ: "Nur Fotos (JPG, PNG, HEIC) und Pläne als PDF sind erlaubt.",
       zuGross: "Dateien über 25 MB können nicht hochgeladen werden.",
@@ -258,6 +263,8 @@ export const deDE: Dictionary = {
     placeholderHint: "Verfügbar in einer späteren Etappe",
     klassifizierungBestanden:
       "Dateiprüfung bestanden – die Vermessung startet in einer späteren Etappe.",
+    messungLaeuft:
+      "Ihr Gebäude wird vermessen… diese Seite aktualisiert sich automatisch.",
     seitenNote: "{classified} Seiten klassifiziert, {used} für die Messung verwendet",
     cards: {
       dateien: {

@@ -6,7 +6,7 @@ import { and, eq } from "drizzle-orm";
 import { db, projectsTable } from "@workspace/db";
 import { requireUser } from "@/lib/auth/session";
 import { ModellViewer } from "@/components/viewer/ModellViewer";
-import { ladeTesthaus } from "@/lib/messung/testhaus";
+import { adaptiereV15FuerAnzeige } from "@/lib/messung/anzeigeAdapterV15";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -27,6 +27,7 @@ export default async function ProjektViewerSeite({
       name: projectsTable.name,
       adresse: projectsTable.adresse,
       status: projectsTable.status,
+      measurement: projectsTable.measurement,
     })
     .from(projectsTable)
     .where(and(eq(projectsTable.id, id), eq(projectsTable.userId, user.id)))
@@ -36,7 +37,15 @@ export default async function ProjektViewerSeite({
   // Viewer nur für fertig gemessene Projekte freigeben.
   if (project.status !== "model_ready") notFound();
 
-  const mess = ladeTesthaus();
+  // model_ready ohne gespeichertes Measurement wäre ein Datenfehler –
+  // explizit 404 statt stillem Fallback auf Testdaten.
+  if (project.measurement === null || project.measurement === undefined) {
+    notFound();
+  }
+  // Wegwerf-Adapter: gespeichertes v1.5-JSON nur für die Anzeige auf
+  // den v1.2-Vertrag des bestehenden Viewers mappen (wirft bei
+  // inkompatiblen Daten, kein stiller Fallback).
+  const mess = adaptiereV15FuerAnzeige(project.measurement);
   return (
     <ModellViewer
       mess={mess}
