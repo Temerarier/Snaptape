@@ -4,6 +4,7 @@
 // alle Zahlen ungerundet in mm bzw. mm² (Eiserne Regel 1). Component-IDs
 // wie "WL-1"/"E-1"/"W-1" sind überall dieselben (Eiserne Regel 3).
 import {
+  boolean,
   doublePrecision,
   integer,
   jsonb,
@@ -21,6 +22,13 @@ import { measureQualityEnum, projectsTable } from "./projects";
 export const measureRunOutcomeEnum = pgEnum("measure_run_outcome", [
   "model_ready",
   "failed",
+]);
+
+// Route der echten Extraktion (nach Upload-Typ laut Klassifizierung).
+export const measureRouteEnum = pgEnum("measure_route", [
+  "photo",
+  "plan",
+  "mixed",
 ]);
 
 export const buildingTypeEnum = pgEnum("building_type", [
@@ -131,6 +139,19 @@ export const measureRunsTable = pgTable("measure_runs", {
   outcome: measureRunOutcomeEnum("outcome"),
   warnings: jsonb("warnings").$type<string[] | null>(),
   errors: jsonb("errors").$type<string[] | null>(),
+  // Echte Extraktion (Protokoll-Erweiterung): Modell, Route, Tokens,
+  // Kostenschätzung, Retry/Repair-Flags und Kennzahlen des Ergebnisses.
+  // Alles nullable – Alt-Zeilen und Stub-Läufe haben sie nicht (voll).
+  model: text("model"),
+  route: measureRouteEnum("route"),
+  inputTokens: integer("input_tokens"),
+  outputTokens: integer("output_tokens"),
+  costUsd: doublePrecision("cost_usd"),
+  retryUsed: boolean("retry_used"),
+  repairUsed: boolean("repair_used"),
+  roofAreaMm2: doublePrecision("roof_area_mm2"),
+  netWallAreaMm2: doublePrecision("net_wall_area_mm2"),
+  openingCount: integer("opening_count"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

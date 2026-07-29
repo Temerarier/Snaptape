@@ -1,8 +1,8 @@
-// Messpipeline (Etappe 2, Skelett): läuft nach bestandener
-// Klassifizierung im Hintergrund. Extrahieren (Stub) → gegen den
-// v1.5-Vertrag validieren → Ergebnis nur anwenden, wenn das Projekt
-// noch zu genau diesem Lauf gehört. Jeder Lauf hinterlässt eine
-// Protokollzeile in measure_runs – auch veraltete.
+// Messpipeline: läuft nach bestandener Klassifizierung im Hintergrund.
+// Extrahieren (echt oder Stub) → gegen den v1.5-Vertrag validieren →
+// Ergebnis nur anwenden, wenn das Projekt noch zu genau diesem Lauf
+// gehört. Jeder Lauf hinterlässt eine Protokollzeile in measure_runs –
+// auch veraltete – inkl. Modell, Route, Tokens, Kosten und Kennzahlen.
 import { and, eq } from "drizzle-orm";
 import {
   db,
@@ -12,7 +12,8 @@ import {
   type ProjectFile,
 } from "@workspace/db";
 import { validateMeasurement } from "@workspace/measurement";
-import { standardExtraktor } from "./extraktor";
+import { standardExtraktor, type ExtraktionsErgebnis } from "./extraktor";
+import type { NutzerReferenz } from "./prompts";
 
 // Ajv-Fehler in lesbare Sätze übersetzen (für Anzeige + Protokoll).
 function lesbareFehler(
@@ -24,23 +25,89 @@ function lesbareFehler(
   });
 }
 
+// Kennzahlen fürs Protokoll aus dem validierten Measurement ziehen.
+// Fehlende Werte bleiben null – keine stillen Ersatzwerte.
+function kennzahlen(roh: unknown): {
+  roofAreaMm2: number | null;
+  netWallAreaMm2: number | null;
+  openingCount: number | null;
+} {
+  const r = roh as {
+    faces?: unknown;
+    openings?: unknown;
+  };
+  const faces = Array.isArray(r?.faces) ? r.faces : null;
+  const openings = Array.isArray(r?.openings) ? r.openings : null;
+  const wert = (m: unknown): number | null =>
+    m && typeof m === "object" && typeof (m as { value?: unknown }).value === "number"
+      ? ((m as { value: number }).value)
+      : null;
+  let roof: number | null = null;
+  let wandNetto: number | null = null;
+  if (faces) {
+    for (const f of faces as { face_class?: string; area_mm2?: unknown; net_area_mm2?: unknown }[]) {
+      if (f?.face_class === "roof_face") {
+        const a = wert(f.area_mm2);
+        if (a !== null) roof = (roof ?? 0) + a;
+      } else if (f?.face_class === "wall") {
+        const n = wert(f.net_area_mm2);
+        if (n !== null) wandNetto = (wandNetto ?? 0) + n;
+      }
+    }
+  }
+  return {
+    roofAreaMm2: roof,
+    netWallAreaMm2: wandNetto,
+    openingCount: openings ? openings.length : null,
+  };
+}
+
 export async function fuehreMessLaufAus(args: {
   projektId: string;
   runId: string;
   quality: "standard" | "premium";
   klassifizierung: ProjectClassification;
   dateien: ProjectFile[];
+  referenz?: NutzerReferenz | null;
 }): Promise<void> {
   const start = Date.now();
+  let ergebnis: ExtraktionsErgebnis | null = null;
   let roh: unknown = null;
   let fehlerListe: string[] = [];
   let warnungen: string[] = [];
   let ausgang: "model_ready" | "failed" = "failed";
 
+  // Referenzmaß nachladen, falls der Aufrufer es nicht mitgibt (das
+  // Projekt speichert es seit Etappe 1).
+  let referenz = args.referenz ?? null;
+  if (args.referenz === undefined) {
+    const [projekt] = await db
+      .select({
+        referenceObject: projectsTable.referenceObject,
+        referenceValue: projectsTable.referenceValue,
+        referenceUnit: projectsTable.referenceUnit,
+      })
+      .from(projectsTable)
+      .where(eq(projectsTable.id, args.projektId));
+    if (
+      projekt?.referenceObject &&
+      typeof projekt.referenceValue === "number" &&
+      projekt.referenceUnit
+    ) {
+      referenz = {
+        objekt: projekt.referenceObject,
+        wert: projekt.referenceValue,
+        einheit: projekt.referenceUnit,
+      };
+    }
+  }
+
   try {
-    roh = await standardExtraktor(args.dateien, args.klassifizierung, {
+    ergebnis = await standardExtraktor(args.dateien, args.klassifizierung, {
       quality: args.quality,
+      referenz,
     });
+    roh = ergebnis.roh;
     const validierung = validateMeasurement(roh);
     if (validierung.valid) {
       ausgang = "model_ready";
@@ -91,6 +158,11 @@ export async function fuehreMessLaufAus(args: {
     ];
   }
 
+  const zahlen = ausgang === "model_ready" ? kennzahlen(roh) : {
+    roofAreaMm2: null,
+    netWallAreaMm2: null,
+    openingCount: null,
+  };
   await db.insert(measureRunsTable).values({
     projectId: args.projektId,
     schemaVersion: "1.5",
@@ -100,5 +172,15 @@ export async function fuehreMessLaufAus(args: {
     outcome: ausgang,
     warnings: warnungen,
     errors: fehlerListe,
+    model: ergebnis?.model ?? null,
+    route: ergebnis?.route ?? null,
+    inputTokens: ergebnis?.inputTokens ?? null,
+    outputTokens: ergebnis?.outputTokens ?? null,
+    costUsd: ergebnis?.costUsd ?? null,
+    retryUsed: ergebnis?.retryUsed ?? null,
+    repairUsed: ergebnis?.repairUsed ?? null,
+    roofAreaMm2: zahlen.roofAreaMm2,
+    netWallAreaMm2: zahlen.netWallAreaMm2,
+    openingCount: zahlen.openingCount,
   });
 }
