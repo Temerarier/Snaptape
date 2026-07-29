@@ -47,6 +47,20 @@ export interface ExtraktionsErgebnis {
   zusammenfassung: string;
 }
 
+// Fehler der Extraktion, der die bis dahin angefallenen Metadaten
+// (Modell, Route, Tokens, Kosten, Retry/Repair) mitführt – damit auch
+// gescheiterte (und gerade die teuren) Läufe vollständig protokolliert
+// werden.
+export class ExtraktionsFehler extends Error {
+  constructor(
+    message: string,
+    public readonly meta: Omit<ExtraktionsErgebnis, "roh" | "zusammenfassung">,
+  ) {
+    super(message);
+    this.name = "ExtraktionsFehler";
+  }
+}
+
 // Route strikt aus dem Klassifizierungs-Ergebnis (photo/plan/mixed).
 export function bestimmeRoute(
   klassifizierung: ProjectClassification,
@@ -227,6 +241,20 @@ export async function extrahiereEcht(
     }
   }
 
+  // Fehler immer mit den bis hierher angefallenen Metadaten werfen,
+  // damit die Pipeline auch gescheiterte Läufe voll protokolliert.
+  const wirfMitMeta = (nachricht: string): never => {
+    throw new ExtraktionsFehler(nachricht, {
+      model,
+      route,
+      inputTokens,
+      outputTokens,
+      costUsd: schaetzeKostenUsd(optionen.quality, inputTokens, outputTokens),
+      retryUsed,
+      repairUsed,
+    });
+  };
+
   // 2. Parse-Fehler → EIN Repair-Aufruf (gleiches Modell, ohne Bilder).
   if (roh === null) {
     repairUsed = true;
@@ -242,12 +270,17 @@ export async function extrahiereEcht(
     });
     inputTokens += antwort.inputTokens;
     outputTokens += antwort.outputTokens;
-    roh = parseTolerant(antwort.text); // wirft → Lauf failed (Pipeline fängt)
+    try {
+      roh = parseTolerant(antwort.text);
+    } catch (fehler) {
+      // Auch der Repair-Versuch unbrauchbar → Lauf failed.
+      wirfMitMeta(fehler instanceof Error ? fehler.message : String(fehler));
+    }
   }
-  if (roh !== null && istDegeneriert(roh) && !retryUsed) {
-    // Repair lieferte parsebar, aber leer – als expliziter Fehler enden,
-    // statt ein absurdes Modell zu speichern.
-    throw new Error("extraction returned a degenerate (empty) result");
+  if (roh !== null && istDegeneriert(roh)) {
+    // Nach Retry bzw. Repair immer noch leer/absurd – expliziter
+    // Fehler statt ein degeneriertes Modell zu speichern.
+    wirfMitMeta("extraction returned a degenerate (empty) result");
   }
 
   // 3. compute.js + validate-assemble.js (1:1 portiert).

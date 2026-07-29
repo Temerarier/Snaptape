@@ -12,6 +12,7 @@ import {
   type ProjectFile,
 } from "@workspace/db";
 import { validateMeasurement } from "@workspace/measurement";
+import { ExtraktionsFehler } from "./echterExtraktor";
 import { standardExtraktor, type ExtraktionsErgebnis } from "./extraktor";
 import type { NutzerReferenz } from "./prompts";
 
@@ -72,6 +73,8 @@ export async function fuehreMessLaufAus(args: {
 }): Promise<void> {
   const start = Date.now();
   let ergebnis: ExtraktionsErgebnis | null = null;
+  // Metadaten gescheiterter Extraktionen (Tokens/Kosten fielen trotzdem an).
+  let fehlerMeta: ExtraktionsFehler["meta"] | null = null;
   let roh: unknown = null;
   let fehlerListe: string[] = [];
   let warnungen: string[] = [];
@@ -120,6 +123,7 @@ export async function fuehreMessLaufAus(args: {
     }
   } catch (fehler) {
     // Extraktor selbst gescheitert: explizit als failed protokollieren.
+    if (fehler instanceof ExtraktionsFehler) fehlerMeta = fehler.meta;
     fehlerListe = [fehler instanceof Error ? fehler.message : String(fehler)];
     console.error(`Messlauf ${args.runId} (Projekt ${args.projektId}):`, fehler);
   }
@@ -172,13 +176,13 @@ export async function fuehreMessLaufAus(args: {
     outcome: ausgang,
     warnings: warnungen,
     errors: fehlerListe,
-    model: ergebnis?.model ?? null,
-    route: ergebnis?.route ?? null,
-    inputTokens: ergebnis?.inputTokens ?? null,
-    outputTokens: ergebnis?.outputTokens ?? null,
-    costUsd: ergebnis?.costUsd ?? null,
-    retryUsed: ergebnis?.retryUsed ?? null,
-    repairUsed: ergebnis?.repairUsed ?? null,
+    model: ergebnis?.model ?? fehlerMeta?.model ?? null,
+    route: ergebnis?.route ?? fehlerMeta?.route ?? null,
+    inputTokens: ergebnis?.inputTokens ?? fehlerMeta?.inputTokens ?? null,
+    outputTokens: ergebnis?.outputTokens ?? fehlerMeta?.outputTokens ?? null,
+    costUsd: ergebnis?.costUsd ?? fehlerMeta?.costUsd ?? null,
+    retryUsed: ergebnis?.retryUsed ?? fehlerMeta?.retryUsed ?? null,
+    repairUsed: ergebnis?.repairUsed ?? fehlerMeta?.repairUsed ?? null,
     roofAreaMm2: zahlen.roofAreaMm2,
     netWallAreaMm2: zahlen.netWallAreaMm2,
     openingCount: zahlen.openingCount,
