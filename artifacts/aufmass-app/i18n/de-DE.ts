@@ -171,6 +171,7 @@ export const deDE: Dictionary = {
       klassifizierung:
         "Die Dateiprüfung ist fehlgeschlagen. Bitte versuchen Sie es gleich erneut.",
       generisch: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      keineBilderGewaehlt: "Keine für die Messung ausgewählten Bilder vorhanden.",
     },
   },
   viewer: {

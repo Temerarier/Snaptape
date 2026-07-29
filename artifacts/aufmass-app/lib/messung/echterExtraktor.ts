@@ -110,7 +110,7 @@ async function baueBildTeile(dateien: ProjectFile[]): Promise<BildTeil[]> {
     }
   }
   if (teile.length === 0) {
-    throw new Error("Keine für die Messung ausgewählten Bilder vorhanden.");
+    throw new Error("No images selected for measurement.");
   }
   const bilder = await Promise.all(
     teile.map(async (t) => {

@@ -169,6 +169,7 @@ export const enUS = {
       klassifizierung:
         "The file check failed. Please try again in a moment.",
       generisch: "Something went wrong. Please try again.",
+      keineBilderGewaehlt: "No images selected for measurement.",
     },
   },
   viewer: {

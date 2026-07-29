@@ -549,6 +549,20 @@ export async function starteMessungAction(
       .where(eq(projectFilesTable.id, dateiId));
   }
 
+  // Die in-memory `dateien`-Variable wurde VOR der Klassifizierung aus
+  // der DB gelesen und hat deshalb noch `classification: null`. Die
+  // Pipeline liest `datei.classification` direkt – ohne aktualisierte
+  // Werte fehlt `selectedForMeasurement: true` → Extraktor wirft
+  // "Keine Bilder ausgewählt". Deshalb hier synchronisieren.
+  const dateitenMitKlassi = dateien.map((d) => {
+    const einheiten = proDatei.get(d.id);
+    if (!einheiten) return d;
+    return {
+      ...d,
+      classification: einheiten.map(({ dateiId: _weg, ...rest }) => rest),
+    };
+  });
+
   if (ergebnis.overall === "rejected") {
     // Problemdateien: Dateien ohne eine einzige nutzbare Bildeinheit.
     const problemDateien = dateien.filter((d) =>
@@ -616,7 +630,7 @@ export async function starteMessungAction(
       runId,
       quality,
       klassifizierung,
-      dateien,
+      dateien: dateitenMitKlassi,
     }),
   );
 
