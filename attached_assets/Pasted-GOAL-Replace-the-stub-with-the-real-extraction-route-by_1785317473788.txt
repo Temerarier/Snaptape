@@ -1,0 +1,35 @@
+GOAL
+Replace the stub with the real extraction: route by upload type, one extraction prompt per route with the reference catalog injected, degenerate-retry, repair call, compute consolidation, validation.
+
+CONTEXT
+- Attached, all updated to schema v1.5 - use VERBATIM:
+  - docs/pipeline/extract-photo-prompt.md, extract-plan-prompt.md, extract-mixed-prompt.md
+  - docs/pipeline/repair-prompt.md
+  - docs/pipeline/reference-catalog.md (injected into every extraction prompt - it is the ONLY source for assumed sizes)
+  - docs/pipeline/compute.js and validate-assemble.js (existing, tested logic - keep it 1:1, only adapt input/output wiring)
+- Model routing: quality "standard" -> [Kimi model id], "premium" -> [Fable model id]. Keys via Secrets.
+
+BUILD
+- extract(files, classification, options):
+  1. Route by classification: photo_exterior only -> photo prompt; plans only -> plan prompt; both -> mixed prompt.
+  2. Build the call: system text + schema v1.5 + reference catalog + user reference (if provided, as scale_type "user_provided" which overrides catalog assumptions) + the files.
+     - Files go in as IMAGES for BOTH models (photos as-is downscaled, PDF pages as the pre-rendered PNGs - never the raw PDF).
+     - ONLY pages/photos classified as usable are included (max 15 plan pages, per the classification filter); unusable pages are excluded from the call.
+     - Before each image, add a short text marker with source and order: 'photo 3' / 'grundriss.pdf, page 2/5'.
+  3. Parse the response tolerantly (the model's content may need a leading "{" prepended).
+  4. Degenerate output (empty or obviously absurd result) -> ONE retry with fresh sampling, same prompt.
+  5. Parse failure -> ONE repair call with the repair prompt, then parse again; still broken -> status failed.
+  6. Run compute.js (weighted-median consolidation of quality.raw_estimates by reliability and photo angle, derives building dimensions, emits warnings).
+  7. Run validate-assemble.js checks, then validateMeasurement (ajv). Valid -> store, model_ready.
+- EXTEND the existing run-log records and the /admin/measurements table (do not rebuild them) with NEW columns per run: model, route (photo/plan/mixed), tokens, cost estimate, retry/repair used yes/no, plus the key measurement results (roof area + squares, net wall area, opening count). The existing columns and the per-row link to the measurement JSON/viewer stay as they are.
+- Table layout fix: with the added columns, make the table horizontally scrollable (one line per run, no squeezed wrapping). Long content like warnings collapses to a count badge ("2 warnings") that expands on click/hover to the full texts - a row must never grow tall because of warning texts.
+- Keep the stub behind a dev flag.
+
+DO NOT
+- Do not edit prompt texts, catalog, or the ported compute/validate logic - if output doesn't fit, fix parsing, not the schema or prompts.
+- Do not add extra LLM calls beyond: extract, (retry), (repair).
+
+DONE WHEN
+- [ ] A photo-only set, a plan-PDF-only set, and a mixed set each run to model_ready on both quality levels.
+- [ ] The stored JSON validates with zero manual fixes; user reference appears as references[] scale_type "user_provided".
+- [ ] The log shows route, model, cost, and whether retry/repair fired.
