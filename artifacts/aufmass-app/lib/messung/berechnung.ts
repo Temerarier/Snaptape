@@ -189,6 +189,8 @@ export function validiereUndAssembliere(p: ComputeInput): ValidateAssembleOutput
   ['references', 'faces', 'edges', 'openings'].forEach(k => { if (!Array.isArray(r[k])) { v.push(k + ' is not an array'); r[k] = []; } });
   // v1.5: optional arrays default to [] instead of failing
   ['attachments', 'downspouts', 'condition_areas'].forEach(k => { if (r[k] === null || r[k] === undefined) r[k] = []; else if (!Array.isArray(r[k])) { v.push(k + ' is not an array'); r[k] = []; } });
+  // building.footprint.points is optional: null/undefined → [] (model cannot always derive the outline)
+  const fpn = r.building && r.building.footprint; if (fpn) { if (fpn.points === null || fpn.points === undefined) fpn.points = []; else if (!Array.isArray(fpn.points)) { v.push('building.footprint.points is not an array'); fpn.points = []; } }
   const idRules: [string, RegExp][] = [['faces', /^(RF|WL|SF|FC)-\d+$/], ['edges', /^E-\d+$/], ['openings', /^(W|D|G|SK)-\d+$/], ['attachments', /^AT-\d+$/], ['downspouts', /^DS-\d+$/], ['condition_areas', /^CA-\d+$/]]; // v1.5: new id patterns
   idRules.forEach(pair => { const k = pair[0]; const rx = pair[1]; (r[k] || []).forEach((el: any) => { if (!el || typeof el.id !== 'string' || !rx.test(el.id)) v.push(k + ': bad id ' + (el && el.id)); }); });
   const EDGE_CLASSES = ['ridge', 'hip', 'valley', 'eave', 'rake', 'flashing', 'step_flashing', 'outside_corner', 'inside_corner', 'base', 'head', 'sill', 'jamb', 'unclassified'];
