@@ -1,0 +1,102 @@
+Fix pack for the measurement compute/validate logic, plus one small
+admin-view change.
+
+RULE FOR EVERY LOGIC FIX (Parts A and B): apply it in BOTH places —
+the source templates docs/pipeline/compute.js and
+docs/pipeline/validate-assemble.js AND their 1:1 port
+lib/messung/berechnung.ts. Template and port must stay logically
+identical. Do not change the schema file, the extraction prompts, or
+the extractor call flow.
+
+--- PART A ---
+
+A0. Backport an earlier fix: the null -> [] normalization for
+    building.footprint.points exists only in berechnung.ts. Add the
+    same guard to docs/pipeline/validate-assemble.js.
+
+A1. General null tolerance: before Ajv schema validation, validate
+    once; for every error of the form "must be number/array/string/
+    object" whose actual value in the document is null, remove that
+    property (arrays -> []) and validate a second time. One healing
+    pass only; remaining errors after the second validation fail the
+    run as today. Covers "/faces/N/pitch/rise_over_12_snapped: must
+    be number" and all future optional-field nulls.
+
+A2. rise_over_12_snapped fallback: in compute, when a roof face has
+    pitch.degrees_original but no numeric rise_over_12_snapped,
+    compute it: tan(degrees) * 12, snapped to the nearest of
+    0..12,14,16,18,24.
+
+A3. Ridge clamp is wrong for buildings with more than one ridge
+    (cross-wing houses): the code clamps/rescales the SUM of all
+    ridge edges against the footprint max dimension, shrinking valid
+    ridges (real run: 17500 -> 13200, both ridges rescaled). Change:
+    with MORE THAN ONE ridge edge, never rescale the sum; clamp each
+    individual ridge edge to footprint max dimension * 1.05 and warn
+    per edge. Sum-based rescale/clamp stays only for the single-ridge
+    case.
+
+A4. Consolidation confidence after outlier removal: when the
+    weighted-median consolidation removes one or more outlier
+    estimates, cap the resulting value at confidence "low" (today it
+    can come out "medium" and hide a real conflict between photos).
+
+A5. Footprint points vs consolidated values: after consolidation, if
+    footprint.points exist and their bounding box differs more than
+    3% from consolidated width_mm/depth_mm, scale the points
+    axis-wise so the bounding box matches, then compute area and
+    perimeter from the scaled points as today. Warn that points were
+    rescaled.
+
+A6. Geometry checks on complex roofs: skip the single-pitch
+    gable/hip formula block (same mechanism as the existing
+    unequalPitch skip) whenever there is more than one ridge edge or
+    at least one valley edge; add one warning noting the skip.
+
+A7. "net area not derived" noise: when several wall faces share an
+    elevation and a face already carries a model-supplied
+    net_area_mm2, accept it silently. Only warn when such a face has
+    NO net value.
+
+--- PART B ---
+
+B1. Flat faces poison the roof pitch statistics: a flat annex roof
+    (pitch 2 deg) entered the pitch list next to 35-42 deg main
+    slopes, so the unequal-pitch ridge formula expected a 10.5 m
+    ridge and produced a false "ridge length 70% off" warning. Fix:
+    for the pitch statistics and all ridge/geometry checks, ignore
+    roof faces with pitch below 10 degrees whenever other roof faces
+    are 15 degrees or steeper. (Flat-only buildings are unaffected.)
+
+B2. Openings above the eave must not reduce wall net area: dormer
+    windows carry the wall's elevation (e.g. "back") but sit above
+    the eave (sill 7350 vs eave 6450) and were subtracted from the
+    wall, producing a false "net differs" warning against the
+    model's correct number. Fix: in the gross-minus-openings
+    computation and in the net-area cross-check, exclude openings
+    whose sill_height_mm is at or above the elevation's eave height
+    (per-elevation value if present, else the global eave height).
+
+B3. spread_percent must be the WORST spread, not the last: the code
+    overwrites q.spread_percent per consolidation target, so a run
+    with 13.8% width spread ended up showing 2.2% (ridge, computed
+    last). Keep the maximum across all targets.
+
+--- ADMIN VIEW ---
+
+C1. In /admin/measurements, add a "Copy JSON" button next to the
+    existing JSON link of each run, copying the stored measurement
+    JSON to the clipboard (with a brief "copied" confirmation). No
+    other admin-view changes.
+
+DONE WHEN:
+- Templates and berechnung.ts contain identical logic for A0-A7 and
+  B1-B3.
+- The rise_over_12_snapped failure run passes on re-run.
+- A cross-wing case (two ridges summing above footprint max) no
+  longer rescales both ridges.
+- A flat annex face no longer triggers the ridge geometry warning.
+- Dormer openings no longer reduce wall net areas.
+- Copy JSON works in the admin view.
+- Existing unit tests pass; add small unit tests for A1, A3, A4, B1,
+  B2.
