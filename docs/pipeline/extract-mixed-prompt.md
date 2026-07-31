@@ -79,6 +79,17 @@ CONDITION RULE (v1.4): report ONLY damage that is actually visible in the photos
 
 For plan pages: condition is a photo-only task - never derive damage from drawings. Colors come from the photos primarily; a colored elevation or a color/material legend on the plan may serve as a fallback or confirmation (cap drawing-derived color confidence at medium, state the source in color.note). Roof covering from photos primarily; a drawing annotation may confirm it.
 
+GRAPHIC SCALE FALLBACK: if a target value has no written dimension on
+the sheet, but at least one written dimension chain exists, derive
+the drawing scale from that chain (prefer a chain on the SAME
+drawing/view as the target) and measure the target graphically from
+the drawing. Emit such values with source "estimated" and confidence
+"low" - NEVER "measured" - and name the derivation in reference_used
+(e.g. "graphic via sheet scale from Giebelansicht chain 11.19 m").
+Written dimensions always take priority where they exist. Only when a
+sheet contains no written dimension at all and no user reference is
+given do affected values stay null with a low_reason.
+
 OUTPUT: fill exactly the attached JSON schema. Emit the top-level keys in exactly this order: meta, building, references, attachments, faces, edges, openings, downspouts, condition_areas, quality - most critical first, so an unexpected cutoff loses only the tail. Return ONLY the JSON object - no markdown fences, no commentary before or after. Per value: reference_used, confidence, source. Not visible or uncertain: null plus a reason. Do not invent elements or reference objects. Do not pad the JSON with placeholder entries.
 
 dimension_chains example (transcribe plan dimension chains verbatim): {"page":2,"label":"EG Suedfassade","values_mm":[3990,1010,3990],"stated_total_mm":8990,"computed_sum_mm":8990,"deviation_percent":0}
