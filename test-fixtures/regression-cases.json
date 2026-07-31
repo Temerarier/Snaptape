@@ -1,0 +1,153 @@
+{
+  "$comment": "SnapTape regression cases v1. Values in mm unless noted. Sources: Bestand plans (Rapp+Tochtenhagen 2019, luka architekten 2012) and the July 2026 GT protocol. tolerance_percent applies to premium runs; standard runs are allowed 2x the tolerance. Cases with expect:null are smoke cases: the run must complete and pass validation, values are recorded but not asserted.",
+  "fixture_dir": "test-fixtures",
+  "cases": [
+    {
+      "id": "neuengamme-photo",
+      "route": "photo",
+      "files": [
+        "neuengamme/IMG_1963.jpeg",
+        "neuengamme/IMG_1966.jpeg"
+      ],
+      "user_reference": null,
+      "expect": {
+        "building.footprint.width_mm": { "value": 13000, "tolerance_percent": 8, "note": "OG plan 13.04 / EG 12.64 / KG 13.14" },
+        "building.footprint.depth_mm": { "value": 10600, "tolerance_percent": 10, "note": "main body; wing incl. bay reaches 13.45" },
+        "building.heights.per_elevation[front].eave_height_mm": { "value": 5600, "tolerance_percent": 15, "note": "wall table: 5.60 m side" },
+        "building.heights.per_elevation[back].eave_height_mm": { "value": 7750, "tolerance_percent": 15, "note": "wall table: 7.75 m side (Drempel)" },
+        "building.heights.ridge_height_mm": { "value": 9800, "tolerance_percent": 15, "estimate": true, "note": "derived from section storey chain, not a printed total" },
+        "roof.median_pitch_deg": { "value": 37, "tolerance_abs": 6, "note": "west gable: rise 3.80 over half-span 5.00" },
+        "roof.type": { "one_of": ["other", "gable", "hip"], "note": "two crossing gable roofs, hip at one end - 'other' is the best single label" },
+        "counts.roof_faces_min": 4,
+        "sum.ridge_edges_mm": { "value": 17500, "tolerance_percent": 20, "note": "two crossing ridges; must NOT be clamped to footprint max (fix A3)" }
+      }
+    },
+    {
+      "id": "leipzig-photo",
+      "route": "photo",
+      "files": [
+        "leipzig/IMG_6794.jpeg",
+        "leipzig/IMG_6797.jpeg",
+        "leipzig/IMG_6799.jpeg",
+        "leipzig/IMG_6804.jpeg",
+        "leipzig/IMG_6805.jpeg",
+        "leipzig/IMG_6807.jpeg",
+        "leipzig/IMG_6809.jpeg",
+        "leipzig/IMG_6810.jpeg",
+        "leipzig/seitenansiicht.jpg"
+      ],
+      "user_reference": null,
+      "expect": {
+        "building.footprint.width_mm": { "value": 12940, "tolerance_percent": 8, "note": "NO elevation total, excl. garage 3.52" },
+        "building.footprint.depth_mm": { "value": 10000, "tolerance_percent": 10, "note": "SO elevation, excl. annex 2.875" },
+        "building.heights.per_elevation[front].eave_height_mm": { "value": 7340, "tolerance_percent": 12, "note": "+7.345 above street datum +-0.00" },
+        "building.heights.ridge_height_mm": { "value": 12225, "tolerance_percent": 12, "note": "section +12.225" },
+        "roof.median_pitch_deg": { "value": 45, "tolerance_abs": 7, "note": "hip lower slopes, from section" },
+        "roof.type": { "one_of": ["hip", "mansard"], "note": "Walmdach with dormers" },
+        "counts.dormers_min": 3,
+        "counts.roof_faces_min": 4,
+        "site.grade_falls_to_back": true
+      }
+    },
+    {
+      "id": "leipzig-plan",
+      "route": "plan",
+      "files": [
+        "leipzig/Aufmass_Entwurf_Lausicker_Str_26.pdf"
+      ],
+      "user_reference": null,
+      "expect": {
+        "building.footprint.width_mm": { "value": 12940, "tolerance_percent": 2, "note": "written dimension - plan route must read, not estimate" },
+        "building.footprint.depth_mm": { "value": 10000, "tolerance_percent": 2 },
+        "building.heights.per_elevation[front].eave_height_mm": { "value": 7345, "tolerance_percent": 3 },
+        "building.heights.ridge_height_mm": { "value": 12225, "tolerance_percent": 3 },
+        "roof.type": { "one_of": ["hip", "mansard"] },
+        "quality.dimension_chains_min": 3
+      }
+    },
+    {
+      "id": "neuengamme-mixed",
+      "route": "mixed",
+      "files": [
+        "neuengamme/IMG_1963.jpeg",
+        "neuengamme/IMG_1966.jpeg",
+        "neuengamme/Plaene_Neuengammer_Hausdeich_hoehe.pdf"
+      ],
+      "user_reference": null,
+      "expect": {
+        "building.footprint.width_mm": { "value": 13000, "tolerance_percent": 4, "note": "plan values must win over photo chains (source measured kept)" },
+        "building.footprint.depth_mm": { "value": 10600, "tolerance_percent": 6 },
+        "roof.type": { "one_of": ["other", "gable", "hip"] }
+      }
+    },
+    {
+      "id": "altengamme-photo",
+      "route": "photo",
+      "files": [
+        "altengamme/imagealten.jpg",
+        "altengamme/image_alten_2.jpg"
+      ],
+      "user_reference": null,
+      "expect": {
+        "building.footprint.width_mm": { "value": 14300, "tolerance_percent": 10, "note": "EG plan total 14.30 (historic ~1900 plan set)" },
+        "roof.type": { "one_of": ["jerkinhead", "hip", "gable"], "note": "gable with half-hipped ends (Krueppelwalm) and a small cross gable over the entrance" }
+      },
+      "$comment": "heights unvalidated; depth reading from the scan too uncertain to assert (~10.3-10.4)"
+    },
+    {
+      "id": "altengamme-plan",
+      "route": "plan",
+      "files": [
+        "altengamme/plan_vorderansicht.jpg",
+        "altengamme/plan_erdgeschoss.jpg",
+        "altengamme/plan_obergeschoss.jpg",
+        "altengamme/plan_dachgeschoss.jpg"
+      ],
+      "user_reference": null,
+      "expect": {
+        "building.footprint.width_mm": { "value": 14300, "tolerance_percent": 3, "note": "written EG total 14.30" },
+        "quality.dimension_chains_min": 2
+      },
+      "$comment": "robustness test: handwritten ~1900 plan set uploaded as JPG scans (Sütterlin labels, low resolution). Heights are not legibly dimensioned - height values must come out estimated/low, never measured."
+    },
+    {
+      "id": "braamheide-photo",
+      "route": "photo",
+      "files": [
+        "braamheide/IMG_5435.jpeg",
+        "braamheide/IMG_5436.jpeg",
+        "braamheide/IMG_5437.jpeg",
+        "braamheide/IMG_5438.jpeg",
+        "braamheide/IMG_5439.jpeg",
+        "braamheide/IMG_5440.jpeg"
+      ],
+      "user_reference": null,
+      "expect": {
+        "building.footprint.depth_mm": { "value": 11194, "tolerance_percent": 12, "note": "gable side total 11.19 from the 1979 elevation chain; street side is the eave side" },
+        "roof.type": { "one_of": ["gable"] },
+        "roof.median_pitch_deg": { "value": 48, "tolerance_abs": 10, "estimate": true, "note": "read off the drawing, not a printed value" }
+      },
+      "$comment": "partial GT: only the gable-side chain is dimensioned; heights unvalidated"
+    },
+    {
+      "id": "braamheide-plan",
+      "route": "plan",
+      "files": [
+        "braamheide/Hausansicht_Braamheide_1.pdf"
+      ],
+      "user_reference": null,
+      "expect": {
+        "building.footprint.depth_mm": { "value": 11194, "tolerance_percent": 3, "note": "written chain total 11.19(4) on the Giebelansicht page; scan is rotated 90 deg and low quality - also a robustness test" },
+        "roof.type": { "one_of": ["gable"] },
+        "quality.dimension_chains_min": 1
+      },
+      "$comment": "heights are NOT dimensioned on this plan; height values must come out as estimated/low, never as measured"
+    }
+  ],
+  "pass_rules": {
+    "premium": "every expect value within tolerance_percent / tolerance_abs",
+    "standard": "every expect value within 2x tolerance",
+    "smoke": "run completes, schema-valid, no VALIDATION warnings, faces/edges/openings non-empty",
+    "always": "no run may fail with an unhandled error; ridge edge sum must never be rescaled when more than one ridge edge exists (fix A3)"
+  }
+}
