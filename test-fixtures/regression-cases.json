@@ -108,7 +108,7 @@
         "building.footprint.width_mm": { "value": 14300, "tolerance_percent": 3, "note": "written EG total 14.30" },
         "quality.dimension_chains_min": 2
       },
-      "$comment": "robustness test: handwritten ~1900 plan set uploaded as JPG scans (Sütterlin labels, low resolution). Heights are not legibly dimensioned - height values must come out estimated/low, never measured."
+      "$comment": "robustness test: handwritten ~1900 plan set uploaded as JPG scans (Sütterlin labels, low resolution). Heights are not legibly dimensioned - height values must come out source 'scaled' or 'estimated' (graphic scale fallback), never 'measured'."
     },
     {
       "id": "braamheide-photo",
@@ -141,7 +141,7 @@
         "roof.type": { "one_of": ["gable"] },
         "quality.dimension_chains_min": 1
       },
-      "$comment": "heights are NOT dimensioned on this plan; height values must come out as estimated/low, never as measured"
+      "$comment": "heights are NOT dimensioned on this plan; height values must come out source 'scaled' or 'estimated' (graphic scale fallback), never 'measured'"
     }
   ],
   "pass_rules": {

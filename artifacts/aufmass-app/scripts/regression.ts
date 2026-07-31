@@ -273,7 +273,10 @@ function pruefeHoehenNieGemessen(m: any): PruefZeile[] {
   return [
     {
       metric: "heights.never_measured",
-      gt: "no height source 'measured'",
+      // Graphically-derived plan heights come out source="scaled" (berechnung
+      // weighted-median consolidation) or source="estimated" (model-direct field).
+      // Both are acceptable; only source="measured" is rejected.
+      gt: "source 'scaled' or 'estimated', never 'measured'",
       actual: gemessen.length ? gemessen.map(([n]) => n).join(", ") : "ok",
       error: "",
       status: gemessen.length ? "FAIL" : "pass",
