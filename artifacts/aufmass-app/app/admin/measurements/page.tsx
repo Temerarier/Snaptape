@@ -6,6 +6,7 @@
 import Link from "next/link";
 import { desc, eq } from "drizzle-orm";
 import { db, measureRunsTable, projectsTable, usersTable } from "@workspace/db";
+import { CopyJsonButton } from "@/components/admin/CopyJsonButton";
 import { getDictionary, toLocale } from "@/i18n";
 import { requireStaff } from "@/lib/auth/staff";
 
@@ -253,6 +254,11 @@ export default async function AdminMessungenSeite() {
                         >
                           {t.jsonLink}
                         </Link>
+                        <CopyJsonButton
+                          json={run.hatMeasurement}
+                          label={t.jsonKopieren}
+                          copiedLabel={t.jsonKopiert}
+                        />
                         <Link
                           href={`/admin/projekt/${run.projektId}/viewer`}
                           className="font-medium text-schrift underline underline-offset-2 hover:text-schrift-sekundaer"

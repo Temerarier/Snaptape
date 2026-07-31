@@ -12,6 +12,7 @@ import {
   type ProjectFile,
 } from "@workspace/db";
 import { validateMeasurement } from "@workspace/measurement";
+import { heileNullFelder } from "./berechnung";
 import { ExtraktionsFehler } from "./echterExtraktor";
 import { standardExtraktor, type ExtraktionsErgebnis } from "./extraktor";
 import type { NutzerReferenz } from "./prompts";
@@ -111,7 +112,13 @@ export async function fuehreMessLaufAus(args: {
       referenz,
     });
     roh = ergebnis.roh;
-    const validierung = validateMeasurement(roh);
+    let validierung = validateMeasurement(roh);
+    if (!validierung.valid) {
+      // A1: genau EINE Heilungsrunde – null-Werte in optionalen Feldern
+      // entfernen (Arrays -> []) und ein zweites Mal validieren.
+      const geheilt = heileNullFelder(roh, validierung.errors ?? []);
+      if (geheilt > 0) validierung = validateMeasurement(roh);
+    }
     if (validierung.valid) {
       ausgang = "model_ready";
       const q = (roh as { quality?: { warnings?: unknown } }).quality;

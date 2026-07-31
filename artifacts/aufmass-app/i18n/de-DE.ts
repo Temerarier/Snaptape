@@ -328,6 +328,8 @@ export const deDE: Dictionary = {
       repairKuerzel: "Repair",
       squaresKuerzel: "Sq",
       jsonLink: "JSON",
+      jsonKopieren: "JSON kopieren",
+      jsonKopiert: "Kopiert!",
       viewerLink: "Viewer",
       keinErgebnis: "nicht vorhanden",
     },

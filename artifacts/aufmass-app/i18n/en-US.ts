@@ -323,6 +323,8 @@ export const enUS = {
       repairKuerzel: "repair",
       squaresKuerzel: "sq",
       jsonLink: "JSON",
+      jsonKopieren: "Copy JSON",
+      jsonKopiert: "Copied!",
       viewerLink: "Viewer",
       keinErgebnis: "none stored",
     },
