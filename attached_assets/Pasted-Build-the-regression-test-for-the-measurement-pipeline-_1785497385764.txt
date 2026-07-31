@@ -1,0 +1,73 @@
+Build the regression test for the measurement pipeline (step 2c of
+docs/plan.md). It measures RESULT QUALITY against known ground-truth
+values, using the real extraction — never the stub.
+
+WHAT EXISTS
+- test-fixtures/ with four house folders (photos + plan PDFs/JPGs)
+  and test-fixtures/regression-cases.json describing 8 cases: files,
+  route (photo/plan/mixed), and "expect" values with tolerances.
+  Cases with "expect": null are smoke cases (see pass_rules in the
+  file).
+- The real pipeline: classification, extraction (kimi-k3 /
+  claude-fable-5), compute + validate in lib/messung/. The dev
+  extraction test route shows how to invoke the pipeline
+  programmatically.
+
+BUILD
+A CLI script (e.g. pnpm regression) that, for each case:
+1. Creates a throwaway internal project, registers the case's fixture
+   files exactly as a real upload would (PDF pages rendered to PNG,
+   same classification, same routing) and runs the REAL measurement
+   pipeline end to end. Never the stub extractor, regardless of any
+   dev flag.
+2. Extracts the metrics named in "expect" from the result JSON.
+   Key conventions:
+   - dotted paths address the measurement JSON
+     (building.footprint.width_mm means that field's .value)
+   - per_elevation[front].eave_height_mm selects the per_elevation
+     entry with elevation "front"
+   - roof.median_pitch_deg = median of pitch.degrees_original over
+     roof faces with pitch >= 10 deg
+   - roof.type = building.roof_type, checked against "one_of"
+   - sum.ridge_edges_mm = sum of all edges with edge_class "ridge"
+   - counts.roof_faces_min / counts.dormers_min = minimum counts
+     (dormers = attachments of type "dormer")
+   - quality.dimension_chains_min = minimum number of entries in
+     quality.dimension_chains
+   - site.grade_falls_to_back = any per_elevation[back]
+     grade_offset_mm.value < -300
+3. Applies tolerances: "tolerance_percent" / "tolerance_abs" as given
+   for premium runs; standard runs pass at 2x tolerance. Values with
+   "estimate": true are reported but never fail a case. Smoke cases
+   pass per pass_rules.smoke. Where a case comment says heights must
+   never be "measured", assert that.
+4. Writes per case: pass/fail per metric (GT, actual, error), model,
+   route, tokens, cost, duration; stores the full result JSON under
+   test-results/<timestamp>/<case-id>.json.
+5. Prints a summary table and exits non-zero if any non-estimate
+   assertion fails.
+
+CLI OPTIONS
+--case <id> (run one case), --quality standard|premium (default
+premium), --list (show cases without running). No scheduling, no CI
+hook - the script is started manually because every run costs real
+API money.
+
+RULES
+- EXTEND existing pipeline code, do not duplicate or rebuild it. The
+  script must exercise the same code path as a real customer run.
+- Do not modify the schema, prompts, compute/validate logic, or
+  regression-cases.json.
+- Runs are internal: they may appear in the admin measurement log
+  (marked as regression runs) but must never appear in any customer
+  project list.
+
+DONE WHEN
+- pnpm regression --list shows all 8 cases.
+- pnpm regression --case braamheide-plan completes a REAL run end to
+  end and prints its metric table (this is the cheapest case - one
+  small PDF).
+- The summary and stored JSONs appear under test-results/.
+- No other behavior of the app changed.
+When done, commit with message "2c regression test" and push to
+GitHub.
