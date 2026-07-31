@@ -16,6 +16,49 @@ const mess = (value: number, confidence = "high", source = "measured") => ({
   low_reason: null,
 });
 
+describe("A0: footprint.points null -> [] im Produktions-Validierungspfad", () => {
+  // echterExtraktor ruft validiereUndAssembliere auf und persistiert
+  // geprueft.result – points: null darf dort nie ankommen.
+  it("normalisiert points: null zu [], bevor das Ergebnis gespeichert wird", () => {
+    const out = validiereUndAssembliere({
+      result: {
+        meta: { country: "DE" },
+        building: {
+          roof_type: "gable",
+          footprint: { points: null, width_mm: mess(10_000), depth_mm: mess(8_000) },
+        },
+        references: [],
+        faces: [{ id: "WL-1", face_class: "wall", elevation: "front", area_mm2: mess(50_000_000) }],
+        edges: [{ id: "E-1", edge_class: "eave", length_mm: mess(10_000) }],
+        openings: [],
+      },
+    } as any);
+    expect(out.result.building.footprint.points).toEqual([]);
+    expect(out.violations).not.toContain("building.footprint.points is not an array");
+  });
+
+  it("normalisiert auch fehlende points zu [] und meldet Nicht-Arrays als Verstoß", () => {
+    const basis = (points: unknown, mitPoints: boolean) => ({
+      result: {
+        meta: { country: "DE" },
+        building: {
+          roof_type: "gable",
+          footprint: mitPoints ? { points } : {},
+        },
+        references: [],
+        faces: [{ id: "WL-1", face_class: "wall", elevation: "front", area_mm2: mess(50_000_000) }],
+        edges: [{ id: "E-1", edge_class: "eave", length_mm: mess(10_000) }],
+        openings: [],
+      },
+    });
+    const ohne = validiereUndAssembliere(basis(undefined, false) as any);
+    expect(ohne.result.building.footprint.points).toEqual([]);
+    const falsch = validiereUndAssembliere(basis("keine Liste", true) as any);
+    expect(falsch.result.building.footprint.points).toEqual([]);
+    expect(falsch.violations).toContain("building.footprint.points is not an array");
+  });
+});
+
 describe("A1: heileNullFelder (eine Heilungsrunde vor der zweiten Validierung)", () => {
   it("entfernt null-Eigenschaften bei 'must be number' und ersetzt Arrays durch []", () => {
     const doc: any = {
