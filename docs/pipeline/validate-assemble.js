@@ -1,12 +1,31 @@
 
-// A1: one healing pass between the two Ajv schema validations (schema-validation step):
-// validate once; for every error "must be number/array/string/object" whose actual value
-// is null, drop the property (arrays -> []); validate a second time. Remaining errors
-// after the second validation fail the run as before. Ported 1:1 as heileNullFelder in
-// lib/messung/berechnung.ts and applied around validateMeasurement in the app pipeline.
+// A1: one healing pass between the two Ajv schema validations. Wiring contract for the
+// schema-validation step (n8n and app pipeline alike): validate once; call
+// healNullFields(result, ajvErrors); if it healed anything, validate a SECOND and final
+// time. For every error "must be number/array/string/object" whose actual value is null,
+// the property is dropped (arrays -> []). Remaining errors after the second validation
+// fail the run as before. Ported 1:1 as heileNullFelder in lib/messung/berechnung.ts and
+// executed around validateMeasurement in lib/messung/pipeline.ts.
+// Errors are processed in DESCENDING path order so splicing an array element cannot
+// shift the indices of elements still to be healed.
 function healNullFields(doc, errors) {
   let healed = 0;
-  (errors || []).forEach(err => {
+  const segsOf = (path) => String(path || '').split('/').slice(1);
+  const sorted = (errors || []).slice().sort((a, b) => {
+    const A = segsOf(a && a.instancePath), B = segsOf(b && b.instancePath);
+    const n = Math.max(A.length, B.length);
+    for (let i = 0; i < n; i++) {
+      const x = A[i], y = B[i];
+      if (x === y) continue;
+      if (x === undefined) return 1;
+      if (y === undefined) return -1;
+      const nx = Number(x), ny = Number(y);
+      if (!Number.isNaN(nx) && !Number.isNaN(ny)) return ny - nx;
+      return x < y ? 1 : -1;
+    }
+    return 0;
+  });
+  sorted.forEach(err => {
     const m = /^must be (number|integer|array|string|object)$/.exec(String(err && err.message || ''));
     if (!m || !err.instancePath) return;
     const parts = err.instancePath.split('/').slice(1).map(s => s.replace(/~1/g, '/').replace(/~0/g, '~'));

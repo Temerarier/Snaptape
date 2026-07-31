@@ -31,6 +31,16 @@ describe("A1: heileNullFelder (eine Heilungsrunde vor der zweiten Validierung)",
     expect(doc.downspouts).toEqual([]);
   });
 
+  it("heilt benachbarte null-Array-Elemente ohne Index-Verschiebung", () => {
+    const doc: any = { edges: [null, null, { id: "E-1" }] };
+    const healed = heileNullFelder(doc, [
+      { instancePath: "/edges/0", message: "must be object" },
+      { instancePath: "/edges/1", message: "must be object" },
+    ]);
+    expect(healed).toBe(2);
+    expect(doc.edges).toEqual([{ id: "E-1" }]);
+  });
+
   it("lässt nicht-null-Werte und fremde Fehlermeldungen unangetastet", () => {
     const doc: any = { building: { roof_type: 42 } };
     const healed = heileNullFelder(doc, [

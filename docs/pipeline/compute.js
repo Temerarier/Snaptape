@@ -144,8 +144,7 @@ if (fp && Array.isArray(fp.points) && fp.points.length >= 3) {
   if (!w3 || !d3) return;
   const rf = (Array.isArray(r.faces) ? r.faces : []).filter(f => f && f.face_class === 'roof_face');
   if (rf.length !== 2) return;
-  const pl0 = rf.filter(f => f.pitch && typeof f.pitch.degrees_original === 'number').map(f => f.pitch.degrees_original);
-  const pl = (pl0.some(x => x >= 15) ? pl0.filter(x => x >= 10) : pl0).sort((a, b) => a - b); // B1: ignore near-flat faces (<10 deg) when other faces are >=15 deg
+  const pl = rf.filter(f => f.pitch && typeof f.pitch.degrees_original === 'number').map(f => f.pitch.degrees_original).sort((a, b) => a - b);
   if (!pl.length) return;
   const pdeg = pl[Math.floor((pl.length - 1) / 2)];
   if (pdeg <= 3 || pdeg >= 80) return;

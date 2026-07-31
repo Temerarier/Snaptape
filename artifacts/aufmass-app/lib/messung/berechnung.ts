@@ -171,8 +171,7 @@ export function berechneKonsolidierung(p: ComputeInput): ComputeInput {
     if (!w3 || !d3) return;
     const rf = (Array.isArray(r.faces) ? r.faces : []).filter((f: any) => f && f.face_class === 'roof_face');
     if (rf.length !== 2) return;
-    const pl0 = rf.filter((f: any) => f.pitch && typeof f.pitch.degrees_original === 'number').map((f: any) => f.pitch.degrees_original);
-    const pl = (pl0.some((x: number) => x >= 15) ? pl0.filter((x: number) => x >= 10) : pl0).sort((a: number, b: number) => a - b); // B1: ignore near-flat faces (<10 deg) when other faces are >=15 deg
+    const pl = rf.filter((f: any) => f.pitch && typeof f.pitch.degrees_original === 'number').map((f: any) => f.pitch.degrees_original).sort((a: number, b: number) => a - b);
     if (!pl.length) return;
     const pdeg = pl[Math.floor((pl.length - 1) / 2)];
     if (pdeg <= 3 || pdeg >= 80) return;
@@ -233,12 +232,30 @@ export function berechneKonsolidierung(p: ComputeInput): ComputeInput {
 // tatsächlicher Wert null ist, wird die Eigenschaft entfernt (Arrays -> []).
 // Danach validiert die Pipeline genau EIN weiteres Mal; verbleibende Fehler
 // lassen den Lauf wie bisher scheitern.
+// Fehler werden in ABSTEIGENDER Pfadreihenfolge verarbeitet, damit das
+// Splicen eines Array-Elements die Indizes noch zu heilender Elemente
+// nicht verschiebt.
 export function heileNullFelder(
   doc: any,
   errors: { instancePath?: string; message?: string }[],
 ): number {
   let healed = 0;
-  (errors || []).forEach(err => {
+  const segsOf = (path: unknown) => String(path || '').split('/').slice(1);
+  const sorted = (errors || []).slice().sort((a, b) => {
+    const A = segsOf(a && a.instancePath), B = segsOf(b && b.instancePath);
+    const n = Math.max(A.length, B.length);
+    for (let i = 0; i < n; i++) {
+      const x = A[i], y = B[i];
+      if (x === y) continue;
+      if (x === undefined) return 1;
+      if (y === undefined) return -1;
+      const nx = Number(x), ny = Number(y);
+      if (!Number.isNaN(nx) && !Number.isNaN(ny)) return ny - nx;
+      return x < y ? 1 : -1;
+    }
+    return 0;
+  });
+  sorted.forEach(err => {
     const m = /^must be (number|integer|array|string|object)$/.exec(String((err && err.message) || ''));
     if (!m || !err.instancePath) return;
     const parts = err.instancePath.split('/').slice(1).map(s => s.replace(/~1/g, '/').replace(/~0/g, '~'));
