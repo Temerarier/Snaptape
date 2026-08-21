@@ -1,0 +1,39 @@
+GOAL
+Heal one specific model output defect: a measurement field returned as a bare
+number instead of a {value, confidence, source} object. Code-side fix only.
+
+CONTEXT
+- What happened: in the neuengamme-mixed regression run the model returned
+  condition_areas[0].area_mm2 as a plain number, so schema validation failed and
+  the whole run went to "failed".
+- lib/messung/pipeline.ts already runs ONE healing round via
+  heileNullFelder(roh, errors) in lib/messung/berechnung.ts, then re-validates
+  once. Extend that existing loop — no second healing pass, no second validation.
+- It currently skips this case because it only acts when the value is null.
+
+BUILD
+- In the same loop: when ajv says "must be object", the current value is a finite
+  number, and the field name is in the list below, wrap it into a valid
+  measurement object. Keep the number unchanged, and since the model told us
+  nothing about its origin, mark it as confidence "low" and source "estimated" —
+  never "measured" or higher. Record in low_reason that this was a code-side
+  shape repair, not a model judgement. Append a matching text to
+  quality.warnings naming the field path.
+- Fields to heal (these are the measurement-typed fields in v1.5):
+  width_mm, depth_mm, height_mm, length_mm, perimeter_mm, area_mm2,
+  net_area_mm2, eave_height_mm, ridge_height_mm, parapet_height_mm,
+  sill_height_mm, soffit_depth_mm, grade_offset_mm.
+  Everything else stays untouched — position_mm is an {x, y} object, not a
+  measurement, and must never be wrapped.
+
+DO NOT
+- Do not change shared/schema/measurement-v1.5.json or any extraction prompt.
+- Do not add an LLM repair call for this.
+- Never invent or alter the number itself.
+
+DONE WHEN
+- [ ] Test: garage-house.json with condition_areas[0].area_mm2 as the bare number
+      2400000 validates after healing, value preserved, confidence "low".
+- [ ] Test: the same file with a bare number in openings[0].position_mm still
+      FAILS (healing must not over-reach).
+- [ ] The untouched fixture still validates and heals nothing.
