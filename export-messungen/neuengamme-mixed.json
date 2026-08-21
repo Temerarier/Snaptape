@@ -1,0 +1,1931 @@
+{
+  "meta": {
+    "unit": "mm",
+    "notes": [
+      "Country determination: Germany (Hamburg) - certainty HIGH. Plan title block reads 'Neuengammer Hausdeich 256, Hamburg', German signage on balcony banners ('SAG JA ZU KLIMASCHUTZ', 'HAMBURGER ZUKUNFTSENTSCHEID'), German house number plaque '256', EN-style metal fence. Calc profile DE.",
+      "Building age: pre-1918 Gruenderzeit villa (decorative brick gables, rusticated render quoins, slate roof). Per DE rule, the historic front entry door (est. 2450 mm) is treated as [statistical] and cross-checked against Reichsformat brick coursing (~78 mm/course) and the plan storey chain.",
+      "Plan set: one sheet, Schnitt S-01 'Bestand', stated scale M 1:50, dated 28.08.2019, watermark 'Vorabzug' (preliminary). Sheet is read in normal orientation, no rotation.",
+      "The section carries a written VERTICAL chain only (0.20/3.15/0.20/3.40/0.20/2.10/0.20 m); no horizontal dimensions exist anywhere in the set, so building depth was taken graphically via the sheet scale derived from the vertical chain (GRAPHIC SCALE FALLBACK).",
+      "Section S-01 is interpreted as cut through the full-height gabled wing (walls rise to eave at top of the 3.15 m storey). The main roof body has a lower eave over a knee-wall band (red brick), visible in both photos.",
+      "Roof geometry: cross-gable - transverse gabled wing (front-right / rear-left as seen from street) intersecting a main roof that is hipped at the left end (seen from street). building.roof_type set to 'other' with this note.",
+      "Sloped dike site: grade at the rear is approx. 300-500 mm lower than at the street side; rear entry reached over ~8 exterior steps. Datum = grade at front (street) side.",
+      "Large tree partially occludes the front-left facade (photo 2) and the rear-left gable (photo 1); far-left front window only partially visible.",
+      "Facade corners of photo 2 lie near the image frame edges; possible wide-angle compression at the far-left window position."
+    ],
+    "photos": [
+      {
+        "index": 1,
+        "view_angle": "slightly_angled",
+        "shows_elevation": "back",
+        "perspective_corrected": false
+      },
+      {
+        "index": 2,
+        "view_angle": "slightly_angled",
+        "shows_elevation": "front",
+        "perspective_corrected": false
+      },
+      {
+        "index": 3,
+        "view_angle": "frontal",
+        "shows_elevation": "unknown",
+        "perspective_corrected": false
+      }
+    ],
+    "country": "DE",
+    "schema_version": "1.5"
+  },
+  "edges": [
+    {
+      "id": "E-1",
+      "length_mm": {
+        "value": 4000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived from low-confidence footprint",
+        "reference_used": "main ridge: width 12500 minus hip run 5500 minus wing half 3000"
+      },
+      "edge_class": "ridge",
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-2",
+      "length_mm": {
+        "value": 11000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "depth via graphic scale fallback",
+        "reference_used": "wing ridge = building depth (gable to gable)"
+      },
+      "edge_class": "ridge",
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-3",
+      "length_mm": {
+        "value": 9170,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived geometry",
+        "reference_used": "sqrt(5500^2+5500^2+4850^2), front-left hip"
+      },
+      "edge_class": "hip",
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-4",
+      "length_mm": {
+        "value": 9170,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived geometry",
+        "reference_used": "rear-left hip, mirror of E-3"
+      },
+      "edge_class": "hip",
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-5",
+      "length_mm": {
+        "value": 5670,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "valley start point estimated",
+        "reference_used": "front valley wing/main, unequal eaves accounted"
+      },
+      "edge_class": "valley",
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-6",
+      "length_mm": {
+        "value": 5670,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "valley start point estimated",
+        "reference_used": "rear valley wing/main, mirror of E-5"
+      },
+      "edge_class": "valley",
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-7",
+      "length_mm": {
+        "value": 6500,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived from footprint split",
+        "reference_used": "front main eave (left corner to wing wall)"
+      },
+      "edge_class": "eave",
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-8",
+      "length_mm": {
+        "value": 6500,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived from footprint split",
+        "reference_used": "rear main eave (mirror of E-7)"
+      },
+      "edge_class": "eave",
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-9",
+      "length_mm": {
+        "value": 11000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "depth via graphic scale fallback",
+        "reference_used": "left eave under hip = building depth"
+      },
+      "edge_class": "eave",
+      "belongs_to_elevation": "left"
+    },
+    {
+      "id": "E-10",
+      "length_mm": {
+        "value": 11000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "depth via graphic scale fallback",
+        "reference_used": "right eave (wing east side wall) = building depth"
+      },
+      "edge_class": "eave",
+      "belongs_to_elevation": "right"
+    },
+    {
+      "id": "E-11",
+      "length_mm": {
+        "value": 2100,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived geometry",
+        "reference_used": "wing west eave, front segment to valley start"
+      },
+      "edge_class": "eave",
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-12",
+      "length_mm": {
+        "value": 2100,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived geometry",
+        "reference_used": "wing west eave, rear segment to valley start"
+      },
+      "edge_class": "eave",
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-13",
+      "length_mm": {
+        "value": 4243,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "wing width estimated",
+        "reference_used": "front gable left rake: sqrt(3000^2+3000^2)"
+      },
+      "edge_class": "rake",
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-14",
+      "length_mm": {
+        "value": 4243,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "wing width estimated",
+        "reference_used": "front gable right rake"
+      },
+      "edge_class": "rake",
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-15",
+      "length_mm": {
+        "value": 4243,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "wing width estimated",
+        "reference_used": "rear gable left rake"
+      },
+      "edge_class": "rake",
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-16",
+      "length_mm": {
+        "value": 4243,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "wing width estimated",
+        "reference_used": "rear gable right rake"
+      },
+      "edge_class": "rake",
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-17",
+      "length_mm": {
+        "value": 6100,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "eave height estimated",
+        "reference_used": "front-left corner to main eave"
+      },
+      "edge_class": "outside_corner",
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-18",
+      "length_mm": {
+        "value": 7950,
+        "source": "scaled",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "front-right corner to wing eave, plan storey chain"
+      },
+      "edge_class": "outside_corner",
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-19",
+      "length_mm": {
+        "value": 6100,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "eave height estimated, grade lower at rear",
+        "reference_used": "rear-left corner (rear view right) to main eave"
+      },
+      "edge_class": "outside_corner",
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-20",
+      "length_mm": {
+        "value": 7950,
+        "source": "scaled",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "rear-right corner (wing side) to wing eave, plan storey chain"
+      },
+      "edge_class": "outside_corner",
+      "belongs_to_elevation": "back"
+    }
+  ],
+  "faces": [
+    {
+      "id": "WL-1",
+      "color": {
+        "hex": "#E9E2CF",
+        "name": "cream rusticated render/stone",
+        "note": "Cream rustication on ground floor and quoins; red facing brick in gable and knee band; grey painted plinth. Overcast light.",
+        "confidence": "medium",
+        "secondary_hex": "#7E3B2C"
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 96350000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "pending deterministic consolidation",
+        "reference_used": "width 12500; main part to eave 6100, wing part to 7950 + gable triangle"
+      },
+      "material": "brick",
+      "elevation": "front",
+      "face_class": "wall",
+      "net_area_mm2": {
+        "value": 81945000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived from estimated opening sizes",
+        "reference_used": "gross minus D-1, D-2, W-1..W-4"
+      },
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "WL-2",
+      "color": {
+        "hex": "#E7E0CC",
+        "name": "cream render, weathered",
+        "note": "Same scheme as front; grey plinth ~1.2 m; some soiling/streaking.",
+        "confidence": "medium",
+        "secondary_hex": "#7E3B2C"
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 96350000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "pending deterministic consolidation",
+        "reference_used": "mirror of front geometry (wing gable at left in rear view)"
+      },
+      "material": "brick",
+      "elevation": "back",
+      "face_class": "wall",
+      "net_area_mm2": {
+        "value": 87440000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived from estimated opening sizes",
+        "reference_used": "gross minus D-3, W-5..W-11"
+      },
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "WL-3",
+      "color": {
+        "hex": "#E7E0CC",
+        "name": "cream render (assumed continuous)",
+        "note": "Not directly photographed; assumed same scheme.",
+        "confidence": "low",
+        "secondary_hex": null
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 67100000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "no dedicated photo of left elevation",
+        "reference_used": "depth 11000 x eave 6100 (hipped end, no gable)"
+      },
+      "material": "brick",
+      "elevation": "left",
+      "face_class": "wall",
+      "net_area_mm2": {
+        "value": 67100000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "elevation not photographed; openings unknown",
+        "reference_used": "no openings verifiable"
+      },
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "WL-4",
+      "color": {
+        "hex": "#E7E0CC",
+        "name": "cream render (assumed continuous)",
+        "note": "Not directly photographed; assumed same scheme.",
+        "confidence": "low",
+        "secondary_hex": "#7E3B2C"
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 87450000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "no dedicated photo of right elevation",
+        "reference_used": "depth 11000 x wing eave 7950"
+      },
+      "material": "brick",
+      "elevation": "right",
+      "face_class": "wall",
+      "net_area_mm2": {
+        "value": 87450000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "elevation not photographed; openings unknown",
+        "reference_used": "no openings verifiable"
+      },
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "RF-1",
+      "color": {
+        "hex": "#494C4F",
+        "name": "dark grey slate",
+        "note": "Slate texture clearly visible in photo 2.",
+        "confidence": "medium",
+        "secondary_hex": null
+      },
+      "pitch": {
+        "degrees_rounded": 41,
+        "degrees_original": 41.4,
+        "rise_over_12_snapped": 11
+      },
+      "area_mm2": {
+        "value": 38500000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "depth via graphic scale fallback",
+        "reference_used": "trapezoid: eave 6500, ridge 4000, slope depth 7333 (pitch ~41 deg)"
+      },
+      "material": "slate",
+      "elevation": "front",
+      "face_class": "roof_face",
+      "net_area_mm2": {
+        "value": 37540000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "skylight sizes estimated",
+        "reference_used": "gross minus SK-1, SK-2"
+      },
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "RF-2",
+      "color": {
+        "hex": "#5A5D48",
+        "name": "slate with moss/algae overgrowth",
+        "note": "Heavy green moss patches (see CA-1), photo 1.",
+        "confidence": "medium",
+        "secondary_hex": "#8A9440"
+      },
+      "pitch": {
+        "degrees_rounded": 41,
+        "degrees_original": 41.4,
+        "rise_over_12_snapped": 11
+      },
+      "area_mm2": {
+        "value": 38500000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "depth via graphic scale fallback",
+        "reference_used": "mirror of RF-1"
+      },
+      "material": "slate",
+      "elevation": "back",
+      "face_class": "roof_face",
+      "net_area_mm2": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "RF-3",
+      "color": {
+        "hex": "#494C4F",
+        "name": "dark grey slate",
+        "note": "Only edge visible in photos.",
+        "confidence": "low",
+        "secondary_hex": null
+      },
+      "pitch": {
+        "degrees_rounded": 41,
+        "degrees_original": 41.4,
+        "rise_over_12_snapped": 11
+      },
+      "area_mm2": {
+        "value": 40300000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "hip end only obliquely visible",
+        "reference_used": "hip triangle: base 11000 x slope depth 7333 / 2"
+      },
+      "material": "slate",
+      "elevation": "left",
+      "face_class": "roof_face",
+      "net_area_mm2": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "RF-4",
+      "color": {
+        "hex": "#494C4F",
+        "name": "dark grey slate",
+        "note": "Partially visible photos 1 and 2.",
+        "confidence": "low",
+        "secondary_hex": null
+      },
+      "pitch": {
+        "degrees_rounded": 45,
+        "degrees_original": 45,
+        "rise_over_12_snapped": 12
+      },
+      "area_mm2": {
+        "value": 33000000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "valley geometry estimated",
+        "reference_used": "wing inner (west) slope: 11000 x 4243 minus main-roof intersection"
+      },
+      "material": "slate",
+      "elevation": "roof",
+      "face_class": "roof_face",
+      "net_area_mm2": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "RF-5",
+      "color": {
+        "hex": "#494C4F",
+        "name": "dark grey slate (assumed)",
+        "note": "Not directly photographed.",
+        "confidence": "low",
+        "secondary_hex": null
+      },
+      "pitch": {
+        "degrees_rounded": 45,
+        "degrees_original": 45,
+        "rise_over_12_snapped": 12
+      },
+      "area_mm2": {
+        "value": 46670000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "not directly photographed",
+        "reference_used": "wing outer (east) slope: 11000 x slope depth 4243"
+      },
+      "material": "slate",
+      "elevation": "right",
+      "face_class": "roof_face",
+      "net_area_mm2": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "SF-1",
+      "color": {
+        "hex": "#D8D2C0",
+        "name": "pale painted wood",
+        "note": "In shadow in all photos.",
+        "confidence": "low",
+        "secondary_hex": null
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 11760000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "overhang depth estimated from oblique photos",
+        "reference_used": "total eave run 39200 x overhang depth 300"
+      },
+      "material": "wood",
+      "elevation": "unknown",
+      "face_class": "soffit",
+      "net_area_mm2": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": {
+        "value": 300,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "seen only obliquely",
+        "reference_used": "proportion vs brick coursing photo 2"
+      }
+    },
+    {
+      "id": "FC-1",
+      "color": {
+        "hex": "#4F5A46",
+        "name": "dark green-grey trim",
+        "note": "Dark eave trim visible photo 2; shadowed.",
+        "confidence": "low",
+        "secondary_hex": null
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 7056000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "fascia height estimated",
+        "reference_used": "eave run 39200 x fascia height 180"
+      },
+      "material": "wood",
+      "elevation": "unknown",
+      "face_class": "fascia",
+      "net_area_mm2": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": {
+        "value": 300,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "seen only obliquely",
+        "reference_used": "same overhang as SF-1"
+      }
+    }
+  ],
+  "quality": {
+    "warnings": [
+      "Depth basis oblique_only: no frontal left/right side photo exists; footprint depth capped at confidence low.",
+      "Graphic scale fallback used for building depth: section S-01 carries only a vertical written chain; horizontal extent measured graphically via the 1:50 sheet scale derived from the 9450 mm vertical chain.",
+      "Plan vs. photo: section S-01 shows full-height (3.15 m) upper-storey walls to the eave, while photos show the main roof springing from a lower knee-wall band (~6.1 m eave). Section interpreted as cut through the full-height gabled wing; main-roof eave (6100 mm) taken from photos, wing eave (7950 mm) from the plan chain.",
+      "Openings likely undercounted on left and right elevations: no photos exist of those sides; left/right walls emitted with no openings.",
+      "Historic front entry door used as a scale is statistical per DE pre-1950 rule (assumed 2450 mm); implied door height from brick-coursing chain ~2400-2550 mm, consistent within tolerance.",
+      "Ground line at the rear elevation is partially occluded (wood pile, barrels); rear grade offset assumed -300 mm; rear height confidences capped at medium.",
+      "Bay window W-4 sits on the projecting bay (AT-3), i.e. ~1200 mm in front of the main facade plane; it is nevertheless subtracted from WL-1 net area for simplicity.",
+      "Front facade corners lie near the photo 2 frame edges; W-1 position/size may be affected by wide-angle compression.",
+      "Roof-facet areas and valley/hip lengths are derived from an estimated cross-gable model (width 12500 x depth 11000, main pitch ~41 deg, wing pitch ~45 deg) and are mutually consistent but individually low confidence."
+    ],
+    "raw_estimates": [
+      {
+        "target": "total_width",
+        "estimate_mm": 12400,
+        "photo_index": 2,
+        "reliability": "medium",
+        "via_transfer": false,
+        "assumed_size_mm": 1100,
+        "reference_object": "window-sum chain across front facade: W-1..W-4 + door + piers (horizontal)"
+      },
+      {
+        "target": "total_width",
+        "estimate_mm": 12700,
+        "photo_index": 2,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 265,
+        "reference_object": "Reichsformat brick stretcher coursing counted across front gable and extrapolated (horizontal)"
+      },
+      {
+        "target": "total_width",
+        "estimate_mm": 12300,
+        "photo_index": 1,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 1000,
+        "reference_object": "rear facade window-sum chain: W-6..W-9 + door + piers (horizontal)"
+      },
+      {
+        "target": "total_depth",
+        "estimate_mm": 11000,
+        "photo_index": 3,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 9450,
+        "reference_object": "graphic via sheet scale from Schnitt S-01 vertical chain 9450 mm (section width across roof triangle)"
+      },
+      {
+        "target": "total_depth",
+        "estimate_mm": 10800,
+        "photo_index": 1,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 2110,
+        "reference_object": "oblique foreshortening of right-hand side wall vs rear-door storey chain"
+      },
+      {
+        "target": "eave_height",
+        "estimate_mm": 6050,
+        "photo_index": 1,
+        "reliability": "medium",
+        "via_transfer": false,
+        "assumed_size_mm": 2110,
+        "reference_object": "rear door height chain (plinth + EG + knee band), vertical"
+      },
+      {
+        "target": "eave_height",
+        "estimate_mm": 6180,
+        "photo_index": 2,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 78,
+        "reference_object": "Reichsformat brick courses counted vertically over knee band + cornice to main eave"
+      },
+      {
+        "target": "eave_height",
+        "estimate_mm": 6150,
+        "photo_index": 2,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 2450,
+        "reference_object": "historic entry door chain (2450 mm) to main eave, vertical"
+      },
+      {
+        "target": "ridge_height",
+        "estimate_mm": 10950,
+        "photo_index": 3,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 9450,
+        "reference_object": "plan storey stack (3.40+0.20+3.15+0.20 + plinth 1.0 m) + graphic roof rise via sheet scale"
+      },
+      {
+        "target": "ridge_height",
+        "estimate_mm": 10900,
+        "photo_index": 2,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 78,
+        "reference_object": "front gable brick-coursing chain from EG sill line to ridge finial, vertical"
+      },
+      {
+        "target": "ridge_height",
+        "estimate_mm": 11050,
+        "photo_index": 1,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 2110,
+        "reference_object": "rear door chain extended over gable to ridge, vertical"
+      }
+    ],
+    "spread_percent": 3.2,
+    "references_used": 11,
+    "dimension_chains": [
+      {
+        "page": 3,
+        "label": "Schnitt S-01 (Plaene_Neuengammer_Hausdeich_hoehe.pdf p.1), vertical storey chain top-down: 0.20 / 3.15 / 0.20 / 3.40 / 0.20 / 2.10 / 0.20 m; assigned_to: heights.per_elevation right eave (wing, 7950 incl. ~1000 plinth above front grade) and building.heights via storey stack",
+        "values_mm": [
+          200,
+          3150,
+          200,
+          3400,
+          200,
+          2100,
+          200
+        ],
+        "computed_sum_mm": 9450,
+        "stated_total_mm": null,
+        "deviation_percent": null
+      }
+    ]
+  },
+  "building": {
+    "heights": {
+      "datum_note": "Grade zero taken at street-side (front) grade. Site slopes: rear grade approx. 300 mm lower (dike parcel); basement exposed ~1.0 m at front, ~1.3 m at rear. Ground line at rear partially occluded by wood pile.",
+      "per_elevation": [
+        {
+          "elevation": "front",
+          "eave_height_mm": {
+            "value": 6100,
+            "source": "estimated",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "main roof eave; wing gable wall in this elevation rises to 7950 mm"
+          },
+          "grade_offset_mm": {
+            "value": 0,
+            "source": "estimated",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "datum elevation"
+          },
+          "ridge_height_mm": {
+            "value": 10950,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "plan chain + gable geometry"
+          }
+        },
+        {
+          "elevation": "back",
+          "eave_height_mm": {
+            "value": 6100,
+            "source": "estimated",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "rear door chain photo 1"
+          },
+          "grade_offset_mm": {
+            "value": -300,
+            "source": "estimated",
+            "confidence": "low",
+            "low_reason": "ground line partly occluded by wood pile",
+            "reference_used": "exposed plinth + 8 exterior risers photo 1"
+          },
+          "ridge_height_mm": {
+            "value": 10950,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "plan chain + gable geometry"
+          }
+        },
+        {
+          "elevation": "left",
+          "eave_height_mm": {
+            "value": 6100,
+            "source": "estimated",
+            "confidence": "low",
+            "low_reason": "no dedicated photo of left elevation",
+            "reference_used": "hipped end of main roof, transfer from front"
+          },
+          "grade_offset_mm": null,
+          "ridge_height_mm": {
+            "value": 10950,
+            "source": "estimated",
+            "confidence": "low",
+            "low_reason": "no dedicated photo",
+            "reference_used": "same ridge as main roof"
+          }
+        },
+        {
+          "elevation": "right",
+          "eave_height_mm": {
+            "value": 7950,
+            "source": "measured",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "plan chain: plinth 1000 + 3400 + 200 + 3150 + 200 (wing side wall full height)"
+          },
+          "grade_offset_mm": null,
+          "ridge_height_mm": {
+            "value": 10950,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "wing ridge"
+          }
+        }
+      ],
+      "eave_height_mm": {
+        "value": 6050,
+        "source": "scaled",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "weighted median of 3 reference estimate(s), computed in code"
+      },
+      "ridge_height_mm": {
+        "value": 10950,
+        "source": "scaled",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "weighted median of 3 reference estimate(s), computed in code"
+      },
+      "parapet_height_mm": null
+    },
+    "stories": 2,
+    "footprint": {
+      "points": [],
+      "area_mm2": {
+        "value": 137500000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived from low-confidence width/depth",
+        "reference_used": "width x depth"
+      },
+      "depth_mm": {
+        "value": 10800,
+        "source": "scaled",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "weighted median of 2 reference estimate(s), computed in code"
+      },
+      "width_mm": {
+        "value": 12400,
+        "source": "scaled",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "weighted median of 3 reference estimate(s), computed in code"
+      },
+      "perimeter_mm": {
+        "value": 47000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived from low-confidence width/depth",
+        "reference_used": "derived from width 12500 x depth 11000"
+      }
+    },
+    "roof_type": "other",
+    "shared_walls": [],
+    "building_type": "detached",
+    "footprint_overall": {
+      "note": "Includes the attached front canted bay (AT-3) with balcony above; no other attached volumes; detached structures none visible.",
+      "depth_mm": {
+        "value": 12200,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "bay depth estimated from oblique photo",
+        "reference_used": "main depth 11000 + front bay projection ~1200"
+      },
+      "width_mm": {
+        "value": 12500,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "photo-scaled only",
+        "reference_used": "same as main body; bay projects in depth only"
+      }
+    }
+  },
+  "openings": [
+    {
+      "id": "D-1",
+      "note": "Reference only, not for ordering",
+      "type": "door",
+      "area_mm2": {
+        "value": 3250000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1300,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "historic door size statistical per DE rule",
+        "reference_used": "historic double door, brick coursing cross-check photo 2"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 2500,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "historic door size statistical per DE rule",
+        "reference_used": "historic Gruenderzeit door range 2300-2600, handle-height cross-check"
+      },
+      "position_mm": {
+        "x": 5600,
+        "y": 900
+      },
+      "perimeter_mm": {
+        "value": 7600,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "steps partially hidden by fence",
+        "reference_used": "threshold at raised EG level, front steps"
+      }
+    },
+    {
+      "id": "D-2",
+      "note": "Balcony access window-door in front gable",
+      "type": "patio_door",
+      "area_mm2": {
+        "value": 3080000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1400,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "partially obscured by rail and banners",
+        "reference_used": "brick coursing front gable photo 2"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 2200,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "sill hidden behind balcony rail",
+        "reference_used": "brick coursing front gable photo 2"
+      },
+      "position_mm": {
+        "x": 8900,
+        "y": 4600
+      },
+      "perimeter_mm": {
+        "value": 7200,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 4600,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "balcony floor assumed at OG floor",
+        "reference_used": "OG floor level from plan chain (1000+3400+200)"
+      }
+    },
+    {
+      "id": "D-3",
+      "note": "White rear entry door with cat flap, photo 1",
+      "type": "door",
+      "area_mm2": {
+        "value": 2004500,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 950,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "rear door reference photo 1 (assumed 2110 high)"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 2110,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "DE market-typical replacement door, photo 1"
+      },
+      "position_mm": {
+        "x": 4800,
+        "y": 1300
+      },
+      "perimeter_mm": {
+        "value": 6120,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 1300,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "ground line partially occluded",
+        "reference_used": "8 exterior risers ~165 mm each"
+      }
+    },
+    {
+      "id": "W-1",
+      "note": "Far-left front window, partially visible at image edge",
+      "type": "window",
+      "area_mm2": {
+        "value": 1995000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1050,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "partially occluded by tree, near frame edge",
+        "reference_used": "entry door chain photo 2"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 1900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "partially occluded by tree",
+        "reference_used": "entry door chain photo 2"
+      },
+      "position_mm": {
+        "x": 600,
+        "y": 1800
+      },
+      "perimeter_mm": {
+        "value": 5900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 1800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "base hidden by shrubs",
+        "reference_used": "EG floor +1000, sill ~800 above floor"
+      }
+    },
+    {
+      "id": "W-2",
+      "note": "Left wing EG window right of tree",
+      "type": "window",
+      "area_mm2": {
+        "value": 1995000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1050,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "partially behind tree",
+        "reference_used": "entry door chain photo 2"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 1900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "partially behind tree",
+        "reference_used": "entry door chain photo 2"
+      },
+      "position_mm": {
+        "x": 3000,
+        "y": 1800
+      },
+      "perimeter_mm": {
+        "value": 5900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 1800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "base hidden",
+        "reference_used": "same sill line as W-1"
+      }
+    },
+    {
+      "id": "W-3",
+      "note": "Narrow EG window between entry door and bay",
+      "type": "window",
+      "area_mm2": {
+        "value": 1235000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 650,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "narrow window between door and bay",
+        "reference_used": "entry door chain photo 2"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 1900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "pending deterministic consolidation",
+        "reference_used": "same head line as W-2"
+      },
+      "position_mm": {
+        "x": 7300,
+        "y": 1800
+      },
+      "perimeter_mm": {
+        "value": 5100,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 1800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "base hidden by shrubs",
+        "reference_used": "common EG sill line"
+      }
+    },
+    {
+      "id": "W-4",
+      "note": "Large window on front face of canted bay AT-3",
+      "type": "window",
+      "area_mm2": {
+        "value": 2850000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1500,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "sits on projecting bay AT-3, plane in front of facade",
+        "reference_used": "brick coursing / door chain photo 2"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 1900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "pending deterministic consolidation",
+        "reference_used": "same head line as EG windows"
+      },
+      "position_mm": {
+        "x": 9200,
+        "y": 1800
+      },
+      "perimeter_mm": {
+        "value": 6800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 1800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "base hidden by shrubs",
+        "reference_used": "common EG sill line"
+      }
+    },
+    {
+      "id": "W-5",
+      "note": "OG window in rear gable of wing",
+      "type": "window",
+      "area_mm2": {
+        "value": 1350000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "pending deterministic consolidation",
+        "reference_used": "Reichsformat brick coursing rear gable photo 1"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1500,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "pending deterministic consolidation",
+        "reference_used": "brick coursing rear gable photo 1"
+      },
+      "position_mm": {
+        "x": 2300,
+        "y": 5400
+      },
+      "perimeter_mm": {
+        "value": 4800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 5400,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived from plan chain",
+        "reference_used": "OG floor 4600 + 800 sill"
+      }
+    },
+    {
+      "id": "W-6",
+      "note": "EG window in wing, rear elevation",
+      "type": "window",
+      "area_mm2": {
+        "value": 1700000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "partially occluded by ladder and lean-to",
+        "reference_used": "rear door chain photo 1"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1700,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "partially occluded",
+        "reference_used": "rear door chain photo 1"
+      },
+      "position_mm": {
+        "x": 2000,
+        "y": 1800
+      },
+      "perimeter_mm": {
+        "value": 5400,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 1800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "base hidden by wood pile",
+        "reference_used": "common EG sill line"
+      }
+    },
+    {
+      "id": "W-7",
+      "note": "Staircase window above rear door",
+      "type": "window",
+      "area_mm2": {
+        "value": 1147500,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 850,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "rear door chain photo 1 (window directly above door)"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1350,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "rear door chain photo 1"
+      },
+      "position_mm": {
+        "x": 4900,
+        "y": 3800
+      },
+      "perimeter_mm": {
+        "value": 4400,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 3800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "interior level assumed",
+        "reference_used": "staircase half-landing level"
+      }
+    },
+    {
+      "id": "W-8",
+      "note": "Narrow EG window, rear main body (left of pair)",
+      "type": "window",
+      "area_mm2": {
+        "value": 960000,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 600,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "rear door chain photo 1"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1600,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "rear door chain photo 1"
+      },
+      "position_mm": {
+        "x": 6600,
+        "y": 1900
+      },
+      "perimeter_mm": {
+        "value": 4400,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 1900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "pending deterministic consolidation",
+        "reference_used": "EG sill line rear main body"
+      }
+    },
+    {
+      "id": "W-9",
+      "note": "Narrow EG window, rear main body (right of pair)",
+      "type": "window",
+      "area_mm2": {
+        "value": 960000,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 600,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "rear door chain photo 1"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1600,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "rear door chain photo 1"
+      },
+      "position_mm": {
+        "x": 8600,
+        "y": 1900
+      },
+      "perimeter_mm": {
+        "value": 4400,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 1900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "pending deterministic consolidation",
+        "reference_used": "EG sill line rear main body"
+      }
+    },
+    {
+      "id": "W-10",
+      "note": "Basement window in grey plinth, rear main body",
+      "type": "window",
+      "area_mm2": {
+        "value": 400000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "dark recessed opening in plinth, hard to delimit",
+        "reference_used": "rear door chain photo 1"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 500,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "shadowed",
+        "reference_used": "plinth proportion photo 1"
+      },
+      "position_mm": {
+        "x": 7600,
+        "y": 300
+      },
+      "perimeter_mm": {
+        "value": 2600,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 300,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "grade line uneven",
+        "reference_used": "above rear grade"
+      }
+    },
+    {
+      "id": "W-11",
+      "note": "Basement window/hatch beside rear stairs",
+      "type": "window",
+      "area_mm2": {
+        "value": 350000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 700,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "small hatch-like opening near stairs, partly hidden",
+        "reference_used": "rear door chain photo 1"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 500,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "partly hidden by stair",
+        "reference_used": "plinth proportion photo 1"
+      },
+      "position_mm": {
+        "x": 5900,
+        "y": 200
+      },
+      "perimeter_mm": {
+        "value": 2400,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": {
+        "value": 200,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "grade occluded",
+        "reference_used": "above rear grade"
+      }
+    },
+    {
+      "id": "SK-1",
+      "note": "Upper skylight on front main slope (RF-1), photo 2",
+      "type": "skylight",
+      "area_mm2": {
+        "value": 480000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 600,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "seen obliquely on slope",
+        "reference_used": "proportion vs slate coursing photo 2"
+      },
+      "elevation": "roof",
+      "height_mm": {
+        "value": 800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "foreshortened",
+        "reference_used": "proportion photo 2"
+      },
+      "position_mm": {
+        "x": 2600,
+        "y": 4800
+      },
+      "perimeter_mm": {
+        "value": 2800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": null
+    },
+    {
+      "id": "SK-2",
+      "note": "Lower skylight on front main slope (RF-1), photo 2",
+      "type": "skylight",
+      "area_mm2": {
+        "value": 480000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "w x h"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 600,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "seen obliquely on slope",
+        "reference_used": "proportion vs slate coursing photo 2"
+      },
+      "elevation": "roof",
+      "height_mm": {
+        "value": 800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "foreshortened",
+        "reference_used": "proportion photo 2"
+      },
+      "position_mm": {
+        "x": 4200,
+        "y": 3200
+      },
+      "perimeter_mm": {
+        "value": 2800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "derived",
+        "reference_used": "2(w+h)"
+      },
+      "sill_height_mm": null
+    }
+  ],
+  "downspouts": [
+    {
+      "id": "DS-1",
+      "elevation": "back",
+      "length_mm": {
+        "value": 6100,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "lower end partially occluded by railing/steps",
+        "reference_used": "approx. rear main eave height"
+      },
+      "position_mm": {
+        "x": 4500
+      },
+      "connects_edge_id": "E-8"
+    }
+  ],
+  "references": [
+    {
+      "plane": "facade_plane",
+      "object": "rear entry door (white, modern replacement, assumed 2110 mm high)",
+      "scale_type": "own_reference",
+      "photo_index": 1,
+      "reliability": "medium",
+      "bounding_box": [
+        700,
+        610,
+        88,
+        162
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 2110,
+      "transferred_via": null
+    },
+    {
+      "plane": "facade_plane",
+      "object": "brick coursing rear gable, Reichsformat pre-1950 (250x65, course incl. joint ~78 mm)",
+      "scale_type": "own_reference",
+      "photo_index": 1,
+      "reliability": "medium",
+      "bounding_box": [
+        380,
+        300,
+        200,
+        180
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 78,
+      "transferred_via": null
+    },
+    {
+      "plane": "facade_plane",
+      "object": "historic front entry double door (Gruenderzeit, assumed 2450 mm high per historic rule)",
+      "scale_type": "own_reference",
+      "photo_index": 2,
+      "reliability": "low",
+      "bounding_box": [
+        565,
+        680,
+        155,
+        300
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 2450,
+      "transferred_via": null
+    },
+    {
+      "plane": "facade_plane",
+      "object": "brick coursing front gable, Reichsformat pre-1950 (~78 mm/course)",
+      "scale_type": "own_reference",
+      "photo_index": 2,
+      "reliability": "medium",
+      "bounding_box": [
+        880,
+        130,
+        330,
+        220
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 78,
+      "transferred_via": null
+    },
+    {
+      "plane": "in_front",
+      "object": "modern balcony guard rail (assumed 1000 mm above balcony floor)",
+      "scale_type": "own_reference",
+      "photo_index": 2,
+      "reliability": "medium",
+      "bounding_box": [
+        745,
+        400,
+        610,
+        150
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 1000,
+      "transferred_via": null
+    },
+    {
+      "plane": "facade_plane",
+      "object": "written dimension chain Schnitt S-01, stated scale M 1:50 (vertical chain 0.20/3.15/0.20/3.40/0.20/2.10/0.20 m)",
+      "scale_type": "own_reference",
+      "photo_index": 3,
+      "reliability": "high",
+      "bounding_box": [
+        160,
+        270,
+        60,
+        470
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 9450,
+      "transferred_via": null
+    }
+  ],
+  "attachments": [
+    {
+      "id": "AT-1",
+      "type": "chimney",
+      "dormer": null,
+      "attached": true,
+      "depth_mm": {
+        "value": 550,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "not visible in depth",
+        "reference_used": "assumed square, slate-clad stack"
+      },
+      "width_mm": {
+        "value": 550,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "small object at distance",
+        "reference_used": "proportion vs ridge, photo 1"
+      },
+      "elevation": "roof",
+      "height_mm": {
+        "value": 1300,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "small object at distance",
+        "reference_used": "height above roof surface, photo 1"
+      },
+      "position_mm": {
+        "x": 7300,
+        "y": 6800
+      },
+      "parent_face_id": "RF-2",
+      "include_in_footprint": false
+    },
+    {
+      "id": "AT-2",
+      "type": "vent",
+      "dormer": null,
+      "attached": true,
+      "depth_mm": null,
+      "width_mm": {
+        "value": 200,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "small object",
+        "reference_used": "proportion vs chimney AT-1, photo 1"
+      },
+      "elevation": "roof",
+      "height_mm": {
+        "value": 700,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "small object",
+        "reference_used": "proportion, photo 1 (right roof area)"
+      },
+      "position_mm": {
+        "x": 10600,
+        "y": 6300
+      },
+      "parent_face_id": "RF-2",
+      "include_in_footprint": false
+    },
+    {
+      "id": "AT-3",
+      "type": "bay",
+      "dormer": null,
+      "attached": true,
+      "depth_mm": {
+        "value": 1200,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "oblique view only",
+        "reference_used": "balcony overhang proportion photo 2"
+      },
+      "width_mm": {
+        "value": 3300,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "partially occluded by shrubs, oblique",
+        "reference_used": "entry door chain photo 2"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 3600,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "ground line occluded by vegetation",
+        "reference_used": "grade to balcony floor (EG storey + plinth), plan chain cross-check"
+      },
+      "position_mm": {
+        "x": 8400,
+        "y": 0
+      },
+      "parent_face_id": "WL-1",
+      "include_in_footprint": true
+    },
+    {
+      "id": "AT-4",
+      "type": "balcony",
+      "dormer": null,
+      "attached": true,
+      "depth_mm": {
+        "value": 1400,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "oblique view",
+        "reference_used": "proportion vs bay depth"
+      },
+      "width_mm": {
+        "value": 3700,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "banners obscure rail geometry",
+        "reference_used": "guard rail reference photo 2"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 1000,
+        "source": "estimated",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "modern rail standard 1000 mm"
+      },
+      "position_mm": {
+        "x": 8200,
+        "y": 4600
+      },
+      "parent_face_id": "WL-1",
+      "include_in_footprint": false
+    },
+    {
+      "id": "AT-5",
+      "type": "awning",
+      "dormer": null,
+      "attached": true,
+      "depth_mm": null,
+      "width_mm": {
+        "value": 2600,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "retracted, seen edge-on",
+        "reference_used": "span above balcony window, photo 2"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 250,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "retracted",
+        "reference_used": "cassette height proportion"
+      },
+      "position_mm": {
+        "x": 8900,
+        "y": 7100
+      },
+      "parent_face_id": "WL-1",
+      "include_in_footprint": false
+    }
+  ],
+  "condition_areas": [
+    {
+      "id": "CA-1",
+      "note": "Extensive green moss/algae growth across most of the rear slate slope; drainage and slate condition should be checked on site.",
+      "type": "mold_mildew",
+      "area_mm2": 20000000,
+      "severity": "moderate",
+      "elevation": "roof",
+      "photo_index": 1,
+      "position_mm": {
+        "x": 500,
+        "y": 1000
+      },
+      "parent_face_id": "RF-2"
+    },
+    {
+      "id": "CA-2",
+      "note": "Dark soiling/algae streaking on rear render, mainly under the cornice band. Confidence low - overcast light, partially shadowed.",
+      "type": "mold_mildew",
+      "area_mm2": 3000000,
+      "severity": "light",
+      "elevation": "back",
+      "photo_index": 1,
+      "position_mm": {
+        "x": 6000,
+        "y": 4600
+      },
+      "parent_face_id": "WL-2"
+    }
+  ]
+}
