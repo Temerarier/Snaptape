@@ -94,35 +94,52 @@ export function berechneKonsolidierung(p: ComputeInput): ComputeInput {
     }
   });
   const wallsByElev: any = {};
-  (Array.isArray(r.faces) ? r.faces : []).forEach((f: any) => { if (f && f.face_class === 'wall' && f.elevation) wallsByElev[f.elevation] = (wallsByElev[f.elevation] || 0) + 1; });
-  // B2: openings whose sill sits at/above the elevation's eave (dormers) must not reduce wall net area
+  const wallById: any = {};
+  (Array.isArray(r.faces) ? r.faces : []).forEach((f: any) => { if (f && f.face_class === 'wall') { if (f.id) wallById[f.id] = f; if (f.elevation) wallsByElev[f.elevation] = (wallsByElev[f.elevation] || 0) + 1; } });
+  // B2: openings whose sill sits at/above the eave (dormers) must not reduce wall net area.
+  // v1.6: the eave is taken from the opening's own wall (WL-n.height_mm) when present, else per elevation as before.
   const eaveByElev: any = {};
   const hts = (r.building && r.building.heights) || {};
   (Array.isArray(hts.per_elevation) ? hts.per_elevation : []).forEach((pe: any) => { const ev = (pe && pe.eave_height_mm && typeof pe.eave_height_mm.value === 'number') ? pe.eave_height_mm.value : null; if (pe && pe.elevation && ev !== null) eaveByElev[pe.elevation] = ev; });
   const eaveGlobal = (hts.eave_height_mm && typeof hts.eave_height_mm.value === 'number') ? hts.eave_height_mm.value : null;
-  const istUeberTraufe = (o: any) => { const sill = (o && o.sill_height_mm && typeof o.sill_height_mm.value === 'number') ? o.sill_height_mm.value : null; if (sill === null) return false; const ee = (o.elevation && eaveByElev[o.elevation] !== undefined) ? eaveByElev[o.elevation] : eaveGlobal; return ee !== null && sill >= ee; };
-  const openAreaByElev: any = {};
+  const eaveFor = (o: any) => { const w = (o && o.parent_face_id) ? wallById[o.parent_face_id] : null; const wh = (w && w.height_mm && typeof w.height_mm.value === 'number') ? w.height_mm.value : null; if (wh !== null) return wh; return (o && o.elevation && eaveByElev[o.elevation] !== undefined) ? eaveByElev[o.elevation] : eaveGlobal; };
+  const istUeberTraufe = (o: any) => { const sill = (o && o.sill_height_mm && typeof o.sill_height_mm.value === 'number') ? o.sill_height_mm.value : null; if (sill === null) return false; const ee = eaveFor(o); return ee !== null && sill >= ee; };
+  // v1.6: openings are attributed to their wall via parent_face_id; elevation is only a fallback for openings without one.
+  const openAreaByFace: any = {};
+  const openAreaByElevUnassigned: any = {};
   (Array.isArray(r.openings) ? r.openings : []).forEach((o: any) => {
     const a = (o && o.area_mm2 && typeof o.area_mm2.value === 'number') ? o.area_mm2.value : null;
-    if (a && o.elevation && o.elevation !== 'roof' && !istUeberTraufe(o)) openAreaByElev[o.elevation] = (openAreaByElev[o.elevation] || 0) + a;
+    if (!a || !o.elevation || o.elevation === 'roof' || istUeberTraufe(o)) return;
+    if (o.parent_face_id) openAreaByFace[o.parent_face_id] = (openAreaByFace[o.parent_face_id] || 0) + a;
+    else openAreaByElevUnassigned[o.elevation] = (openAreaByElevUnassigned[o.elevation] || 0) + a;
   });
   (Array.isArray(r.faces) ? r.faces : []).forEach((f: any) => {
     if (!f || f.face_class !== 'wall') return;
     const g = (f.area_mm2 && typeof f.area_mm2.value === 'number') ? f.area_mm2.value : null;
     if (g === null) return;
-    if (wallsByElev[f.elevation] > 1) {
-      // A7: multi-face elevations with a model-supplied net area are accepted silently; only warn when the net value is missing
-      const hatNetz = f.net_area_mm2 && typeof f.net_area_mm2 === 'object' && typeof f.net_area_mm2.value === 'number';
-      if (!hatNetz) q.warnings.push('net area not derived for ' + String(f.id) + ': several wall faces share elevation ' + String(f.elevation) + ' and no model net area present');
-      return;
+    let opening: number = openAreaByFace[f.id] || 0;
+    const unassigned = openAreaByElevUnassigned[f.elevation] || 0;
+    if (unassigned > 0) {
+      if (wallsByElev[f.elevation] === 1) opening += unassigned;
+      else q.warnings.push(String(f.id) + ': openings without parent_face_id on elevation ' + String(f.elevation) + ' could not be attributed to a wall; net area may be too high');
     }
-    const net = Math.max(0, g - (openAreaByElev[f.elevation] || 0));
+    const net = Math.max(0, g - opening);
     const has = f.net_area_mm2 && typeof f.net_area_mm2 === 'object' && typeof f.net_area_mm2.value === 'number';
     if (!has) {
-      f.net_area_mm2 = { value: Math.round(net), confidence: (f.area_mm2.confidence || 'low'), source: 'scaled', reference_used: 'gross minus openings on this elevation, computed in code', low_reason: null };
+      f.net_area_mm2 = { value: Math.round(net), confidence: (f.area_mm2.confidence || 'low'), source: 'scaled', reference_used: 'gross minus openings on this wall, computed in code', low_reason: null };
     } else if (net > 0 && Math.abs(f.net_area_mm2.value - net) / net > 0.03) {
       q.warnings.push(String(f.id) + ': reported net area differs more than 3% from computed gross-minus-openings (' + Math.round(f.net_area_mm2.value / 10000) / 100 + ' vs ' + Math.round(net / 10000) / 100 + ' m2)');
     }
+  });
+  // v1.6: wall dimensions must reconstruct the gross area (width x height + half gable); a mismatch is reported, never corrected.
+  (Array.isArray(r.faces) ? r.faces : []).forEach((f: any) => {
+    if (!f || f.face_class !== 'wall') return;
+    const gv = (m: any) => (m && typeof m === 'object' && typeof m.value === 'number') ? m.value : null;
+    const w = gv(f.width_mm), h = gv(f.height_mm), gab = gv(f.gable_height_mm) || 0, a = gv(f.area_mm2);
+    if (!w || !h || !a) return;
+    const calc = w * h + 0.5 * w * gab;
+    const dev = Math.abs(calc - a) / a;
+    if (dev > 0.02) q.warnings.push(String(f.id) + ': width x height (+ gable) = ' + Math.round(calc / 10000) / 100 + ' m2, but area_mm2 = ' + Math.round(a / 10000) / 100 + ' m2 (' + Math.round(dev * 100) + '% off)');
   });
   const chains = Array.isArray(q.dimension_chains) ? q.dimension_chains : [];
   chains.forEach((c: any) => {
@@ -307,6 +324,18 @@ export function validiereUndAssembliere(p: ComputeInput): ValidateAssembleOutput
     if (o.width_mm !== null && o.width_mm !== undefined && !isMeas(o.width_mm)) v.push(String(o.id) + ': width_mm is not a valid measurement object');
     if (o.height_mm !== null && o.height_mm !== undefined && !isMeas(o.height_mm)) v.push(String(o.id) + ': height_mm is not a valid measurement object');
   });
+  // v1.6: parent_face_id must point at an existing face; wall dimensions must be plausible
+  const faceIdsV: any = {};
+  (r.faces || []).forEach((f: any) => { if (f && typeof f.id === 'string') faceIdsV[f.id] = true; });
+  (r.openings || []).forEach((o: any) => {
+    if (o && o.parent_face_id && !faceIdsV[o.parent_face_id]) v.push(String(o.id) + ': parent_face_id ' + String(o.parent_face_id) + ' not found in faces');
+  });
+  (r.faces || []).forEach((f: any) => {
+    if (!f || f.face_class !== 'wall') return;
+    const w = num(f.width_mm); const h = num(f.height_mm);
+    if (w !== null && w !== undefined && (w < 300 || w > 200000)) v.push(String(f.id) + ': width ' + Math.round(w) + ' mm outside 300-200000');
+    if (h !== null && h !== undefined && (h < 500 || h > 40000)) v.push(String(f.id) + ': height ' + Math.round(h) + ' mm outside 500-40000');
+  });
   const q = (r.quality && typeof r.quality === 'object') ? r.quality : {};
   r.quality = q;
   q.warnings = Array.isArray(q.warnings) ? q.warnings : [];
@@ -354,14 +383,31 @@ export function validiereUndAssembliere(p: ComputeInput): ValidateAssembleOutput
     }
     const wallByElev: any = {};
     facesV.forEach((f: any) => { if (f && f.face_class === 'wall' && f.elevation) { const a = num(f.area_mm2); if (typeof a === 'number') wallByElev[f.elevation] = (wallByElev[f.elevation] || 0) + a; } });
-    // B2: openings whose sill sits at/above the elevation's eave (dormers) are excluded from the wall cross-check
+    // B2: openings whose sill sits at/above the eave (dormers) are excluded from the wall cross-check.
+    // v1.6: cross-check per wall face via parent_face_id; unassigned openings fall back to the elevation only when it has one wall.
     const eaveByElevV: any = {};
     const htsV = (r.building && r.building.heights) || {};
     (Array.isArray(htsV.per_elevation) ? htsV.per_elevation : []).forEach((pe: any) => { const ev = pe ? num(pe.eave_height_mm) : null; if (pe && pe.elevation && ev !== null) eaveByElevV[pe.elevation] = ev; });
-    const istUeberTraufeV = (o: any) => { const sill = o ? num(o.sill_height_mm) : null; if (sill === null || sill === undefined) return false; const ee = (o.elevation && eaveByElevV[o.elevation] !== undefined) ? eaveByElevV[o.elevation] : eave; return ee !== null && ee !== undefined && sill >= ee; };
-    const opByElev: any = {};
-    (Array.isArray(r.openings) ? r.openings : []).forEach((o: any) => { if (o && o.elevation && o.elevation !== 'roof' && !istUeberTraufeV(o)) { const a = num(o.area_mm2); if (typeof a === 'number') opByElev[o.elevation] = (opByElev[o.elevation] || 0) + a; } });
-    Object.keys(opByElev).forEach(el => { if (wallByElev[el] && opByElev[el] > wallByElev[el]) q.warnings.push('geometry check openings on ' + el + ': total opening area exceeds wall gross area'); });
+    const wallByIdV: any = {};
+    const wallCountByElevV: any = {};
+    facesV.forEach((f: any) => { if (f && f.face_class === 'wall') { if (f.id) wallByIdV[f.id] = f; if (f.elevation) wallCountByElevV[f.elevation] = (wallCountByElevV[f.elevation] || 0) + 1; } });
+    const eaveForV = (o: any) => { const w = (o && o.parent_face_id) ? wallByIdV[o.parent_face_id] : null; const wh = w ? num(w.height_mm) : null; if (wh !== null && wh !== undefined) return wh; return (o && o.elevation && eaveByElevV[o.elevation] !== undefined) ? eaveByElevV[o.elevation] : eave; };
+    const istUeberTraufeV = (o: any) => { const sill = o ? num(o.sill_height_mm) : null; if (sill === null || sill === undefined) return false; const ee = eaveForV(o); return ee !== null && ee !== undefined && sill >= ee; };
+    const opByFace: any = {};
+    const opUnassignedByElev: any = {};
+    (Array.isArray(r.openings) ? r.openings : []).forEach((o: any) => {
+      if (!o || !o.elevation || o.elevation === 'roof' || istUeberTraufeV(o)) return;
+      const a = num(o.area_mm2); if (typeof a !== 'number') return;
+      if (o.parent_face_id) opByFace[o.parent_face_id] = (opByFace[o.parent_face_id] || 0) + a;
+      else opUnassignedByElev[o.elevation] = (opUnassignedByElev[o.elevation] || 0) + a;
+    });
+    facesV.forEach((f: any) => {
+      if (!f || f.face_class !== 'wall') return;
+      const g = num(f.area_mm2); if (typeof g !== 'number') return;
+      let op: number = opByFace[f.id] || 0;
+      if (wallCountByElevV[f.elevation] === 1) op += (opUnassignedByElev[f.elevation] || 0);
+      if (op > g) q.warnings.push('geometry check openings on ' + String(f.id) + ': total opening area exceeds wall gross area');
+    });
   })();
   const summary = 'country ' + (r.meta ? r.meta.country : '?') + ' | faces ' + (r.faces || []).length + ' | edges ' + (r.edges || []).length + ' | openings ' + (r.openings || []).length + ' | attachments ' + (r.attachments || []).length + ' | downspouts ' + (r.downspouts || []).length + ' | condition ' + (r.condition_areas || []).length + ' | warnings ' + q.warnings.length + (p.repaired ? ' | repaired output' : '');
   return { valid: v.length === 0, violations: v, summary: summary, usage: p.usage || null, stop_reason: p.stop_reason || null, model: p.model || null, repaired: !!p.repaired, result: r };

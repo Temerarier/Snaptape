@@ -67,35 +67,52 @@ const PITCH_SNAPS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 18, 24];
   }
 });
 const wallsByElev = {};
-(Array.isArray(r.faces) ? r.faces : []).forEach(f => { if (f && f.face_class === 'wall' && f.elevation) wallsByElev[f.elevation] = (wallsByElev[f.elevation] || 0) + 1; });
-// B2: openings whose sill sits at/above the elevation's eave (dormers) must not reduce wall net area
+const wallById = {};
+(Array.isArray(r.faces) ? r.faces : []).forEach(f => { if (f && f.face_class === 'wall') { if (f.id) wallById[f.id] = f; if (f.elevation) wallsByElev[f.elevation] = (wallsByElev[f.elevation] || 0) + 1; } });
+// B2: openings whose sill sits at/above the eave (dormers) must not reduce wall net area.
+// v1.6: the eave is taken from the opening's own wall (WL-n.height_mm) when present, else per elevation as before.
 const eaveByElev = {};
 const hts = (r.building && r.building.heights) || {};
 (Array.isArray(hts.per_elevation) ? hts.per_elevation : []).forEach(pe => { const ev = (pe && pe.eave_height_mm && typeof pe.eave_height_mm.value === 'number') ? pe.eave_height_mm.value : null; if (pe && pe.elevation && ev !== null) eaveByElev[pe.elevation] = ev; });
 const eaveGlobal = (hts.eave_height_mm && typeof hts.eave_height_mm.value === 'number') ? hts.eave_height_mm.value : null;
-const istUeberTraufe = (o) => { const sill = (o && o.sill_height_mm && typeof o.sill_height_mm.value === 'number') ? o.sill_height_mm.value : null; if (sill === null) return false; const ee = (o.elevation && eaveByElev[o.elevation] !== undefined) ? eaveByElev[o.elevation] : eaveGlobal; return ee !== null && sill >= ee; };
-const openAreaByElev = {};
+const eaveFor = (o) => { const w = (o && o.parent_face_id) ? wallById[o.parent_face_id] : null; const wh = (w && w.height_mm && typeof w.height_mm.value === 'number') ? w.height_mm.value : null; if (wh !== null) return wh; return (o && o.elevation && eaveByElev[o.elevation] !== undefined) ? eaveByElev[o.elevation] : eaveGlobal; };
+const istUeberTraufe = (o) => { const sill = (o && o.sill_height_mm && typeof o.sill_height_mm.value === 'number') ? o.sill_height_mm.value : null; if (sill === null) return false; const ee = eaveFor(o); return ee !== null && sill >= ee; };
+// v1.6: openings are attributed to their wall via parent_face_id; elevation is only a fallback for openings without one.
+const openAreaByFace = {};
+const openAreaByElevUnassigned = {};
 (Array.isArray(r.openings) ? r.openings : []).forEach(o => {
   const a = (o && o.area_mm2 && typeof o.area_mm2.value === 'number') ? o.area_mm2.value : null;
-  if (a && o.elevation && o.elevation !== 'roof' && !istUeberTraufe(o)) openAreaByElev[o.elevation] = (openAreaByElev[o.elevation] || 0) + a;
+  if (!a || !o.elevation || o.elevation === 'roof' || istUeberTraufe(o)) return;
+  if (o.parent_face_id) openAreaByFace[o.parent_face_id] = (openAreaByFace[o.parent_face_id] || 0) + a;
+  else openAreaByElevUnassigned[o.elevation] = (openAreaByElevUnassigned[o.elevation] || 0) + a;
 });
 (Array.isArray(r.faces) ? r.faces : []).forEach(f => {
   if (!f || f.face_class !== 'wall') return;
   const g = (f.area_mm2 && typeof f.area_mm2.value === 'number') ? f.area_mm2.value : null;
   if (g === null) return;
-  if (wallsByElev[f.elevation] > 1) {
-    // A7: multi-face elevations with a model-supplied net area are accepted silently; only warn when the net value is missing
-    const hatNetz = f.net_area_mm2 && typeof f.net_area_mm2 === 'object' && typeof f.net_area_mm2.value === 'number';
-    if (!hatNetz) q.warnings.push('net area not derived for ' + String(f.id) + ': several wall faces share elevation ' + String(f.elevation) + ' and no model net area present');
-    return;
+  let opening = openAreaByFace[f.id] || 0;
+  const unassigned = openAreaByElevUnassigned[f.elevation] || 0;
+  if (unassigned > 0) {
+    if (wallsByElev[f.elevation] === 1) opening += unassigned;
+    else q.warnings.push(String(f.id) + ': openings without parent_face_id on elevation ' + String(f.elevation) + ' could not be attributed to a wall; net area may be too high');
   }
-  const net = Math.max(0, g - (openAreaByElev[f.elevation] || 0));
+  const net = Math.max(0, g - opening);
   const has = f.net_area_mm2 && typeof f.net_area_mm2 === 'object' && typeof f.net_area_mm2.value === 'number';
   if (!has) {
-    f.net_area_mm2 = { value: Math.round(net), confidence: (f.area_mm2.confidence || 'low'), source: 'scaled', reference_used: 'gross minus openings on this elevation, computed in code', low_reason: null };
+    f.net_area_mm2 = { value: Math.round(net), confidence: (f.area_mm2.confidence || 'low'), source: 'scaled', reference_used: 'gross minus openings on this wall, computed in code', low_reason: null };
   } else if (net > 0 && Math.abs(f.net_area_mm2.value - net) / net > 0.03) {
     q.warnings.push(String(f.id) + ': reported net area differs more than 3% from computed gross-minus-openings (' + Math.round(f.net_area_mm2.value / 10000) / 100 + ' vs ' + Math.round(net / 10000) / 100 + ' m2)');
   }
+});
+// v1.6: wall dimensions must reconstruct the gross area (width x height + half gable); a mismatch is reported, never corrected.
+(Array.isArray(r.faces) ? r.faces : []).forEach(f => {
+  if (!f || f.face_class !== 'wall') return;
+  const gv = (m) => (m && typeof m === 'object' && typeof m.value === 'number') ? m.value : null;
+  const w = gv(f.width_mm), h = gv(f.height_mm), gab = gv(f.gable_height_mm) || 0, a = gv(f.area_mm2);
+  if (!w || !h || !a) return;
+  const calc = w * h + 0.5 * w * gab;
+  const dev = Math.abs(calc - a) / a;
+  if (dev > 0.02) q.warnings.push(String(f.id) + ': width x height (+ gable) = ' + Math.round(calc / 10000) / 100 + ' m2, but area_mm2 = ' + Math.round(a / 10000) / 100 + ' m2 (' + Math.round(dev * 100) + '% off)');
 });
 const chains = Array.isArray(q.dimension_chains) ? q.dimension_chains : [];
 chains.forEach(c => {

@@ -8,7 +8,7 @@ SnapTape measures houses from photos. A contractor uploads photos of a house (or
 
 ## The most important rule
 
-All parts of the app share one data format: **the measurement JSON, defined in `shared/schema/measurement-v1.5.json`.** The pipeline writes it, the viewer reads it, the report exports it. A complete example lives in `fixtures/garage-house.json` — use it as test data everywhere.
+All parts of the app share one data format: **the measurement JSON, defined in `shared/schema/measurement-v1.6.json`.** The pipeline writes it, the viewer reads it, the report exports it. A complete example lives in `fixtures/garage-house.json` — use it as test data everywhere.
 
 Two things follow from this rule:
 - **Never invent new fields or formats.** If something seems missing, stop and ask.

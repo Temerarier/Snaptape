@@ -14,9 +14,9 @@ FULL DELIVERABLE - a complete run covers ALL of these; a category that is genuin
 - Building: building_type, stories, roof_type, shared_walls (duplex/townhouse).
 - Footprint: width_mm, depth_mm, perimeter_mm, area_mm2 (and the points polygon where derivable).
 - Heights: eave_height_mm, ridge_height_mm; parapet_height_mm only for parapet/flat roofs. On sloped sites or where eave/ridge differ per side, ALSO fill heights.per_elevation (eave/ridge/grade_offset per elevation) and heights.datum_note stating where grade zero was taken.
-- Faces: every roof facet (RF-n) with sloped area_mm2 and pitch (degrees_original + degrees_rounded; rise_over_12_snapped only for US calc profile); every wall (WL-n) per elevation with gross area_mm2 and net_area_mm2; soffit (SF-n) and fascia (FC-n) with soffit_depth_mm where assessable; material where visible.
+- Faces: every roof facet (RF-n) with sloped area_mm2 and pitch (degrees_original + degrees_rounded; rise_over_12_snapped only for US calc profile); every wall (WL-n) per elevation with gross area_mm2 and net_area_mm2, plus width_mm, height_mm and gable_height_mm (see WALL DIMENSION RULE); soffit (SF-n) and fascia (FC-n) with soffit_depth_mm where assessable; material where visible.
 - Edges: every roofline and outline edge (E-n) with edge_class, length_mm and belongs_to_elevation. Report ridge, hip, valley, eave and rake edges individually - their per-class totals are the deliverable a roofer buys.
-- Openings: every window, door, patio_door, garage_door and skylight (W/D/G/SK-n) with width_mm, height_mm, sill_height_mm, position_mm, area_mm2, perimeter_mm.
+- Openings: every window, door, patio_door, garage_door and skylight (W/D/G/SK-n) with width_mm, height_mm, sill_height_mm, position_mm, area_mm2, perimeter_mm and parent_face_id (see OPENING PARENT RULE).
 - Attachments: every dormer, bay, balcony, awning, addition and chimney with width/height/depth where assessable, PLUS placement so it can be modeled: position_mm (lower-left corner on the parent elevation, like openings; for roof objects x along the eave from its left end, y from the eave upward along the slope), parent_face_id (the WL-n/RF-n it sits on), attached (false for free-standing garages/outbuildings - never merge those into the house), include_in_footprint, and for dormers dormer.style plus dormer.face_pitch_deg.
 Edge lengths, roof areas and heights are cross-checked downstream against footprint + pitch geometry. Keep them mutually consistent (e.g. a gable ridge equals the footprint side it runs along) instead of estimating each number in isolation.
 
@@ -33,6 +33,9 @@ MEASUREMENT DEFINITIONS (use exactly these):
 - Edge classes: ridge = horizontal top edge; hip = sloped external junction of two roof faces; valley = sloped internal junction; eave = horizontal lower roof edge; rake = sloped gable-end roof edge; outside_corner / inside_corner = vertical wall corners; head / sill / jamb = top / bottom / side edge of an opening (report only when individually relevant). Use "unclassified" instead of guessing.
 - Soffit: the horizontal underside of the roof overhang; soffit_depth_mm = horizontal distance from wall face to fascia.
 - Fascia: the vertical board capping the eave end of the overhang; its face area = fascia run length x fascia height.
+- Wall width: the horizontal extent of that single wall face - the footprint segment it sits on - never the whole building width.
+- Wall height: ground line to the eave line AT THAT FACE, i.e. the rectangular part of the wall. A gable above it is never included here.
+- Gable height: rise from that eave line to the ridge, on walls that carry a gable.
 - Footprint perimeter: total outline length including every jog and bay; footprint area is enclosed by the same outline.
 
 VERTICAL ANCHOR RULE: eave/ridge/sill heights must be scaled from at least one VERTICAL reference chain (door height, storey height, vertically counted brick courses) - never purely from horizontal references. Produce raw estimates for eave_height from at least TWO different vertical chains when available. If the ground line is occluded (fence, vehicles, vegetation), state the assumed ground offset in low_reason, add one quality.warnings entry, and cap confidence at medium. Photos looking steeply upward compress verticals: cap height confidence at low and prefer chains from the most level photo available.
@@ -63,6 +66,10 @@ FACE COLOR RULE (v1.4, plans): fill color ONLY when the drawing explicitly provi
 CONDITION RULE (v1.4, plans): condition_areas cannot be read from drawings - always an empty array, without warnings. Downspouts: report drops (DS-n with elevation, length_mm, position_mm.x, connects_edge_id) only where the elevation drawings actually show them; otherwise leave the array empty.
 
 PENETRATION RULE (v1.4): pipes and vents drawn on roof plans or elevations are attachments with type "pipe" / "vent" and position_mm on their parent face. Count what the drawings show; do not invent typical penetrations.
+
+WALL DIMENSION RULE (v1.6): for every wall face (WL-n) report three values: width_mm (how wide this one wall is), height_mm (ground to eave at this wall, the rectangular part only) and gable_height_mm (eave to ridge, only if this wall has a gable; otherwise null). Measure them PER WALL. The building width and eave height you already report stay as they are; these are for the single wall. A garage front and the main front are two walls with two different widths and heights, even though both are elevation "front". Then check: width x height + 0.5 x width x gable_height must equal that wall's area_mm2 within 2%. If it does not, keep the values as measured and add one quality.warnings entry with the wall id and both numbers. Do not change a measured value to make the check pass.
+
+OPENING PARENT RULE (v1.6): every opening carries parent_face_id - the WL-n it sits on; skylights take their RF-n. elevation alone is NOT sufficient: an attached garage front and the main front are both elevation "front", so without the face id an opening cannot be attributed to a wall and net wall areas cannot be computed. If you genuinely cannot tell which face an opening belongs to, set parent_face_id null and add one quality.warnings entry naming that opening - never guess.
 
 GRAPHIC SCALE FALLBACK: if a target value has no written dimension on
 the sheet, but at least one written dimension chain exists, derive

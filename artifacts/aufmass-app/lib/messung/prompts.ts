@@ -57,7 +57,7 @@ export function baueSystemText(
 ): string {
   const prompt = ladeRepoDatei(PROMPT_DATEI[route]);
   const katalog = ladeRepoDatei("docs/pipeline/reference-catalog.md");
-  const schema = ladeRepoDatei("shared/schema/measurement-v1.5.json");
+  const schema = ladeRepoDatei("shared/schema/measurement-v1.6.json");
 
   let system = prompt.includes("__REFERENCE_CATALOG__")
     ? prompt.replace("__REFERENCE_CATALOG__", katalog)
@@ -76,15 +76,15 @@ export function baueSystemText(
   return system;
 }
 
-// Repair-Prompt: __SCHEMA_V1_5__ wird laut Laufzeit-Hinweis in der
+// Repair-Prompt: __SCHEMA_V1_6__ wird laut Laufzeit-Hinweis in der
 // Datei durch das Schema ersetzt; der Hinweis-Absatz selbst ist nicht
 // Teil des Prompts und wird entfernt.
 export function baueRepairSystemText(): string {
   const prompt = ladeRepoDatei("docs/pipeline/repair-prompt.md");
-  const schema = ladeRepoDatei("shared/schema/measurement-v1.5.json");
+  const schema = ladeRepoDatei("shared/schema/measurement-v1.6.json");
   return prompt
     .replace(/\n\(Runtime note[\s\S]*$/, "\n")
-    .replace("__SCHEMA_V1_5__", schema);
+    .replace("__SCHEMA_V1_6__", schema);
 }
 
 export const REPAIR_VORTEXT = "Your previous response could not be used. Problem: ";

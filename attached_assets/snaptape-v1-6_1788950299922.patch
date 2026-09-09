@@ -1,0 +1,1946 @@
+From 85edb3fcf35a51082e749ba0665a14097f3a335d Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 9 Sep 2026 09:42:16 +0000
+Subject: [PATCH] Schema v1.6: parent_face_id on openings, width/height/gable
+ on wall faces
+
+- shared/schema/measurement-v1.6.json (additive; v1.5 data still validates)
+- extract-photo/plan/mixed prompts: WALL DIMENSION RULE, OPENING PARENT RULE,
+  deliverable lines and definitions
+- compute.js + berechnung.ts port: net wall area grouped by parent_face_id
+  (removes the A7 skip for multi-face elevations), dormer check uses the
+  wall's own height, new width x height (+gable) vs area_mm2 consistency check
+- validate-assemble.js + port: parent_face_id must exist, wall dimension
+  plausibility, openings-vs-gross cross-check per wall face
+- schema path repointed in validateMeasurement.ts, prompts.ts, tests, docs
+- fixture: schema_version 1.6, parent_face_id on all 20 openings, wall
+  dimensions from footprint/eave/ridge/garage geometry (area_mm2 unchanged)
+
+Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_014xT2L4T9xXoRRGon2pZcKX
+---
+ .../aufmass-app/lib/messung/berechnung.ts     |   80 +-
+ artifacts/aufmass-app/lib/messung/prompts.ts  |    8 +-
+ docs/pipeline/compute.js                      |   41 +-
+ docs/pipeline/extract-mixed-prompt.md         |   11 +-
+ docs/pipeline/extract-photo-prompt.md         |   11 +-
+ docs/pipeline/extract-plan-prompt.md          |   11 +-
+ docs/pipeline/repair-prompt.md                |    4 +-
+ docs/pipeline/validate-assemble.js            |   39 +-
+ docs/plan.md                                  |    2 +-
+ fixtures/garage-house.json                    |  132 +-
+ .../src/validateMeasurement.test.ts           |    4 +-
+ lib/measurement/src/validateMeasurement.ts    |    6 +-
+ shared/schema/measurement-v1.6.json           | 1096 +++++++++++++++++
+ 13 files changed, 1391 insertions(+), 54 deletions(-)
+ create mode 100644 shared/schema/measurement-v1.6.json
+
+diff --git a/artifacts/aufmass-app/lib/messung/berechnung.ts b/artifacts/aufmass-app/lib/messung/berechnung.ts
+index 34ea558..e13ab37 100644
+--- a/artifacts/aufmass-app/lib/messung/berechnung.ts
++++ b/artifacts/aufmass-app/lib/messung/berechnung.ts
+@@ -94,36 +94,53 @@ export function berechneKonsolidierung(p: ComputeInput): ComputeInput {
+     }
+   });
+   const wallsByElev: any = {};
+-  (Array.isArray(r.faces) ? r.faces : []).forEach((f: any) => { if (f && f.face_class === 'wall' && f.elevation) wallsByElev[f.elevation] = (wallsByElev[f.elevation] || 0) + 1; });
+-  // B2: openings whose sill sits at/above the elevation's eave (dormers) must not reduce wall net area
++  const wallById: any = {};
++  (Array.isArray(r.faces) ? r.faces : []).forEach((f: any) => { if (f && f.face_class === 'wall') { if (f.id) wallById[f.id] = f; if (f.elevation) wallsByElev[f.elevation] = (wallsByElev[f.elevation] || 0) + 1; } });
++  // B2: openings whose sill sits at/above the eave (dormers) must not reduce wall net area.
++  // v1.6: the eave is taken from the opening's own wall (WL-n.height_mm) when present, else per elevation as before.
+   const eaveByElev: any = {};
+   const hts = (r.building && r.building.heights) || {};
+   (Array.isArray(hts.per_elevation) ? hts.per_elevation : []).forEach((pe: any) => { const ev = (pe && pe.eave_height_mm && typeof pe.eave_height_mm.value === 'number') ? pe.eave_height_mm.value : null; if (pe && pe.elevation && ev !== null) eaveByElev[pe.elevation] = ev; });
+   const eaveGlobal = (hts.eave_height_mm && typeof hts.eave_height_mm.value === 'number') ? hts.eave_height_mm.value : null;
+-  const istUeberTraufe = (o: any) => { const sill = (o && o.sill_height_mm && typeof o.sill_height_mm.value === 'number') ? o.sill_height_mm.value : null; if (sill === null) return false; const ee = (o.elevation && eaveByElev[o.elevation] !== undefined) ? eaveByElev[o.elevation] : eaveGlobal; return ee !== null && sill >= ee; };
+-  const openAreaByElev: any = {};
++  const eaveFor = (o: any) => { const w = (o && o.parent_face_id) ? wallById[o.parent_face_id] : null; const wh = (w && w.height_mm && typeof w.height_mm.value === 'number') ? w.height_mm.value : null; if (wh !== null) return wh; return (o && o.elevation && eaveByElev[o.elevation] !== undefined) ? eaveByElev[o.elevation] : eaveGlobal; };
++  const istUeberTraufe = (o: any) => { const sill = (o && o.sill_height_mm && typeof o.sill_height_mm.value === 'number') ? o.sill_height_mm.value : null; if (sill === null) return false; const ee = eaveFor(o); return ee !== null && sill >= ee; };
++  // v1.6: openings are attributed to their wall via parent_face_id; elevation is only a fallback for openings without one.
++  const openAreaByFace: any = {};
++  const openAreaByElevUnassigned: any = {};
+   (Array.isArray(r.openings) ? r.openings : []).forEach((o: any) => {
+     const a = (o && o.area_mm2 && typeof o.area_mm2.value === 'number') ? o.area_mm2.value : null;
+-    if (a && o.elevation && o.elevation !== 'roof' && !istUeberTraufe(o)) openAreaByElev[o.elevation] = (openAreaByElev[o.elevation] || 0) + a;
++    if (!a || !o.elevation || o.elevation === 'roof' || istUeberTraufe(o)) return;
++    if (o.parent_face_id) openAreaByFace[o.parent_face_id] = (openAreaByFace[o.parent_face_id] || 0) + a;
++    else openAreaByElevUnassigned[o.elevation] = (openAreaByElevUnassigned[o.elevation] || 0) + a;
+   });
+   (Array.isArray(r.faces) ? r.faces : []).forEach((f: any) => {
+     if (!f || f.face_class !== 'wall') return;
+     const g = (f.area_mm2 && typeof f.area_mm2.value === 'number') ? f.area_mm2.value : null;
+     if (g === null) return;
+-    if (wallsByElev[f.elevation] > 1) {
+-      // A7: multi-face elevations with a model-supplied net area are accepted silently; only warn when the net value is missing
+-      const hatNetz = f.net_area_mm2 && typeof f.net_area_mm2 === 'object' && typeof f.net_area_mm2.value === 'number';
+-      if (!hatNetz) q.warnings.push('net area not derived for ' + String(f.id) + ': several wall faces share elevation ' + String(f.elevation) + ' and no model net area present');
+-      return;
++    let opening: number = openAreaByFace[f.id] || 0;
++    const unassigned = openAreaByElevUnassigned[f.elevation] || 0;
++    if (unassigned > 0) {
++      if (wallsByElev[f.elevation] === 1) opening += unassigned;
++      else q.warnings.push(String(f.id) + ': openings without parent_face_id on elevation ' + String(f.elevation) + ' could not be attributed to a wall; net area may be too high');
+     }
+-    const net = Math.max(0, g - (openAreaByElev[f.elevation] || 0));
++    const net = Math.max(0, g - opening);
+     const has = f.net_area_mm2 && typeof f.net_area_mm2 === 'object' && typeof f.net_area_mm2.value === 'number';
+     if (!has) {
+-      f.net_area_mm2 = { value: Math.round(net), confidence: (f.area_mm2.confidence || 'low'), source: 'scaled', reference_used: 'gross minus openings on this elevation, computed in code', low_reason: null };
++      f.net_area_mm2 = { value: Math.round(net), confidence: (f.area_mm2.confidence || 'low'), source: 'scaled', reference_used: 'gross minus openings on this wall, computed in code', low_reason: null };
+     } else if (net > 0 && Math.abs(f.net_area_mm2.value - net) / net > 0.03) {
+       q.warnings.push(String(f.id) + ': reported net area differs more than 3% from computed gross-minus-openings (' + Math.round(f.net_area_mm2.value / 10000) / 100 + ' vs ' + Math.round(net / 10000) / 100 + ' m2)');
+     }
+   });
++  // v1.6: wall dimensions must reconstruct the gross area (width x height + half gable); a mismatch is reported, never corrected.
++  (Array.isArray(r.faces) ? r.faces : []).forEach((f: any) => {
++    if (!f || f.face_class !== 'wall') return;
++    const gv = (m: any) => (m && typeof m === 'object' && typeof m.value === 'number') ? m.value : null;
++    const w = gv(f.width_mm), h = gv(f.height_mm), gab = gv(f.gable_height_mm) || 0, a = gv(f.area_mm2);
++    if (!w || !h || !a) return;
++    const calc = w * h + 0.5 * w * gab;
++    const dev = Math.abs(calc - a) / a;
++    if (dev > 0.02) q.warnings.push(String(f.id) + ': width x height (+ gable) = ' + Math.round(calc / 10000) / 100 + ' m2, but area_mm2 = ' + Math.round(a / 10000) / 100 + ' m2 (' + Math.round(dev * 100) + '% off)');
++  });
+   const chains = Array.isArray(q.dimension_chains) ? q.dimension_chains : [];
+   chains.forEach((c: any) => {
+     if (c && Array.isArray(c.values_mm) && typeof c.stated_total_mm === 'number' && c.stated_total_mm > 0) {
+@@ -307,6 +324,18 @@ export function validiereUndAssembliere(p: ComputeInput): ValidateAssembleOutput
+     if (o.width_mm !== null && o.width_mm !== undefined && !isMeas(o.width_mm)) v.push(String(o.id) + ': width_mm is not a valid measurement object');
+     if (o.height_mm !== null && o.height_mm !== undefined && !isMeas(o.height_mm)) v.push(String(o.id) + ': height_mm is not a valid measurement object');
+   });
++  // v1.6: parent_face_id must point at an existing face; wall dimensions must be plausible
++  const faceIdsV: any = {};
++  (r.faces || []).forEach((f: any) => { if (f && typeof f.id === 'string') faceIdsV[f.id] = true; });
++  (r.openings || []).forEach((o: any) => {
++    if (o && o.parent_face_id && !faceIdsV[o.parent_face_id]) v.push(String(o.id) + ': parent_face_id ' + String(o.parent_face_id) + ' not found in faces');
++  });
++  (r.faces || []).forEach((f: any) => {
++    if (!f || f.face_class !== 'wall') return;
++    const w = num(f.width_mm); const h = num(f.height_mm);
++    if (w !== null && w !== undefined && (w < 300 || w > 200000)) v.push(String(f.id) + ': width ' + Math.round(w) + ' mm outside 300-200000');
++    if (h !== null && h !== undefined && (h < 500 || h > 40000)) v.push(String(f.id) + ': height ' + Math.round(h) + ' mm outside 500-40000');
++  });
+   const q = (r.quality && typeof r.quality === 'object') ? r.quality : {};
+   r.quality = q;
+   q.warnings = Array.isArray(q.warnings) ? q.warnings : [];
+@@ -354,14 +383,31 @@ export function validiereUndAssembliere(p: ComputeInput): ValidateAssembleOutput
+     }
+     const wallByElev: any = {};
+     facesV.forEach((f: any) => { if (f && f.face_class === 'wall' && f.elevation) { const a = num(f.area_mm2); if (typeof a === 'number') wallByElev[f.elevation] = (wallByElev[f.elevation] || 0) + a; } });
+-    // B2: openings whose sill sits at/above the elevation's eave (dormers) are excluded from the wall cross-check
++    // B2: openings whose sill sits at/above the eave (dormers) are excluded from the wall cross-check.
++    // v1.6: cross-check per wall face via parent_face_id; unassigned openings fall back to the elevation only when it has one wall.
+     const eaveByElevV: any = {};
+     const htsV = (r.building && r.building.heights) || {};
+     (Array.isArray(htsV.per_elevation) ? htsV.per_elevation : []).forEach((pe: any) => { const ev = pe ? num(pe.eave_height_mm) : null; if (pe && pe.elevation && ev !== null) eaveByElevV[pe.elevation] = ev; });
+-    const istUeberTraufeV = (o: any) => { const sill = o ? num(o.sill_height_mm) : null; if (sill === null || sill === undefined) return false; const ee = (o.elevation && eaveByElevV[o.elevation] !== undefined) ? eaveByElevV[o.elevation] : eave; return ee !== null && ee !== undefined && sill >= ee; };
+-    const opByElev: any = {};
+-    (Array.isArray(r.openings) ? r.openings : []).forEach((o: any) => { if (o && o.elevation && o.elevation !== 'roof' && !istUeberTraufeV(o)) { const a = num(o.area_mm2); if (typeof a === 'number') opByElev[o.elevation] = (opByElev[o.elevation] || 0) + a; } });
+-    Object.keys(opByElev).forEach(el => { if (wallByElev[el] && opByElev[el] > wallByElev[el]) q.warnings.push('geometry check openings on ' + el + ': total opening area exceeds wall gross area'); });
++    const wallByIdV: any = {};
++    const wallCountByElevV: any = {};
++    facesV.forEach((f: any) => { if (f && f.face_class === 'wall') { if (f.id) wallByIdV[f.id] = f; if (f.elevation) wallCountByElevV[f.elevation] = (wallCountByElevV[f.elevation] || 0) + 1; } });
++    const eaveForV = (o: any) => { const w = (o && o.parent_face_id) ? wallByIdV[o.parent_face_id] : null; const wh = w ? num(w.height_mm) : null; if (wh !== null && wh !== undefined) return wh; return (o && o.elevation && eaveByElevV[o.elevation] !== undefined) ? eaveByElevV[o.elevation] : eave; };
++    const istUeberTraufeV = (o: any) => { const sill = o ? num(o.sill_height_mm) : null; if (sill === null || sill === undefined) return false; const ee = eaveForV(o); return ee !== null && ee !== undefined && sill >= ee; };
++    const opByFace: any = {};
++    const opUnassignedByElev: any = {};
++    (Array.isArray(r.openings) ? r.openings : []).forEach((o: any) => {
++      if (!o || !o.elevation || o.elevation === 'roof' || istUeberTraufeV(o)) return;
++      const a = num(o.area_mm2); if (typeof a !== 'number') return;
++      if (o.parent_face_id) opByFace[o.parent_face_id] = (opByFace[o.parent_face_id] || 0) + a;
++      else opUnassignedByElev[o.elevation] = (opUnassignedByElev[o.elevation] || 0) + a;
++    });
++    facesV.forEach((f: any) => {
++      if (!f || f.face_class !== 'wall') return;
++      const g = num(f.area_mm2); if (typeof g !== 'number') return;
++      let op: number = opByFace[f.id] || 0;
++      if (wallCountByElevV[f.elevation] === 1) op += (opUnassignedByElev[f.elevation] || 0);
++      if (op > g) q.warnings.push('geometry check openings on ' + String(f.id) + ': total opening area exceeds wall gross area');
++    });
+   })();
+   const summary = 'country ' + (r.meta ? r.meta.country : '?') + ' | faces ' + (r.faces || []).length + ' | edges ' + (r.edges || []).length + ' | openings ' + (r.openings || []).length + ' | attachments ' + (r.attachments || []).length + ' | downspouts ' + (r.downspouts || []).length + ' | condition ' + (r.condition_areas || []).length + ' | warnings ' + q.warnings.length + (p.repaired ? ' | repaired output' : '');
+   return { valid: v.length === 0, violations: v, summary: summary, usage: p.usage || null, stop_reason: p.stop_reason || null, model: p.model || null, repaired: !!p.repaired, result: r };
+diff --git a/artifacts/aufmass-app/lib/messung/prompts.ts b/artifacts/aufmass-app/lib/messung/prompts.ts
+index 9b30f7e..03cdee8 100644
+--- a/artifacts/aufmass-app/lib/messung/prompts.ts
++++ b/artifacts/aufmass-app/lib/messung/prompts.ts
+@@ -57,7 +57,7 @@ export function baueSystemText(
+ ): string {
+   const prompt = ladeRepoDatei(PROMPT_DATEI[route]);
+   const katalog = ladeRepoDatei("docs/pipeline/reference-catalog.md");
+-  const schema = ladeRepoDatei("shared/schema/measurement-v1.5.json");
++  const schema = ladeRepoDatei("shared/schema/measurement-v1.6.json");
+ 
+   let system = prompt.includes("__REFERENCE_CATALOG__")
+     ? prompt.replace("__REFERENCE_CATALOG__", katalog)
+@@ -76,15 +76,15 @@ export function baueSystemText(
+   return system;
+ }
+ 
+-// Repair-Prompt: __SCHEMA_V1_5__ wird laut Laufzeit-Hinweis in der
++// Repair-Prompt: __SCHEMA_V1_6__ wird laut Laufzeit-Hinweis in der
+ // Datei durch das Schema ersetzt; der Hinweis-Absatz selbst ist nicht
+ // Teil des Prompts und wird entfernt.
+ export function baueRepairSystemText(): string {
+   const prompt = ladeRepoDatei("docs/pipeline/repair-prompt.md");
+-  const schema = ladeRepoDatei("shared/schema/measurement-v1.5.json");
++  const schema = ladeRepoDatei("shared/schema/measurement-v1.6.json");
+   return prompt
+     .replace(/\n\(Runtime note[\s\S]*$/, "\n")
+-    .replace("__SCHEMA_V1_5__", schema);
++    .replace("__SCHEMA_V1_6__", schema);
+ }
+ 
+ export const REPAIR_VORTEXT = "Your previous response could not be used. Problem: ";
+diff --git a/docs/pipeline/compute.js b/docs/pipeline/compute.js
+index 567b03c..695e36d 100644
+--- a/docs/pipeline/compute.js
++++ b/docs/pipeline/compute.js
+@@ -67,36 +67,53 @@ const PITCH_SNAPS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 18, 24];
+   }
+ });
+ const wallsByElev = {};
+-(Array.isArray(r.faces) ? r.faces : []).forEach(f => { if (f && f.face_class === 'wall' && f.elevation) wallsByElev[f.elevation] = (wallsByElev[f.elevation] || 0) + 1; });
+-// B2: openings whose sill sits at/above the elevation's eave (dormers) must not reduce wall net area
++const wallById = {};
++(Array.isArray(r.faces) ? r.faces : []).forEach(f => { if (f && f.face_class === 'wall') { if (f.id) wallById[f.id] = f; if (f.elevation) wallsByElev[f.elevation] = (wallsByElev[f.elevation] || 0) + 1; } });
++// B2: openings whose sill sits at/above the eave (dormers) must not reduce wall net area.
++// v1.6: the eave is taken from the opening's own wall (WL-n.height_mm) when present, else per elevation as before.
+ const eaveByElev = {};
+ const hts = (r.building && r.building.heights) || {};
+ (Array.isArray(hts.per_elevation) ? hts.per_elevation : []).forEach(pe => { const ev = (pe && pe.eave_height_mm && typeof pe.eave_height_mm.value === 'number') ? pe.eave_height_mm.value : null; if (pe && pe.elevation && ev !== null) eaveByElev[pe.elevation] = ev; });
+ const eaveGlobal = (hts.eave_height_mm && typeof hts.eave_height_mm.value === 'number') ? hts.eave_height_mm.value : null;
+-const istUeberTraufe = (o) => { const sill = (o && o.sill_height_mm && typeof o.sill_height_mm.value === 'number') ? o.sill_height_mm.value : null; if (sill === null) return false; const ee = (o.elevation && eaveByElev[o.elevation] !== undefined) ? eaveByElev[o.elevation] : eaveGlobal; return ee !== null && sill >= ee; };
+-const openAreaByElev = {};
++const eaveFor = (o) => { const w = (o && o.parent_face_id) ? wallById[o.parent_face_id] : null; const wh = (w && w.height_mm && typeof w.height_mm.value === 'number') ? w.height_mm.value : null; if (wh !== null) return wh; return (o && o.elevation && eaveByElev[o.elevation] !== undefined) ? eaveByElev[o.elevation] : eaveGlobal; };
++const istUeberTraufe = (o) => { const sill = (o && o.sill_height_mm && typeof o.sill_height_mm.value === 'number') ? o.sill_height_mm.value : null; if (sill === null) return false; const ee = eaveFor(o); return ee !== null && sill >= ee; };
++// v1.6: openings are attributed to their wall via parent_face_id; elevation is only a fallback for openings without one.
++const openAreaByFace = {};
++const openAreaByElevUnassigned = {};
+ (Array.isArray(r.openings) ? r.openings : []).forEach(o => {
+   const a = (o && o.area_mm2 && typeof o.area_mm2.value === 'number') ? o.area_mm2.value : null;
+-  if (a && o.elevation && o.elevation !== 'roof' && !istUeberTraufe(o)) openAreaByElev[o.elevation] = (openAreaByElev[o.elevation] || 0) + a;
++  if (!a || !o.elevation || o.elevation === 'roof' || istUeberTraufe(o)) return;
++  if (o.parent_face_id) openAreaByFace[o.parent_face_id] = (openAreaByFace[o.parent_face_id] || 0) + a;
++  else openAreaByElevUnassigned[o.elevation] = (openAreaByElevUnassigned[o.elevation] || 0) + a;
+ });
+ (Array.isArray(r.faces) ? r.faces : []).forEach(f => {
+   if (!f || f.face_class !== 'wall') return;
+   const g = (f.area_mm2 && typeof f.area_mm2.value === 'number') ? f.area_mm2.value : null;
+   if (g === null) return;
+-  if (wallsByElev[f.elevation] > 1) {
+-    // A7: multi-face elevations with a model-supplied net area are accepted silently; only warn when the net value is missing
+-    const hatNetz = f.net_area_mm2 && typeof f.net_area_mm2 === 'object' && typeof f.net_area_mm2.value === 'number';
+-    if (!hatNetz) q.warnings.push('net area not derived for ' + String(f.id) + ': several wall faces share elevation ' + String(f.elevation) + ' and no model net area present');
+-    return;
++  let opening = openAreaByFace[f.id] || 0;
++  const unassigned = openAreaByElevUnassigned[f.elevation] || 0;
++  if (unassigned > 0) {
++    if (wallsByElev[f.elevation] === 1) opening += unassigned;
++    else q.warnings.push(String(f.id) + ': openings without parent_face_id on elevation ' + String(f.elevation) + ' could not be attributed to a wall; net area may be too high');
+   }
+-  const net = Math.max(0, g - (openAreaByElev[f.elevation] || 0));
++  const net = Math.max(0, g - opening);
+   const has = f.net_area_mm2 && typeof f.net_area_mm2 === 'object' && typeof f.net_area_mm2.value === 'number';
+   if (!has) {
+-    f.net_area_mm2 = { value: Math.round(net), confidence: (f.area_mm2.confidence || 'low'), source: 'scaled', reference_used: 'gross minus openings on this elevation, computed in code', low_reason: null };
++    f.net_area_mm2 = { value: Math.round(net), confidence: (f.area_mm2.confidence || 'low'), source: 'scaled', reference_used: 'gross minus openings on this wall, computed in code', low_reason: null };
+   } else if (net > 0 && Math.abs(f.net_area_mm2.value - net) / net > 0.03) {
+     q.warnings.push(String(f.id) + ': reported net area differs more than 3% from computed gross-minus-openings (' + Math.round(f.net_area_mm2.value / 10000) / 100 + ' vs ' + Math.round(net / 10000) / 100 + ' m2)');
+   }
+ });
++// v1.6: wall dimensions must reconstruct the gross area (width x height + half gable); a mismatch is reported, never corrected.
++(Array.isArray(r.faces) ? r.faces : []).forEach(f => {
++  if (!f || f.face_class !== 'wall') return;
++  const gv = (m) => (m && typeof m === 'object' && typeof m.value === 'number') ? m.value : null;
++  const w = gv(f.width_mm), h = gv(f.height_mm), gab = gv(f.gable_height_mm) || 0, a = gv(f.area_mm2);
++  if (!w || !h || !a) return;
++  const calc = w * h + 0.5 * w * gab;
++  const dev = Math.abs(calc - a) / a;
++  if (dev > 0.02) q.warnings.push(String(f.id) + ': width x height (+ gable) = ' + Math.round(calc / 10000) / 100 + ' m2, but area_mm2 = ' + Math.round(a / 10000) / 100 + ' m2 (' + Math.round(dev * 100) + '% off)');
++});
+ const chains = Array.isArray(q.dimension_chains) ? q.dimension_chains : [];
+ chains.forEach(c => {
+   if (c && Array.isArray(c.values_mm) && typeof c.stated_total_mm === 'number' && c.stated_total_mm > 0) {
+diff --git a/docs/pipeline/extract-mixed-prompt.md b/docs/pipeline/extract-mixed-prompt.md
+index ddd162a..397ed08 100644
+--- a/docs/pipeline/extract-mixed-prompt.md
++++ b/docs/pipeline/extract-mixed-prompt.md
+@@ -17,9 +17,9 @@ FULL DELIVERABLE - a complete run covers ALL of these; a category that is genuin
+ - Building: building_type, stories, roof_type, shared_walls (duplex/townhouse).
+ - Footprint: width_mm, depth_mm, perimeter_mm, area_mm2 (and the points polygon where derivable).
+ - Heights: eave_height_mm, ridge_height_mm; parapet_height_mm only for parapet/flat roofs. On sloped sites or where eave/ridge differ per side, ALSO fill heights.per_elevation (eave/ridge/grade_offset per elevation) and heights.datum_note stating where grade zero was taken.
+-- Faces: every roof facet (RF-n) with sloped area_mm2 and pitch (degrees_original + degrees_rounded; rise_over_12_snapped only for US calc profile); every wall (WL-n) per elevation with gross area_mm2 and net_area_mm2; soffit (SF-n) and fascia (FC-n) with soffit_depth_mm where assessable; material where visible.
++- Faces: every roof facet (RF-n) with sloped area_mm2 and pitch (degrees_original + degrees_rounded; rise_over_12_snapped only for US calc profile); every wall (WL-n) per elevation with gross area_mm2 and net_area_mm2, plus width_mm, height_mm and gable_height_mm (see WALL DIMENSION RULE); soffit (SF-n) and fascia (FC-n) with soffit_depth_mm where assessable; material where visible.
+ - Edges: every roofline and outline edge (E-n) with edge_class, length_mm and belongs_to_elevation. Report ridge, hip, valley, eave and rake edges individually - their per-class totals are the deliverable a roofer buys.
+-- Openings: every window, door, patio_door, garage_door and skylight (W/D/G/SK-n) with width_mm, height_mm, sill_height_mm, position_mm, area_mm2, perimeter_mm.
++- Openings: every window, door, patio_door, garage_door and skylight (W/D/G/SK-n) with width_mm, height_mm, sill_height_mm, position_mm, area_mm2, perimeter_mm and parent_face_id (see OPENING PARENT RULE).
+ - Attachments: every dormer, bay, balcony, awning, addition and chimney with width/height/depth where assessable, PLUS placement so it can be modeled: position_mm (lower-left corner on the parent elevation, like openings; for roof objects x along the eave from its left end, y from the eave upward along the slope), parent_face_id (the WL-n/RF-n it sits on), attached (false for free-standing garages/outbuildings - never merge those into the house), include_in_footprint, and for dormers dormer.style plus dormer.face_pitch_deg. Pipes and vents count as attachments too (see PENETRATION RULE).
+ - Downspouts: every visible drop as DS-n (see DOWNSPOUT RULE).
+ - Condition areas: photo-visible damage as CA-n (see CONDITION RULE).
+@@ -38,6 +38,9 @@ MEASUREMENT DEFINITIONS (use exactly these):
+ - Edge classes: ridge = horizontal top edge; hip = sloped external junction of two roof faces; valley = sloped internal junction; eave = horizontal lower roof edge; rake = sloped gable-end roof edge; outside_corner / inside_corner = vertical wall corners; head / sill / jamb = top / bottom / side edge of an opening (report only when individually relevant). Use "unclassified" instead of guessing.
+ - Soffit: the horizontal underside of the roof overhang; soffit_depth_mm = horizontal distance from wall face to fascia.
+ - Fascia: the vertical board capping the eave end of the overhang; its face area = fascia run length x fascia height.
++- Wall width: the horizontal extent of that single wall face - the footprint segment it sits on - never the whole building width.
++- Wall height: ground line to the eave line AT THAT FACE, i.e. the rectangular part of the wall. A gable above it is never included here.
++- Gable height: rise from that eave line to the ridge, on walls that carry a gable.
+ - Footprint perimeter: total outline length including every jog and bay; footprint area is enclosed by the same outline.
+ 
+ BRICK FORMAT RULE: before using brick coursing as a reference, determine the format from the stone proportions (stretcher length : height): DE Normalformat NF 240x71 mm -> course incl. joint 83.3 mm; Duennformat DF 240x52 -> 62.5 mm; Reichsformat (pre-1950) 250x65 -> ~78 mm; US modular 194x57 -> 67.7 mm. State the detected format in the reference entry. If the facade may be brick slips on insulation (Riemchen: very flat reveals, unusually perfect joints, modern windows in an 'old' wall), down-weight coursing to reliability low and add a warning.
+@@ -73,6 +76,10 @@ FACE COLOR RULE (v1.4): for every face, fill color with the dominant surface col
+ 
+ PENETRATION RULE (v1.4): pipes (plumbing stacks) and vents (roof/wall vents incl. exhaust caps) are attachments with type "pipe" / "vent", each with position_mm and parent_face_id. They fall under the COMPLETENESS CONTRACT: count them across all photos first, then emit exactly that many entries - pipe boots and vents are per-piece quote positions, an undercount is a wrong answer.
+ 
++WALL DIMENSION RULE (v1.6): for every wall face (WL-n) report three values: width_mm (how wide this one wall is), height_mm (ground to eave at this wall, the rectangular part only) and gable_height_mm (eave to ridge, only if this wall has a gable; otherwise null). Measure them PER WALL. The building width and eave height you already report stay as they are; these are for the single wall. A garage front and the main front are two walls with two different widths and heights, even though both are elevation "front". Then check: width x height + 0.5 x width x gable_height must equal that wall's area_mm2 within 2%. If it does not, keep the values as measured and add one quality.warnings entry with the wall id and both numbers. Do not change a measured value to make the check pass.
++
++OPENING PARENT RULE (v1.6): every opening carries parent_face_id - the WL-n it sits on; skylights take their RF-n. elevation alone is NOT sufficient: an attached garage front and the main front are both elevation "front", so without the face id an opening cannot be attributed to a wall and net wall areas cannot be computed. If you genuinely cannot tell which face an opening belongs to, set parent_face_id null and add one quality.warnings entry naming that opening - never guess.
++
+ DOWNSPOUT RULE (v1.4): report every visible downspout drop in the top-level downspouts array (DS-n): elevation, length_mm (approximately the eave height of that elevation when not directly measurable, with source "estimated"), position_mm.x along its elevation, and connects_edge_id (the eave edge E-n whose gutter it serves) where identifiable. Gutter RUNS stay derived downstream from eave edges - only the drops are reported here.
+ 
+ CONDITION RULE (v1.4): report ONLY damage that is actually visible in the photos in condition_areas (CA-n): type (failing_paint / rot / sheathing_damage / decking_damage / mold_mildew / rust / crack / missing_material), parent_face_id, elevation, area_mm2, severity (light / moderate / severe), position_mm, and photo_index of the photo where it shows best. Never speculate about hidden damage; a shadowed or partially visible finding gets confidence low with a low_reason. No visible damage means an empty array - not a warning.
+diff --git a/docs/pipeline/extract-photo-prompt.md b/docs/pipeline/extract-photo-prompt.md
+index 2d45ead..5f02613 100644
+--- a/docs/pipeline/extract-photo-prompt.md
++++ b/docs/pipeline/extract-photo-prompt.md
+@@ -16,9 +16,9 @@ FULL DELIVERABLE - a complete run covers ALL of these; a category that is genuin
+ - Building: building_type, stories, roof_type, shared_walls (duplex/townhouse).
+ - Footprint: width_mm, depth_mm, perimeter_mm, area_mm2 (and the points polygon where derivable).
+ - Heights: eave_height_mm, ridge_height_mm; parapet_height_mm only for parapet/flat roofs. On sloped sites or where eave/ridge differ per side, ALSO fill heights.per_elevation (eave/ridge/grade_offset per elevation) and heights.datum_note stating where grade zero was taken.
+-- Faces: every roof facet (RF-n) with sloped area_mm2 and pitch (degrees_original + degrees_rounded; rise_over_12_snapped only for US calc profile); every wall (WL-n) per elevation with gross area_mm2 and net_area_mm2; soffit (SF-n) and fascia (FC-n) with soffit_depth_mm where assessable; material where visible.
++- Faces: every roof facet (RF-n) with sloped area_mm2 and pitch (degrees_original + degrees_rounded; rise_over_12_snapped only for US calc profile); every wall (WL-n) per elevation with gross area_mm2 and net_area_mm2, plus width_mm, height_mm and gable_height_mm (see WALL DIMENSION RULE); soffit (SF-n) and fascia (FC-n) with soffit_depth_mm where assessable; material where visible.
+ - Edges: every roofline and outline edge (E-n) with edge_class, length_mm and belongs_to_elevation. Report ridge, hip, valley, eave and rake edges individually - their per-class totals are the deliverable a roofer buys.
+-- Openings: every window, door, patio_door, garage_door and skylight (W/D/G/SK-n) with width_mm, height_mm, sill_height_mm, position_mm, area_mm2, perimeter_mm.
++- Openings: every window, door, patio_door, garage_door and skylight (W/D/G/SK-n) with width_mm, height_mm, sill_height_mm, position_mm, area_mm2, perimeter_mm and parent_face_id (see OPENING PARENT RULE).
+ - Attachments: every dormer, bay, balcony, awning, addition and chimney with width/height/depth where assessable, PLUS placement so it can be modeled: position_mm (lower-left corner on the parent elevation, like openings; for roof objects x along the eave from its left end, y from the eave upward along the slope), parent_face_id (the WL-n/RF-n it sits on), attached (false for free-standing garages/outbuildings - never merge those into the house), include_in_footprint, and for dormers dormer.style plus dormer.face_pitch_deg. Pipes and vents count as attachments too (see PENETRATION RULE).
+ - Downspouts: every visible drop as DS-n (see DOWNSPOUT RULE).
+ - Condition areas: photo-visible damage as CA-n (see CONDITION RULE).
+@@ -37,6 +37,9 @@ MEASUREMENT DEFINITIONS (use exactly these):
+ - Edge classes: ridge = horizontal top edge; hip = sloped external junction of two roof faces; valley = sloped internal junction; eave = horizontal lower roof edge; rake = sloped gable-end roof edge; outside_corner / inside_corner = vertical wall corners; head / sill / jamb = top / bottom / side edge of an opening (report only when individually relevant). Use "unclassified" instead of guessing.
+ - Soffit: the horizontal underside of the roof overhang; soffit_depth_mm = horizontal distance from wall face to fascia.
+ - Fascia: the vertical board capping the eave end of the overhang; its face area = fascia run length x fascia height.
++- Wall width: the horizontal extent of that single wall face - the footprint segment it sits on - never the whole building width.
++- Wall height: ground line to the eave line AT THAT FACE, i.e. the rectangular part of the wall. A gable above it is never included here.
++- Gable height: rise from that eave line to the ridge, on walls that carry a gable.
+ - Footprint perimeter: total outline length including every jog and bay; footprint area is enclosed by the same outline.
+ 
+ BRICK FORMAT RULE: before using brick coursing as a reference, determine the format from the stone proportions (stretcher length : height): DE Normalformat NF 240x71 mm -> course incl. joint 83.3 mm; Duennformat DF 240x52 -> 62.5 mm; Reichsformat (pre-1950) 250x65 -> ~78 mm; US modular 194x57 -> 67.7 mm. State the detected format in the reference entry. If the facade may be brick slips on insulation (Riemchen: very flat reveals, unusually perfect joints, modern windows in an 'old' wall), down-weight coursing to reliability low and add a warning.
+@@ -63,6 +66,10 @@ FACE COLOR RULE (v1.4): for every face, fill color with the dominant surface col
+ 
+ PENETRATION RULE (v1.4): pipes (plumbing stacks) and vents (roof/wall vents incl. exhaust caps) are attachments with type "pipe" / "vent", each with position_mm and parent_face_id. They fall under the COMPLETENESS CONTRACT: count them across all photos first, then emit exactly that many entries - pipe boots and vents are per-piece quote positions, an undercount is a wrong answer.
+ 
++WALL DIMENSION RULE (v1.6): for every wall face (WL-n) report three values: width_mm (how wide this one wall is), height_mm (ground to eave at this wall, the rectangular part only) and gable_height_mm (eave to ridge, only if this wall has a gable; otherwise null). Measure them PER WALL. The building width and eave height you already report stay as they are; these are for the single wall. A garage front and the main front are two walls with two different widths and heights, even though both are elevation "front". Then check: width x height + 0.5 x width x gable_height must equal that wall's area_mm2 within 2%. If it does not, keep the values as measured and add one quality.warnings entry with the wall id and both numbers. Do not change a measured value to make the check pass.
++
++OPENING PARENT RULE (v1.6): every opening carries parent_face_id - the WL-n it sits on; skylights take their RF-n. elevation alone is NOT sufficient: an attached garage front and the main front are both elevation "front", so without the face id an opening cannot be attributed to a wall and net wall areas cannot be computed. If you genuinely cannot tell which face an opening belongs to, set parent_face_id null and add one quality.warnings entry naming that opening - never guess.
++
+ DOWNSPOUT RULE (v1.4): report every visible downspout drop in the top-level downspouts array (DS-n): elevation, length_mm (approximately the eave height of that elevation when not directly measurable, with source "estimated"), position_mm.x along its elevation, and connects_edge_id (the eave edge E-n whose gutter it serves) where identifiable. Gutter RUNS stay derived downstream from eave edges - only the drops are reported here.
+ 
+ CONDITION RULE (v1.4): report ONLY damage that is actually visible in the photos in condition_areas (CA-n): type (failing_paint / rot / sheathing_damage / decking_damage / mold_mildew / rust / crack / missing_material), parent_face_id, elevation, area_mm2, severity (light / moderate / severe), position_mm, and photo_index of the photo where it shows best. Never speculate about hidden damage; a shadowed or partially visible finding gets confidence low with a low_reason. No visible damage means an empty array - not a warning.
+diff --git a/docs/pipeline/extract-plan-prompt.md b/docs/pipeline/extract-plan-prompt.md
+index c8023f9..dc13ea4 100644
+--- a/docs/pipeline/extract-plan-prompt.md
++++ b/docs/pipeline/extract-plan-prompt.md
+@@ -14,9 +14,9 @@ FULL DELIVERABLE - a complete run covers ALL of these; a category that is genuin
+ - Building: building_type, stories, roof_type, shared_walls (duplex/townhouse).
+ - Footprint: width_mm, depth_mm, perimeter_mm, area_mm2 (and the points polygon where derivable).
+ - Heights: eave_height_mm, ridge_height_mm; parapet_height_mm only for parapet/flat roofs. On sloped sites or where eave/ridge differ per side, ALSO fill heights.per_elevation (eave/ridge/grade_offset per elevation) and heights.datum_note stating where grade zero was taken.
+-- Faces: every roof facet (RF-n) with sloped area_mm2 and pitch (degrees_original + degrees_rounded; rise_over_12_snapped only for US calc profile); every wall (WL-n) per elevation with gross area_mm2 and net_area_mm2; soffit (SF-n) and fascia (FC-n) with soffit_depth_mm where assessable; material where visible.
++- Faces: every roof facet (RF-n) with sloped area_mm2 and pitch (degrees_original + degrees_rounded; rise_over_12_snapped only for US calc profile); every wall (WL-n) per elevation with gross area_mm2 and net_area_mm2, plus width_mm, height_mm and gable_height_mm (see WALL DIMENSION RULE); soffit (SF-n) and fascia (FC-n) with soffit_depth_mm where assessable; material where visible.
+ - Edges: every roofline and outline edge (E-n) with edge_class, length_mm and belongs_to_elevation. Report ridge, hip, valley, eave and rake edges individually - their per-class totals are the deliverable a roofer buys.
+-- Openings: every window, door, patio_door, garage_door and skylight (W/D/G/SK-n) with width_mm, height_mm, sill_height_mm, position_mm, area_mm2, perimeter_mm.
++- Openings: every window, door, patio_door, garage_door and skylight (W/D/G/SK-n) with width_mm, height_mm, sill_height_mm, position_mm, area_mm2, perimeter_mm and parent_face_id (see OPENING PARENT RULE).
+ - Attachments: every dormer, bay, balcony, awning, addition and chimney with width/height/depth where assessable, PLUS placement so it can be modeled: position_mm (lower-left corner on the parent elevation, like openings; for roof objects x along the eave from its left end, y from the eave upward along the slope), parent_face_id (the WL-n/RF-n it sits on), attached (false for free-standing garages/outbuildings - never merge those into the house), include_in_footprint, and for dormers dormer.style plus dormer.face_pitch_deg.
+ Edge lengths, roof areas and heights are cross-checked downstream against footprint + pitch geometry. Keep them mutually consistent (e.g. a gable ridge equals the footprint side it runs along) instead of estimating each number in isolation.
+ 
+@@ -33,6 +33,9 @@ MEASUREMENT DEFINITIONS (use exactly these):
+ - Edge classes: ridge = horizontal top edge; hip = sloped external junction of two roof faces; valley = sloped internal junction; eave = horizontal lower roof edge; rake = sloped gable-end roof edge; outside_corner / inside_corner = vertical wall corners; head / sill / jamb = top / bottom / side edge of an opening (report only when individually relevant). Use "unclassified" instead of guessing.
+ - Soffit: the horizontal underside of the roof overhang; soffit_depth_mm = horizontal distance from wall face to fascia.
+ - Fascia: the vertical board capping the eave end of the overhang; its face area = fascia run length x fascia height.
++- Wall width: the horizontal extent of that single wall face - the footprint segment it sits on - never the whole building width.
++- Wall height: ground line to the eave line AT THAT FACE, i.e. the rectangular part of the wall. A gable above it is never included here.
++- Gable height: rise from that eave line to the ridge, on walls that carry a gable.
+ - Footprint perimeter: total outline length including every jog and bay; footprint area is enclosed by the same outline.
+ 
+ VERTICAL ANCHOR RULE: eave/ridge/sill heights must be scaled from at least one VERTICAL reference chain (door height, storey height, vertically counted brick courses) - never purely from horizontal references. Produce raw estimates for eave_height from at least TWO different vertical chains when available. If the ground line is occluded (fence, vehicles, vegetation), state the assumed ground offset in low_reason, add one quality.warnings entry, and cap confidence at medium. Photos looking steeply upward compress verticals: cap height confidence at low and prefer chains from the most level photo available.
+@@ -64,6 +67,10 @@ CONDITION RULE (v1.4, plans): condition_areas cannot be read from drawings - alw
+ 
+ PENETRATION RULE (v1.4): pipes and vents drawn on roof plans or elevations are attachments with type "pipe" / "vent" and position_mm on their parent face. Count what the drawings show; do not invent typical penetrations.
+ 
++WALL DIMENSION RULE (v1.6): for every wall face (WL-n) report three values: width_mm (how wide this one wall is), height_mm (ground to eave at this wall, the rectangular part only) and gable_height_mm (eave to ridge, only if this wall has a gable; otherwise null). Measure them PER WALL. The building width and eave height you already report stay as they are; these are for the single wall. A garage front and the main front are two walls with two different widths and heights, even though both are elevation "front". Then check: width x height + 0.5 x width x gable_height must equal that wall's area_mm2 within 2%. If it does not, keep the values as measured and add one quality.warnings entry with the wall id and both numbers. Do not change a measured value to make the check pass.
++
++OPENING PARENT RULE (v1.6): every opening carries parent_face_id - the WL-n it sits on; skylights take their RF-n. elevation alone is NOT sufficient: an attached garage front and the main front are both elevation "front", so without the face id an opening cannot be attributed to a wall and net wall areas cannot be computed. If you genuinely cannot tell which face an opening belongs to, set parent_face_id null and add one quality.warnings entry naming that opening - never guess.
++
+ GRAPHIC SCALE FALLBACK: if a target value has no written dimension on
+ the sheet, but at least one written dimension chain exists, derive
+ the drawing scale from that chain (prefer a chain on the SAME
+diff --git a/docs/pipeline/repair-prompt.md b/docs/pipeline/repair-prompt.md
+index 058a9fe..6d5e57e 100644
+--- a/docs/pipeline/repair-prompt.md
++++ b/docs/pipeline/repair-prompt.md
+@@ -1,6 +1,6 @@
+ You repair broken model output. Return the SAME measurement data as ONE valid JSON object conforming to the schema below. Do not re-measure anything, no commentary, no markdown fences. If the output was cut off, complete the JSON with null values plus a low_reason for anything you cannot recover.
+ 
+ SCHEMA:
+-__SCHEMA_V1_5__
++__SCHEMA_V1_6__
+ 
+-(Runtime note for the implementation, not part of the prompt: replace __SCHEMA_V1_5__ with the contents of shared/schema/measurement-v1.5.json. The user message contains: "Your previous response could not be used. Problem: <error>" followed by "PREVIOUS OUTPUT:" and the raw text, truncated to 150,000 characters.)
++(Runtime note for the implementation, not part of the prompt: replace __SCHEMA_V1_6__ with the contents of shared/schema/measurement-v1.6.json. The user message contains: "Your previous response could not be used. Problem: <error>" followed by "PREVIOUS OUTPUT:" and the raw text, truncated to 150,000 characters.)
+diff --git a/docs/pipeline/validate-assemble.js b/docs/pipeline/validate-assemble.js
+index 5cb315b..d37b543 100644
+--- a/docs/pipeline/validate-assemble.js
++++ b/docs/pipeline/validate-assemble.js
+@@ -75,6 +75,18 @@ if (ridge !== null && eave !== null && ridge < eave) v.push('ridge height below
+   if (o.width_mm !== null && o.width_mm !== undefined && !isMeas(o.width_mm)) v.push(String(o.id) + ': width_mm is not a valid measurement object');
+   if (o.height_mm !== null && o.height_mm !== undefined && !isMeas(o.height_mm)) v.push(String(o.id) + ': height_mm is not a valid measurement object');
+ });
++// v1.6: parent_face_id must point at an existing face; wall dimensions must be plausible
++const faceIdsV = {};
++(r.faces || []).forEach(f => { if (f && typeof f.id === 'string') faceIdsV[f.id] = true; });
++(r.openings || []).forEach(o => {
++  if (o && o.parent_face_id && !faceIdsV[o.parent_face_id]) v.push(String(o.id) + ': parent_face_id ' + String(o.parent_face_id) + ' not found in faces');
++});
++(r.faces || []).forEach(f => {
++  if (!f || f.face_class !== 'wall') return;
++  const w = num(f.width_mm); const h = num(f.height_mm);
++  if (w !== null && w !== undefined && (w < 300 || w > 200000)) v.push(String(f.id) + ': width ' + Math.round(w) + ' mm outside 300-200000');
++  if (h !== null && h !== undefined && (h < 500 || h > 40000)) v.push(String(f.id) + ': height ' + Math.round(h) + ' mm outside 500-40000');
++});
+ const q = (r.quality && typeof r.quality === 'object') ? r.quality : {};
+ r.quality = q;
+ q.warnings = Array.isArray(q.warnings) ? q.warnings : [];
+@@ -122,14 +134,31 @@ v.forEach(x => q.warnings.push('VALIDATION: ' + x));
+   }
+   const wallByElev = {};
+   facesV.forEach(f => { if (f && f.face_class === 'wall' && f.elevation) { const a = num(f.area_mm2); if (typeof a === 'number') wallByElev[f.elevation] = (wallByElev[f.elevation] || 0) + a; } });
+-  // B2: openings whose sill sits at/above the elevation's eave (dormers) are excluded from the wall cross-check
++  // B2: openings whose sill sits at/above the eave (dormers) are excluded from the wall cross-check.
++  // v1.6: cross-check per wall face via parent_face_id; unassigned openings fall back to the elevation only when it has one wall.
+   const eaveByElevV = {};
+   const htsV = (r.building && r.building.heights) || {};
+   (Array.isArray(htsV.per_elevation) ? htsV.per_elevation : []).forEach(pe => { const ev = pe ? num(pe.eave_height_mm) : null; if (pe && pe.elevation && ev !== null) eaveByElevV[pe.elevation] = ev; });
+-  const istUeberTraufeV = (o) => { const sill = o ? num(o.sill_height_mm) : null; if (sill === null || sill === undefined) return false; const ee = (o.elevation && eaveByElevV[o.elevation] !== undefined) ? eaveByElevV[o.elevation] : eave; return ee !== null && ee !== undefined && sill >= ee; };
+-  const opByElev = {};
+-  (Array.isArray(r.openings) ? r.openings : []).forEach(o => { if (o && o.elevation && o.elevation !== 'roof' && !istUeberTraufeV(o)) { const a = num(o.area_mm2); if (typeof a === 'number') opByElev[o.elevation] = (opByElev[o.elevation] || 0) + a; } });
+-  Object.keys(opByElev).forEach(el => { if (wallByElev[el] && opByElev[el] > wallByElev[el]) q.warnings.push('geometry check openings on ' + el + ': total opening area exceeds wall gross area'); });
++  const wallByIdV = {};
++  const wallCountByElevV = {};
++  facesV.forEach(f => { if (f && f.face_class === 'wall') { if (f.id) wallByIdV[f.id] = f; if (f.elevation) wallCountByElevV[f.elevation] = (wallCountByElevV[f.elevation] || 0) + 1; } });
++  const eaveForV = (o) => { const w = (o && o.parent_face_id) ? wallByIdV[o.parent_face_id] : null; const wh = w ? num(w.height_mm) : null; if (wh !== null && wh !== undefined) return wh; return (o && o.elevation && eaveByElevV[o.elevation] !== undefined) ? eaveByElevV[o.elevation] : eave; };
++  const istUeberTraufeV = (o) => { const sill = o ? num(o.sill_height_mm) : null; if (sill === null || sill === undefined) return false; const ee = eaveForV(o); return ee !== null && ee !== undefined && sill >= ee; };
++  const opByFace = {};
++  const opUnassignedByElev = {};
++  (Array.isArray(r.openings) ? r.openings : []).forEach(o => {
++    if (!o || !o.elevation || o.elevation === 'roof' || istUeberTraufeV(o)) return;
++    const a = num(o.area_mm2); if (typeof a !== 'number') return;
++    if (o.parent_face_id) opByFace[o.parent_face_id] = (opByFace[o.parent_face_id] || 0) + a;
++    else opUnassignedByElev[o.elevation] = (opUnassignedByElev[o.elevation] || 0) + a;
++  });
++  facesV.forEach(f => {
++    if (!f || f.face_class !== 'wall') return;
++    const g = num(f.area_mm2); if (typeof g !== 'number') return;
++    let op = opByFace[f.id] || 0;
++    if (wallCountByElevV[f.elevation] === 1) op += (opUnassignedByElev[f.elevation] || 0);
++    if (op > g) q.warnings.push('geometry check openings on ' + String(f.id) + ': total opening area exceeds wall gross area');
++  });
+ })();
+ const summary = 'country ' + (r.meta ? r.meta.country : '?') + ' | faces ' + (r.faces || []).length + ' | edges ' + (r.edges || []).length + ' | openings ' + (r.openings || []).length + ' | attachments ' + (r.attachments || []).length + ' | downspouts ' + (r.downspouts || []).length + ' | condition ' + (r.condition_areas || []).length + ' | warnings ' + q.warnings.length + (p.repaired ? ' | repaired output' : '');
+ return [{ json: { valid: v.length === 0, violations: v, summary: summary, usage: p.usage || null, stop_reason: p.stop_reason || null, model: p.model || null, repaired: !!p.repaired, result: r } }];
+diff --git a/docs/plan.md b/docs/plan.md
+index e3931b6..db73db1 100644
+--- a/docs/plan.md
++++ b/docs/plan.md
+@@ -8,7 +8,7 @@ SnapTape measures houses from photos. A contractor uploads photos of a house (or
+ 
+ ## The most important rule
+ 
+-All parts of the app share one data format: **the measurement JSON, defined in `shared/schema/measurement-v1.5.json`.** The pipeline writes it, the viewer reads it, the report exports it. A complete example lives in `fixtures/garage-house.json` — use it as test data everywhere.
++All parts of the app share one data format: **the measurement JSON, defined in `shared/schema/measurement-v1.6.json`.** The pipeline writes it, the viewer reads it, the report exports it. A complete example lives in `fixtures/garage-house.json` — use it as test data everywhere.
+ 
+ Two things follow from this rule:
+ - **Never invent new fields or formats.** If something seems missing, stop and ask.
+diff --git a/fixtures/garage-house.json b/fixtures/garage-house.json
+index 28b3711..5b59c6c 100644
+--- a/fixtures/garage-house.json
++++ b/fixtures/garage-house.json
+@@ -2,7 +2,7 @@
+   "meta": {
+     "country": "US",
+     "unit": "mm",
+-    "schema_version": "1.5",
++    "schema_version": "1.6",
+     "photos": [
+       {
+         "index": 1,
+@@ -334,6 +334,21 @@
+         "confidence": "high",
+         "source": "scaled"
+       },
++      "width_mm": {
++        "value": 12192.0,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "footprint width x eave height; eave side of the main gable roof",
++        "low_reason": null
++      },
++      "height_mm": {
++        "value": 5486.4,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "footprint width x eave height; eave side of the main gable roof",
++        "low_reason": null
++      },
++      "gable_height_mm": null,
+       "soffit_depth_mm": null,
+       "pitch": null,
+       "orientation_deg": null,
+@@ -360,6 +375,21 @@
+         "confidence": "high",
+         "source": "scaled"
+       },
++      "width_mm": {
++        "value": 12192.0,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "footprint width x eave height; eave side of the main gable roof",
++        "low_reason": null
++      },
++      "height_mm": {
++        "value": 5486.4,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "footprint width x eave height; eave side of the main gable roof",
++        "low_reason": null
++      },
++      "gable_height_mm": null,
+       "soffit_depth_mm": null,
+       "pitch": null,
+       "orientation_deg": null,
+@@ -386,6 +416,27 @@
+         "confidence": "medium",
+         "source": "scaled"
+       },
++      "width_mm": {
++        "value": 8534.4,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave",
++        "low_reason": null
++      },
++      "height_mm": {
++        "value": 5486.4,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave",
++        "low_reason": null
++      },
++      "gable_height_mm": {
++        "value": 2843.8,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave",
++        "low_reason": null
++      },
+       "soffit_depth_mm": null,
+       "pitch": null,
+       "orientation_deg": null,
+@@ -412,6 +463,27 @@
+         "confidence": "medium",
+         "source": "scaled"
+       },
++      "width_mm": {
++        "value": 8534.4,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave (garage attaches here)",
++        "low_reason": null
++      },
++      "height_mm": {
++        "value": 5486.4,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave (garage attaches here)",
++        "low_reason": null
++      },
++      "gable_height_mm": {
++        "value": 2843.8,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave (garage attaches here)",
++        "low_reason": null
++      },
+       "soffit_depth_mm": null,
+       "pitch": null,
+       "orientation_deg": null,
+@@ -438,6 +510,21 @@
+         "confidence": "high",
+         "source": "scaled"
+       },
++      "width_mm": {
++        "value": 6705.6,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "garage width x garage height (AT-7); eave side of the garage gable",
++        "low_reason": null
++      },
++      "height_mm": {
++        "value": 2743.2,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "garage width x garage height (AT-7); eave side of the garage gable",
++        "low_reason": null
++      },
++      "gable_height_mm": null,
+       "soffit_depth_mm": null,
+       "pitch": null,
+       "orientation_deg": null,
+@@ -464,6 +551,27 @@
+         "confidence": "medium",
+         "source": "scaled"
+       },
++      "width_mm": {
++        "value": 6705.6,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "garage depth x garage height (AT-7); gable end, rise from rake 3749 mm",
++        "low_reason": null
++      },
++      "height_mm": {
++        "value": 2743.2,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "garage depth x garage height (AT-7); gable end, rise from rake 3749 mm",
++        "low_reason": null
++      },
++      "gable_height_mm": {
++        "value": 1677.0,
++        "confidence": "medium",
++        "source": "scaled",
++        "reference_used": "garage depth x garage height (AT-7); gable end, rise from rake 3749 mm",
++        "low_reason": null
++      },
+       "soffit_depth_mm": null,
+       "pitch": null,
+       "orientation_deg": null,
+@@ -871,6 +979,7 @@
+       "id": "W-1",
+       "type": "window",
+       "elevation": "front",
++      "parent_face_id": "WL-1",
+       "width_mm": {
+         "value": 914.4,
+         "confidence": "high",
+@@ -904,6 +1013,7 @@
+       "id": "W-2",
+       "type": "window",
+       "elevation": "front",
++      "parent_face_id": "WL-1",
+       "width_mm": {
+         "value": 914.4,
+         "confidence": "high",
+@@ -937,6 +1047,7 @@
+       "id": "W-3",
+       "type": "window",
+       "elevation": "front",
++      "parent_face_id": "WL-1",
+       "width_mm": {
+         "value": 914.4,
+         "confidence": "high",
+@@ -970,6 +1081,7 @@
+       "id": "W-4",
+       "type": "window",
+       "elevation": "front",
++      "parent_face_id": "WL-1",
+       "width_mm": {
+         "value": 914.4,
+         "confidence": "high",
+@@ -1003,6 +1115,7 @@
+       "id": "W-5",
+       "type": "window",
+       "elevation": "back",
++      "parent_face_id": "WL-2",
+       "width_mm": {
+         "value": 914.4,
+         "confidence": "high",
+@@ -1036,6 +1149,7 @@
+       "id": "W-6",
+       "type": "window",
+       "elevation": "back",
++      "parent_face_id": "WL-2",
+       "width_mm": {
+         "value": 914.4,
+         "confidence": "high",
+@@ -1069,6 +1183,7 @@
+       "id": "W-7",
+       "type": "window",
+       "elevation": "back",
++      "parent_face_id": "WL-2",
+       "width_mm": {
+         "value": 914.4,
+         "confidence": "high",
+@@ -1102,6 +1217,7 @@
+       "id": "W-8",
+       "type": "window",
+       "elevation": "back",
++      "parent_face_id": "WL-2",
+       "width_mm": {
+         "value": 914.4,
+         "confidence": "high",
+@@ -1135,6 +1251,7 @@
+       "id": "W-9",
+       "type": "window",
+       "elevation": "left",
++      "parent_face_id": "WL-3",
+       "width_mm": {
+         "value": 914.4,
+         "confidence": "high",
+@@ -1168,6 +1285,7 @@
+       "id": "W-10",
+       "type": "window",
+       "elevation": "left",
++      "parent_face_id": "WL-3",
+       "width_mm": {
+         "value": 914.4,
+         "confidence": "high",
+@@ -1201,6 +1319,7 @@
+       "id": "W-11",
+       "type": "window",
+       "elevation": "front",
++      "parent_face_id": "WL-1",
+       "width_mm": {
+         "value": 812.9,
+         "confidence": "medium",
+@@ -1234,6 +1353,7 @@
+       "id": "W-12",
+       "type": "window",
+       "elevation": "front",
++      "parent_face_id": "WL-1",
+       "width_mm": {
+         "value": 812.9,
+         "confidence": "medium",
+@@ -1267,6 +1387,7 @@
+       "id": "W-13",
+       "type": "window",
+       "elevation": "left",
++      "parent_face_id": "WL-3",
+       "width_mm": {
+         "value": 812.9,
+         "confidence": "medium",
+@@ -1300,6 +1421,7 @@
+       "id": "W-14",
+       "type": "window",
+       "elevation": "right",
++      "parent_face_id": "WL-4",
+       "width_mm": {
+         "value": 812.9,
+         "confidence": "medium",
+@@ -1333,6 +1455,7 @@
+       "id": "W-15",
+       "type": "window",
+       "elevation": "right",
++      "parent_face_id": "WL-4",
+       "width_mm": {
+         "value": 812.9,
+         "confidence": "medium",
+@@ -1366,6 +1489,7 @@
+       "id": "W-16",
+       "type": "window",
+       "elevation": "back",
++      "parent_face_id": "WL-2",
+       "width_mm": {
+         "value": 812.9,
+         "confidence": "medium",
+@@ -1399,6 +1523,7 @@
+       "id": "D-1",
+       "type": "door",
+       "elevation": "front",
++      "parent_face_id": "WL-1",
+       "width_mm": {
+         "value": 914.4,
+         "confidence": "high",
+@@ -1432,6 +1557,7 @@
+       "id": "D-2",
+       "type": "patio_door",
+       "elevation": "back",
++      "parent_face_id": "WL-2",
+       "width_mm": {
+         "value": 1828.8,
+         "confidence": "high",
+@@ -1465,6 +1591,7 @@
+       "id": "G-1",
+       "type": "garage_door",
+       "elevation": "front",
++      "parent_face_id": "WL-5",
+       "width_mm": {
+         "value": 4876.8,
+         "confidence": "high",
+@@ -1498,6 +1625,7 @@
+       "id": "SK-1",
+       "type": "skylight",
+       "elevation": "roof",
++      "parent_face_id": "RF-1",
+       "width_mm": {
+         "value": 609.6,
+         "confidence": "medium",
+@@ -1781,4 +1909,4 @@
+       "Garage back roof facet partially occluded in photo 3."
+     ]
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/lib/measurement/src/validateMeasurement.test.ts b/lib/measurement/src/validateMeasurement.test.ts
+index 4ea4cdc..2a74c83 100644
+--- a/lib/measurement/src/validateMeasurement.test.ts
++++ b/lib/measurement/src/validateMeasurement.test.ts
+@@ -1,4 +1,4 @@
+-// Contract tests for shared/schema/measurement-v1.5.json (docs/plan.md, Step 0).
++// Contract tests for shared/schema/measurement-v1.6.json (docs/plan.md, Step 0).
+ // The fixture fixtures/garage-house.json is the canonical example house and
+ // must always validate; a misclassified material must always fail.
+ import { readFileSync } from "node:fs";
+@@ -24,7 +24,7 @@ function loadFixture(): Fixture {
+   return JSON.parse(readFileSync(fixturePath, "utf8")) as Fixture;
+ }
+ 
+-describe("measurement contract v1.5", () => {
++describe("measurement contract v1.6", () => {
+   it("validates the garage-house fixture against the schema (Test 1)", () => {
+     const { valid, errors } = validateMeasurement(loadFixture());
+     expect(errors).toEqual([]);
+diff --git a/lib/measurement/src/validateMeasurement.ts b/lib/measurement/src/validateMeasurement.ts
+index 9d42e6d..792b333 100644
+--- a/lib/measurement/src/validateMeasurement.ts
++++ b/lib/measurement/src/validateMeasurement.ts
+@@ -1,5 +1,5 @@
+ // Validates measurement JSON against the canonical SnapTape contract
+-// shared/schema/measurement-v1.5.json (JSON Schema draft 2020-12).
++// shared/schema/measurement-v1.6.json (JSON Schema draft 2020-12).
+ // The schema file at the workspace root is the single source of truth
+ // (docs/plan.md); it is loaded from disk on first use so no second copy
+ // of the contract exists anywhere in the repo.
+@@ -16,7 +16,7 @@ export interface ValidationResult {
+   errors: ErrorObject[];
+ }
+ 
+-const SCHEMA_REL_PATH = join("shared", "schema", "measurement-v1.5.json");
++const SCHEMA_REL_PATH = join("shared", "schema", "measurement-v1.6.json");
+ 
+ /** Walk upward from `startDir` until the workspace root is found. */
+ function findRepoRoot(startDir: string): string | null {
+@@ -63,7 +63,7 @@ function getValidator(): ValidateFunction {
+ }
+ 
+ /**
+- * Validate a measurement JSON document against measurement-v1.5.json.
++ * Validate a measurement JSON document against measurement-v1.6.json.
+  * Never throws on invalid input; returns all violations (including the
+  * conditional if/then material rules for roof vs. wall faces).
+  */
+diff --git a/shared/schema/measurement-v1.6.json b/shared/schema/measurement-v1.6.json
+new file mode 100644
+index 0000000..c4087db
+--- /dev/null
++++ b/shared/schema/measurement-v1.6.json
+@@ -0,0 +1,1096 @@
++{
++  "$schema": "https://json-schema.org/draft/2020-12/schema",
++  "title": "Snaptape Measurement Schema v1.6 (whole building)",
++  "description": "Full building: lists of faces, edges, openings. Internal units are millimeters (unrounded); display converts to imperial (ft-in, sq ft, pitch x/12). US construction terms. v1.2 adds Hover-proven elements: roof flashing/step-flashing edges, three-stage pitch (original/rounded/snapped), soffit depth, window group_id, patio_door/skylight, chimney attachment, user_provided reference. Calculated values (waste, united inches, squares, gutter runs) stay in the calculation layer, NOT here. v1.3: heights.per_elevation + datum_note (sloped sites); building.footprint = MAIN BODY only, building.footprint_overall = envelope incl. attached volumes; attachments carry position_mm, parent_face_id, attached, include_in_footprint and dormer style/pitch so they can be placed and modeled. v1.4: faces carry color (hex + confidence) so the 3D viewer can render realistic surfaces; attachments add pipe/vent types so penetration counts by type (pipe boots, roof vents) are quotable; new downspouts array stores count/length/position explicitly (gutter RUNS stay derived from eave edges, downspout drops do not); new condition_areas array captures visible damage (failing paint, rot, sheathing damage) with face link, area and severity. v1.5: faces.material extended with roof covering materials (shingle_asphalt, shingle_wood, metal, tile, slate, membrane) so the covering type per roof face is quotable ($/SQ benchmark, metal-vs-shingle takeoff, tear-off type) and the viewer can group roof facets by covering material instead of color only. Conditional validation: roof_face accepts covering materials only, wall/soffit/fascia accept wall substrates only (metal valid for both) - misclassified extractions fail validation instead of reaching the viewer. v1.6: openings carry parent_face_id (the WL-n/RF-n they sit on) so an opening can be attributed to one wall even when an attached volume shares an elevation with the main body; wall faces carry width_mm, height_mm (grade to eave, rectangular part) and gable_height_mm so the gross area is reconstructable (width x height + 0.5 x width x gable) and checkable in code.",
++  "type": "object",
++  "required": [
++    "meta",
++    "building",
++    "references",
++    "faces",
++    "edges",
++    "openings"
++  ],
++  "properties": {
++    "meta": {
++      "type": "object",
++      "required": [
++        "country",
++        "unit"
++      ],
++      "properties": {
++        "country": {
++          "enum": [
++            "US",
++            "DE"
++          ]
++        },
++        "unit": {
++          "const": "mm",
++          "description": "Internal storage unit, unrounded. Display layer converts to imperial (ft-in, sq ft, pitch x/12); raw mm shown in tooltips."
++        },
++        "schema_version": {
++          "const": "1.6"
++        },
++        "photos": {
++          "type": "array",
++          "items": {
++            "type": "object",
++            "required": [
++              "index",
++              "view_angle"
++            ],
++            "properties": {
++              "index": {
++                "type": "integer",
++                "minimum": 1,
++                "description": "1-based, matches the photo numbering used in prompts."
++              },
++              "shows_elevation": {
++                "enum": [
++                  "front",
++                  "back",
++                  "left",
++                  "right",
++                  "roof",
++                  "multiple",
++                  "unknown"
++                ],
++                "description": "front = street-facing side, as seen from the street. Never guess compass directions."
++              },
++              "view_angle": {
++                "enum": [
++                  "frontal",
++                  "slightly_angled",
++                  "steeply_angled"
++                ]
++              },
++              "perspective_corrected": {
++                "type": "boolean"
++              }
++            }
++          }
++        },
++        "notes": {
++          "type": "array",
++          "items": {
++            "type": "string"
++          }
++        }
++      }
++    },
++    "building": {
++      "type": "object",
++      "required": [
++        "roof_type"
++      ],
++      "description": "Elevations are named functionally: front = street-facing side, back = garden side, left/right as seen FROM the street. Compass orientation is derived deterministically from the address later, never guessed from photos.",
++      "properties": {
++        "building_type": {
++          "enum": [
++            "detached",
++            "duplex",
++            "townhouse_middle",
++            "townhouse_end",
++            "unknown"
++          ]
++        },
++        "stories": {
++          "type": [
++            "integer",
++            "null"
++          ]
++        },
++        "roof_type": {
++          "enum": [
++            "gable",
++            "hip",
++            "flat",
++            "shed",
++            "mansard",
++            "gambrel",
++            "jerkinhead",
++            "other",
++            "unknown"
++          ]
++        },
++        "footprint": {
++          "type": [
++            "object",
++            "null"
++          ],
++          "description": "MAIN building body ONLY (principal volume). Attached annexes, garages, porches, bays are EXCLUDED here and reported as attachments; the combined envelope goes into footprint_overall. Points as [x,y] mm clockwise from front-left corner; or simplified width/depth.",
++          "properties": {
++            "points": {
++              "type": "array",
++              "items": {
++                "type": "array",
++                "items": {
++                  "type": "number"
++                },
++                "minItems": 2,
++                "maxItems": 2
++              }
++            },
++            "width_mm": {
++              "$ref": "#/$defs/measurement_or_null"
++            },
++            "depth_mm": {
++              "$ref": "#/$defs/measurement_or_null"
++            },
++            "perimeter_mm": {
++              "$ref": "#/$defs/measurement_or_null"
++            },
++            "area_mm2": {
++              "$ref": "#/$defs/measurement_or_null"
++            }
++          }
++        },
++        "heights": {
++          "type": "object",
++          "properties": {
++            "eave_height_mm": {
++              "$ref": "#/$defs/measurement_or_null"
++            },
++            "ridge_height_mm": {
++              "$ref": "#/$defs/measurement_or_null"
++            },
++            "parapet_height_mm": {
++              "$ref": "#/$defs/measurement_or_null"
++            },
++            "datum_note": {
++              "type": [
++                "string",
++                "null"
++              ],
++              "description": "Where grade zero (y=0) is taken and whether the site is sloped. Building heights refer to the lowest visible grade point."
++            },
++            "per_elevation": {
++              "type": [
++                "array",
++                "null"
++              ],
++              "description": "Per-elevation eave/ridge heights. Fill ONLY when a single building value would be wrong (sloped grade, cross-gable, jerkinhead). Flat symmetric buildings leave this null and use eave_height_mm/ridge_height_mm.",
++              "items": {
++                "type": "object",
++                "required": [
++                  "elevation"
++                ],
++                "properties": {
++                  "elevation": {
++                    "enum": [
++                      "front",
++                      "back",
++                      "left",
++                      "right"
++                    ]
++                  },
++                  "eave_height_mm": {
++                    "$ref": "#/$defs/measurement_or_null"
++                  },
++                  "ridge_height_mm": {
++                    "$ref": "#/$defs/measurement_or_null"
++                  },
++                  "grade_offset_mm": {
++                    "$ref": "#/$defs/measurement_or_null"
++                  }
++                }
++              }
++            }
++          }
++        },
++        "shared_walls": {
++          "type": "array",
++          "description": "For duplex/townhouse: which elevation is a shared (party) wall.",
++          "items": {
++            "enum": [
++              "front",
++              "back",
++              "left",
++              "right"
++            ]
++          }
++        },
++        "footprint_overall": {
++          "type": [
++            "object",
++            "null"
++          ],
++          "description": "Overall envelope INCLUDING attached secondary volumes (annexes, attached garages), still excluding detached structures and roof overhangs. Equals footprint when nothing is attached.",
++          "properties": {
++            "width_mm": {
++              "$ref": "#/$defs/measurement_or_null"
++            },
++            "depth_mm": {
++              "$ref": "#/$defs/measurement_or_null"
++            },
++            "note": {
++              "type": [
++                "string",
++                "null"
++              ],
++              "description": "Which attachments are included."
++            }
++          }
++        }
++      }
++    },
++    "references": {
++      "type": "array",
++      "description": "One scale per photo. A scale never carries across photos. Priority order: user_provided (overrides everything) > own_reference (tier-3 normed object) > transferred.",
++      "items": {
++        "type": "object",
++        "required": [
++          "photo_index",
++          "scale_type"
++        ],
++        "properties": {
++          "photo_index": {
++            "type": "integer",
++            "minimum": 1
++          },
++          "scale_type": {
++            "enum": [
++              "user_provided",
++              "own_reference",
++              "transferred",
++              "none"
++            ],
++            "description": "user_provided = a measurement entered by the user; it overrides ALL assumptions."
++          },
++          "object": {
++            "type": [
++              "string",
++              "null"
++            ],
++            "description": "e.g. 'entry door', 'brick course', 'license plate'"
++          },
++          "bounding_box": {
++            "type": [
++              "array",
++              "null"
++            ],
++            "items": {
++              "type": "number"
++            }
++          },
++          "assumed_size_mm": {
++            "type": [
++              "number",
++              "null"
++            ]
++          },
++          "reliability": {
++            "enum": [
++              "high",
++              "medium",
++              "low",
++              null
++            ]
++          },
++          "plane": {
++            "enum": [
++              "facade_plane",
++              "in_front",
++              "behind",
++              "unknown",
++              null
++            ]
++          },
++          "transferred_via": {
++            "type": [
++              "string",
++              "null"
++            ],
++            "description": "Only if scale_type=transferred: shared element + source photo, e.g. 'window W-2 width from photo 1'"
++          },
++          "user_confirmed": {
++            "type": "boolean",
++            "default": false,
++            "description": "True if the user confirmed a DETECTED reference. Not the same as scale_type=user_provided."
++          }
++        }
++      }
++    },
++    "attachments": {
++      "type": "array",
++      "description": "Extra volumes/obstacles (dormer, bay, balcony, awning, addition, chimney) AND small penetrations (pipe = plumbing stack, vent = roof/wall vent, incl. exhaust caps) WITH placement, so they can be modeled and counted by type for quoting (pipe boots EA, vents EA, chimney flashing EA).",
++      "items": {
++        "type": "object",
++        "required": [
++          "id",
++          "type"
++        ],
++        "properties": {
++          "id": {
++            "type": "string",
++            "pattern": "^AT-[0-9]+$"
++          },
++          "type": {
++            "enum": [
++              "dormer",
++              "bay",
++              "balcony",
++              "awning",
++              "addition",
++              "chimney",
++              "pipe",
++              "vent",
++              "other"
++            ]
++          },
++          "elevation": {
++            "enum": [
++              "front",
++              "back",
++              "left",
++              "right",
++              "roof",
++              "unknown"
++            ]
++          },
++          "width_mm": {
++            "$ref": "#/$defs/measurement_or_null"
++          },
++          "height_mm": {
++            "$ref": "#/$defs/measurement_or_null"
++          },
++          "depth_mm": {
++            "$ref": "#/$defs/measurement_or_null"
++          },
++          "position_mm": {
++            "type": [
++              "object",
++              "null"
++            ],
++            "description": "Lower-left corner of the attachment on its parent face, like openings: x from the lower-left corner of the elevation (for roof objects: x along the eave from its left end, y from the eave upward along the slope).",
++            "properties": {
++              "x": {
++                "type": "number"
++              },
++              "y": {
++                "type": "number"
++              }
++            }
++          },
++          "parent_face_id": {
++            "type": [
++              "string",
++              "null"
++            ],
++            "description": "Face this attachment sits on (WL-n or RF-n)."
++          },
++          "attached": {
++            "type": [
++              "boolean",
++              "null"
++            ],
++            "description": "false = detached structure (e.g. free-standing garage/outbuilding)."
++          },
++          "include_in_footprint": {
++            "type": [
++              "boolean",
++              "null"
++            ],
++            "description": "true if this volume is part of footprint_overall."
++          },
++          "dormer": {
++            "type": [
++              "object",
++              "null"
++            ],
++            "description": "Dormers only.",
++            "properties": {
++              "style": {
++                "enum": [
++                  "shed",
++                  "gable",
++                  "hip",
++                  "eyebrow",
++                  "flat",
++                  "other",
++                  null
++                ]
++              },
++              "face_pitch_deg": {
++                "type": [
++                  "number",
++                  "null"
++                ]
++              }
++            }
++          }
++        }
++      }
++    },
++    "faces": {
++      "type": "array",
++      "description": "All building faces (roof faces, walls, soffits, fascia).",
++      "items": {
++        "type": "object",
++        "required": [
++          "id",
++          "face_class",
++          "area_mm2"
++        ],
++        "properties": {
++          "id": {
++            "type": "string",
++            "pattern": "^(RF|WL|SF|FC)-[0-9]+$",
++            "description": "RF=roof face, WL=wall, SF=soffit, FC=fascia"
++          },
++          "face_class": {
++            "enum": [
++              "roof_face",
++              "wall",
++              "soffit",
++              "fascia"
++            ]
++          },
++          "elevation": {
++            "enum": [
++              "front",
++              "back",
++              "left",
++              "right",
++              "roof",
++              "unknown"
++            ],
++            "description": "front = street-facing side."
++          },
++          "material": {
++            "enum": [
++              "stucco",
++              "brick",
++              "siding",
++              "wood",
++              "concrete",
++              "eifs",
++              "shingle_asphalt",
++              "shingle_wood",
++              "metal",
++              "tile",
++              "slate",
++              "membrane",
++              "other",
++              "unknown",
++              null
++            ],
++            "description": "Wall substrates (stucco…eifs) for WL faces; roof coverings (shingle_asphalt, shingle_wood, metal, tile, slate, membrane) for RF faces. Drives $/SF wall rates and $/SQ roof benchmarks."
++          },
++          "area_mm2": {
++            "$ref": "#/$defs/measurement"
++          },
++          "net_area_mm2": {
++            "$ref": "#/$defs/measurement_or_null"
++          },
++          "width_mm": {
++            "$ref": "#/$defs/measurement_or_null",
++            "description": "Horizontal extent of this one wall face - the footprint segment it sits on, not the whole building width. Wall faces only."
++          },
++          "height_mm": {
++            "$ref": "#/$defs/measurement_or_null",
++            "description": "Grade to the eave line at this face - the rectangular part of the wall only, never including a gable. Wall faces only."
++          },
++          "gable_height_mm": {
++            "$ref": "#/$defs/measurement_or_null",
++            "description": "Rise from the eave line to the ridge where this wall carries a gable; null otherwise. Gable area = 0.5 x width_mm x gable_height_mm."
++          },
++          "soffit_depth_mm": {
++            "$ref": "#/$defs/measurement_or_null",
++            "description": "Only for soffit/fascia faces (roofline overhang depth). Hover-style."
++          },
++          "pitch": {
++            "type": [
++              "object",
++              "null"
++            ],
++            "description": "Roof faces only. Three-stage like Hover: exact, rounded, and snapped to a common pitch.",
++            "properties": {
++              "degrees_original": {
++                "type": "number"
++              },
++              "degrees_rounded": {
++                "type": "number"
++              },
++              "rise_over_12_snapped": {
++                "type": "number",
++                "description": "US pitch snapped to a common value, rise per 12 run (e.g. 6 = 6/12)"
++              }
++            }
++          },
++          "orientation_deg": {
++            "type": [
++              "number",
++              "null"
++            ],
++            "description": "Azimuth, roof only. Derived from address later; null from photos."
++          },
++          "color": {
++            "type": [
++              "object",
++              "null"
++            ],
++            "description": "Dominant surface color for 3D-viewer rendering. From photos; white balance/shadow can shift hue - confidence reflects that. Not a paint-order color.",
++            "required": [
++              "hex",
++              "confidence"
++            ],
++            "properties": {
++              "hex": {
++                "type": "string",
++                "pattern": "^#[0-9A-Fa-f]{6}$",
++                "description": "sRGB hex of the dominant color, e.g. #B5651D"
++              },
++              "name": {
++                "type": [
++                  "string",
++                  "null"
++                ],
++                "description": "Human-readable, e.g. 'weathered wood brown'"
++              },
++              "confidence": {
++                "enum": [
++                  "high",
++                  "medium",
++                  "low"
++                ]
++              },
++              "secondary_hex": {
++                "type": [
++                  "string",
++                  "null"
++                ],
++                "pattern": "^#[0-9A-Fa-f]{6}$",
++                "description": "Optional accent/second tone on the same face (e.g. brick mortar)."
++              },
++              "note": {
++                "type": [
++                  "string",
++                  "null"
++                ],
++                "description": "e.g. 'face in shadow in all photos', 'strong color cast'"
++              }
++            }
++          }
++        },
++        "allOf": [
++          {
++            "if": {
++              "properties": {
++                "face_class": {
++                  "const": "roof_face"
++                }
++              },
++              "required": [
++                "face_class"
++              ]
++            },
++            "then": {
++              "properties": {
++                "material": {
++                  "enum": [
++                    "shingle_asphalt",
++                    "shingle_wood",
++                    "metal",
++                    "tile",
++                    "slate",
++                    "membrane",
++                    "other",
++                    "unknown",
++                    null
++                  ]
++                }
++              }
++            },
++            "$comment": "Roof faces: covering materials only. metal is valid for both roof and wall."
++          },
++          {
++            "if": {
++              "properties": {
++                "face_class": {
++                  "enum": [
++                    "wall",
++                    "soffit",
++                    "fascia"
++                  ]
++                }
++              },
++              "required": [
++                "face_class"
++              ]
++            },
++            "then": {
++              "properties": {
++                "material": {
++                  "enum": [
++                    "stucco",
++                    "brick",
++                    "siding",
++                    "wood",
++                    "concrete",
++                    "eifs",
++                    "metal",
++                    "other",
++                    "unknown",
++                    null
++                  ]
++                }
++              }
++            },
++            "$comment": "Wall/soffit/fascia faces: wall substrates only."
++          }
++        ]
++      }
++    },
++    "edges": {
++      "type": "array",
++      "description": "All edges with class and length. US roofing/siding terms. Roof-metal edges (flashing, step_flashing) included. 'unclassified' is kept and shown, never silently dropped (completeness signal). Note: gutter RUNS are derived from eave edges in the calculation layer; downspout drops are stored explicitly in downspouts (v1.4).",
++      "items": {
++        "type": "object",
++        "required": [
++          "id",
++          "edge_class",
++          "length_mm"
++        ],
++        "properties": {
++          "id": {
++            "type": "string",
++            "pattern": "^E-[0-9]+$"
++          },
++          "edge_class": {
++            "enum": [
++              "ridge",
++              "hip",
++              "valley",
++              "eave",
++              "rake",
++              "flashing",
++              "step_flashing",
++              "outside_corner",
++              "inside_corner",
++              "base",
++              "head",
++              "sill",
++              "jamb",
++              "unclassified"
++            ]
++          },
++          "length_mm": {
++            "$ref": "#/$defs/measurement"
++          },
++          "belongs_to_elevation": {
++            "enum": [
++              "front",
++              "back",
++              "left",
++              "right",
++              "roof",
++              "unknown",
++              null
++            ]
++          }
++        }
++      }
++    },
++    "openings": {
++      "type": "array",
++      "description": "All windows, doors, garage doors, skylights across the building. patio_door is separate because US siding-waste rules treat garage/patio doors differently (<20 sq ft excl. vs <33 sq ft incl.).",
++      "items": {
++        "type": "object",
++        "required": [
++          "id",
++          "type",
++          "elevation",
++          "width_mm",
++          "height_mm"
++        ],
++        "properties": {
++          "id": {
++            "type": "string",
++            "pattern": "^(W|D|G|SK)-[0-9]+$",
++            "description": "W=window, D=door, G=garage door, SK=skylight"
++          },
++          "type": {
++            "enum": [
++              "window",
++              "door",
++              "patio_door",
++              "garage_door",
++              "skylight",
++              "other"
++            ]
++          },
++          "elevation": {
++            "enum": [
++              "front",
++              "back",
++              "left",
++              "right",
++              "roof",
++              "unknown"
++            ],
++            "description": "roof only for skylights."
++          },
++          "parent_face_id": {
++            "type": [
++              "string",
++              "null"
++            ],
++            "description": "Wall face (WL-n) this opening sits on; skylights take their roof face (RF-n). Needed because elevation alone is ambiguous when an attached volume shares an elevation with the main body (garage front and main front are both 'front')."
++          },
++          "width_mm": {
++            "$ref": "#/$defs/measurement"
++          },
++          "height_mm": {
++            "$ref": "#/$defs/measurement"
++          },
++          "sill_height_mm": {
++            "$ref": "#/$defs/measurement_or_null"
++          },
++          "group_id": {
++            "type": [
++              "string",
++              "null"
++            ],
++            "description": "Optional window group (shared trim), Hover-style WG-x. Group metrics (group width/height, united inches) live in the calculation layer."
++          },
++          "position_mm": {
++            "type": [
++              "object",
++              "null"
++            ],
++            "description": "x/y of the opening's lower-left corner, from the lower-left corner of its elevation.",
++            "properties": {
++              "x": {
++                "type": "number"
++              },
++              "y": {
++                "type": "number"
++              }
++            }
++          },
++          "area_mm2": {
++            "$ref": "#/$defs/measurement_or_null"
++          },
++          "perimeter_mm": {
++            "$ref": "#/$defs/measurement_or_null"
++          },
++          "note": {
++            "type": "string",
++            "default": "Reference only, not for ordering",
++            "description": "Single source of truth for this text is the app config; keep in sync."
++          }
++        }
++      }
++    },
++    "quality": {
++      "type": [
++        "object",
++        "null"
++      ],
++      "properties": {
++        "references_used": {
++          "type": "integer"
++        },
++        "spread_percent": {
++          "type": "number"
++        },
++        "warnings": {
++          "type": "array",
++          "items": {
++            "type": "string"
++          }
++        },
++        "raw_estimates": {
++          "type": "array",
++          "description": "One entry per (target x reference x photo). Emitted by the model, consolidated downstream in code.",
++          "items": {
++            "type": "object",
++            "required": [
++              "target",
++              "photo_index",
++              "reference_object",
++              "assumed_size_mm",
++              "estimate_mm"
++            ],
++            "properties": {
++              "target": {
++                "enum": [
++                  "total_width",
++                  "total_depth",
++                  "eave_height",
++                  "ridge_height"
++                ]
++              },
++              "photo_index": {
++                "type": "integer"
++              },
++              "reference_object": {
++                "type": "string"
++              },
++              "assumed_size_mm": {
++                "type": "number"
++              },
++              "estimate_mm": {
++                "type": "number"
++              },
++              "reliability": {
++                "enum": [
++                  "high",
++                  "medium",
++                  "low",
++                  null
++                ]
++              },
++              "via_transfer": {
++                "type": "boolean",
++                "default": false
++              }
++            }
++          }
++        },
++        "dimension_chains": {
++          "type": "array",
++          "description": "Transcribed plan dimension chains. Sum verification runs downstream in code.",
++          "items": {
++            "type": "object",
++            "required": [
++              "page",
++              "values_mm"
++            ],
++            "properties": {
++              "page": {
++                "type": "integer"
++              },
++              "label": {
++                "type": [
++                  "string",
++                  "null"
++                ]
++              },
++              "values_mm": {
++                "type": "array",
++                "items": {
++                  "type": "number"
++                }
++              },
++              "stated_total_mm": {
++                "type": [
++                  "number",
++                  "null"
++                ]
++              },
++              "computed_sum_mm": {
++                "type": [
++                  "number",
++                  "null"
++                ]
++              },
++              "deviation_percent": {
++                "type": [
++                  "number",
++                  "null"
++                ]
++              }
++            }
++          }
++        }
++      }
++    },
++    "downspouts": {
++      "type": [
++        "array",
++        "null"
++      ],
++      "description": "Downspout drops, stored explicitly (v1.4). Count = array length. Gutter RUNS remain derived from eave edges in the calculation layer; drops cannot be derived from eaves, so they live here.",
++      "items": {
++        "type": "object",
++        "required": [
++          "id",
++          "elevation"
++        ],
++        "properties": {
++          "id": {
++            "type": "string",
++            "pattern": "^DS-[0-9]+$"
++          },
++          "elevation": {
++            "enum": [
++              "front",
++              "back",
++              "left",
++              "right",
++              "unknown"
++            ]
++          },
++          "length_mm": {
++            "$ref": "#/$defs/measurement_or_null",
++            "description": "Vertical run length; typically ~eave height of that elevation if not measurable."
++          },
++          "position_mm": {
++            "type": [
++              "object",
++              "null"
++            ],
++            "description": "x of the drop from the lower-left corner of its elevation.",
++            "properties": {
++              "x": {
++                "type": "number"
++              }
++            }
++          },
++          "connects_edge_id": {
++            "type": [
++              "string",
++              "null"
++            ],
++            "description": "Eave edge (E-n) whose gutter this drop serves, if identifiable."
++          }
++        }
++      }
++    },
++    "condition_areas": {
++      "type": [
++        "array",
++        "null"
++      ],
++      "description": "Visible-damage areas from photos (v1.4). Drives prep/contingency positions (scrape/sand, prime, rot repair, sheathing allowance). Photo-visible only - hidden damage stays an on-site exclusion.",
++      "items": {
++        "type": "object",
++        "required": [
++          "id",
++          "type"
++        ],
++        "properties": {
++          "id": {
++            "type": "string",
++            "pattern": "^CA-[0-9]+$"
++          },
++          "type": {
++            "enum": [
++              "failing_paint",
++              "rot",
++              "sheathing_damage",
++              "decking_damage",
++              "mold_mildew",
++              "rust",
++              "crack",
++              "missing_material",
++              "other"
++            ]
++          },
++          "parent_face_id": {
++            "type": [
++              "string",
++              "null"
++            ],
++            "description": "Face the damage sits on (WL/RF/SF/FC-n)."
++          },
++          "elevation": {
++            "enum": [
++              "front",
++              "back",
++              "left",
++              "right",
++              "roof",
++              "unknown",
++              null
++            ]
++          },
++          "area_mm2": {
++            "$ref": "#/$defs/measurement_or_null"
++          },
++          "severity": {
++            "enum": [
++              "light",
++              "moderate",
++              "severe",
++              null
++            ]
++          },
++          "position_mm": {
++            "type": [
++              "object",
++              "null"
++            ],
++            "description": "Lower-left corner of the damage patch on its parent face (like openings).",
++            "properties": {
++              "x": {
++                "type": "number"
++              },
++              "y": {
++                "type": "number"
++              }
++            }
++          },
++          "photo_index": {
++            "type": [
++              "integer",
++              "null"
++            ],
++            "description": "Photo where the damage is best visible."
++          },
++          "note": {
++            "type": [
++              "string",
++              "null"
++            ]
++          }
++        }
++      }
++    }
++  },
++  "$defs": {
++    "measurement": {
++      "type": "object",
++      "required": [
++        "value",
++        "confidence",
++        "source"
++      ],
++      "properties": {
++        "value": {
++          "type": "number",
++          "description": "unrounded, mm or mm2"
++        },
++        "confidence": {
++          "enum": [
++            "high",
++            "medium",
++            "low"
++          ]
++        },
++        "source": {
++          "enum": [
++            "measured",
++            "scaled",
++            "estimated"
++          ]
++        },
++        "reference_used": {
++          "type": [
++            "string",
++            "null"
++          ]
++        },
++        "low_reason": {
++          "type": [
++            "string",
++            "null"
++          ]
++        }
++      }
++    },
++    "measurement_or_null": {
++      "oneOf": [
++        {
++          "$ref": "#/$defs/measurement"
++        },
++        {
++          "type": "null"
++        }
++      ]
++    }
++  }
++}
+\ No newline at end of file
+-- 
+2.43.0
+

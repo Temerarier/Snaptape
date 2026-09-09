@@ -1,4 +1,4 @@
-// Contract tests for shared/schema/measurement-v1.5.json (docs/plan.md, Step 0).
+// Contract tests for shared/schema/measurement-v1.6.json (docs/plan.md, Step 0).
 // The fixture fixtures/garage-house.json is the canonical example house and
 // must always validate; a misclassified material must always fail.
 import { readFileSync } from "node:fs";
@@ -24,7 +24,7 @@ function loadFixture(): Fixture {
   return JSON.parse(readFileSync(fixturePath, "utf8")) as Fixture;
 }
 
-describe("measurement contract v1.5", () => {
+describe("measurement contract v1.6", () => {
   it("validates the garage-house fixture against the schema (Test 1)", () => {
     const { valid, errors } = validateMeasurement(loadFixture());
     expect(errors).toEqual([]);

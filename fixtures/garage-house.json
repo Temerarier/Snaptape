@@ -2,7 +2,7 @@
   "meta": {
     "country": "US",
     "unit": "mm",
-    "schema_version": "1.5",
+    "schema_version": "1.6",
     "photos": [
       {
         "index": 1,
@@ -334,6 +334,21 @@
         "confidence": "high",
         "source": "scaled"
       },
+      "width_mm": {
+        "value": 12192.0,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "footprint width x eave height; eave side of the main gable roof",
+        "low_reason": null
+      },
+      "height_mm": {
+        "value": 5486.4,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "footprint width x eave height; eave side of the main gable roof",
+        "low_reason": null
+      },
+      "gable_height_mm": null,
       "soffit_depth_mm": null,
       "pitch": null,
       "orientation_deg": null,
@@ -360,6 +375,21 @@
         "confidence": "high",
         "source": "scaled"
       },
+      "width_mm": {
+        "value": 12192.0,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "footprint width x eave height; eave side of the main gable roof",
+        "low_reason": null
+      },
+      "height_mm": {
+        "value": 5486.4,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "footprint width x eave height; eave side of the main gable roof",
+        "low_reason": null
+      },
+      "gable_height_mm": null,
       "soffit_depth_mm": null,
       "pitch": null,
       "orientation_deg": null,
@@ -385,6 +415,27 @@
         "value": 47845065.6,
         "confidence": "medium",
         "source": "scaled"
+      },
+      "width_mm": {
+        "value": 8534.4,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave",
+        "low_reason": null
+      },
+      "height_mm": {
+        "value": 5486.4,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave",
+        "low_reason": null
+      },
+      "gable_height_mm": {
+        "value": 2843.8,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave",
+        "low_reason": null
       },
       "soffit_depth_mm": null,
       "pitch": null,
@@ -412,6 +463,27 @@
         "confidence": "medium",
         "source": "scaled"
       },
+      "width_mm": {
+        "value": 8534.4,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave (garage attaches here)",
+        "low_reason": null
+      },
+      "height_mm": {
+        "value": 5486.4,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave (garage attaches here)",
+        "low_reason": null
+      },
+      "gable_height_mm": {
+        "value": 2843.8,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave (garage attaches here)",
+        "low_reason": null
+      },
       "soffit_depth_mm": null,
       "pitch": null,
       "orientation_deg": null,
@@ -438,6 +510,21 @@
         "confidence": "high",
         "source": "scaled"
       },
+      "width_mm": {
+        "value": 6705.6,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "garage width x garage height (AT-7); eave side of the garage gable",
+        "low_reason": null
+      },
+      "height_mm": {
+        "value": 2743.2,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "garage width x garage height (AT-7); eave side of the garage gable",
+        "low_reason": null
+      },
+      "gable_height_mm": null,
       "soffit_depth_mm": null,
       "pitch": null,
       "orientation_deg": null,
@@ -463,6 +550,27 @@
         "value": 21460602.2,
         "confidence": "medium",
         "source": "scaled"
+      },
+      "width_mm": {
+        "value": 6705.6,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "garage depth x garage height (AT-7); gable end, rise from rake 3749 mm",
+        "low_reason": null
+      },
+      "height_mm": {
+        "value": 2743.2,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "garage depth x garage height (AT-7); gable end, rise from rake 3749 mm",
+        "low_reason": null
+      },
+      "gable_height_mm": {
+        "value": 1677.0,
+        "confidence": "medium",
+        "source": "scaled",
+        "reference_used": "garage depth x garage height (AT-7); gable end, rise from rake 3749 mm",
+        "low_reason": null
       },
       "soffit_depth_mm": null,
       "pitch": null,
@@ -871,6 +979,7 @@
       "id": "W-1",
       "type": "window",
       "elevation": "front",
+      "parent_face_id": "WL-1",
       "width_mm": {
         "value": 914.4,
         "confidence": "high",
@@ -904,6 +1013,7 @@
       "id": "W-2",
       "type": "window",
       "elevation": "front",
+      "parent_face_id": "WL-1",
       "width_mm": {
         "value": 914.4,
         "confidence": "high",
@@ -937,6 +1047,7 @@
       "id": "W-3",
       "type": "window",
       "elevation": "front",
+      "parent_face_id": "WL-1",
       "width_mm": {
         "value": 914.4,
         "confidence": "high",
@@ -970,6 +1081,7 @@
       "id": "W-4",
       "type": "window",
       "elevation": "front",
+      "parent_face_id": "WL-1",
       "width_mm": {
         "value": 914.4,
         "confidence": "high",
@@ -1003,6 +1115,7 @@
       "id": "W-5",
       "type": "window",
       "elevation": "back",
+      "parent_face_id": "WL-2",
       "width_mm": {
         "value": 914.4,
         "confidence": "high",
@@ -1036,6 +1149,7 @@
       "id": "W-6",
       "type": "window",
       "elevation": "back",
+      "parent_face_id": "WL-2",
       "width_mm": {
         "value": 914.4,
         "confidence": "high",
@@ -1069,6 +1183,7 @@
       "id": "W-7",
       "type": "window",
       "elevation": "back",
+      "parent_face_id": "WL-2",
       "width_mm": {
         "value": 914.4,
         "confidence": "high",
@@ -1102,6 +1217,7 @@
       "id": "W-8",
       "type": "window",
       "elevation": "back",
+      "parent_face_id": "WL-2",
       "width_mm": {
         "value": 914.4,
         "confidence": "high",
@@ -1135,6 +1251,7 @@
       "id": "W-9",
       "type": "window",
       "elevation": "left",
+      "parent_face_id": "WL-3",
       "width_mm": {
         "value": 914.4,
         "confidence": "high",
@@ -1168,6 +1285,7 @@
       "id": "W-10",
       "type": "window",
       "elevation": "left",
+      "parent_face_id": "WL-3",
       "width_mm": {
         "value": 914.4,
         "confidence": "high",
@@ -1201,6 +1319,7 @@
       "id": "W-11",
       "type": "window",
       "elevation": "front",
+      "parent_face_id": "WL-1",
       "width_mm": {
         "value": 812.9,
         "confidence": "medium",
@@ -1234,6 +1353,7 @@
       "id": "W-12",
       "type": "window",
       "elevation": "front",
+      "parent_face_id": "WL-1",
       "width_mm": {
         "value": 812.9,
         "confidence": "medium",
@@ -1267,6 +1387,7 @@
       "id": "W-13",
       "type": "window",
       "elevation": "left",
+      "parent_face_id": "WL-3",
       "width_mm": {
         "value": 812.9,
         "confidence": "medium",
@@ -1300,6 +1421,7 @@
       "id": "W-14",
       "type": "window",
       "elevation": "right",
+      "parent_face_id": "WL-4",
       "width_mm": {
         "value": 812.9,
         "confidence": "medium",
@@ -1333,6 +1455,7 @@
       "id": "W-15",
       "type": "window",
       "elevation": "right",
+      "parent_face_id": "WL-4",
       "width_mm": {
         "value": 812.9,
         "confidence": "medium",
@@ -1366,6 +1489,7 @@
       "id": "W-16",
       "type": "window",
       "elevation": "back",
+      "parent_face_id": "WL-2",
       "width_mm": {
         "value": 812.9,
         "confidence": "medium",
@@ -1399,6 +1523,7 @@
       "id": "D-1",
       "type": "door",
       "elevation": "front",
+      "parent_face_id": "WL-1",
       "width_mm": {
         "value": 914.4,
         "confidence": "high",
@@ -1432,6 +1557,7 @@
       "id": "D-2",
       "type": "patio_door",
       "elevation": "back",
+      "parent_face_id": "WL-2",
       "width_mm": {
         "value": 1828.8,
         "confidence": "high",
@@ -1465,6 +1591,7 @@
       "id": "G-1",
       "type": "garage_door",
       "elevation": "front",
+      "parent_face_id": "WL-5",
       "width_mm": {
         "value": 4876.8,
         "confidence": "high",
@@ -1498,6 +1625,7 @@
       "id": "SK-1",
       "type": "skylight",
       "elevation": "roof",
+      "parent_face_id": "RF-1",
       "width_mm": {
         "value": 609.6,
         "confidence": "medium",
