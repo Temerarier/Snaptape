@@ -119,8 +119,8 @@ describe("computeDerived public API and canonical fixture", () => {
 
     expect(roofArea).toBe(194817674.8);
     expect(netWallArea).not.toBeNull();
-    expect(mm2ToSquareFeet(netWallArea!)).toBeCloseTo(2681.9901568344803, 10);
-    expect(formatSquareFeet(mm2ToSquareFeet(netWallArea!))).toBe("2682 sq ft");
+    expect(mm2ToSquareFeet(netWallArea!)).toBeCloseTo(2778.7532799787823, 10);
+    expect(formatSquareFeet(mm2ToSquareFeet(netWallArea!))).toBe("2779 sq ft");
     expect(formatSquareFeet(mm2ToSquareFeet(roofArea!))).toBe("2097 sq ft");
     expect(formatSquares(derived.roof.squares.value)).toBe("21.0 SQ");
   });

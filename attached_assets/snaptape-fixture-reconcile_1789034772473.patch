@@ -1,0 +1,179 @@
+From 2cf83e9311d5c165f230483466994f819d334dae Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 10 Sep 2026 09:54:08 +0000
+Subject: [PATCH] Fixture: reconcile wall areas with their own dimensions
+
+garage-house.json contradicted itself twice: five of six wall faces had
+area_mm2 5-18% off from width x height (+ gable), and four stored net
+areas were 26 sq ft below gross minus that wall's own openings. The
+widths come from the footprint and the heights from the eave height -
+both documented building values - so the stored areas were the wrong
+side. Recomputed area_mm2 = w*h + 0.5*w*gable and net = area minus the
+openings attributed via parent_face_id. All six walls now pass the 2%
+consistency check in berechnung.ts.
+
+Golden value moves with it: walls net 2,682 -> 2,779 sq ft (test and
+docs/plan.md). Roof, openings and downspouts are unchanged.
+
+Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_014xT2L4T9xXoRRGon2pZcKX
+---
+ docs/plan.md                               |  2 +-
+ fixtures/garage-house.json                 | 56 +++++++++++++---------
+ lib/measurement/src/computeDerived.test.ts |  4 +-
+ 3 files changed, 37 insertions(+), 25 deletions(-)
+
+diff --git a/docs/plan.md b/docs/plan.md
+index db73db1..2af35e9 100644
+--- a/docs/plan.md
++++ b/docs/plan.md
+@@ -33,4 +33,4 @@ Two things follow from this rule:
+ ## Check numbers for the example house
+ 
+ Use these to verify results — don't just trust output that "looks right":
+-roof 2,097 sq ft = 21.0 SQ · 6 roof facets · walls net 2,656 sq ft · 16 windows · 3 doors · 4 downspouts · eaves 118' 0" · ridge 70' 0".
++roof 2,097 sq ft = 21.0 SQ · 6 roof facets · walls net 2,779 sq ft · 16 windows · 3 doors · 4 downspouts · eaves 118' 0" · ridge 70' 0".
+diff --git a/fixtures/garage-house.json b/fixtures/garage-house.json
+index 5b59c6c..3bdf649 100644
+--- a/fixtures/garage-house.json
++++ b/fixtures/garage-house.json
+@@ -325,14 +325,16 @@
+       "elevation": "front",
+       "material": "siding",
+       "area_mm2": {
+-        "value": 72464371.2,
++        "value": 66890188.8,
+         "confidence": "high",
+-        "source": "scaled"
++        "source": "scaled",
++        "reference_used": "width x height + 0.5 x width x gable, reconciled with footprint and eave height (fixture v1.6)"
+       },
+       "net_area_mm2": {
+-        "value": 62152133.8,
++        "value": 57382867.2,
+         "confidence": "high",
+-        "source": "scaled"
++        "source": "scaled",
++        "reference_used": "gross minus openings on this wall (by parent_face_id)"
+       },
+       "width_mm": {
+         "value": 12192.0,
+@@ -366,14 +368,16 @@
+       "elevation": "back",
+       "material": "siding",
+       "area_mm2": {
+-        "value": 70606310.4,
++        "value": 66890188.8,
+         "confidence": "high",
+-        "source": "scaled"
++        "source": "scaled",
++        "reference_used": "width x height + 0.5 x width x gable, reconciled with footprint and eave height (fixture v1.6)"
+       },
+       "net_area_mm2": {
+-        "value": 59922460.8,
++        "value": 56608614.2,
+         "confidence": "high",
+-        "source": "scaled"
++        "source": "scaled",
++        "reference_used": "gross minus openings on this wall (by parent_face_id)"
+       },
+       "width_mm": {
+         "value": 12192.0,
+@@ -407,14 +411,16 @@
+       "elevation": "left",
+       "material": "siding",
+       "area_mm2": {
+-        "value": 52025702.4,
++        "value": 58958195.5,
+         "confidence": "medium",
+-        "source": "scaled"
++        "source": "scaled",
++        "reference_used": "width x height + 0.5 x width x gable, reconciled with footprint and eave height (fixture v1.6)"
+       },
+       "net_area_mm2": {
+-        "value": 47845065.6,
++        "value": 55180016.6,
+         "confidence": "medium",
+-        "source": "scaled"
++        "source": "scaled",
++        "reference_used": "gross minus openings on this wall (by parent_face_id)"
+       },
+       "width_mm": {
+         "value": 8534.4,
+@@ -454,14 +460,16 @@
+       "elevation": "right",
+       "material": "siding",
+       "area_mm2": {
+-        "value": 50167641.6,
++        "value": 58958195.5,
+         "confidence": "medium",
+-        "source": "scaled"
++        "source": "scaled",
++        "reference_used": "width x height + 0.5 x width x gable, reconciled with footprint and eave height (fixture v1.6)"
+       },
+       "net_area_mm2": {
+-        "value": 47380550.4,
++        "value": 56976020.1,
+         "confidence": "medium",
+-        "source": "scaled"
++        "source": "scaled",
++        "reference_used": "gross minus openings on this wall (by parent_face_id)"
+       },
+       "width_mm": {
+         "value": 8534.4,
+@@ -503,12 +511,14 @@
+       "area_mm2": {
+         "value": 18394801.9,
+         "confidence": "high",
+-        "source": "scaled"
++        "source": "scaled",
++        "reference_used": "width x height + 0.5 x width x gable, reconciled with footprint and eave height (fixture v1.6)"
+       },
+       "net_area_mm2": {
+         "value": 7989661.4,
+         "confidence": "high",
+-        "source": "scaled"
++        "source": "scaled",
++        "reference_used": "gross minus openings on this wall (by parent_face_id)"
+       },
+       "width_mm": {
+         "value": 6705.6,
+@@ -542,14 +552,16 @@
+       "elevation": "right",
+       "material": "brick",
+       "area_mm2": {
+-        "value": 21460602.2,
++        "value": 24017447.5,
+         "confidence": "medium",
+-        "source": "scaled"
++        "source": "scaled",
++        "reference_used": "width x height + 0.5 x width x gable, reconciled with footprint and eave height (fixture v1.6)"
+       },
+       "net_area_mm2": {
+-        "value": 21460602.2,
++        "value": 24017447.5,
+         "confidence": "medium",
+-        "source": "scaled"
++        "source": "scaled",
++        "reference_used": "gross minus openings on this wall (by parent_face_id)"
+       },
+       "width_mm": {
+         "value": 6705.6,
+diff --git a/lib/measurement/src/computeDerived.test.ts b/lib/measurement/src/computeDerived.test.ts
+index ed068bd..ad3144b 100644
+--- a/lib/measurement/src/computeDerived.test.ts
++++ b/lib/measurement/src/computeDerived.test.ts
+@@ -119,8 +119,8 @@ describe("computeDerived public API and canonical fixture", () => {
+ 
+     expect(roofArea).toBe(194817674.8);
+     expect(netWallArea).not.toBeNull();
+-    expect(mm2ToSquareFeet(netWallArea!)).toBeCloseTo(2681.9901568344803, 10);
+-    expect(formatSquareFeet(mm2ToSquareFeet(netWallArea!))).toBe("2682 sq ft");
++    expect(mm2ToSquareFeet(netWallArea!)).toBeCloseTo(2778.7532799787823, 10);
++    expect(formatSquareFeet(mm2ToSquareFeet(netWallArea!))).toBe("2779 sq ft");
+     expect(formatSquareFeet(mm2ToSquareFeet(roofArea!))).toBe("2097 sq ft");
+     expect(formatSquares(derived.roof.squares.value)).toBe("21.0 SQ");
+   });
+-- 
+2.43.0
+

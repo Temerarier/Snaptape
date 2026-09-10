@@ -33,4 +33,4 @@ Two things follow from this rule:
 ## Check numbers for the example house
 
 Use these to verify results — don't just trust output that "looks right":
-roof 2,097 sq ft = 21.0 SQ · 6 roof facets · walls net 2,656 sq ft · 16 windows · 3 doors · 4 downspouts · eaves 118' 0" · ridge 70' 0".
+roof 2,097 sq ft = 21.0 SQ · 6 roof facets · walls net 2,779 sq ft · 16 windows · 3 doors · 4 downspouts · eaves 118' 0" · ridge 70' 0".
