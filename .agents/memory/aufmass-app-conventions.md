@@ -9,7 +9,12 @@ description: Fixed stack, iron rules, and artifact quirks for the Aufmaß-App (N
   **Why:** user brief says "Stack (fix, nicht ändern)".
 - The 9 "Eiserne Regeln" (mm unrounded internally, mess-schema.json contract, fixed English IDs, confidence/source on every value, reference-only hint, errors before payment, calculations only in lib/berechnung/, UI texts central in i18n, elevations front/back/left/right) live verbatim in root `replit.md` — read them before any feature work.
 - Schema contract is v1.2 (English, US market) since July 2026: IDs RF-/WL-/SF-/FC-, E-, W-/D-/G-/SK-, AT-; CAUTION: D- means door (was Dach) and W- means window (was Wand) — never assume v1.0 meanings. Status enum: draft/reviewing/ready/failed. Display imperial (ft-in, whole ft², pitch x/12), data stays unrounded mm. Contract file: `artifacts/aufmass-app/schema/mess-schema.json`.
-- TWO contracts coexist since 2026-07-27: the SnapTape roadmap (docs/plan.md) added canonical v1.5 at `shared/schema/measurement-v1.5.json` (fixture `fixtures/garage-house.json`, validator `@workspace/measurement`, Ajv 2020-12 dialect required). The running app still reads v1.2 until the roadmap's viewer step migrates it — don't "unify" them early, and never edit v1.5 schema/fixture content (byte-fixed external contract).
+- Keep the legacy viewer contract separate from the newer shared measurement contract until an explicit viewer migration is requested.
+  **Why:** the user requires the old viewer calculation and its tests to remain byte-for-byte unchanged while shared display calculations are built alongside them.
+  **How to apply:** do not consolidate the two calculation layers or migrate old consumers as incidental cleanup.
+- Do not alter the canonical fixture to make requested golden totals pass when independent arithmetic disagrees.
+  **Why:** on 2026-09-10 the user approved correcting the net-wall expected value to match parent-linked dimension deductions, rather than trusting inconsistent stored net totals or changing the fixture.
+  **How to apply:** explain and obtain approval for an inconsistent acceptance value; preserve the fixture and the independently correct calculation.
 - The internal HausModell (lib/viewer/baukasten.ts) intentionally keeps German FIELD names (typ, fassade, laengeMm) with English VALUES — do not "fix" `.typ` accesses.
 - The app lives at `artifacts/aufmass-app/` (previewPath "/"); it is a Next.js app inside a mostly Vite/Express monorepo. `artifacts/api-server` and `artifacts/mockup-sandbox` are NOT part of this product.
 - User communicates in German; UI display texts are still German (English UI translation is its own stage, proposed as follow-up task), internal names/enums are English.

@@ -1,4 +1,4 @@
-- [Aufmaß-App conventions](aufmass-app-conventions.md) — fixed stack + 9 iron rules in replit.md; app on schema v1.2 (D-/W- swap!) with shared v1.5 contract in parallel; monorepo + Next.js quirks.
+- [Aufmaß-App conventions](aufmass-app-conventions.md) — fixed stack; preserve legacy viewer during shared-contract work; fixture inconsistencies need explicit acceptance decisions; Next.js quirks.
 - [Tracked build output crashes dev server](tracked-build-output.md) — git-tracked .next files let checkpoints rewrite the live webpack cache → "reading 'call'" client crashes; fix via .gitignore + rm on disk.
 - [Viewer v1.2 Baukasten strictness](viewer-v12-baukasten-strictness.md) — 3D viewer throws on anything beyond an exact simple-gable set; reduce richer JSON via display adapter, don't touch viewer.
 - [LLM extraction model quirks](llm-extraction-models.md) — kimi-k3: temp=1 only, streaming+include_usage mandatory (300 s fetch timeout trap); claude-fable-5: no temperature param; use ≥64k output caps.

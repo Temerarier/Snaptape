@@ -13,7 +13,9 @@ import {
 describe("measurement conversions", () => {
   it("uses the exact length and area conversion constants", () => {
     expect(mmToInches(25.4)).toBe(1);
-    expect(mmToInches(12 * 25.4)).toBe(12);
+    // Binary floating-point division need not produce the integer exactly.
+    // Conversion must not add rounding just to make this assertion exact.
+    expect(mmToInches(12 * 25.4)).toBeCloseTo(12, 12);
     expect(mm2ToSquareFeet(92903.04)).toBe(1);
     expect(mm2ToSquares(92903.04 * 100)).toBe(1);
   });
