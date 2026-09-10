@@ -1,0 +1,38 @@
+GOAL
+A pure, unit-tested compute module that derives all DISPLAY values from a stored measurement
+JSON. No UI. (This is separate from the pipeline's berechnung.ts, which consolidates raw
+estimates DURING measurement.)
+
+CONTEXT
+- Input: a valid v1.6 measurement JSON. Test data: fixtures/garage-house.json.
+- Put it in lib/measurement, next to validateMeasurement.ts, so viewer and report can both
+  import it.
+- lib/berechnung/flaechen.ts is the old v1.2 version of this. The old viewer uses it. Leave
+  it alone; it gets deleted with the old viewer later.
+
+BUILD
+- computeDerived(measurement) returning: roof area total + squares; edge totals per class
+  incl. drip edge (eaves+rakes); net/gross wall totals and PER WALL FACE - never per
+  elevation, since two walls can share one; per wall face also its width_mm, height_mm,
+  gable_height_mm and the openings deducted from it; opening counts by type, then by parent
+  wall, grouped identical openings, perimeter split (tops/sills/sides); corner totals;
+  starter/base total; J-channel estimate; gutter runs from eave edges; downspout totals;
+  united inches; suggested waste factor.
+- An opening belongs to the wall in its parent_face_id. One with parent_face_id null is
+  listed as unassigned and deducted nowhere.
+- Every derived value carries the weakest confidence of its inputs.
+- Golden-value tests from the fixture: roof 2,097 sq ft / 21.0 SQ; walls net 2,656 sq ft;
+  drip edge = eaves + rakes; 16 windows in 2 size groups; 4 downspouts; G-1 is the only
+  opening deducted from WL-5; WL-6 has none.
+- All math in mm; ONE formatting utility converts to ft-in / sq ft / SQ (round once, at
+  display).
+
+DO NOT
+- Do not put this logic into UI components.
+- Do not round intermediate values.
+- Do not modify lib/berechnung/flaechen.ts, berechnung.ts, the schema or the fixture.
+
+DONE WHEN
+- [ ] All golden-value tests pass.
+- [ ] The formatting utility is the only place that rounds.
+- [ ] The existing flaechen tests still pass and the old viewer is unchanged.
