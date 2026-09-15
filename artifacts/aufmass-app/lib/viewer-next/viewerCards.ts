@@ -98,21 +98,45 @@ function setVerify(row: CardRow, dict: Dictionary["viewerNext"]) {
   return row;
 }
 
-function buildWallCalc(wall: DerivedWall, dict: Dictionary["viewerNext"]) {
+function buildWallCalc(
+  wall: DerivedWall,
+  dict: Dictionary["viewerNext"],
+  displayedNet: number,
+) {
   const calcLines: { label: string; value: string }[] = [];
   const w = formatLen(wall.width_mm.value);
   const h = formatLen(wall.height_mm.value);
+  const missingComponent =
+    wall.rectangle_area_mm2.value === null ||
+    wall.gable_area_mm2.value === null ||
+    wall.deducted_area_mm2.value === null;
 
-  const gable = wall.gable_height_mm?.value;
-  const dimensions = gable
-    ? `${w} × ${h} + ${dict.labels.gable} ${w} × ${formatLen(gable)} / 2`
-    : `${w} × ${h}`;
-  calcLines.push({ label: dimensions, value: formatArea(wall.gross_area_mm2.value) });
+  if (missingComponent) {
+    return [{ label: dict.labels.breakdownUnavailable, value: "—" }];
+  }
+
+  const rectangle = Math.round(mm2ToSquareFeet(wall.rectangle_area_mm2.value));
+  let gable = Math.round(mm2ToSquareFeet(wall.gable_area_mm2.value));
+  const deduction = Math.round(mm2ToSquareFeet(wall.deducted_area_mm2.value));
+  const displayedTotal = rectangle + gable - deduction;
+
+  // Balance whole-square-foot component rounding to the already-rounded net.
+  // The source quantities remain the genuine computeDerived components.
+  gable += displayedNet - displayedTotal;
+
+  calcLines.push({ label: `${w} × ${h}`, value: rectangle.toString() });
+
+  if (wall.gable_height_mm?.value && gable !== 0) {
+    calcLines.push({
+      label: `+ ${dict.labels.gable} ${w} × ${formatLen(wall.gable_height_mm.value)} / 2`,
+      value: gable.toString(),
+    });
+  }
 
   if (wall.deductedOpenings.length > 0) {
     calcLines.push({
       label: `− ${wall.deductedOpenings.length} ${dict.labels.openings}`,
-      value: "−" + formatArea(wall.deducted_area_mm2.value),
+      value: `−${deduction}`,
     });
   }
   return calcLines;
@@ -274,18 +298,20 @@ export function buildCards(derived: DerivedMeasurement, measurement: MinimalMeas
     sub: dict.labels.ofWhichGables.replace("{area}", formatArea(derived.walls.gable_area_mm2.value)),
     accentClass: "border-l-viewer-walls",
     rows: derived.walls.faces.map((w) => {
-      const isMissing = w.gross_area_mm2.value === null;
+      const isMissing = w.gross_area_mm2.value === null || w.net_area_mm2.value === null;
+      const displayedGross = isMissing ? 0 : Number(formatArea(w.gross_area_mm2.value));
+      const displayedNet = isMissing ? 0 : Number(formatArea(w.net_area_mm2.value));
       const rawFace = measurement.faces?.find(f => f.id === w.id);
       const material = rawFace?.material ? rawFace.material.charAt(0).toUpperCase() + rawFace.material.slice(1) : undefined;
       return {
         id: w.id,
         label: w.elevation ? `${w.elevation.charAt(0).toUpperCase() + w.elevation.slice(1)} (${w.id})` : w.id,
         badge: material,
-        sub: isMissing ? dict.labels.notCaptured : `${formatArea(w.gross_area_mm2.value)} ${dict.labels.gross}`,
-        value: isMissing ? undefined : formatArea(w.net_area_mm2.value),
+        sub: isMissing ? dict.labels.notCaptured : `${displayedGross} ${dict.labels.gross}`,
+        value: isMissing ? undefined : displayedNet.toString(),
         cta: isMissing ? dict.labels.addPhoto : undefined,
         hasCalc: !isMissing,
-        calcLines: isMissing ? undefined : buildWallCalc(w, dict),
+        calcLines: isMissing ? undefined : buildWallCalc(w, dict, displayedNet),
       };
     }),
   });
@@ -379,17 +405,14 @@ export function buildCards(derived: DerivedMeasurement, measurement: MinimalMeas
   trimRows.push({ id: "t_out_c", label: dict.labels.outsideCorners, value: outsideCornerCount.toString(), unit: dict.labels.ea });
   trimRows.push({ id: "t_in_c", label: dict.labels.insideCorners, value: insideCornerCount.toString(), unit: dict.labels.ea });
 
-  const fasciaArea = fasciaFaces[0]?.area_mm2?.value ?? null;
-  const soffitArea = soffitFaces[0]?.area_mm2?.value ?? null;
-
   cards.push({
     id: "trim",
     title: dict.cards.trim.toUpperCase(),
-    hero: formatArea(fasciaArea),
+    hero: formatArea(derived.trim.fascia_area_mm2.value),
     heroUnit: `sq ft ${dict.labels.fascia.toLowerCase()}`,
-    sub: `${dict.labels.soffit} ${formatArea(soffitArea)} sq ft · ${outsideCornerCount + insideCornerCount} ${dict.labels.corners}`,
+    sub: `${dict.labels.soffit} ${formatArea(derived.trim.soffit_area_mm2.value)} sq ft · ${outsideCornerCount + insideCornerCount} ${dict.labels.corners}`,
     accentClass: "border-l-viewer-trim",
-    rows: trimRows.filter(r => r.value !== "—" && r.value !== "0"),
+    rows: trimRows,
   });
 
   // 9. Condition Areas

@@ -143,8 +143,11 @@ export function computeDerived(measurement: MeasurementInput): DerivedMeasuremen
     const width = read(f.width_mm, "mm", f.id, "width_mm");
     const height = read(f.height_mm, "mm", f.id, "height_mm");
     const gable = f.gable_height_mm === null ? null : read(f.gable_height_mm, "mm", f.id, "gable_height_mm");
-    const reconstructed = calculate("mm2", [width, height, gable ?? result(0, "mm", "high", [f.id])],
-      ([w, h, g]) => w * h + 0.5 * w * g);
+    const rectangleArea = calculate("mm2", [width, height], ([w, h]) => w * h);
+    const gableArea = gable === null
+      ? result(0, "mm2", "high", [f.id])
+      : calculate("mm2", [width, gable], ([w, g]) => 0.5 * w * g);
+    const reconstructed = sum("mm2", [rectangleArea, gableArea]);
     const stored = read(f.area_mm2, "mm2", f.id, "area_mm2");
     const gross = stored.complete ? stored : reconstructed;
     if (stored.value !== null && reconstructed.value !== null &&
@@ -163,6 +166,7 @@ export function computeDerived(measurement: MeasurementInput): DerivedMeasuremen
     }
     return { id: f.id, elevation: f.elevation ?? null,
       width_mm: width, height_mm: height, gable_height_mm: gable,
+      rectangle_area_mm2: rectangleArea, gable_area_mm2: gableArea,
       gross_area_mm2: gross, reconstructed_area_mm2: reconstructed,
       grossAreaBasis: stored.complete ? "stored" : "dimensions",
       deductedOpenings: assigned, deducted_area_mm2: deducted, net_area_mm2: net };
@@ -175,10 +179,13 @@ export function computeDerived(measurement: MeasurementInput): DerivedMeasuremen
   ]));
   const roofFaces = measurement.faces.filter(f => f.face_class === "roof_face");
   const roofArea = sum("mm2", roofFaces.map(f => read(f.area_mm2, "mm2", f.id, "area_mm2")));
-  const gableArea = sum("mm2", walls
-    .filter(wall => wall.gable_height_mm !== null)
-    .map(wall => calculate("mm2", [wall.width_mm, wall.gable_height_mm!],
-      ([width, gableHeight]) => 0.5 * width * gableHeight)));
+  const gableArea = sum("mm2", walls.map(wall => wall.gable_area_mm2));
+  const fasciaArea = sum("mm2", measurement.faces
+    .filter(face => face.face_class === "fascia")
+    .map(face => read(face.area_mm2, "mm2", face.id, "area_mm2")));
+  const soffitArea = sum("mm2", measurement.faces
+    .filter(face => face.face_class === "soffit")
+    .map(face => read(face.area_mm2, "mm2", face.id, "area_mm2")));
   const complex = measurement.building?.roof_type === "hip" ||
     measurement.edges.some(e => e.edge_class === "hip" || e.edge_class === "valley") ||
     measurement.edges.filter(e => e.edge_class === "ridge").length > 1;
@@ -218,6 +225,7 @@ export function computeDerived(measurement: MeasurementInput): DerivedMeasuremen
       deducted_area_mm2: sum("mm2", walls.map(w => w.deducted_area_mm2)),
       net_area_mm2: sum("mm2", walls.map(w => w.net_area_mm2)),
       gable_area_mm2: gableArea },
+    trim: { fascia_area_mm2: fasciaArea, soffit_area_mm2: soffitArea },
     openings: { ...counts(openings), items: openings,
       byWall: Object.fromEntries(walls.map(w => [w.id, counts(w.deductedOpenings)])),
       identicalGroups: groupOpenings(openings),

@@ -220,5 +220,5 @@ From `fixtures/garage-house.json` via computeDerived — the viewer must show:
 roof **2,097 sq ft · 21.0 SQ · 6 facets**; walls net **2,779 sq ft**, of which gables
 **322 sq ft** (3 gabled walls: 131 + 131 + 60); **16 windows**, 1 door, 1 patio door,
 1 garage door, 1 skylight; **4 downspouts · 63' 0"** (18' + 18' + 18' + 9'); eaves
-**118' 0"**; ridge **70' 0"**; rake **109' 8"**; every wall row's breakdown adds up (the
+**118' 0"**; ridge **70' 0"**; rake **109' 9"**; every wall row's breakdown adds up (the
 fixture was reconciled on 2026-09-10 — all six walls pass the 2% check).

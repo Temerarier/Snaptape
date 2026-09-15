@@ -135,6 +135,20 @@ describe("computeDerived public API and canonical fixture", () => {
     expect(formatSquareFeet(mm2ToSquareFeet(area!))).toBe("322 sq ft");
   });
 
+  it("exposes genuine per-wall components and aggregate trim areas", () => {
+    const derived = computeDerived(loadFixture());
+    const rightWall = derived.walls.faces.find(wall => wall.id === "WL-4")!;
+
+    expect(formatSquareFeet(mm2ToSquareFeet(rightWall.rectangle_area_mm2.value!)))
+      .toBe("504 sq ft");
+    expect(formatSquareFeet(mm2ToSquareFeet(rightWall.gable_area_mm2.value!)))
+      .toBe("131 sq ft");
+    expect(formatSquareFeet(mm2ToSquareFeet(derived.trim.fascia_area_mm2.value!)))
+      .toBe("107 sq ft");
+    expect(formatSquareFeet(mm2ToSquareFeet(derived.trim.soffit_area_mm2.value!)))
+      .toBe("157 sq ft");
+  });
+
   it("keeps fixture opening groups, drainage, drip edge, and garage assignments exact", () => {
     const derived = computeDerived(loadFixture());
     const windowGroups = derived.openings.identicalGroups.filter(

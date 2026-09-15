@@ -99,3 +99,67 @@
 .ladebalken {
   animation: ladebalken 1.4s ease-in-out infinite;
 }
+
+/* Viewer-next layout follows tablet orientation, not width alone. */
+@media (min-width: 768px) and (orientation: portrait) {
+  .viewer-next-shell {
+    display: grid;
+    grid-template-rows: 55dvh 45dvh;
+  }
+
+  .viewer-next-panel {
+    position: static;
+    width: 100%;
+    height: 100% !important;
+    min-height: 0;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .viewer-next-measure-portrait {
+    display: flex;
+  }
+}
+
+@media (min-width: 768px) and (orientation: landscape) {
+  .viewer-next-shell {
+    flex-direction: row;
+  }
+
+  .viewer-next-panel {
+    position: static;
+    width: 480px;
+    height: auto;
+    flex-shrink: 0;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .viewer-next-measure-wide {
+    display: flex;
+  }
+}
+
+@media (min-width: 1280px) {
+  .viewer-next-shell {
+    flex-direction: row;
+  }
+
+  .viewer-next-panel {
+    position: static;
+    width: 480px;
+    height: auto;
+    flex-shrink: 0;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .viewer-next-measure-wide {
+    display: flex;
+  }
+
+  .viewer-next-measure-portrait,
+  .viewer-next-gesture {
+    display: none;
+  }
+}

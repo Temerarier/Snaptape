@@ -105,6 +105,8 @@ export interface DerivedWall {
   readonly width_mm: DerivedValue<"mm">;
   readonly height_mm: DerivedValue<"mm">;
   readonly gable_height_mm: DerivedValue<"mm"> | null;
+  readonly rectangle_area_mm2: DerivedValue<"mm2">;
+  readonly gable_area_mm2: DerivedValue<"mm2">;
   readonly gross_area_mm2: DerivedValue<"mm2">;
   readonly reconstructed_area_mm2: DerivedValue<"mm2">;
   readonly grossAreaBasis: "stored" | "dimensions";
@@ -143,6 +145,10 @@ export interface DerivedMeasurement {
     readonly deducted_area_mm2: DerivedValue<"mm2">;
     readonly net_area_mm2: DerivedValue<"mm2">;
     readonly gable_area_mm2: DerivedValue<"mm2">;
+  };
+  readonly trim: {
+    readonly fascia_area_mm2: DerivedValue<"mm2">;
+    readonly soffit_area_mm2: DerivedValue<"mm2">;
   };
   readonly openings: OpeningCounts & {
     readonly items: readonly DerivedOpening[];

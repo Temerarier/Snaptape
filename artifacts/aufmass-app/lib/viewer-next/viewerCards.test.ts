@@ -43,8 +43,20 @@ describe("viewer-next fixture presentation", () => {
     expect([walls.hero, walls.sub, walls.rows.length]).toEqual([
       "2779", "of which gables 322 sq ft", 6,
     ]);
-    expect(walls.rows.every(row => row.calcLines?.[0]?.value === row.sub?.split(" ")[0]))
-      .toBe(true);
+    for (const row of walls.rows) {
+      if (!row.calcLines) continue;
+      const reconciledNet = row.calcLines.reduce(
+        (sum, line) => sum + Number(line.value.replace("−", "-")),
+        0,
+      );
+      expect(reconciledNet, row.id).toBe(Number(row.value));
+    }
+    const rightWall = walls.rows.find(row => row.id === "WL-4")!;
+    expect(rightWall.calcLines?.map(line => line.label)).toEqual([
+      `28' 0" × 18' 0"`,
+      `+ gable 28' 0" × 9' 4" / 2`,
+      "− 2 openings",
+    ]);
     expect(openings.hero).toBe("20");
     expect(openings.sub).toBe(
       "16 windows, 1 door, 1 patio door, 1 garage door, 1 skylight",
@@ -63,8 +75,56 @@ describe("viewer-next fixture presentation", () => {
     const windows = cards.find(card => card.id === "openings")!.rows[0];
     const listedWindows = windows.subRows!.flatMap(group => group.subRows ?? []);
 
+    expect(edgeRows.find(row => row.id === "edge-rake")?.value).toBe("109' 9\"");
     expect(edgeRows.find(row => row.id === "edge-unclassified")?.value).toBe("0' 0\"");
     expect(listedWindows).toHaveLength(16);
+  });
+
+  it("keeps an unknown trim face visible for field verification", () => {
+    const displayWithNullFascia: MinimalMeasurement = {
+      ...displayMeasurement,
+      faces: displayMeasurement.faces?.map(face => face.face_class === "fascia"
+        ? { ...face, area_mm2: { value: null } }
+        : face),
+    };
+    const nullTrimCards = buildCards(
+      computeDerived(measurement),
+      displayWithNullFascia,
+      enUS.viewerNext,
+    );
+    const fascia = nullTrimCards
+      .find(card => card.id === "trim")!
+      .rows.find(row => row.id === "FC-1")!;
+
+    expect([fascia.value, fascia.unit]).toEqual(["—", "verify on site"]);
+  });
+
+  it("does not throw when stored wall area exists without wall dimensions", () => {
+    const missingWidthFixture = {
+      ...fixture,
+      faces: fixture.faces.map(face => face.id === "WL-1"
+        ? { ...face, width_mm: null }
+        : face),
+    };
+    const missingWidthInput = missingWidthFixture as unknown as MeasurementInput;
+    const missingWidthDisplay = missingWidthFixture as unknown as MinimalMeasurement;
+
+    expect(() => buildCards(
+      computeDerived(missingWidthInput),
+      missingWidthDisplay,
+      enUS.viewerNext,
+    )).not.toThrow();
+
+    const wall = buildCards(
+      computeDerived(missingWidthInput),
+      missingWidthDisplay,
+      enUS.viewerNext,
+    ).find(card => card.id === "walls")!.rows.find(row => row.id === "WL-1")!;
+
+    expect(wall.value).toBe("618");
+    expect(wall.calcLines).toEqual([
+      { label: "Wall breakdown unavailable · verify on site", value: "—" },
+    ]);
   });
 
   it("filters exactly the card sets from the spec", () => {

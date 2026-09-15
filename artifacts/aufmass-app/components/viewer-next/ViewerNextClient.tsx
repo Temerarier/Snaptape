@@ -21,6 +21,7 @@ export function ViewerNextClient({ measurement, cards, dict }: { measurement: Mi
   const [filter, setFilter] = useState<TradeFilter>("all");
   const [openCards, setOpenCards] = useState<Set<string>>(new Set());
   const [openRows, setOpenRows] = useState<Set<string>>(new Set());
+  const [statusOpen, setStatusOpen] = useState(false);
   const [sheetDetent, setSheetDetent] = useState<"peek" | "half" | "full">("half");
 
   const visibleCards = filterCards(cards, filter);
@@ -59,9 +60,9 @@ export function ViewerNextClient({ measurement, cards, dict }: { measurement: Mi
   const projectName = dict.demoProject;
 
   return (
-    <div className="flex h-[100dvh] w-full flex-col overflow-hidden bg-hintergrund font-sans text-schrift lg:flex-row">
+    <div className="viewer-next-shell flex h-[100dvh] w-full flex-col overflow-hidden bg-hintergrund font-sans text-schrift">
       {/* Viewport Placeholder */}
-      <div className="relative flex flex-1 flex-col overflow-hidden bg-[#FAFBFC]">
+      <div className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-[#FAFBFC]">
         {/* Header Toolbar (Desktop/Tablet Landscape) */}
         <div className="hidden min-h-[56px] flex-none flex-wrap items-center gap-2 border-b border-linie bg-flaeche px-4 py-2 md:flex">
           <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
@@ -96,16 +97,16 @@ export function ViewerNextClient({ measurement, cards, dict }: { measurement: Mi
           </div>
 
           {/* Tablet Portrait: Measure pill top-right */}
-          <div className="absolute right-4 top-4 z-10 hidden items-center gap-1 rounded-full border border-linie bg-flaeche p-1 shadow-karte md:flex lg:hidden">
+          <div className="viewer-next-measure-portrait absolute right-4 top-4 z-10 hidden items-center gap-1 rounded-full border border-linie bg-flaeche p-1 shadow-karte">
             <button className="rounded-full px-3 py-1.5 text-xs font-semibold text-schrift-sekundaer transition-colors hover:bg-slate-100">{dict.labels.measureLine}</button>
           </div>
 
           {/* Desktop/Tablet Landscape: Measure pill bottom-center */}
-          <div className="absolute bottom-4 left-1/2 z-10 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-linie bg-flaeche p-1 shadow-karte lg:flex">
+          <div className="viewer-next-measure-wide absolute bottom-4 left-1/2 z-10 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-linie bg-flaeche p-1 shadow-karte">
             <button className="rounded-full px-3 py-1.5 text-xs font-semibold text-schrift-sekundaer transition-colors hover:bg-slate-100">{dict.labels.measureLine}</button>
           </div>
 
-          <div className="pointer-events-none absolute left-4 top-4 z-10 rounded-lg border-2 border-linie bg-white/95 px-2.5 py-1.5 font-mono text-xs font-medium text-schrift lg:hidden">
+          <div className="viewer-next-gesture pointer-events-none absolute left-4 top-4 z-10 rounded-lg border-2 border-linie bg-white/95 px-2.5 py-1.5 font-mono text-xs font-medium text-schrift">
             {dict.labels.dragOrbit}
           </div>
         </div>
@@ -114,8 +115,8 @@ export function ViewerNextClient({ measurement, cards, dict }: { measurement: Mi
       {/* Measurement Panel */}
       <div
         className={cn(
-          "absolute inset-x-0 bottom-0 z-20 flex h-[100dvh] flex-col bg-hintergrund shadow-[0_-8px_30px_rgba(0,0,0,0.12)] transition-transform duration-300 ease-in-out md:static md:h-[45vh] md:translate-y-0 md:shadow-none lg:h-auto lg:w-[480px]",
-          "translate-y-[48%] md:translate-y-0",
+          "viewer-next-panel absolute inset-x-0 bottom-0 z-20 flex h-[100dvh] flex-col bg-hintergrund shadow-[0_-8px_30px_rgba(0,0,0,0.12)] transition-transform duration-300 ease-in-out",
+          "translate-y-[48%]",
           sheetDetent === "peek" && "max-md:translate-y-[calc(100%-128px)]",
           sheetDetent === "half" && "max-md:translate-y-[48%]",
           sheetDetent === "full" && "max-md:translate-y-[12%]"
@@ -136,9 +137,22 @@ export function ViewerNextClient({ measurement, cards, dict }: { measurement: Mi
           <div className="flex items-center gap-2">
              <div className="text-base font-bold">{dict.measurements}</div>
           </div>
-          <div className="text-xs text-schrift-sekundaer">
-            {references.length} {dict.references.toLowerCase()} · {warnings.length} {dict.warnings.toLowerCase()}
-          </div>
+          <button
+            type="button"
+            aria-expanded={statusOpen}
+            aria-controls="viewer-quality-status"
+            onClick={() => setStatusOpen(open => !open)}
+            className="flex min-h-11 items-center justify-between rounded-lg text-left text-xs text-schrift-sekundaer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-akzent"
+          >
+            <span>{references.length} {dict.references.toLowerCase()} · {warnings.length} {dict.warnings.toLowerCase()}</span>
+            <span className={cn("transition-transform", statusOpen && "rotate-180")}>▾</span>
+          </button>
+          {statusOpen && (
+            <div id="viewer-quality-status" className="max-h-36 overflow-y-auto rounded-lg border border-linie bg-flaeche p-3 text-xs text-schrift-sekundaer">
+              <div>{warnings.length > 0 ? dict.labels.warningsRequireReview : dict.labels.noWarnings}</div>
+              <div>{references.length > 0 ? dict.labels.referencesUsed : dict.labels.noReferences}</div>
+            </div>
+          )}
           <div className="flex flex-wrap gap-1.5">
             {(["all", "roofing", "siding", "painting"] as TradeFilter[]).map((f) => (
               <button
