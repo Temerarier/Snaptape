@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #FAFBFC; }
+  a { color: #2563EB; text-decoration: none; }
+  a:hover { color: #1D4ED8; text-decoration: underline; }
+  @keyframes st-dash { to { stroke-dashoffset: -40; } }
+  @keyframes st-pulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+</style>
+</helmet>
+<div data-screen-label="Model Viewer Tablet Portrait" style="width: 830px; height: 1190px; position: relative; display: flex; flex-direction: column; overflow: hidden; background: #FAFBFC; font-family: 'IBM Plex Sans', sans-serif; color: #16233A;">
+
+  <!-- ============ VIEWER ============ -->
+  <div data-screen-label="3D Viewer" style="{{ viewerPos }}">
+    <!-- toolbar -->
+    <div style="min-height: 56px; flex: none; display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; padding: 8px 16px; background: #FFFFFF; border-bottom: 1px solid #E3E8EF;">
+      <div style="display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 0 1 auto; overflow: hidden;">
+        <div style="font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">1428 Maple St, Columbus OH</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #4A5568;">{{ statusLine }}</div>
+      </div>
+      <div style="flex: 1;"></div>
+      <button onClick="{{ openAddPhotos }}" style="font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 600; color: #43536E; background: #FFFFFF; border: 1px solid #D5DEEA; border-radius: 10px; padding: 8px 12px; cursor: pointer; white-space: nowrap;" style-hover="background: #F1F5F9;">+ Add photos</button>
+      <button onClick="{{ resetView }}" style="font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 600; color: #2563EB; background: #FFFFFF; border: 1px solid #D5DEEA; border-radius: 10px; padding: 8px 12px; cursor: pointer;" style-hover="background: #EAF1FE;">Reset view</button>
+      <label onClick="{{ toggleCond }}" style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; flex: none; white-space: nowrap;">
+        <span style="font-size: 12px; font-weight: 500; color: #43536E;">Show conditions</span>
+        <span style="{{ condTrack }}"><span style="{{ condKnob }}"></span></span>
+      </label>
+    </div>
+
+    <!-- canvas -->
+    <div style="flex: 1; position: relative; overflow: hidden; background: linear-gradient(180deg, #F6F8FB 0%, #EEF2F7 100%);">
+      <div style="position: absolute; inset: 0; background-image: linear-gradient(#E3E8EF 1px, transparent 1px), linear-gradient(90deg, #E3E8EF 1px, transparent 1px); background-size: 48px 48px; opacity: 0.5;"></div>
+
+      <sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+        <!-- LOADING: wireframe builds up -->
+        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 24px;">
+          <svg viewBox="0 0 1000 620" style="width: 78%; max-height: 70%;">
+            <g fill="none" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="6 5" style="animation: st-dash 2.2s linear infinite;">
+              <polygon points="250,560 680,560 680,330 250,330"></polygon>
+              <polygon points="250,560 150,505 150,300 250,330"></polygon>
+              <polygon points="240,332 692,332 600,205 350,205"></polygon>
+              <polygon points="240,332 140,298 350,205"></polygon>
+              <line x1="350" y1="205" x2="600" y2="205"></line>
+              <polygon points="280,450 430,450 430,560 280,560"></polygon>
+              <polygon points="600,460 645,460 645,560 600,560"></polygon>
+            </g>
+          </svg>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #43536E;">Analyzing photos 3/5</div>
+            <div style="width: 260px; height: 6px; background: #E3E8EF; border-radius: 3px; overflow: hidden;">
+              <div style="width: 60%; height: 100%; background: #2563EB; border-radius: 3px;"></div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isReady }}" hint-placeholder-val="{{ true }}">
+        <div style="{{ camStyle }}">
+          <svg viewBox="0 0 1000 620" onClick="{{ svgClick }}" style="{{ svgStyle }}">
+            <defs>
+              <pattern id="hatchWarn" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+                <line x1="0" y1="0" x2="0" y2="8" stroke="#EA580C" stroke-width="2.5"></line>
+              </pattern>
+            </defs>
+            <!-- ground -->
+            <line x1="80" y1="560" x2="920" y2="560" stroke="#B9C4D4" stroke-width="1.5"></line>
+            <!-- left wall WL-3 (brick) -->
+            <polygon points="250,560 150,505 150,300 250,330" fill="{{ f.WL3 }}" stroke="{{ st.WL3 }}" stroke-width="{{ sw.WL3 }}" stroke-dasharray="{{ dsh.WL3 }}" onClick="{{ pick.WL3 }}" onMouseEnter="{{ hin.WL3 }}" onMouseLeave="{{ hout.WL3 }}" style="cursor: pointer;"></polygon>
+            <line x1="165" y1="330" x2="240" y2="352" stroke="#C8BBAD" stroke-width="1"></line>
+            <line x1="160" y1="420" x2="242" y2="446" stroke="#C8BBAD" stroke-width="1"></line>
+            <polygon points="175,370 212,380 212,430 175,418" fill="{{ f.W6 }}" stroke="{{ st.W6 }}" stroke-width="{{ sw.W6 }}" onClick="{{ pick.W6 }}" style="cursor: pointer;"></polygon>
+            <polygon points="175,450 212,462 212,508 175,494" fill="{{ f.W7 }}" stroke="{{ st.W7 }}" stroke-width="{{ sw.W7 }}" onClick="{{ pick.W7 }}" style="cursor: pointer;"></polygon>
+            <!-- front wall WL-1 -->
+            <polygon points="250,560 680,560 680,330 250,330" fill="{{ f.WL1 }}" stroke="{{ st.WL1 }}" stroke-width="{{ sw.WL1 }}" stroke-dasharray="{{ dsh.WL1 }}" onClick="{{ pick.WL1 }}" onMouseEnter="{{ hin.WL1 }}" onMouseLeave="{{ hout.WL1 }}" style="cursor: pointer;"></polygon>
+            <!-- siding lines -->
+            <line x1="252" y1="440" x2="678" y2="440" stroke="#D8D2C2" stroke-width="1"></line>
+            <line x1="252" y1="352" x2="678" y2="352" stroke="#D8D2C2" stroke-width="1"></line>
+            <!-- upper windows -->
+            <rect x="292" y="358" width="46" height="58" fill="{{ f.W1 }}" stroke="{{ st.W1 }}" stroke-width="{{ sw.W1 }}" onClick="{{ pick.W1 }}" style="cursor: pointer;"></rect>
+            <rect x="372" y="358" width="46" height="58" fill="{{ f.W2 }}" stroke="{{ st.W2 }}" stroke-width="{{ sw.W2 }}" onClick="{{ pick.W2 }}" style="cursor: pointer;"></rect>
+            <rect x="470" y="358" width="46" height="58" fill="{{ f.W3 }}" stroke="{{ st.W3 }}" stroke-width="{{ sw.W3 }}" onClick="{{ pick.W3 }}" onMouseEnter="{{ hin.W3 }}" onMouseLeave="{{ hout.W3 }}" style="cursor: pointer;"></rect>
+            <rect x="548" y="358" width="46" height="58" fill="{{ f.W4 }}" stroke="{{ st.W4 }}" stroke-width="{{ sw.W4 }}" onClick="{{ pick.W4 }}" style="cursor: pointer;"></rect>
+            <rect x="500" y="468" width="46" height="58" fill="{{ f.W5 }}" stroke="{{ st.W5 }}" stroke-width="{{ sw.W5 }}" onClick="{{ pick.W5 }}" style="cursor: pointer;"></rect>
+            <!-- attached 2-car garage: brick front WL-5, own gable roof RF-7 -->
+            <polygon points="262,560 448,560 448,448 262,448" fill="{{ f.WL5 }}" stroke="{{ st.WL5 }}" stroke-width="{{ sw.WL5 }}" onClick="{{ pick.WL5 }}" onMouseEnter="{{ hin.WL5 }}" onMouseLeave="{{ hout.WL5 }}" style="cursor: pointer;"></polygon>
+            <polygon points="262,448 448,448 355,410" fill="{{ f.WL5 }}" stroke="{{ st.WL5 }}" stroke-width="{{ sw.WL5 }}" onClick="{{ pick.WL5 }}" style="cursor: pointer;"></polygon>
+            <line x1="268" y1="462" x2="442" y2="462" stroke="#C8BBAD" stroke-width="1"></line>
+            <polygon points="252,452 351,412 359,412 268,454" fill="{{ f.RF7 }}" stroke="{{ st.RF7 }}" stroke-width="{{ sw.RF7 }}" onClick="{{ pick.RF7 }}" onMouseEnter="{{ hin.RF7 }}" onMouseLeave="{{ hout.RF7 }}" style="cursor: pointer;"></polygon>
+            <polygon points="351,412 359,412 458,452 442,454" fill="{{ f.RF7 }}" stroke="{{ st.RF7 }}" stroke-width="{{ sw.RF7 }}" onClick="{{ pick.RF7 }}" style="cursor: pointer;"></polygon>
+            <!-- 2-car garage door GD-1 -->
+            <polygon points="288,472 422,472 422,560 288,560" fill="{{ f.GD1 }}" stroke="{{ st.GD1 }}" stroke-width="{{ sw.GD1 }}" onClick="{{ pick.GD1 }}" onMouseEnter="{{ hin.GD1 }}" onMouseLeave="{{ hout.GD1 }}" style="cursor: pointer;"></polygon>
+            <line x1="292" y1="496" x2="418" y2="496" stroke="#C3CBD8" stroke-width="1"></line>
+            <line x1="292" y1="520" x2="418" y2="520" stroke="#C3CBD8" stroke-width="1"></line>
+            <line x1="292" y1="544" x2="418" y2="544" stroke="#C3CBD8" stroke-width="1"></line>
+            <!-- door DR-1 -->
+            <polygon points="600,462 645,462 645,560 600,560" fill="{{ f.DR1 }}" stroke="{{ st.DR1 }}" stroke-width="{{ sw.DR1 }}" onClick="{{ pick.DR1 }}" onMouseEnter="{{ hin.DR1 }}" onMouseLeave="{{ hout.DR1 }}" style="cursor: pointer;"></polygon>
+            <!-- porch roof RF-6 (low confidence: dashed) -->
+            <polygon points="560,422 700,422 722,394 578,394" fill="{{ f.RF6 }}" stroke="{{ st.RF6 }}" stroke-width="{{ sw.RF6 }}" stroke-dasharray="{{ dsh.RF6 }}" onClick="{{ pick.RF6 }}" onMouseEnter="{{ hin.RF6 }}" onMouseLeave="{{ hout.RF6 }}" style="cursor: pointer;"></polygon>
+            <line x1="578" y1="560" x2="578" y2="424" stroke="#8A97AB" stroke-width="2.5"></line>
+            <line x1="694" y1="560" x2="694" y2="424" stroke="#8A97AB" stroke-width="2.5"></line>
+            <!-- main roof RF-1 -->
+            <polygon points="240,332 692,332 600,205 350,205" fill="{{ f.RF1 }}" stroke="{{ st.RF1 }}" stroke-width="{{ sw.RF1 }}" onClick="{{ pick.RF1 }}" onMouseEnter="{{ hin.RF1 }}" onMouseLeave="{{ hout.RF1 }}" style="cursor: pointer;"></polygon>
+            <!-- left hip RF-3 -->
+            <polygon points="240,332 140,298 350,205" fill="{{ f.RF3 }}" stroke="{{ st.RF3 }}" stroke-width="{{ sw.RF3 }}" onClick="{{ pick.RF3 }}" onMouseEnter="{{ hin.RF3 }}" onMouseLeave="{{ hout.RF3 }}" style="cursor: pointer;"></polygon>
+            <!-- ridge -->
+            <line x1="350" y1="205" x2="600" y2="205" stroke="#7D8AA0" stroke-width="2"></line>
+            <!-- dormer RF-5 -->
+            <polygon points="438,300 512,300 512,262 438,262" fill="#EDE8DB" stroke="#8A97AB" stroke-width="1"></polygon>
+            <rect x="456" y="270" width="38" height="26" fill="#DCE8F2" stroke="#8A97AB" stroke-width="1"></rect>
+            <polygon points="432,262 518,262 475,236" fill="{{ f.RF5 }}" stroke="{{ st.RF5 }}" stroke-width="{{ sw.RF5 }}" onClick="{{ pick.RF5 }}" onMouseEnter="{{ hin.RF5 }}" onMouseLeave="{{ hout.RF5 }}" style="cursor: pointer;"></polygon>
+            <!-- chimney CH-1 -->
+            <polygon points="612,215 648,215 648,150 612,150" fill="{{ f.CH1 }}" stroke="{{ st.CH1 }}" stroke-width="{{ sw.CH1 }}" onClick="{{ pick.CH1 }}" onMouseEnter="{{ hin.CH1 }}" onMouseLeave="{{ hout.CH1 }}" style="cursor: pointer;"></polygon>
+            <rect x="607" y="142" width="46" height="8" fill="#B0A190" stroke="#8A97AB" stroke-width="1"></rect>
+            <!-- pipes + vents -->
+            <circle cx="405" cy="255" r="5" fill="#64748B"></circle>
+            <circle cx="565" cy="240" r="5" fill="#64748B"></circle>
+            <circle cx="300" cy="290" r="5" fill="#64748B"></circle>
+            <rect x="520" y="268" width="12" height="8" fill="#64748B"></rect>
+            <rect x="330" y="250" width="12" height="8" fill="#64748B"></rect>
+            <!-- fascia FC-1 -->
+            <polygon points="240,332 692,332 692,343 240,343" fill="{{ f.FC1 }}" stroke="{{ st.FC1 }}" stroke-width="{{ sw.FC1 }}" onClick="{{ pick.FC1 }}" onMouseEnter="{{ hin.FC1 }}" onMouseLeave="{{ hout.FC1 }}" style="cursor: pointer;"></polygon>
+            <!-- downspouts -->
+            <line x1="246" y1="343" x2="246" y2="560" stroke="#8A97AB" stroke-width="3"></line>
+            <line x1="686" y1="343" x2="686" y2="560" stroke="#8A97AB" stroke-width="3"></line>
+            <!-- condition overlays -->
+            <sc-if value="{{ showCond }}" hint-placeholder-val="{{ false }}">
+              <polygon points="240,332 692,332 692,343 240,343" fill="url(#hatchWarn)" stroke="#DC2626" stroke-width="2" style="pointer-events: none;"></polygon>
+              <g style="pointer-events: none;">
+                <rect x="700" y="286" width="196" height="40" rx="6" fill="#FFFFFF" stroke="#EA580C" stroke-width="1.5"></rect>
+                <text x="712" y="303" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#16233A">Rot · Fascia (FC-1)</text>
+                <text x="712" y="319" font-family="IBM Plex Mono" font-size="11" fill="#B45309">8 sq ft · severe · photo #12</text>
+                <line x1="700" y1="316" x2="668" y2="338" stroke="#EA580C" stroke-width="1.5"></line>
+              </g>
+              <g style="pointer-events: none;">
+                <rect x="60" y="180" width="228" height="40" rx="6" fill="#FFFFFF" stroke="#EA580C" stroke-width="1.5"></rect>
+                <text x="72" y="197" font-family="IBM Plex Sans" font-size="12" font-weight="600" fill="#16233A">Failing paint · Back (WL-2)</text>
+                <text x="72" y="213" font-family="IBM Plex Mono" font-size="11" fill="#B45309">120 sq ft · moderate · photo #7</text>
+                <line x1="200" y1="220" x2="230" y2="270" stroke="#EA580C" stroke-width="1.5" stroke-dasharray="4 3"></line>
+              </g>
+            </sc-if>
+            <!-- key dimensions (always visible) -->
+            <g stroke="#3A4A63" stroke-width="1.5" fill="none">
+              <line x1="250" y1="586" x2="680" y2="586"></line>
+              <line x1="250" y1="580" x2="250" y2="592"></line>
+              <line x1="680" y1="580" x2="680" y2="592"></line>
+              <line x1="730" y1="205" x2="730" y2="560"></line>
+              <line x1="724" y1="205" x2="736" y2="205"></line>
+              <line x1="724" y1="560" x2="736" y2="560"></line>
+              <line x1="770" y1="332" x2="770" y2="560"></line>
+              <line x1="764" y1="332" x2="776" y2="332"></line>
+              <line x1="764" y1="560" x2="776" y2="560"></line>
+            </g>
+            <g font-family="IBM Plex Mono" font-size="15" font-weight="600" fill="#16233A">
+              <rect x="430" y="574" width="70" height="24" rx="4" fill="#FFFFFF" stroke="#8A97AB" stroke-width="1.5"></rect>
+              <text x="465" y="591" text-anchor="middle">42' 0"</text>
+              <rect x="694" y="366" width="72" height="24" rx="4" fill="#FFFFFF" stroke="#8A97AB" stroke-width="1.5"></rect>
+              <text x="730" y="383" text-anchor="middle">26' 8"</text>
+              <rect x="736" y="434" width="72" height="24" rx="4" fill="#FFFFFF" stroke="#8A97AB" stroke-width="1.5"></rect>
+              <text x="772" y="451" text-anchor="middle">18' 4"</text>
+              <text x="430" y="614" font-size="12" font-weight="600" fill="#3A4A63">width</text>
+              <text x="694" y="358" font-size="12" font-weight="600" fill="#3A4A63">ridge</text>
+              <text x="736" y="426" font-size="12" font-weight="600" fill="#3A4A63">eave</text>
+            </g>
+            <!-- user measure lines -->
+            <sc-for list="{{ mlines }}" as="ml" hint-placeholder-count="0">
+              <g style="pointer-events: none;">
+                <line x1="{{ ml.x1 }}" y1="{{ ml.y1 }}" x2="{{ ml.x2 }}" y2="{{ ml.y2 }}" stroke="#991B1B" stroke-width="2"></line>
+                <circle cx="{{ ml.x1 }}" cy="{{ ml.y1 }}" r="4" fill="#991B1B"></circle>
+                <circle cx="{{ ml.x2 }}" cy="{{ ml.y2 }}" r="4" fill="#991B1B"></circle>
+                <rect x="{{ ml.lx }}" y="{{ ml.ly }}" width="{{ ml.lw }}" height="28" rx="5" fill="#991B1B"></rect>
+                {{ ml.textNode }}
+              </g>
+            </sc-for>
+            <sc-if value="{{ mpending }}" hint-placeholder-val="{{ false }}">
+              <circle cx="{{ mpx }}" cy="{{ mpy }}" r="4.5" fill="none" stroke="#DC2626" stroke-width="2" style="pointer-events: none;"></circle>
+            </sc-if>
+            {{ snapMark }}
+            <!-- floating label for selection -->
+            <sc-if value="{{ floatShow }}" hint-placeholder-val="{{ false }}">
+              <g style="pointer-events: none;">
+                {{ floatConnector }}
+                <rect x="{{ floatX }}" y="{{ floatY }}" width="{{ floatW }}" height="{{ floatH }}" rx="8" fill="#16233A" stroke="#FFFFFF" stroke-width="1.5"></rect>
+                {{ floatNameNode }}
+                {{ floatValueNode }}
+                {{ floatAreaNode }}
+              </g>
+            </sc-if>
+          </svg>
+        </div>
+      </sc-if>
+
+      <!-- calculation bubble -->
+      <sc-if value="{{ tallyShow }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 6; background: #16233A; color: #FFFFFF; border-radius: 14px; padding: 10px 14px; box-shadow: 0 8px 28px rgba(20,30,50,0.35); display: flex; flex-direction: column; gap: 8px; max-width: 72%;">
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <span style="font-size: 14px; font-weight: 600; white-space: nowrap;">{{ tallyCount }} selected</span>
+            <sc-for list="{{ tallyGroups }}" as="tg" hint-placeholder-count="1">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap;">{{ tg.label }} · {{ tg.sum }}</span>
+            </sc-for>
+            <span style="flex: 1;"></span>
+            <button onClick="{{ tallyCopy }}" style="font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; font-weight: 600; color: #16233A; background: #FFFFFF; border: none; border-radius: 10px; padding: 0 14px; min-height: 44px; cursor: pointer;">Copy</button>
+            <button onClick="{{ tallyClear }}" style="font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; font-weight: 600; color: #FFFFFF; background: transparent; border: 2px solid #7C8CA8; border-radius: 10px; padding: 0 14px; min-height: 44px; cursor: pointer;">Clear</button>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <sc-for list="{{ tallyChips }}" as="tc" hint-placeholder-count="2">
+              <span style="display: inline-flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; background: #22324D; border-radius: 999px; padding: 3px 6px 3px 10px;">{{ tc.label }}<button onClick="{{ tc.onRemove }}" style="width: 16px; height: 16px; border: none; border-radius: 50%; background: #45577A; color: #FFFFFF; font-size: 10px; cursor: pointer; line-height: 1; padding: 0;">×</button></span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <!-- measure pill -->
+      <div style="position: absolute; right: 16px; top: 16px; z-index: 6; display: flex; align-items: center; gap: 6px; background: #FFFFFF; border: 2px solid #C6D0DE; border-radius: 999px; padding: 5px 6px; box-shadow: 0 2px 10px rgba(20,30,50,0.14);">
+        <button onClick="{{ measureToggle }}" style="{{ measureBtn }}">Measure line</button>
+        <sc-if value="{{ hasMlines }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ measureClear }}" style="{{ clearBtn }}">Clear</button>
+        </sc-if>
+      </div>
+      <div style="position: absolute; left: 16px; top: 16px; z-index: 5; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #16233A; background: rgba(255,255,255,0.94); border: 2px solid #C6D0DE; border-radius: 8px; padding: 6px 10px; pointer-events: none;">drag orbit · pinch zoom · 2-finger pan</div>
+    </div>
+  </div>
+
+  <!-- ============ MEASUREMENT PANEL ============ -->
+  <div data-screen-label="Measurement Panel" style="{{ panelPos }}">
+    <div onPointerDown="{{ shDown }}" onClick="{{ cycleSheet }}" style="flex: none; display: flex; align-items: center; justify-content: center; height: 44px; cursor: grab; touch-action: none; user-select: none;">
+      <div style="{{ grabberStyle }}"></div>
+    </div>
+    <!-- panel header -->
+    
+
+    <!-- panel body -->
+    <div style="flex: none; padding: 14px 18px 10px; border-bottom: 2px solid #C6D0DE; display: flex; flex-direction: column; gap: 10px; max-width: 780px; width: 776px; margin: 0 auto; box-sizing: border-box; height: 70px">
+      <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+        
+        <button onClick="{{ ch.all }}" style="{{ cb.all }}">All</button><button onClick="{{ ch.roofing }}" style="{{ cb.roofing }}">Roofing</button>
+        <button onClick="{{ ch.siding }}" style="{{ cb.siding }}">Siding</button><button onClick="{{ ch.painting }}" style="{{ cb.painting }}">Painting</button>
+        
+      </div><div style="display: flex; align-items: center; gap: 10px;">
+        
+        <div style="flex: 1;"></div>
+      </div>
+      
+      <!-- trade lens chips -->
+      
+    </div><div ref="{{ panelRef }}" style="flex: 1; min-height: 0; overflow-y: auto; position: relative; padding: 14px 14px 40px; display: flex; flex-direction: column; gap: 12px; max-width: 780px; width: 100%; margin: 0 auto; box-sizing: border-box;">
+      <sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+        <sc-for list="{{ skeletons }}" as="sk" hint-placeholder-count="5">
+          <div style="flex: none; background: #FFFFFF; border: 1px solid #E3E8EF; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; animation: st-pulse 1.6s ease-in-out infinite;">
+            <div style="width: 40%; height: 10px; border-radius: 5px; background: #E3E8EF;"></div>
+            <div style="width: 62%; height: 22px; border-radius: 6px; background: #EDF1F6;"></div>
+            <div style="width: 85%; height: 10px; border-radius: 5px; background: #EDF1F6;"></div>
+          </div>
+        </sc-for>
+        <div style="text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #5B6B85; padding: 8px;">Building measurements…</div>
+      </sc-if>
+      <sc-if value="{{ isReady }}" hint-placeholder-val="{{ true }}">
+        <sc-for list="{{ cards }}" as="card" hint-placeholder-count="5">
+          <div style="flex: none; background: #FFFFFF; border: 1px solid #E3E8EF; border-radius: 14px; overflow: hidden; box-shadow: 0 1px 2px rgba(20,30,50,0.04); border-left: 3px solid {{ card.color }};">
+            <div onClick="{{ card.onToggle }}" style="display: flex; align-items: center; gap: 12px; padding: 13px 14px; cursor: pointer; user-select: none;" style-hover="background: #F8FAFC;">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #4A5568;">{{ card.title }}</div>
+                  <sc-if value="{{ card.badge }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size: 12px; font-weight: 600; color: #0A5566; background: #E0F2F7; border-radius: 999px; padding: 2px 9px; white-space: nowrap;">{{ card.badge }}</span>
+                  </sc-if>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;">
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; color: #16233A;">{{ card.hero }}</span>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600; color: #16233A; white-space: nowrap;">{{ card.heroUnit }}</span>
+                  <sc-if value="{{ card.hero2 }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; color: #4A5568; white-space: nowrap;">· {{ card.hero2 }}</span>
+                  </sc-if>
+                </div>
+                <div style="font-size: 12px; font-weight: 500; color: #4A5568;">{{ card.sub }}</div>
+              </div>
+              <span style="{{ card.chev }}">▾</span>
+            </div>
+            <sc-if value="{{ card.expanded }}" hint-placeholder-val="{{ false }}">
+              <div style="border-top: 1px solid #EDF1F6; padding: 4px 0 6px;">
+                <sc-for list="{{ card.rows }}" as="row" hint-placeholder-count="3">
+                  <div>
+                    <div onClick="{{ row.onSelect }}" onMouseEnter="{{ row.onEnter }}" onMouseLeave="{{ row.onLeave }}" ref="{{ row.setRef }}" style="{{ row.style }}">
+                      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px;">
+                        <div style="display: flex; align-items: center; gap: 7px; min-width: 0; flex-wrap: wrap;">
+                          <span title="{{ row.labelTip }}" style="font-size: 15px; font-weight: 500; color: #16233A; line-height: 1.3;">{{ row.label }}</span>
+                          <sc-if value="{{ row.badge }}" hint-placeholder-val="{{ false }}">
+                            <span style="{{ row.badgeStyle }}">{{ row.badge }}</span>
+                          </sc-if>
+                        </div>
+                        <sc-if value="{{ row.sub }}" hint-placeholder-val="{{ false }}">
+                          <span style="font-size: 12px; font-weight: 500; color: #4A5568;">{{ row.sub }}</span>
+                        </sc-if>
+                      </div>
+                      <sc-if value="{{ row.cta }}" hint-placeholder-val="{{ false }}">
+                        <button onClick="{{ row.onCta }}" style="font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; font-weight: 600; color: #1E40AF; background: #EAF1FE; border: 2px solid #1E40AF; border-radius: 10px; padding: 0 14px; min-height: 44px; cursor: pointer; white-space: nowrap;" style-hover="background: #DBE7FD;">Add photo</button>
+                      </sc-if>
+                      <sc-if value="{{ row.value2 }}" hint-placeholder-val="{{ false }}">
+                        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 500; color: #4A5568; font-variant-numeric: tabular-nums; width: 48px; min-width: 48px; text-align: right; flex: none; white-space: nowrap;">{{ row.value2 }}</span>
+                      </sc-if>
+                      <sc-if value="{{ row.value }}" hint-placeholder-val="{{ true }}">
+                        <span style="width: 92px; text-align: right; flex: none; white-space: nowrap;" title="{{ row.raw }}">
+                          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; color: #16233A;">{{ row.value }}</span>
+                          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600; color: #4A5568;"> {{ row.unit }}</span>
+                        </span>
+                      </sc-if>
+                      <sc-if value="{{ row.hasActions }}" hint-placeholder-val="{{ false }}">
+                        <span style="{{ row.actStyle }}" style-hover="opacity: 1;">
+                          <button onClick="{{ row.onCopy }}" title="Copy value" style="{{ row.copyStyle }}" style-hover="background: #EDF1F6;">⧉</button>
+                          <button onClick="{{ row.onTally }}" title="Add to tally" style="{{ row.tallyStyle }}" style-hover="background: #EDF1F6;">Σ</button>
+                        </span>
+                      </sc-if>
+                      <sc-if value="{{ row.hasSub }}" hint-placeholder-val="{{ false }}">
+                        <span onClick="{{ row.onExpand }}" style="{{ row.chev }}">▾</span>
+                      </sc-if>
+                      <sc-if value="{{ row.hasCalc }}" hint-placeholder-val="{{ false }}">
+                        <button onClick="{{ row.onExpand }}" title="Show how this was calculated" style="{{ row.calcChev }}">▾</button>
+                      </sc-if>
+                      <sc-if value="{{ row.noChev }}" hint-placeholder-val="{{ false }}">
+                        <span style="flex: none; width: 44px;"></span>
+                      </sc-if>
+                    </div>
+                    <sc-if value="{{ row.calcOpen }}" hint-placeholder-val="{{ false }}">
+                      <div style="margin: 2px 14px 8px 28px; background: #FAFBFC; border: 1px solid #E3E8EF; border-radius: 10px; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px;">
+                        <sc-for list="{{ row.calcLines }}" as="cl" hint-placeholder-count="3">
+                          <div style="display: flex; align-items: center; gap: 12px; min-height: 34px;">
+                            <span style="flex: 1; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #43536E;">{{ cl.label }}</span>
+                            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; color: #16233A; width: 62px; text-align: right; flex: none;">{{ cl.value }}</span>
+                            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7D8AA0; width: 40px; flex: none; white-space: nowrap;">sq ft</span>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ row.open }}" hint-placeholder-val="{{ false }}">
+                      <div style="background: #FAFBFC; border-top: 1px solid #EDF1F6; border-bottom: 1px solid #EDF1F6;">
+                        <sc-for list="{{ row.subRows }}" as="sr" hint-placeholder-count="2">
+                          <div>
+                          <div onClick="{{ sr.onSelect }}" style="{{ sr.style }}">
+                            <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px;">
+                              <span style="font-size: 15px; font-weight: 500; color: #16233A; line-height: 1.3;">{{ sr.label }}</span>
+                              <sc-if value="{{ sr.sub }}" hint-placeholder-val="{{ false }}">
+                                <span style="font-size: 12px; font-weight: 500; color: #4A5568;">{{ sr.sub }}</span>
+                              </sc-if>
+                            </div>
+                            <span style="width: 92px; text-align: right; flex: none; white-space: nowrap;">
+                              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; color: #16233A;">{{ sr.value }}</span>
+                              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600; color: #4A5568;"> {{ sr.unit }}</span>
+                            </span>
+                          <sc-if value="{{ sr.hasActions }}" hint-placeholder-val="{{ false }}">
+                            <span style="{{ sr.actStyle }}">
+                              <button onClick="{{ sr.onCopy }}" title="Copy value" style="{{ sr.copyStyle }}">⧉</button>
+                              <button onClick="{{ sr.onTally }}" title="Add to tally" style="{{ sr.tallyStyle }}">Σ</button>
+                            </span>
+                          </sc-if>
+                          
+                            <sc-if value="{{ sr.hasItems }}" hint-placeholder-val="{{ false }}">
+                              <button onClick="{{ sr.onExpand }}" style="{{ sr.chev }}">▾</button>
+                            </sc-if>
+                            <sc-if value="{{ sr.noChev }}" hint-placeholder-val="{{ true }}">
+                              <span style="flex: none; width: 44px;"></span>
+                            </sc-if>
+                          </div>
+                          <sc-if value="{{ sr.itemsOpen }}" hint-placeholder-val="{{ false }}">
+                            <div style="{{ sr.itemsBox }}">
+                              <sc-for list="{{ sr.items }}" as="it" hint-placeholder-count="3">
+                                <div onClick="{{ it.onSelect }}" style="{{ it.style }}">
+                                  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;">
+                                    <span style="{{ it.labelStyle }}">{{ it.label }}</span>
+                                    <sc-if value="{{ it.sub }}" hint-placeholder-val="{{ false }}">
+                                      <span style="{{ it.subStyle }}">{{ it.sub }}</span>
+                                    </sc-if>
+                                  </div>
+                                  <span style="width: 92px; text-align: right; flex: none; white-space: nowrap;">
+                                    <span style="{{ it.valueStyle }}">{{ it.value }}</span>
+                                    <span style="{{ it.unitStyle }}"> {{ it.unit }}</span>
+                                  </span>
+                            <sc-if value="{{ it.hasActions }}" hint-placeholder-val="{{ false }}">
+                              <span style="{{ it.actStyle }}">
+                                <button onClick="{{ it.onCopy }}" title="Copy value" style="{{ it.copyStyle }}">⧉</button>
+                                <button onClick="{{ it.onTally }}" title="Add to tally" style="{{ it.tallyStyle }}">Σ</button>
+                              </span>
+                            </sc-if>
+                                  <span style="flex: none; width: 44px;"></span>
+                                </div>
+                              </sc-for>
+                            </div>
+                          </sc-if>
+                        </div>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ card.footnote }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding: 8px 14px 4px; font-size: 12px; font-weight: 600; color: #4A5568;">{{ card.footnote }}</div>
+                </sc-if>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </sc-if>
+      <div data-quality-note="1" style="flex: none; display: flex; flex-direction: column; gap: 7px; padding: 16px 4px 4px; border-top: 1px solid #C6D0DE;">
+        <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #4A5568;">About this run</div>
+        <div style="font-size: 12px; font-weight: 500; color: #4A5568; line-height: 1.6;">RF-6 partially occluded by tree · Right elevation not captured, no photos · 2 unclassified edges (14 LF) need review</div>
+        <div style="font-size: 12px; font-weight: 500; color: #4A5568; line-height: 1.6;">References used: garage door 16' 0" · entry door 36"</div>
+        <div data-disclaimer="1" style="font-size: 12px; font-weight: 400; color: #4A5568; line-height: 1.55; margin-top: 4px; padding-top: 8px; border-top: 1px solid #C6D0DE;">AI-generated estimates from photographs, for estimating purposes only. Accuracy depends on photo coverage and quality. The user remains responsible for verifying all numbers on site.</div>
+      </div>
+      <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+        <div style="position: sticky; bottom: 8px; align-self: center; background: #16233A; color: #FFFFFF; font-size: 14px; font-weight: 600; border-radius: 999px; padding: 11px 18px; box-shadow: 0 4px 16px rgba(20,30,50,0.25);">{{ toast }}</div>
+      </sc-if>
+    </div>
+  </div>
+
+  <!-- ============ ADD PHOTOS MODAL ============ -->
+  <sc-if value="{{ apOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ apClose }}" style="position: absolute; inset: 0; z-index: 40; background: rgba(22,35,58,0.45); display: flex; align-items: center; justify-content: center; padding: 24px;">
+      <div onClick="{{ apStop }}" style="width: 100%; max-width: 480px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 24px 64px rgba(20,30,50,0.35); display: flex; flex-direction: column; overflow: hidden;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 16px 20px 12px; border-bottom: 1px solid #E3E8EF;">
+          <div style="font-size: 15px; font-weight: 700;">Add photos</div>
+          <div style="flex: 1;"></div>
+          <button onClick="{{ apClose }}" style="width: 28px; height: 28px; border: none; background: transparent; border-radius: 8px; font-size: 16px; color: #5B6B85; cursor: pointer; line-height: 1;" style-hover="background: #F1F5F9;">×</button>
+        </div>
+        <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 14px;">
+          <div onClick="{{ apAddFile }}" style="{{ apDropStyle }}">
+            <div style="font-weight: 600; font-size: 14px; color: #16233A;">Drag photos or plan PDFs here</div>
+            <div style="font-size: 12px; color: #6B7A93;">or <span style="color: #2563EB; font-weight: 600;">browse files</span></div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #93A1B5;">{{ apCount }} of 10 files · JPG, PNG, HEIC, PDF</div>
+          </div>
+          <sc-if value="{{ apHasFiles }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <sc-for list="{{ apFiles }}" as="af" hint-placeholder-count="0">
+                <span style="display: inline-flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #43536E; background: #F1F5F9; border: 1px solid #E3E8EF; border-radius: 999px; padding: 3px 6px 3px 10px;">{{ af.name }}<button onClick="{{ af.onRemove }}" style="width: 16px; height: 16px; border: none; border-radius: 50%; background: #D5DEEA; color: #43536E; font-size: 10px; cursor: pointer; line-height: 1; padding: 0;">×</button></span>
+              </sc-for>
+            </div>
+          </sc-if>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #4A5568;">Measurement quality</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: #FFFFFF; border: 1px solid #E3E8EF; border-radius: 14px; overflow: hidden;">
+              <button onClick="{{ apQualStd }}" style="{{ apStdStyle }}">
+                <span style="{{ apStdTitle }}">Standard</span>
+                <span style="font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; color: #6B7A93; line-height: 1.45;">Good accuracy, lower cost per measurement</span>
+              </button>
+              <button onClick="{{ apQualPrm }}" style="{{ apPrmStyle }}">
+                <span style="{{ apPrmTitle }}">Premium</span>
+                <span style="font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; color: #6B7A93; line-height: 1.45;">Highest accuracy, uses more of your quota</span>
+              </button>
+            </div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 8px; background: #F8FAFC; border: 1px solid #E3E8EF; border-radius: 10px; padding: 10px 12px;">
+            <svg viewBox="0 0 16 16" style="width: 15px; height: 15px; flex: none; margin-top: 1px;"><circle cx="8" cy="8" r="7" fill="none" stroke="#5B6B85" stroke-width="1.4"></circle><rect x="7.3" y="7" width="1.4" height="5" rx="0.7" fill="#5B6B85"></rect><circle cx="8" cy="4.6" r="0.9" fill="#5B6B85"></circle></svg>
+            <span style="font-size: 12px; color: #43536E; line-height: 1.5;">Running a new measurement uses 1 measurement from your plan.</span>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; padding: 12px 20px 16px; border-top: 1px solid #E3E8EF;">
+          <button onClick="{{ apClose }}" style="font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; font-weight: 600; color: #43536E; background: transparent; border: none; border-radius: 10px; padding: 9px 14px; cursor: pointer;" style-hover="background: #F1F5F9;">Cancel</button>
+          <button onClick="{{ apSubmit }}" style="{{ apSubmitStyle }}">Upload &amp; re-measure</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 834, &quot;height&quot;: 1194}, &quot;screen&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;ready&quot;, &quot;options&quot;: [&quot;ready&quot;, &quot;loading&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Screen states&quot;}}">
+class Component extends DCLogic {
+  state = { sel: null, hov: null, exp: { edges: true }, open: {}, tip: null, chip: 'all', cond: false, qual: false, tally: {}, toast: null, sheet: null, measuring: false, mp: null, mlines: [], showDims: true, apOpen: false, apFiles: [], apQuality: 'standard' };
+
+  constructor(props) {
+    super(props);
+    this.rowEls = {};
+    this.panelEl = null;
+    // element metadata for 3D linkage
+    this.EL = {
+      'RF-1': { key: 'RF1', float: 'RF-1 · 612 sq ft · 6/12', x: 400, y: 250, cam: 'scale(1.16)', o: '46% 43%' },
+      'RF-2': { key: null,  float: 'RF-2 · 598 sq ft · 6/12 · back — not in view', x: 340, y: 158, cam: 'scale(1.05)', o: '50% 30%' },
+      'RF-3': { key: 'RF3', float: 'RF-3 · 340 sq ft · 8/12', x: 150, y: 240, cam: 'scale(1.2) translate(60px, 20px)', o: '24% 43%' },
+      'RF-4': { key: null,  float: 'RF-4 · 336 sq ft · 8/12 · right — not in view', x: 620, y: 158, cam: 'scale(1.05)', o: '65% 33%' },
+      'RF-5': { key: 'RF5', float: 'RF-5 · 96 sq ft · 4/12 · dormer', x: 400, y: 200, cam: 'scale(1.5)', o: '47% 42%' },
+      'RF-6': { key: 'RF6', float: 'RF-6 · 118 sq ft · 3/12 · porch', x: 545, y: 358, cam: 'scale(1.35)', o: '64% 66%' },
+      'WL-1': { key: 'WL1', float: 'WL-1 · Front · 618 sq ft net', x: 330, y: 398, cam: 'scale(1.12)', o: '46% 72%' },
+      'WL-2': { key: null,  float: 'WL-2 · Back · 645 sq ft net — not in view', x: 340, y: 158, cam: 'scale(1.02)', o: '50% 50%' },
+      'WL-3': { key: 'WL3', float: 'WL-3 · Left · 489 sq ft net · Brick', x: 60, y: 388, cam: 'scale(1.2) translate(80px, -10px)', o: '20% 70%' },
+      'WL-5': { key: 'WL5', float: 'WL-5 · Garage front · Brick · 218 sq ft net', x: 240, y: 418, cam: 'scale(1.3) translate(40px, -40px)', o: '35% 80%' },
+      'RF-7': { key: 'RF7', float: 'RF-7 · Garage front · 176 sq ft · 6/12', x: 250, y: 384, cam: 'scale(1.35) translate(40px, -30px)', o: '35% 72%' },
+      'RF-8': { key: null, float: 'RF-8 · Garage back · 172 sq ft · 6/12 — not in view', x: 340, y: 158, cam: 'scale(1.05)', o: '50% 30%' },
+      'GD-1': { key: 'GD1', float: "GD-1 · Garage · 16' 0\" × 7' 0\"", x: 280, y: 418, cam: 'scale(1.3) translate(30px, -40px)', o: '35% 82%' },
+      'DR-1': { key: 'DR1', float: 'DR-1 · Entry door · 36" × 80"', x: 545, y: 428, cam: 'scale(1.3) translate(-30px, -40px)', o: '62% 82%' },
+      'W-3':  { key: 'W3',  float: "W-3 · 36\" × 60\" · 15 sq ft · P 16' 0\"", x: 415, y: 322, cam: 'scale(1.45)', o: '49% 62%' },
+      'CH-1': { key: 'CH1', float: 'CH-1 · Chimney · 24" × 24"', x: 555, y: 108, cam: 'scale(1.4) translate(-40px, 50px)', o: '63% 29%' },
+      'W-1': { key: 'W1', float: 'W-1', x: 300, y: 322 },
+      'W-2': { key: 'W2', float: 'W-2', x: 380, y: 322 },
+      'W-4': { key: 'W4', float: 'W-4', x: 556, y: 322 },
+      'W-5': { key: 'W5', float: 'W-5', x: 508, y: 432 },
+      'W-6': { key: 'W6', float: 'W-6', x: 180, y: 334 },
+      'W-7': { key: 'W7', float: 'W-7', x: 180, y: 414 },
+      'FC-1': { key: 'FC1', float: 'FC-1 · Fascia · 382 LF · from eaves + rakes', x: 330, y: 288, cam: 'scale(1.15)', o: '46% 54%' }
+    };
+    this.FILLS = { RF1: '#C9CFD8', RF3: '#BFC7D2', RF5: '#C9CFD8', RF6: '#D4DAE2', RF7: '#C9CFD8', WL1: '#EDE8DB', WL3: '#D9C4B2', WL5: '#D9C4B2', GD1: '#E7EBF1', DR1: '#B08968', W1: '#DCE8F2', W2: '#DCE8F2', W4: '#DCE8F2', W5: '#DCE8F2', W6: '#DCE8F2', W7: '#DCE8F2', W3: '#DCE8F2', CH1: '#C4B5A5', FC1: '#F5F0E6' };
+    this.GROUPCOLOR = { RF1: '#0E7490', RF3: '#0E7490', RF5: '#0E7490', RF6: '#0E7490', RF7: '#0E7490', WL1: '#B45309', WL3: '#B45309', WL5: '#B45309', GD1: '#C026D3', DR1: '#C026D3', W3: '#C026D3', CH1: '#475569', FC1: '#64748B' };
+    this.ELEVFACES = { front: ['WL1', 'WL5', 'RF7', 'W3', 'DR1', 'GD1'], left: ['WL3'], roof: ['RF1', 'RF3', 'RF5', 'RF6', 'RF7', 'CH1'], back: [], right: [] };
+    this.CLS = { roof: 'Roof', edges: 'Roof', penetr: 'Roof', gutters: 'Roof', heights: 'Roof', walls: 'Walls', openings: 'Openings', trim: 'Trim', cond: 'Condition' };
+  }
+
+  select(id, src) {
+    if (this.state.measuring) return;
+    this.setState({ sel: this.state.sel === id ? null : id, tip: null });
+    if (src === '3d' && this.rowEls[id] && this.panelEl) {
+      const el = this.rowEls[id];
+      this.panelEl.scrollTo({ top: Math.max(0, el.offsetTop - 140), behavior: 'smooth' });
+    }
+  }
+
+  flash(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._tt);
+    this._tt = setTimeout(() => this.setState({ toast: null }), 1800);
+  }
+
+  buildEdges() {
+    if (this._edges) return this._edges;
+    const polylines = [
+      [[240,332],[692,332]], [[240,343],[692,343]], [[350,205],[600,205]],
+      [[240,332],[350,205]], [[692,332],[600,205]], [[140,298],[350,205]], [[140,298],[240,332]],
+      [[250,560],[680,560]], [[250,330],[250,560]], [[680,330],[680,560]],
+      [[150,300],[150,505]], [[150,505],[250,560]], [[150,300],[250,330]],
+      [[262,448],[448,448]], [[262,448],[262,560]], [[448,448],[448,560]], [[262,560],[448,560]],
+      [[262,448],[355,410]], [[355,410],[448,448]],
+      [[288,472],[422,472]], [[288,472],[288,560]], [[422,472],[422,560]],
+      [[560,422],[700,422]], [[578,394],[722,394]], [[578,424],[578,560]], [[694,424],[694,560]],
+      [[600,462],[645,462]], [[600,462],[600,560]], [[645,462],[645,560]],
+      [[612,150],[648,150]], [[612,150],[612,215]], [[648,150],[648,215]],
+      [[432,262],[518,262]], [[432,262],[475,236]], [[475,236],[518,262]],
+      [[438,262],[438,300]], [[512,262],[512,300]], [[438,300],[512,300]]
+    ];
+    const seen = {}, corners = [];
+    polylines.forEach(s => s.forEach(p => { const k = p[0]+','+p[1]; if (!seen[k]) { seen[k] = 1; corners.push(p); } }));
+    this._edges = { segs: polylines, corners };
+    return this._edges;
+  }
+
+  snapPoint(x, y, scale) {
+    const { segs, corners } = this.buildEdges();
+    const k = 1 / Math.max(scale || 1, 0.2);
+    const CORNER_R = 22 * k, EDGE_R = 12 * k;
+    let best = null, bd = CORNER_R;
+    corners.forEach(c => { const d = Math.hypot(c[0] - x, c[1] - y); if (d < bd) { bd = d; best = { x: c[0], y: c[1], kind: 'corner' }; } });
+    if (best) return best;
+    let ed = EDGE_R;
+    segs.forEach(([a, b]) => {
+      const vx = b[0] - a[0], vy = b[1] - a[1];
+      const len2 = vx * vx + vy * vy;
+      if (!len2) return;
+      let t = ((x - a[0]) * vx + (y - a[1]) * vy) / len2;
+      t = Math.max(0, Math.min(1, t));
+      const px = a[0] + t * vx, py = a[1] + t * vy;
+      const d = Math.hypot(px - x, py - y);
+      if (d < ed) { ed = d; best = { x: Math.round(px), y: Math.round(py), kind: 'edge' }; }
+    });
+    return best || { x, y, kind: null };
+  }
+
+  svgClick(e) {
+    if (!this.state.measuring) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    const scale = Math.min(r.width / 1000, r.height / 620);
+    const x = Math.round((e.clientX - r.left - (r.width - 1000 * scale) / 2) / scale);
+    const y = Math.round((e.clientY - r.top - (r.height - 620 * scale) / 2) / scale);
+    const sp = this.snapPoint(x, y, scale);
+    if (!this.state.mp) { this.setState({ mp: { x: sp.x, y: sp.y, kind: sp.kind } }); return; }
+    const p = this.state.mp;
+    if (Math.hypot(sp.x - p.x, sp.y - p.y) < 6) return;
+    const distFt = Math.hypot(sp.x - p.x, sp.y - p.y) * 42 / 430;
+    let ft = Math.floor(distFt);
+    let inch = Math.round((distFt - ft) * 12);
+    if (inch === 12) { ft += 1; inch = 0; }
+    const label = ft + "' " + inch + '"';
+    clearTimeout(this._snapT);
+    this._snapT = setTimeout(() => this.setState({ msnap: null }), 900);
+    this.setState({ mlines: this.state.mlines.concat([{ x1: p.x, y1: p.y, x2: sp.x, y2: sp.y, label }]), mp: null, msnap: sp.kind ? { x: sp.x, y: sp.y, kind: sp.kind } : null });
+  }
+
+  apSeg(active, first) {
+    return `display:flex; flex-direction:column; align-items:flex-start; gap:3px; text-align:left; padding:11px 13px; border:none; cursor:pointer; background:${active ? '#EAF1FE' : '#FFFFFF'}; box-shadow:${active ? 'inset 0 0 0 1.5px #2563EB' : 'none'}; ${first ? 'border-right:1px solid #E3E8EF;' : ''}`;
+  }
+  apTitle(active) {
+    return `font-family:'IBM Plex Sans',sans-serif; font-size:13px; font-weight:600; color:${active ? '#2563EB' : '#16233A'};`;
+  }
+
+  parseVal(v) {
+    if (v === undefined || v === null) return null;
+    const t = String(v).replace('=', '').replace(/,/g, '').trim();
+    const m = t.match(/^(\d+)'(?:\s*(\d+)\")?$/);
+    if (m) return parseInt(m[1], 10) + (m[2] ? parseInt(m[2], 10) / 12 : 0);
+    if (/^\d+(\.\d+)?$/.test(t)) return parseFloat(t);
+    return null;
+  }
+
+  toggleTally(r, cardId) {
+    const num = this.parseVal(r.value);
+    if (num === null) { this.flash('Value cannot be tallied'); return; }
+    const key = r.id || r.label;
+    const tally = Object.assign({}, this.state.tally);
+    if (tally[key]) { delete tally[key]; this.setState({ tally }); this.flash(key + ' removed from tally'); return; }
+    const unit = r.unit && r.unit.trim() ? r.unit : 'LF';
+    tally[key] = { label: key, num, unit, cls: this.CLS[cardId] || 'Other' };
+    this.setState({ tally });
+    this.flash(key + ' added to tally');
+  }
+
+  mkRow(r, cardId) {
+    const s = this.state;
+    const ACT_COPY = 'width:44px; height:44px; margin:-10px 0; border:none; background:transparent; border-radius:10px; cursor:pointer; font-size:14px; line-height:1; color:#4A5568; padding:0; flex:none;';
+    const ACT_TALLY = (on) => `width:44px; height:44px; margin:-10px 0; border:none; border-radius:10px; cursor:pointer; font-size:14px; line-height:1; padding:0; flex:none; background:${on ? '#1E40AF' : 'transparent'}; color:${on ? '#FFFFFF' : '#4A5568'};`;
+    const selected = s.sel === r.id;
+    const hovered = s.hov === r.id;
+    const bg = selected ? '#EAF1FE' : hovered ? '#F4F7FB' : 'transparent';
+    const inset = selected ? 'inset 0 0 0 1.5px #2563EB' : 'none';
+    return Object.assign({}, r, {
+      style: `display:flex; align-items:center; gap:9px; padding:9px 14px; cursor:pointer; background:${bg}; box-shadow:${inset}; border-radius:9px; margin:1px 4px;`,
+      hasActions: !!r.value && !r.cta,
+      labelTip: (r.label || '') + (r.value ? ' — ' + r.value + ' ' + (r.unit || '') : ''),
+      actStyle: `display:flex; gap:2px; flex:none; opacity:${s.tally[r.id || r.label] ? 1 : 0.55};`,
+      copyStyle: ACT_COPY,
+      tallyStyle: ACT_TALLY(s.tally[r.id || r.label]),
+      hasSub: !!r.subRows,
+      hasCalc: !!r.calc,
+      noChev: !r.subRows && !r.calc,
+      calcOpen: !!r.calc && !!s.open[r.id],
+      calcLines: r.calc || null,
+      calcChev: `flex:none; width:44px; height:44px; margin:0; padding:0; border:none; background:transparent; display:flex; align-items:center; justify-content:center; font-size:13px; color:#4A5568; cursor:pointer; transform:rotate(${s.open[r.id] ? 180 : 0}deg); transition:transform .18s;`,
+      open: !!r.subRows && !!s.open[r.id],
+      chev: `flex:none; width:44px; height:44px; margin:0; padding:0; border:none; background:transparent; display:flex; align-items:center; justify-content:center; font-size:13px; color:#4A5568; cursor:pointer; transform:rotate(${s.open[r.id] ? 180 : 0}deg); transition:transform .18s;`,
+      badgeStyle: r.badge ? `font-size:12px; font-weight:600; border-radius:999px; padding:2px 9px; white-space:nowrap; color:${r.badgeColor}; background:${r.badgeBg};` : null,
+      onSelect: r.id ? () => { this.select(r.id, 'panel'); if (r.subRows || r.calc) this.setState((p) => ({ open: Object.assign({}, p.open, { [r.id]: !p.open[r.id] }) })); } : () => {},
+      onEnter: r.id ? () => this.setState({ hov: r.id }) : () => {},
+      onLeave: () => this.setState({ hov: null }),
+      onExpand: (e) => { e.stopPropagation(); this.setState({ open: Object.assign({}, s.open, { [r.id]: !s.open[r.id] }) }); },
+      onCopy: (e) => { e.stopPropagation(); try { navigator.clipboard.writeText(`${r.label}: ${r.value} ${r.unit || ''}`); } catch (_) {} this.flash(`${r.id || r.label} copied`); },
+      onTally: (e) => { e.stopPropagation(); this.toggleTally(r, cardId); },
+      onCta: (e) => { e.stopPropagation(); this.flash('Photo capture flow opens here'); },
+      setRef: r.id ? (el) => { if (el) this.rowEls[r.id] = el; } : null,
+      subRows: r.subRows ? r.subRows.map(sr => Object.assign({}, sr, {
+        style: `display:flex; align-items:center; gap:9px; padding:7px 18px 7px 30px; cursor:pointer; background:${s.sel === sr.id ? '#EAF1FE' : 'transparent'};`,
+        hasActions: !!sr.value,
+        actStyle: 'display:flex; gap:2px; flex:none;',
+        copyStyle: ACT_COPY,
+        tallyStyle: ACT_TALLY(s.tally[sr.id || sr.label]),
+        onCopy: (e) => { e.stopPropagation(); try { navigator.clipboard.writeText(`${sr.label}: ${sr.value} ${sr.unit || ''}`); } catch (_) {} this.flash(`${sr.id || sr.label} copied`); },
+        onTally: (e) => { e.stopPropagation(); this.toggleTally({ id: sr.id, label: sr.label, value: sr.value, unit: sr.unit }, cardId); },
+        onSelect: sr.id ? (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.select(sr.id, 'panel'); if (sr.items) this.setState((p) => ({ open: Object.assign({}, p.open, { [sr.id]: !p.open[sr.id] }) })); } : (e) => { if (e && e.stopPropagation) e.stopPropagation(); },
+        hasItems: !!sr.items,
+        noChev: !sr.items,
+        itemsOpen: !!sr.items && !!s.open[sr.id],
+        chev: `flex:none; width:44px; height:44px; margin:0; padding:0; border:none; background:transparent; display:flex; align-items:center; justify-content:center; font-size:13px; color:#4A5568; cursor:pointer; transform:rotate(${s.open[sr.id] ? 180 : 0}deg); transition:transform .18s;`,
+        onExpand: (e) => { e.stopPropagation(); this.setState({ open: Object.assign({}, s.open, { [sr.id]: !s.open[sr.id] }) }); },
+        itemsBox: 'background:#F4F7FB; border-top:2px solid #C6D0DE; border-bottom:2px solid #C6D0DE;',
+        items: sr.items ? sr.items.map(it => {
+          const iid = String(it.label || '').split(' · ')[0];
+          return Object.assign({}, it, {
+          onSelect: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.select(iid, 'panel'); },
+          hasActions: !!it.value,
+          actStyle: 'display:flex; gap:2px; flex:none;',
+          copyStyle: ACT_COPY,
+          tallyStyle: ACT_TALLY(s.tally[iid]),
+          onCopy: (e) => { e.stopPropagation(); try { navigator.clipboard.writeText(`${it.label}: ${it.value} ${it.unit || ''}`); } catch (_) {} this.flash(iid + ' copied'); },
+          onTally: (e) => { e.stopPropagation(); this.toggleTally({ id: iid, label: it.label, value: it.value, unit: it.unit }, cardId); },
+          style: 'display:flex; align-items:center; gap:9px; padding:10px 18px 10px 44px; min-height:48px; box-sizing:border-box; cursor:pointer; ' + (s.sel === iid ? 'background:#EAF1FE; box-shadow:inset 0 0 0 2px #1E40AF; border-radius:10px;' : ''),
+          labelStyle: 'font-size:15px; font-weight:500; color:#16233A; line-height:1.3;',
+          subStyle: 'font-size:12px; font-weight:500; color:#4A5568;',
+          valueStyle: "font-family:'IBM Plex Mono',monospace; font-size:17px; font-weight:600; font-variant-numeric:tabular-nums; color:#16233A;",
+          unitStyle: "font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:500; color:#4A5568;"
+        }); }) : null
+      })) : null
+    });
+  }
+
+  cardsData() {
+    return [
+      { id: 'roof', title: 'Roof Area', color: '#0E7490', badge: 'Asphalt shingle', hero: '2,448', heroUnit: 'sq ft', hero2: '24.5 SQ', sub: '8 facets · predominant pitch 6/12', elev: ['roof'], rows: [
+        { id: 'RF-1', label: 'Front (RF-1)', value: '612', unit: 'sq ft', value2: '6/12', elev: ['front', 'roof'] },
+        { id: 'RF-2', label: 'Back (RF-2)', value: '598', unit: 'sq ft', value2: '6/12', elev: ['back', 'roof'] },
+        { id: 'RF-3', label: 'Left hip (RF-3)', value: '340', unit: 'sq ft', value2: '8/12', elev: ['left', 'roof'] },
+        { id: 'RF-4', label: 'Right hip (RF-4)', value: '336', unit: 'sq ft', value2: '8/12', elev: ['right', 'roof'] },
+        { id: 'RF-5', label: 'Dormer front (RF-5)', value: '96', unit: 'sq ft', value2: '4/12', elev: ['front', 'roof'] },
+        { id: 'RF-6', label: 'Porch (RF-6)', badge: 'Verify material', badgeColor: '#B45309', badgeBg: '#FCEEDC', value: '118', unit: 'sq ft', value2: '3/12', elev: ['front', 'roof'] },
+        { id: 'RF-7', label: 'Garage front (RF-7)', value: '176', unit: 'sq ft', value2: '6/12', elev: ['front', 'roof'] },
+        { id: 'RF-8', label: 'Garage back (RF-8)', value: '172', unit: 'sq ft', value2: '6/12', elev: ['back', 'roof'] }
+      ] },
+      { id: 'edges', title: 'Roof Edges', color: '#7C3AED', hero: '583', heroUnit: 'LF', sub: '6 edge classes · incl. garage · 2 unclassified', elev: ['roof'], rows: [
+        { id: 'ED-EA', label: 'Eaves', value: '155', unit: 'LF', elev: ['front', 'back', 'roof'], subRows: [
+          { id: 'EA-1', label: 'EA-1 · Front', value: "44' 6\"", unit: '' },
+          { id: 'EA-2', label: 'EA-2 · Back', value: "44' 6\"", unit: '' },
+          { id: 'EA-3', label: 'EA-3 · Porch', value: "34' 0\"", unit: '' },
+          { id: 'EA-4', label: 'EA-4 · Garage', value: "32' 0\"", unit: '' }
+        ] },
+        { id: 'ED-RA', label: 'Rakes', value: '227', unit: 'LF', elev: ['left', 'right', 'roof'], subRows: [
+          { id: 'RA-H', label: 'House · 4 rakes', value: "183' 0\"", unit: '' },
+          { id: 'RA-G', label: 'Garage · 2 rakes', value: "44' 0\"", unit: '' }
+        ] },
+        { id: 'ED-RI', label: 'Ridges', value: '74', unit: 'LF', elev: ['roof'], subRows: [
+          { id: 'RI-1', label: 'RI-1 · Main house', value: "42' 0\"", unit: '' },
+          { id: 'RI-2', label: 'RI-2 · Garage', value: "32' 0\"", unit: '' }
+        ] },
+        { id: 'ED-HI', label: 'Hips', value: '0', unit: 'LF', elev: ['roof'] },
+        { id: 'ED-VA', label: 'Valleys', value: '38', unit: 'LF', elev: ['roof'], subRows: [
+          { id: 'VA-1', label: 'VA-1 · Left dormer', value: "19' 0\"", unit: '' },
+          { id: 'VA-2', label: 'VA-2 · Right dormer', value: "19' 0\"", unit: '' }
+        ] },
+        { id: 'ED-SF', label: 'Step Flashing', value: '35', unit: 'LF', elev: ['roof'] },
+        { id: 'ED-FL', label: 'Flashing', value: '40', unit: 'LF', elev: ['roof'] },
+        { id: 'ED-DE', label: 'Drip Edge (Eaves + Rakes)', value: '= 382', unit: 'LF', elev: ['roof'] },
+        { id: 'ED-UN', label: 'Unclassified edges (2)', value: '14', unit: 'LF', elev: ['roof'], subRows: [
+          { id: 'UN-1', label: 'UN-1 · near dormer', value: "8' 4\"", unit: '' },
+          { id: 'UN-2', label: 'UN-2 · near porch', value: "5' 8\"", unit: '' }
+        ] }
+      ] },
+      { id: 'penetr', title: 'Penetrations', color: '#475569', hero: '6', heroUnit: 'total', sub: '3 pipes · 2 vents · 1 chimney', elev: ['roof'], rows: [
+        { id: 'PN-P', label: 'Pipes', value: '3', unit: 'EA', elev: ['roof'] },
+        { id: 'PN-V', label: 'Vents', value: '2', unit: 'EA', elev: ['roof'] },
+        { id: 'CH-1', label: 'Chimney (CH-1)', sub: '24" × 24"', value: '1', unit: 'EA', elev: ['roof'] }
+      ] },
+      { id: 'gutters', title: 'Gutters & Downspouts', color: '#64748B', hero: '155', heroUnit: 'LF', sub: "4 downspouts · 63' 0\" drop", elev: ['roof', 'front', 'back'], rows: [
+        { id: 'GT-1', label: 'Gutter runs (eaves)', value: '155', unit: 'LF', elev: ['front', 'back', 'roof'] },
+        { id: 'DS-1', label: 'Downspouts', sub: "total 63' 0\"", value: '4', unit: 'EA', elev: ['front', 'back'], subRows: [
+          { id: 'DS-A', label: 'DS-1', sub: 'front', value: "18' 0\"", unit: '' },
+          { id: 'DS-B', label: 'DS-2', sub: 'front', value: "18' 0\"", unit: '' },
+          { id: 'DS-C', label: 'DS-3', sub: 'back', value: "18' 0\"", unit: '' },
+          { id: 'DS-D', label: 'DS-4', sub: 'garage, front', value: "9' 0\"", unit: '' }
+        ] }
+      ] },
+      { id: 'heights', title: 'Height', color: '#64748B', hero: '2', heroUnit: 'stories', sub: "Eave 18' 4\" · Ridge 26' 8\"", elev: ['front', 'back', 'left', 'right', 'roof'], rows: [
+        { id: 'HT-S', label: 'Stories', value: '2', unit: 'EA' },
+        { id: 'HT-E', label: 'Eave Height', value: "18' 4\"", unit: '' },
+        { id: 'HT-R', label: 'Ridge Height', value: "26' 8\"", unit: '' }
+      ] },
+      { id: 'walls', title: 'Walls', color: '#B45309', hero: '1,970', heroUnit: 'sq ft net', sub: '4 of 5 elevations captured · of which gables 322 sq ft', elev: ['front', 'back', 'left', 'right'], rows: [
+        { id: 'WL-1', label: 'Front (WL-1)', sub: '742 sq ft gross', badge: 'Siding', badgeColor: '#0E7490', badgeBg: '#E0F2F7', value: '618', unit: 'sq ft', elev: ['front'], calc: [
+          { label: '42\' 0" × 17\' 8"', value: '742' },
+          { label: '− 6 openings', value: '−124' }
+        ] },
+        { id: 'WL-2', label: 'Back (WL-2)', sub: '738 sq ft gross', badge: 'Siding', badgeColor: '#0E7490', badgeBg: '#E0F2F7', value: '645', unit: 'sq ft', elev: ['back'], calc: [
+          { label: '41\' 0" × 18\' 0"', value: '738' },
+          { label: '− 5 openings', value: '−93' }
+        ] },
+        { id: 'WL-3', label: 'Left (WL-3)', sub: '512 sq ft gross', badge: 'Brick', badgeColor: '#B45309', badgeBg: '#FCEEDC', value: '489', unit: 'sq ft', elev: ['left'], calc: [
+          { label: '24\' 0" × 18\' 4"', value: '440' },
+          { label: '+ gable 24\' 0" × 6\' 0" / 2', value: '72' },
+          { label: '− 3 openings', value: '−23' }
+        ] },
+        { id: 'WL-5', label: 'Garage front (WL-5)', sub: '336 sq ft gross · main body is siding', badge: 'Brick', badgeColor: '#B45309', badgeBg: '#FCEEDC', value: '218', unit: 'sq ft', calc: [
+          { label: '32\' 0" × 9\' 0"', value: '288' },
+          { label: '+ gable 32\' 0" × 3\' 0" / 2', value: '48' },
+          { label: '− 2 openings', value: '−118' }
+        ], elev: ['front'] },
+        { id: 'WL-4', label: 'Right (WL-4)', sub: 'Not captured — add photo', cta: true, elev: ['right'] }
+      ] },
+      { id: 'openings', title: 'Openings', color: '#C026D3', hero: '17', heroUnit: 'openings', hero2: "Perimeter 222 LF", sub: '14 windows · 2 doors · 1 garage door', elev: ['front', 'back', 'left', 'right'], rows: [
+        { id: 'OP-W', label: 'Windows', sub: 'Perimeter 222 LF', value: '14', unit: 'EA', subRows: [
+          { id: 'OPW-F', label: 'Front', sub: "5 EA · Perimeter 92' 0\"", value: '104', unit: 'sq ft', items: [
+            { label: 'W-1 · 36" × 60"', sub: "Perimeter 16' 0\"", value: '15', unit: 'sq ft' },
+            { label: 'W-2 · 48" × 60"', sub: "Perimeter 18' 0\"", value: '20', unit: 'sq ft' },
+            { label: 'W-3 · 36" × 60"', sub: "Perimeter 16' 0\"", value: '15', unit: 'sq ft' },
+            { label: 'W-4 · 48" × 72"', sub: "Perimeter 20' 0\"", value: '24', unit: 'sq ft' },
+            { label: 'W-5 · 60" × 72"', sub: "Perimeter 22' 0\"", value: '30', unit: 'sq ft' }
+          ] },
+          { id: 'OPW-B', label: 'Back', sub: "5 EA · Perimeter 86' 0\"", value: '93', unit: 'sq ft', items: [
+            { label: 'W-9 · 48" × 72"', sub: "Perimeter 20' 0\"", value: '24', unit: 'sq ft' },
+            { label: 'W-10 · 60" × 72"', sub: "Perimeter 22' 0\"", value: '30', unit: 'sq ft' },
+            { label: 'W-11 · 36" × 48"', sub: "Perimeter 14' 0\"", value: '12', unit: 'sq ft' },
+            { label: 'W-12 · 36" × 48"', sub: "Perimeter 14' 0\"", value: '12', unit: 'sq ft' },
+            { label: 'W-13 · 36" × 60"', sub: "Perimeter 16' 0\"", value: '15', unit: 'sq ft' }
+          ] },
+          { id: 'OPW-L', label: 'Left', sub: "3 EA · Perimeter 34' 0\"", value: '23', unit: 'sq ft', items: [
+            { label: 'W-6 · 24" × 48"', sub: "Perimeter 12' 0\"", value: '8', unit: 'sq ft' },
+            { label: 'W-7 · 24" × 36"', sub: "Perimeter 10' 0\"", value: '6', unit: 'sq ft' },
+            { label: 'W-8 · 36" × 36"', sub: "Perimeter 12' 0\"", value: '9', unit: 'sq ft' }
+          ] },
+          { id: 'OPW-G', label: 'Garage front', sub: "1 EA · Perimeter 10' 0\"", value: '6', unit: 'sq ft', items: [
+            { label: 'W-14 · 24" × 36"', sub: "Perimeter 10' 0\"", value: '6', unit: 'sq ft' }
+          ] }
+        ] },
+        { id: 'OP-D', label: 'Doors', sub: "Perimeter 38' 8\"", value: '2', unit: 'EA', subRows: [
+          { id: 'DR-1', label: 'DR-1 · Front · 36" × 80"', sub: "Perimeter 19' 4\"", value: '20', unit: 'sq ft' },
+          { id: 'DR-2', label: 'DR-2 · Right · 36" × 80"', sub: "Perimeter 19' 4\" · on uncaptured elevation", value: '20', unit: 'sq ft' }
+        ] },
+        { id: 'OP-G', label: 'Garage Doors', sub: "Perimeter 46' 0\"", value: '1', unit: 'EA', subRows: [
+          { id: 'GD-1', label: 'GD-1 · Garage front · 16\' 0" × 7\' 0"', sub: "Perimeter 46' 0\"", value: '112', unit: 'sq ft' }
+        ] }
+      ] },
+      { id: 'trim', title: 'Trim & Roofline', color: '#64748B', hero: '382', heroUnit: 'LF fascia', sub: 'soffit 207 sq ft · 10 corners', elev: ['front', 'back', 'left', 'right'], rows: [
+        { id: 'TC-O', label: 'Outside Corners', sub: "× wall height 18' 4\"", value: '8', unit: 'EA' },
+        { id: 'TC-I', label: 'Inside Corners', sub: "× wall height 18' 4\"", value: '2', unit: 'EA' },
+        { id: 'SF-1', label: 'Soffit (SF-1)', sub: "eave run 155' × 16\" depth", badge: 'verify on site', badgeColor: '#0E7490', badgeBg: '#E0F2F7', value: '207', unit: 'sq ft' },
+        { id: 'FC-1', label: 'Fascia (FC-1)', sub: 'from eaves + rakes', value: '382', unit: 'LF' }
+      ] },
+      { id: 'cond', title: 'Condition Areas', color: '#EA580C', hero: '128', heroUnit: 'sq ft', sub: '2 areas flagged — toggle overlay in viewer', elev: ['back', 'front'], rows: [
+        { id: 'CD-1', label: 'Failing Paint · Back (WL-2)', sub: 'photo #7', badge: 'moderate', badgeColor: '#B45309', badgeBg: '#FCEEDC', value: '120', unit: 'sq ft', elev: ['back'] },
+        { id: 'CD-2', label: 'Rot · Fascia (FC-1)', sub: 'photo #12', badge: 'severe', badgeColor: '#DC2626', badgeBg: '#FDE8E8', value: '8', unit: 'sq ft', elev: ['front'] }
+      ] }
+    ];
+  }
+
+  shDown(e) {
+    e.preventDefault();
+    const host = e.currentTarget.parentElement.parentElement;
+    const H = host ? host.offsetHeight : 1190;
+    const startY = e.clientY;
+    const startPct = this.state.dragPct != null ? this.state.dragPct : ({ full: 12, half: 42, peek: 72 }[this.state.detent ?? 'half'] || 42);
+    this._moved = false;
+    const move = (ev) => {
+      const d = (ev.clientY - startY) / H * 100;
+      if (Math.abs(ev.clientY - startY) > 4) this._moved = true;
+      this.setState({ dragPct: Math.max(10, Math.min(76, startPct + d)) });
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      const p = this.state.dragPct;
+      if (p == null) return;
+      const stops = { full: 12, half: 42, peek: 72 };
+      let best = 'half', bd = Infinity;
+      Object.keys(stops).forEach(k => { const d = Math.abs(stops[k] - p); if (d < bd) { bd = d; best = k; } });
+      this.setState({ detent: best, dragPct: null, dragging2: false });
+      setTimeout(() => { this._moved = false; }, 80);
+    };
+    this.setState({ dragging2: true });
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  }
+
+  cycleDetent() {
+    if (this._moved) { this._moved = false; return; }
+    const order = ['peek', 'half', 'full'];
+    const cur = this.state.detent ?? 'half';
+    this.setState({ detent: order[(order.indexOf(cur) + 1) % 3] });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const layout = this.props.layout ?? 'desktop';
+    const screen = this.props.screen ?? 'ready';
+    const isTablet = false;
+    const isLoading = screen === 'loading';
+    const sheet = s.sheet ?? this.props.sheet ?? 'half';
+    const sheetH = { peek: '128px', half: '52%', full: '88%' }[sheet] || '52%';
+
+    const detent = s.detent ?? 'half';
+    const viewPct = s.dragPct != null ? s.dragPct : ({ full: 12, half: 42, peek: 72 }[detent] || 42);
+    const viewerPos = `flex:0 0 ${viewPct}%; min-height:0; width:100%; display:flex; flex-direction:column; position:relative;`;
+    const panelPos = 'flex:1 1 auto; min-height:0; width:100%; background:#FFFFFF; border-top:2px solid #C6D0DE; display:flex; flex-direction:column;';
+
+
+
+    // trade lens chips
+    const chips = ['all', 'roofing', 'siding', 'painting'];
+    const cb = {}, ch = {};
+    chips.forEach(c => {
+      const active = s.chip === c;
+      cb[c] = `font-family:'IBM Plex Sans',sans-serif; font-size:14px; font-weight:600; padding:0 14px; min-height:44px; border-radius:999px; cursor:pointer; white-space:nowrap; border:2px solid ${active ? '#1E40AF' : '#C6D0DE'}; color:${active ? '#1E40AF' : '#16233A'}; background:${active ? '#EAF1FE' : '#FFFFFF'};`;
+      ch[c] = () => this.setState({ chip: c === s.chip ? 'all' : c });
+    });
+
+    // 3D face props
+    const f = {}, st = {}, sw = {}, dsh = {}, pick = {}, hin = {}, hout = {};
+    const selKey = s.sel && this.EL[s.sel] ? this.EL[s.sel].key : null;
+    const hovKey = s.hov && this.EL[s.hov] ? this.EL[s.hov].key : null;
+    const chipFaces = [];
+    Object.keys(this.FILLS).forEach(k => {
+      const base = this.FILLS[k];
+      const id = Object.keys(this.EL).find(i => this.EL[i].key === k);
+      if (k === selKey) {
+        f[k] = `color-mix(in srgb, ${base} 55%, #2563EB 45%)`; st[k] = '#2563EB'; sw[k] = 3;
+      } else if (k === hovKey) {
+        f[k] = `color-mix(in srgb, ${base} 78%, #2563EB 22%)`; st[k] = '#2563EB'; sw[k] = 1.5;
+      } else if (chipFaces.indexOf(k) >= 0) {
+        f[k] = `color-mix(in srgb, ${base} 72%, ${this.GROUPCOLOR[k]} 28%)`; st[k] = this.GROUPCOLOR[k]; sw[k] = 2;
+      } else {
+        f[k] = base; st[k] = '#8A97AB'; sw[k] = 1.2;
+      }
+      dsh[k] = null;
+      if (k === 'RF6') { dsh[k] = '6 4'; if (k !== selKey && k !== hovKey) st[k] = '#B45309'; }
+      pick[k] = () => this.select(id, '3d');
+      hin[k] = () => this.setState({ hov: id });
+      hout[k] = () => this.setState({ hov: null });
+    });
+
+    // floating label
+    const el = s.sel ? this.EL[s.sel] : null;
+    const NV = {
+      'RF-1': ['RF-1', '6/12 · Asphalt shingle', '612 sq ft'],
+      'RF-2': ['RF-2', '6/12 · Asphalt shingle', '598 sq ft'],
+      'RF-3': ['RF-3', '8/12 · Asphalt shingle', '340 sq ft'],
+      'RF-4': ['RF-4', '8/12 · Asphalt shingle', '336 sq ft'],
+      'RF-5': ['RF-5', '4/12 · Asphalt shingle · dormer', '96 sq ft'],
+      'RF-6': ['RF-6', '3/12 · Asphalt shingle · porch', '118 sq ft'],
+      'RF-7': ['RF-7', '6/12 · Asphalt shingle', '176 sq ft'],
+      'RF-8': ['RF-8', '6/12 · Asphalt shingle', '172 sq ft'],
+      'WL-1': ['WL-1', '42\' 0" × 17\' 8" · Siding', '618 sq ft net'],
+      'WL-2': ['WL-2', '41\' 0" × 18\' 0" · Siding', '645 sq ft net'],
+      'WL-3': ['WL-3', '24\' 0" × 18\' 4" · Brick', '489 sq ft net'],
+      'WL-5': ['WL-5', '32\' 0" × 9\' 0" · Brick', '218 sq ft net'],
+      'GD-1': ['GD-1', '16\' 0" × 7\' 0"', '112 sq ft'],
+      'DR-1': ['DR-1', '36" × 80"', '20 sq ft'],
+      'W-1': ['W-1', '36" × 60"', '15 sq ft'],
+      'W-2': ['W-2', '48" × 60"', '20 sq ft'],
+      'W-3': ['W-3', '36" × 60"', '15 sq ft'],
+      'W-4': ['W-4', '48" × 72"', '24 sq ft'],
+      'W-5': ['W-5', '60" × 72"', '30 sq ft'],
+      'W-6': ['W-6', '24" × 48"', '8 sq ft'],
+      'W-7': ['W-7', '24" × 36"', '6 sq ft'],
+      'CH-1': ['CH-1', '24" × 24"'],
+      'FC-1': ['FC-1', '382 LF · from eaves + rakes']
+    };
+    const ANCHOR = {
+      'RF-1': [470, 270], 'RF-3': [243, 278], 'RF-5': [475, 253], 'RF-6': [640, 408],
+      'RF-7': [355, 435], 'WL-1': [465, 445], 'WL-3': [200, 424], 'WL-5': [355, 490],
+      'GD-1': [355, 516], 'DR-1': [622, 511], 'W-3': [493, 387], 'CH-1': [630, 182], 'FC-1': [466, 337]
+    };
+    const nv = s.sel && NV[s.sel] ? NV[s.sel] : null;
+    const floatName = nv ? nv[0] : '';
+    const floatValue = nv ? nv[1] : '';
+    const floatArea = nv && nv[2] ? nv[2] : '';
+    const floatW = nv ? Math.round(Math.max(floatName.length, floatValue.length, floatArea.length) * 10.7) + 30 : 0;
+    const floatH = floatArea ? 86 : 62;
+    const BBOX = {
+      'RF-1': [240, 205, 692, 332], 'RF-3': [140, 205, 350, 332], 'RF-5': [432, 236, 518, 262],
+      'RF-6': [560, 394, 722, 422], 'RF-7': [252, 408, 458, 454], 'WL-1': [250, 330, 680, 560],
+      'WL-3': [150, 300, 250, 560], 'WL-5': [262, 410, 448, 560], 'GD-1': [288, 472, 422, 560],
+      'DR-1': [600, 462, 645, 560], 'CH-1': [612, 150, 648, 215], 'FC-1': [240, 332, 692, 343],
+      'W-1': [292, 358, 338, 416], 'W-2': [372, 358, 418, 416], 'W-3': [470, 358, 516, 416],
+      'W-4': [548, 358, 594, 416], 'W-5': [500, 468, 546, 526],
+      'W-6': [175, 370, 212, 430], 'W-7': [175, 450, 212, 508]
+    };
+    const anchor = s.sel ? ANCHOR[s.sel] : null;
+    const bb = s.sel ? BBOX[s.sel] : null;
+    const clampX = (v) => Math.max(6, Math.min(994 - floatW, v));
+    const clampY = (v) => Math.max(6, Math.min(614 - floatH, v));
+    let boxX = el ? el.x : 0, boxY = el ? el.y : 0;
+    if (bb) {
+      const gap = 22;
+      const cx = (bb[0] + bb[2]) / 2, cy = (bb[1] + bb[3]) / 2;
+      if (bb[1] - floatH - gap >= 6) { boxX = clampX(cx - floatW / 2); boxY = bb[1] - floatH - gap; }
+      else if (bb[2] + gap + floatW <= 994) { boxX = bb[2] + gap; boxY = clampY(cy - floatH / 2); }
+      else if (bb[0] - gap - floatW >= 6) { boxX = bb[0] - gap - floatW; boxY = clampY(cy - floatH / 2); }
+      else { boxX = clampX(cx - floatW / 2); boxY = clampY(bb[3] + gap); }
+    } else if (anchor) {
+      boxX = clampX(anchor[0] > 500 ? anchor[0] - floatW - 40 : anchor[0] + 40);
+      boxY = clampY(anchor[1] - floatH - 26);
+    }
+    const aPt = anchor || (bb ? [(bb[0] + bb[2]) / 2, (bb[1] + bb[3]) / 2] : null);
+    const cxBox = aPt ? Math.max(boxX, Math.min(boxX + floatW, aPt[0])) : boxX;
+    const cyBox = aPt ? Math.max(boxY, Math.min(boxY + floatH, aPt[1])) : boxY;
+    const camStyle = `position:absolute; inset:0; transform:${el ? el.cam : 'scale(1)'}; transform-origin:${el ? el.o : '50% 50%'}; transition:transform .35s ease;`;
+
+    // cards with filtering
+    const LENS = { roofing: ['roof', 'edges', 'penetr'], siding: ['walls', 'trim', 'openings'], painting: ['walls', 'openings', 'trim', 'cond'] };
+    const cards = this.cardsData().map(c => {
+      const rows = c.rows;
+      const show = s.chip === 'all' || (LENS[s.chip] || []).indexOf(c.id) >= 0;
+      const expanded = !!s.exp[c.id] || (s.sel && c.rows.some(r => r.id === s.sel || (r.subRows && r.subRows.some(x => x.id === s.sel))));
+      return show ? Object.assign({}, c, {
+        rows: rows.map(r => this.mkRow(r, c.id)),
+        expanded,
+        chev: `flex:none; width:44px; height:44px; margin:0; padding:0; border:none; background:transparent; display:flex; align-items:center; justify-content:center; font-size:13px; color:#4A5568; cursor:pointer; transform:rotate(${expanded ? 180 : 0}deg); transition:transform .18s;`,
+        onToggle: () => this.setState({ exp: Object.assign({}, s.exp, { [c.id]: !expanded }) })
+      }) : null;
+    }).filter(Boolean);
+
+    const titems = Object.keys(s.tally).map(k => s.tally[k]);
+    const groupsMap = {};
+    titems.forEach(it => { const gk = it.cls + '|' + it.unit; groupsMap[gk] = (groupsMap[gk] || 0) + it.num; });
+    const fmtN = (n) => (Math.round(n * 100) / 100).toLocaleString('en-US');
+    const tallyGroups = Object.keys(groupsMap).map(gk => { const parts = gk.split('|'); return { label: parts[0], sum: fmtN(groupsMap[gk]) + ' ' + parts[1] }; });
+    const mlines = (s.mlines || []).map(l => {
+      const mx = (l.x1 + l.x2) / 2, my = (l.y1 + l.y2) / 2;
+      const lw = Math.round(l.label.length * 10.6 + 20);
+      return { x1: l.x1, y1: l.y1, x2: l.x2, y2: l.y2, label: l.label, lx: mx - lw / 2, ly: my - 36, lw, tx: mx, ty: my - 17,
+        textNode: React.createElement('text', { x: mx, y: my - 17, textAnchor: 'middle', fontFamily: 'IBM Plex Mono', fontSize: 17, fontWeight: 600, fill: '#FFFFFF' }, l.label) };
+    });
+    return {
+      viewerPos, panelPos, cb, ch, f, st, sw, dsh, pick, hin, hout, camStyle,
+      svgStyle: `width:100%; height:100%; display:block; cursor:${s.measuring ? 'crosshair' : 'default'};`,
+      svgClick: (e) => this.svgClick(e),
+      measureToggle: () => this.setState({ measuring: !s.measuring, mp: null }),
+      measureBtn: `font-family:'IBM Plex Sans',sans-serif; font-size:14px; font-weight:600; border:none; border-radius:999px; padding:0 18px; min-height:44px; cursor:pointer; color:${s.measuring ? '#FFFFFF' : '#1E40AF'}; background:${s.measuring ? '#1E40AF' : '#EAF1FE'};`,
+      clearBtn: `font-family:'IBM Plex Sans',sans-serif; font-size:14px; font-weight:600; color:#16233A; background:transparent; border:none; border-radius:999px; padding:0 16px; min-height:44px; cursor:pointer;`,
+      measureClear: () => this.setState({ mlines: [], mp: null }),
+      hasMlines: (s.mlines || []).length > 0,
+      mlines, mpending: !!s.mp, mpx: s.mp ? s.mp.x : 0, mpy: s.mp ? s.mp.y : 0,
+      snapMark: (function () {
+        const sm = (s.mp && s.mp.kind) ? { x: s.mp.x, y: s.mp.y, kind: s.mp.kind } : s.msnap;
+        if (!sm) return null;
+        const kids = sm.kind === 'corner'
+          ? [React.createElement('rect', { key: 'c', x: sm.x - 6, y: sm.y - 6, width: 12, height: 12, fill: 'none', stroke: '#DC2626', strokeWidth: 2 }),
+             React.createElement('circle', { key: 'd', cx: sm.x, cy: sm.y, r: 2, fill: '#DC2626' })]
+          : [React.createElement('circle', { key: 'r', cx: sm.x, cy: sm.y, r: 7, fill: 'none', stroke: '#DC2626', strokeWidth: 2, strokeDasharray: '3 3' })];
+        return React.createElement('g', { style: { pointerEvents: 'none' } }, kids);
+      })(),
+      showDims: true,
+      dimTrack: `width:36px; height:20px; border-radius:10px; position:relative; transition:background .2s; flex:none; background:${s.showDims ? '#2563EB' : '#CBD5E1'};`,
+      dimKnob: `position:absolute; top:2px; width:16px; height:16px; border-radius:50%; background:#FFFFFF; transition:left .2s; left:${s.showDims ? '18px' : '2px'};`,
+      isTablet, isLoading, isReady: !isLoading,
+      statusLine: 'Model ready · 5 photos · updated 2h ago',
+      showCond: s.cond,
+      toggleCond: () => this.setState({ cond: !s.cond }),
+      condTrack: `width:36px; height:20px; border-radius:10px; position:relative; transition:background .2s; flex:none; background:${s.cond ? '#2563EB' : '#CBD5E1'};`,
+      condKnob: `position:absolute; top:2px; width:16px; height:16px; border-radius:50%; background:#FFFFFF; transition:left .2s; left:${s.cond ? '18px' : '2px'};`,
+      resetView: () => this.setState({ sel: null, chip: 'all', tip: null }),
+      floatShow: !!nv, floatW, floatH, floatX: boxX, floatY: boxY,
+      floatNameNode: nv ? React.createElement('text', { x: boxX + 15, y: boxY + 25, fontFamily: "'IBM Plex Mono', monospace", fontSize: 17, fontWeight: 600, fill: '#FFFFFF' }, floatName) : null,
+      floatValueNode: nv ? React.createElement('text', { x: boxX + 15, y: boxY + 49, fontFamily: "'IBM Plex Mono', monospace", fontSize: 17, fontWeight: 600, fill: '#FFFFFF' }, floatValue) : null,
+      floatAreaNode: floatArea ? React.createElement('text', { x: boxX + 15, y: boxY + 73, fontFamily: "'IBM Plex Mono', monospace", fontSize: 17, fontWeight: 600, fill: '#FFFFFF' }, floatArea) : null,
+      floatConnector: aPt ? React.createElement('line', { x1: cxBox, y1: cyBox, x2: aPt[0], y2: aPt[1], stroke: '#16233A', strokeWidth: 2 }) : null,
+      tallyShow: titems.length > 0, tallyCount: titems.length, tallyGroups,
+      tallyChips: titems.map(it => ({ label: it.label + ' ' + fmtN(it.num) + ' ' + it.unit, onRemove: () => { const t = Object.assign({}, s.tally); delete t[it.label]; this.setState({ tally: t }); } })),
+      tallyCopy: () => { try { navigator.clipboard.writeText(tallyGroups.map(g => g.label + ': ' + g.sum).join(' · ')); } catch (_) {} this.flash('Tally copied'); },
+      tallyClear: () => this.setState({ tally: {} }),
+      cards, skeletons: [1, 2, 3, 4, 5],
+      toast: s.toast,
+      panelRef: (n) => { this.panelEl = n; },
+      apOpen: s.apOpen,
+      openAddPhotos: () => this.setState({ apOpen: true }),
+      apClose: () => this.setState({ apOpen: false, apFiles: [] }),
+      apStop: (e) => e.stopPropagation(),
+      apAddFile: () => {
+        if (s.apFiles.length >= 10) { this.flash('10-file limit reached'); return; }
+        const n = s.apFiles.length + 1;
+        const name = n % 3 === 0 ? 'site-plan-' + n + '.pdf' : 'IMG_48' + (20 + n) + '.jpg';
+        this.setState({ apFiles: s.apFiles.concat([{ name }]) });
+      },
+      apCount: s.apFiles.length,
+      apHasFiles: s.apFiles.length > 0,
+      apFiles: s.apFiles.map((fl, i) => ({ name: fl.name, onRemove: (e) => { e.stopPropagation(); this.setState({ apFiles: s.apFiles.filter((_, j) => j !== i) }); } })),
+      apDropStyle: `display:flex; flex-direction:column; align-items:center; gap:5px; padding:22px 16px; border-radius:14px; border:2px dashed #C9D4E2; background:#FFFFFF; cursor:pointer; text-align:center;`,
+      apQualStd: () => this.setState({ apQuality: 'standard' }),
+      apQualPrm: () => this.setState({ apQuality: 'premium' }),
+      apStdStyle: this.apSeg(s.apQuality === 'standard', true),
+      apPrmStyle: this.apSeg(s.apQuality === 'premium', false),
+      apStdTitle: this.apTitle(s.apQuality === 'standard'),
+      apPrmTitle: this.apTitle(s.apQuality === 'premium'),
+      apSubmitStyle: `font-family:'IBM Plex Sans',sans-serif; font-size:13px; font-weight:600; border:none; border-radius:10px; padding:9px 16px; color:#FFFFFF; background:${s.apFiles.length ? '#2563EB' : '#B9C7DE'}; cursor:${s.apFiles.length ? 'pointer' : 'default'};`,
+      apSubmit: () => {
+        if (!s.apFiles.length) return;
+        this.setState({ apOpen: false, apFiles: [] });
+        this.flash('Re-measurement started · ' + s.apFiles.length + ' file' + (s.apFiles.length > 1 ? 's' : '') + ' · ' + s.apQuality);
+      },
+      cycleSheet: () => this.cycleDetent(),
+      shDown: (e) => this.shDown(e),
+      grabberStyle: `width:52px; height:6px; border-radius:3px; background:${s.dragging2 ? '#1E40AF' : '#8A97AB'}; transition:background .15s;`
+    };
+  }
+}
+</script>
+</body>
+</html>

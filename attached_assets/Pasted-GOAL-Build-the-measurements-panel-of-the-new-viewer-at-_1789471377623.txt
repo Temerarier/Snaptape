@@ -1,0 +1,55 @@
+GOAL
+Build the measurements panel of the new viewer at route /viewer-next: 3D placeholder on the
+left, the panel on the right, faithfully reproducing the approved v4 design. The old viewer
+stays untouched.
+
+FIRST
+Commit the five attached files unchanged:
+- the spec                  -> docs/viewer-spec.md
+- replit.md                 -> replit.md (replaces the current one: it corrects two stale
+                               iron rules and adds the 4a-4d roadmap)
+- the three design exports  -> docs/viewer-reference/desktop.html, tablet-portrait.html,
+                               tablet-landscape.html
+Then read docs/viewer-spec.md completely before writing any code. It is binding, and it
+answers what this prompt does not repeat: card order and contents, row anatomy and
+interaction, the walls breakdown, the openings grouping, downspouts, the quality block and
+its disclaimer, what is deliberately not displayed, legibility, vocabulary.
+
+SOURCES OF TRUTH
+- Structure and styling: the three reference files. Replicate the desktop artboard exactly;
+  the other two give the tablet layouts. There is no phone artboard on purpose - the phone
+  is the tablet-portrait layout at a narrower width, with no controls of its own (spec 3).
+  Panel content is the same on every screen size - the artboards differ only in layout.
+- Rules and behaviour: docs/viewer-spec.md.
+- Numbers: computeDerived(measurement) from the shared lib, fed with
+  fixtures/garage-house.json via the demo project. The viewer never calculates. The
+  reference shows a different demo house - never copy a number from it.
+- Contract: shared/schema/measurement-v1.6.json.
+
+DO NOT
+- Do not deviate from the reference structure or styling, and do not add anything the spec
+  does not ask for.
+- Do not modify the old viewer, its route, lib/viewer/, the compute lib, the schema, or the
+  fixture.
+- Do not calculate in the UI - if a number is missing from computeDerived, stop and ask.
+- Do not build the 3D viewport, the selection box, the tally bubble or the measure tool -
+  placeholder only, they are the next prompt.
+
+DONE WHEN
+- [ ] The spec, replit.md and the three reference files are committed unchanged
+- [ ] Roof Area reads 2,097 sq ft · 21.0 SQ · 6 facets
+- [ ] Walls reads 2,779 sq ft net, "of which gables 322 sq ft"; each of the six wall rows
+      opens to a breakdown that adds up exactly to its gross and net
+- [ ] Openings: all 16 windows listed, grouped by wall
+- [ ] Downspouts: 4 EA · 63' 0" with four sub-rows (18' / 18' / 18' / 9') that add up
+- [ ] Below the last card: the quality block, closing with the disclaimer sentence word for
+      word - and no confidence display anywhere in the panel
+- [ ] Chip "Roofing" leaves exactly the five roofing cards of spec section 3 visible;
+      "All" shows all nine
+- [ ] Every collapsible row opens on one tap - name the rows you checked
+- [ ] One responsive build: the panel holds up at each of the four widths in spec section
+      11 - name the widths you checked - and at phone width it is the portrait layout with
+      its three detents, with no phone-only controls
+- [ ] Side by side with docs/viewer-reference/desktop.html the panel is the same design -
+      name any place where you had to deviate and why
+- [ ] pnpm test passes and the old viewer works exactly as before
