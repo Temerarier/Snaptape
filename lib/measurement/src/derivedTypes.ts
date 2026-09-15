@@ -129,6 +129,7 @@ export interface DerivedMeasurement {
   readonly roof: {
     readonly area_mm2: DerivedValue<"mm2">;
     readonly squares: DerivedValue<"SQ">;
+    readonly facet_count: DerivedValue<"count">;
     /** 0.10/simple, 0.15/hips, valleys or multiple ridges. Heuristic, not an order. */
     readonly suggestedWasteFactor: DerivedValue<"ratio">;
   };
@@ -141,6 +142,7 @@ export interface DerivedMeasurement {
     readonly gross_area_mm2: DerivedValue<"mm2">;
     readonly deducted_area_mm2: DerivedValue<"mm2">;
     readonly net_area_mm2: DerivedValue<"mm2">;
+    readonly gable_area_mm2: DerivedValue<"mm2">;
   };
   readonly openings: OpeningCounts & {
     readonly items: readonly DerivedOpening[];

@@ -125,6 +125,16 @@ describe("computeDerived public API and canonical fixture", () => {
     expect(formatSquares(derived.roof.squares.value)).toBe("21.0 SQ");
   });
 
+  it("counts six roof facets in the canonical fixture", () => {
+    expect(computeDerived(loadFixture()).roof.facet_count.value).toBe(6);
+  });
+
+  it("totals 322 square feet of gables in the canonical fixture", () => {
+    const area = computeDerived(loadFixture()).walls.gable_area_mm2.value;
+    expect(area).not.toBeNull();
+    expect(formatSquareFeet(mm2ToSquareFeet(area!))).toBe("322 sq ft");
+  });
+
   it("keeps fixture opening groups, drainage, drip edge, and garage assignments exact", () => {
     const derived = computeDerived(loadFixture());
     const windowGroups = derived.openings.identicalGroups.filter(

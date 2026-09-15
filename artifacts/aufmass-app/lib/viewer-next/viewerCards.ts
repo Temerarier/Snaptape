@@ -1,0 +1,422 @@
+import type { DerivedMeasurement, DerivedWall } from "@workspace/measurement";
+import {
+  formatSquareFeet,
+  formatSquares,
+  formatFeetInches,
+  mm2ToSquareFeet,
+  mmToInches,
+} from "@workspace/measurement";
+import type { Dictionary } from "@/i18n/en-US";
+
+export type TradeFilter = "all" | "roofing" | "siding" | "painting";
+
+export interface CardRow {
+  id: string;
+  label: string;
+  badge?: string;
+  sub?: string;
+  value?: string;
+  value2?: string;
+  unit?: string;
+  hasSub?: boolean;
+  hasCalc?: boolean;
+  cta?: string;
+  subRows?: CardRow[];
+  calcLines?: { label: string; value: string }[];
+}
+
+export interface ViewerCard {
+  id: string;
+  title: string;
+  badge?: string;
+  hero: string;
+  heroUnit: string;
+  hero2?: string;
+  sub?: string;
+  accentClass: string;
+  rows: CardRow[];
+}
+
+export interface MinimalMeasurement {
+  meta?: { notes?: string[] };
+  building?: {
+    stories?: number;
+    heights?: {
+      eave_height_mm?: { value: number | null };
+      ridge_height_mm?: { value: number | null };
+      parapet_height_mm?: { value: number | null };
+    };
+  };
+  faces?: Array<{
+    id: string;
+    face_class: string;
+    material?: string;
+    elevation?: string;
+    area_mm2?: { value: number | null };
+    pitch?: { rise_over_12_snapped?: number | null };
+  }>;
+  edges?: Array<{
+    id: string;
+    edge_class: string;
+    belongs_to_elevation?: string | null;
+    length_mm?: { value: number | null };
+  }>;
+  attachments?: Array<{
+    id: string;
+    type: string;
+    width_mm?: { value: number | null };
+    height_mm?: { value: number | null };
+    depth_mm?: { value: number | null };
+  }>;
+  condition_areas?: Array<{
+    id: string;
+    type: string;
+    parent_face_id?: string;
+    elevation?: string;
+    severity?: string;
+    area_mm2?: { value: number | null };
+    photo_index?: number;
+    note?: string;
+  }>;
+  quality?: { warnings?: string[] };
+  references?: Array<{
+    photo_index?: number;
+    scale_type?: string;
+    object?: string;
+    transferred_via?: string;
+  }>;
+}
+
+const formatArea = (val: number | null) =>
+  val !== null ? formatSquareFeet(mm2ToSquareFeet(val)).replace(" sq ft", "") : "—";
+const formatLen = (val: number | null) => (val !== null ? formatFeetInches(mmToInches(val)) : "—");
+
+function setVerify(row: CardRow, dict: Dictionary["viewerNext"]) {
+  if (row.value === "—") {
+    row.unit = dict.labels.verifyOnSite;
+  }
+  return row;
+}
+
+function buildWallCalc(wall: DerivedWall, dict: Dictionary["viewerNext"]) {
+  const calcLines: { label: string; value: string }[] = [];
+  const w = formatLen(wall.width_mm.value);
+  const h = formatLen(wall.height_mm.value);
+
+  const gable = wall.gable_height_mm?.value;
+  const dimensions = gable
+    ? `${w} × ${h} + ${dict.labels.gable} ${w} × ${formatLen(gable)} / 2`
+    : `${w} × ${h}`;
+  calcLines.push({ label: dimensions, value: formatArea(wall.gross_area_mm2.value) });
+
+  if (wall.deductedOpenings.length > 0) {
+    calcLines.push({
+      label: `− ${wall.deductedOpenings.length} ${dict.labels.openings}`,
+      value: "−" + formatArea(wall.deducted_area_mm2.value),
+    });
+  }
+  return calcLines;
+}
+
+export function buildCards(derived: DerivedMeasurement, measurement: MinimalMeasurement, dict: Dictionary["viewerNext"]): ViewerCard[] {
+  const cards: ViewerCard[] = [];
+
+  // 1. Roof Area
+  const roofFaces = measurement.faces?.filter(f => f.face_class === "roof_face") || [];
+  const roofMats = Array.from(new Set(roofFaces.map(f => f.material).filter(Boolean)));
+  const roofBadge = roofMats.length === 1 ? (roofMats[0] as string).replace("_", " ") : undefined;
+
+  cards.push({
+    id: "roof_area",
+    title: dict.cards.roofArea.toUpperCase(),
+    badge: roofBadge ? roofBadge.charAt(0).toUpperCase() + roofBadge.slice(1) : undefined,
+    hero: derived.roof.area_mm2.value !== null ? formatSquareFeet(mm2ToSquareFeet(derived.roof.area_mm2.value)).replace(" sq ft", "") : "—",
+    heroUnit: "sq ft",
+    hero2: derived.roof.squares.value !== null ? formatSquares(derived.roof.squares.value) : "—",
+    sub: derived.roof.facet_count.value === null
+      ? `— ${dict.labels.verifyOnSite}`
+      : `${derived.roof.facet_count.value} ${dict.labels.facets}`,
+    accentClass: "border-l-viewer-roof",
+    rows: roofFaces.map(face => ({
+      id: face.id,
+      label: `${face.elevation
+        ? face.elevation.charAt(0).toUpperCase() + face.elevation.slice(1)
+        : dict.labels.roof} (${face.id})`,
+      value: formatArea(face.area_mm2?.value ?? null),
+      unit: "sq ft",
+      value2: face.pitch?.rise_over_12_snapped == null
+        ? "—"
+        : `${face.pitch.rise_over_12_snapped}/12`,
+    })),
+  });
+
+  // 2. Roof Edges
+  const edgeClasses = [
+    ["eave", dict.labels.eaves],
+    ["rake", dict.labels.rakes],
+    ["ridge", dict.labels.ridge],
+    ["hip", dict.labels.hip],
+    ["valley", dict.labels.valley],
+    ["step_flashing", dict.labels.stepFlashing],
+    ["flashing", dict.labels.flashing],
+    ["unclassified", dict.labels.unclassified],
+  ] as const;
+
+  cards.push({
+    id: "roof_edges",
+    title: dict.cards.roofEdges.toUpperCase(),
+    hero: formatLen(derived.edges.drip_edge_mm.value),
+    heroUnit: dict.labels.dripEdge,
+    accentClass: "border-l-viewer-edges",
+    rows: edgeClasses.map(([edgeClass, label]) => {
+      const itemRows = (measurement.edges ?? [])
+        .filter(edge => edge.edge_class === edgeClass)
+        .map(edge => ({
+          id: edge.id,
+          label: edge.belongs_to_elevation
+            ? `${edge.id} · ${edge.belongs_to_elevation}`
+            : edge.id,
+          value: formatLen(edge.length_mm?.value ?? null),
+        }));
+      return {
+        id: `edge-${edgeClass}`,
+        label,
+        value: formatLen(derived.edges.byClass[edgeClass]?.value ?? null),
+        hasSub: itemRows.length > 0,
+        subRows: itemRows,
+      };
+    }).filter(row => row.id === "edge-unclassified" || row.value !== "0' 0\""),
+  });
+
+  // 3. Penetrations
+  const skylightCount = derived.openings.byType["skylight"]?.value;
+  const penetrations = (measurement.attachments ?? [])
+    .filter(attachment => ["pipe", "vent", "chimney"].includes(attachment.type));
+  const penetrationRows: CardRow[] = penetrations.map(attachment => ({
+    id: attachment.id,
+    label: `${attachment.type.charAt(0).toUpperCase() + attachment.type.slice(1)} (${attachment.id})`,
+    value: "1",
+    unit: dict.labels.ea,
+  }));
+  if (skylightCount !== null && skylightCount !== undefined && skylightCount > 0) {
+    penetrationRows.push({
+      id: "p-sky",
+      label: dict.labels.skylights,
+      value: skylightCount.toString(),
+      unit: dict.labels.ea,
+    });
+  }
+  cards.push({
+    id: "penetrations",
+    title: dict.cards.penetrations.toUpperCase(),
+    hero: penetrationRows.length.toString(),
+    heroUnit: dict.labels.total,
+    accentClass: "border-l-viewer-penetrations",
+    rows: penetrationRows,
+  });
+
+  // 4. Gutters & Downspouts
+  const dsTotal = derived.downspouts.total_mm.value;
+  const dsCount = derived.downspouts.count.value;
+  
+  cards.push({
+    id: "gutters",
+    title: dict.cards.gutters.toUpperCase(),
+    hero: formatLen(derived.gutters.total_mm.value),
+    heroUnit: dict.labels.gutterRun,
+    sub: dsTotal === null || dsCount === null
+      ? undefined
+      : `${dsCount} ${dict.labels.downspouts.toLowerCase()} · ${formatLen(dsTotal)} ${dict.labels.drop.toLowerCase()}`,
+    accentClass: "border-l-viewer-gutters",
+    rows: [
+      {
+        id: "g_run",
+        label: dict.labels.gutters,
+        value: formatLen(derived.gutters.total_mm.value),
+      },
+      {
+        id: "ds",
+        label: dict.labels.downspouts,
+        value: dsTotal !== null && dsCount !== null ? dsCount.toString() : "—",
+        unit: dsTotal !== null && dsCount !== null ? dict.labels.ea : undefined,
+        sub: dsTotal !== null ? `${dict.labels.total.toLowerCase()} ${formatLen(dsTotal)}` : undefined,
+        hasSub: derived.downspouts.drops.length > 0,
+        subRows: derived.downspouts.drops.map((d, i) => ({
+          id: `ds_${i}`,
+          label: d.elevation ? `${dict.labels.drop} (${d.elevation})` : `${dict.labels.drop} ${i + 1}`,
+          value: formatLen(d.length_mm.value),
+        })),
+      },
+    ],
+  });
+
+  // 5. Height
+  cards.push({
+    id: "height",
+    title: dict.cards.height.toUpperCase(),
+    hero: measurement.building?.stories?.toString() ?? "—",
+    heroUnit: dict.labels.stories,
+    sub: `${dict.labels.eaveHeight} ${formatLen(measurement.building?.heights?.eave_height_mm?.value ?? null)} · ${dict.labels.ridgeHeight} ${formatLen(measurement.building?.heights?.ridge_height_mm?.value ?? null)}`,
+    accentClass: "border-l-viewer-height",
+    rows: [
+      { id: "h_eave", label: dict.labels.eaveHeight, value: formatLen(measurement.building?.heights?.eave_height_mm?.value ?? null), unit: "" },
+      { id: "h_ridge", label: dict.labels.ridgeHeight, value: formatLen(measurement.building?.heights?.ridge_height_mm?.value ?? null), unit: "" },
+      { id: "h_para", label: dict.labels.parapetHeight, value: formatLen(measurement.building?.heights?.parapet_height_mm?.value ?? null), unit: "" },
+    ],
+  });
+
+  // 6. Walls
+  cards.push({
+    id: "walls",
+    title: dict.cards.walls.toUpperCase(),
+    hero: formatArea(derived.walls.net_area_mm2.value),
+    heroUnit: "sq ft",
+    sub: dict.labels.ofWhichGables.replace("{area}", formatArea(derived.walls.gable_area_mm2.value)),
+    accentClass: "border-l-viewer-walls",
+    rows: derived.walls.faces.map((w) => {
+      const isMissing = w.gross_area_mm2.value === null;
+      const rawFace = measurement.faces?.find(f => f.id === w.id);
+      const material = rawFace?.material ? rawFace.material.charAt(0).toUpperCase() + rawFace.material.slice(1) : undefined;
+      return {
+        id: w.id,
+        label: w.elevation ? `${w.elevation.charAt(0).toUpperCase() + w.elevation.slice(1)} (${w.id})` : w.id,
+        badge: material,
+        sub: isMissing ? dict.labels.notCaptured : `${formatArea(w.gross_area_mm2.value)} ${dict.labels.gross}`,
+        value: isMissing ? undefined : formatArea(w.net_area_mm2.value),
+        cta: isMissing ? dict.labels.addPhoto : undefined,
+        hasCalc: !isMissing,
+        calcLines: isMissing ? undefined : buildWallCalc(w, dict),
+      };
+    }),
+  });
+
+  // 7. Openings
+  const openingTypes = ["window", "door", "patio_door", "garage_door", "skylight"];
+  const openingRows: CardRow[] = [];
+  const openingSummaries: string[] = [];
+  
+  openingTypes.forEach((t) => {
+    const count = derived.openings.byType[t]?.value;
+    if (count !== null && count !== undefined && count > 0) {
+      const typeLabel = t.split("_").map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(" ") + (count > 1 ? "s" : "");
+      openingSummaries.push(`${count} ${typeLabel.toLowerCase()}`);
+      
+      const items = derived.openings.items.filter((o) => o.type === t);
+      let subRows: CardRow[] = [];
+      if (items.length > 6) {
+        const byWall: Record<string, typeof items> = {};
+        items.forEach(o => {
+          const key = o.parent_face_id || dict.labels.unassigned;
+          if (!byWall[key]) byWall[key] = [];
+          byWall[key].push(o);
+        });
+        Object.keys(byWall).forEach(wId => {
+          const wall = derived.walls.faces.find(f => f.id === wId);
+          let label = wId;
+          if (wall && wall.elevation) {
+            const sameElev = derived.walls.faces.filter(f => f.elevation === wall.elevation);
+            const elevName = wall.elevation.charAt(0).toUpperCase() + wall.elevation.slice(1);
+            label = sameElev.length > 1 ? `${elevName} (${wId})` : elevName;
+          } else if (wId === dict.labels.unassigned) {
+            label = dict.labels.unassigned;
+          }
+          subRows.push({
+            id: `og_${wId}`,
+            label,
+            hasSub: true,
+            subRows: byWall[wId].map(o => ({
+              id: o.id,
+              label: `${o.id} · ${formatLen(o.width_mm.value)} × ${formatLen(o.height_mm.value)}`,
+              sub: `${dict.labels.perimeter} ${formatLen(o.perimeter.total_mm.value)}`,
+              value: formatArea(o.area_mm2.value),
+            }))
+          });
+        });
+      } else {
+        subRows = items.map(o => ({
+          id: o.id,
+          label: `${o.id} · ${formatLen(o.width_mm.value)} × ${formatLen(o.height_mm.value)}`,
+          sub: `${dict.labels.perimeter} ${formatLen(o.perimeter.total_mm.value)}`,
+          value: formatArea(o.area_mm2.value),
+        }));
+      }
+
+      const typeLabelForTitle = t.split("_").map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(" ") + "s";
+      openingRows.push({
+        id: `op_${t}`,
+        label: typeLabelForTitle,
+        value: count.toString(),
+        unit: dict.labels.ea,
+        hasSub: true,
+        subRows,
+      });
+    }
+  });
+
+  cards.push({
+    id: "openings",
+    title: dict.cards.openings.toUpperCase(),
+    hero: derived.openings.total.value?.toString() ?? "—",
+    heroUnit: dict.labels.ea,
+    sub: openingSummaries.length > 0 ? openingSummaries.join(", ") : undefined,
+    accentClass: "border-l-viewer-openings",
+    rows: openingRows,
+  });
+
+  // 8. Trim & Roofline
+  const fasciaFaces = measurement.faces?.filter(f => f.face_class === "fascia") || [];
+  const soffitFaces = measurement.faces?.filter(f => f.face_class === "soffit") || [];
+  const outsideCornerCount = (measurement.edges ?? []).filter(edge => edge.edge_class === "outside_corner").length;
+  const insideCornerCount = (measurement.edges ?? []).filter(edge => edge.edge_class === "inside_corner").length;
+
+  const trimRows: CardRow[] = [];
+  fasciaFaces.forEach(f => {
+    trimRows.push({ id: f.id, label: `${dict.labels.fascia} (${f.elevation || f.id})`, value: formatArea(f.area_mm2?.value ?? null), unit: "sq ft" });
+  });
+  soffitFaces.forEach(f => {
+    trimRows.push({ id: f.id, label: `${dict.labels.soffit} (${f.elevation || f.id})`, value: formatArea(f.area_mm2?.value ?? null), unit: "sq ft" });
+  });
+  trimRows.push({ id: "t_out_c", label: dict.labels.outsideCorners, value: outsideCornerCount.toString(), unit: dict.labels.ea });
+  trimRows.push({ id: "t_in_c", label: dict.labels.insideCorners, value: insideCornerCount.toString(), unit: dict.labels.ea });
+
+  const fasciaArea = fasciaFaces[0]?.area_mm2?.value ?? null;
+  const soffitArea = soffitFaces[0]?.area_mm2?.value ?? null;
+
+  cards.push({
+    id: "trim",
+    title: dict.cards.trim.toUpperCase(),
+    hero: formatArea(fasciaArea),
+    heroUnit: `sq ft ${dict.labels.fascia.toLowerCase()}`,
+    sub: `${dict.labels.soffit} ${formatArea(soffitArea)} sq ft · ${outsideCornerCount + insideCornerCount} ${dict.labels.corners}`,
+    accentClass: "border-l-viewer-trim",
+    rows: trimRows.filter(r => r.value !== "—" && r.value !== "0"),
+  });
+
+  // 9. Condition Areas
+  const condAreas = measurement.condition_areas || [];
+  cards.push({
+    id: "condition_areas",
+    title: dict.cards.conditionAreas.toUpperCase(),
+    hero: condAreas.length.toString(),
+    heroUnit: dict.labels.areas,
+    accentClass: "border-l-viewer-conditions",
+    rows: condAreas.map(c => ({
+      id: c.id,
+      label: `${c.type.split("_").map((s: string) => s.charAt(0).toUpperCase() + s.slice(1)).join(" ")} · ${c.parent_face_id || dict.labels.unassigned}`,
+      sub: c.severity ? `${c.severity} ${dict.labels.severity}` : undefined,
+      value: formatArea(c.area_mm2?.value ?? null),
+      unit: "sq ft",
+    })),
+  });
+
+  // Apply "verify on site" to any row that has a null value "—"
+  const applyVerify = (rows: CardRow[]) => {
+    rows.forEach((r) => {
+      setVerify(r, dict);
+      if (r.subRows) applyVerify(r.subRows);
+    });
+  };
+  cards.forEach((c) => applyVerify(c.rows));
+
+  return cards;
+}

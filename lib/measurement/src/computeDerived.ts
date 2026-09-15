@@ -175,6 +175,10 @@ export function computeDerived(measurement: MeasurementInput): DerivedMeasuremen
   ]));
   const roofFaces = measurement.faces.filter(f => f.face_class === "roof_face");
   const roofArea = sum("mm2", roofFaces.map(f => read(f.area_mm2, "mm2", f.id, "area_mm2")));
+  const gableArea = sum("mm2", walls
+    .filter(wall => wall.gable_height_mm !== null)
+    .map(wall => calculate("mm2", [wall.width_mm, wall.gable_height_mm!],
+      ([width, gableHeight]) => 0.5 * width * gableHeight)));
   const complex = measurement.building?.roof_type === "hip" ||
     measurement.edges.some(e => e.edge_class === "hip" || e.edge_class === "valley") ||
     measurement.edges.filter(e => e.edge_class === "ridge").length > 1;
@@ -207,11 +211,13 @@ export function computeDerived(measurement: MeasurementInput): DerivedMeasuremen
 
   return {
     roof: { area_mm2: roofArea, squares: calculate("SQ", [roofArea], ([area]) => mm2ToSquares(area)),
+      facet_count: count(roofFaces.map(face => face.id)),
       suggestedWasteFactor: waste },
     edges: { byClass, drip_edge_mm: sum("mm", [byClass.eave, byClass.rake]) },
     walls: { faces: walls, gross_area_mm2: sum("mm2", walls.map(w => w.gross_area_mm2)),
       deducted_area_mm2: sum("mm2", walls.map(w => w.deducted_area_mm2)),
-      net_area_mm2: sum("mm2", walls.map(w => w.net_area_mm2)) },
+      net_area_mm2: sum("mm2", walls.map(w => w.net_area_mm2)),
+      gable_area_mm2: gableArea },
     openings: { ...counts(openings), items: openings,
       byWall: Object.fromEntries(walls.map(w => [w.id, counts(w.deductedOpenings)])),
       identicalGroups: groupOpenings(openings),

@@ -26,6 +26,17 @@
   --color-fehler: #b91c1c;
   --color-fehler-flaeche: #fbe9e9;
 
+  /* Viewer v4 card accents from the approved reference artboards. */
+  --color-viewer-roof: #0e7490;
+  --color-viewer-edges: #7c3aed;
+  --color-viewer-penetrations: #475569;
+  --color-viewer-gutters: #64748b;
+  --color-viewer-height: #64748b;
+  --color-viewer-walls: #b45309;
+  --color-viewer-openings: #c026d3;
+  --color-viewer-trim: #64748b;
+  --color-viewer-conditions: #ea580c;
+
   /* Radien: 12px Bedienelemente/Inputs, 16–20px Karten, Pills rounded-full */
   --radius-eingabe: 12px;
   --radius-karte: 16px;

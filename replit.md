@@ -11,9 +11,10 @@
 ## Eiserne Regeln
 1. Alle Maße intern IMMER in Millimetern, ungerundet als Zahl speichern.
    Gerundet wird nur in der Anzeige. Keine Ausnahmen.
-2. Die Datei schema/mess-schema.json (v1.2, englisch) ist der Vertrag
-   zwischen Messung, Datenbank, Viewer und Report. Änderungen nur auf
-   ausdrückliche Anweisung.
+2. Der Vertrag zwischen Messung, Datenbank, Viewer und Report ist
+   shared/schema/measurement-v1.6.json. Änderungen nur auf
+   ausdrückliche Anweisung. (Historisch: schema/mess-schema.json v1.2 —
+   nicht mehr verwenden.)
 3. Jedes Bauteil hat eine feste ID (W-1 = Fenster/Window, D-1 =
    Tür/Door, G-1 = Garagentor, SK-1 = Skylight, E-1 = Kante/Edge,
    RF-1 = Dachfläche/Roof Face, WL-1 = Wand/Wall, SF-1 = Soffit,
@@ -23,11 +24,12 @@
    Wand). Alte und neue IDs niemals mischen.
 4. Jeder Messwert trägt: value, confidence (high/medium/low), source
    (measured/scaled/estimated), reference_used.
-5. Öffnungsmaße zeigen immer den Hinweis „Reference only, not for
-   ordering" (deutsch angezeigt als „Richtmaß, kein Bestellmaß").
-   EINZIGE Quelle für beide Texte: lib/config/hinweis.ts
-   (HINWEIS_RICHTMASS_EN / HINWEIS_RICHTMASS_DE) – nirgends
-   hart codieren.
+5. Wo der Hinweis „Reference only, not for ordering" (deutsch
+   „Richtmaß, kein Bestellmaß") angezeigt wird, ist die EINZIGE Quelle
+   lib/config/hinweis.ts (HINWEIS_RICHTMASS_EN / HINWEIS_RICHTMASS_DE) –
+   nirgends hart codieren. AUSNAHME: der neue Viewer (/viewer-next)
+   zeigt ihn bewusst NICHT; dort gilt allein der Haftungssatz aus
+   docs/viewer-spec.md, Abschnitt 12. Nicht nachrüsten.
 6. Fehler dem Nutzer IMMER vor einer Bezahlung anzeigen, nie danach.
 7. Berechnete Werte (brutto/netto, Verschnitt) leben in lib/berechnung/,
    nie im Mess-JSON.
@@ -98,3 +100,25 @@ aber nicht. Kein Pflicht-Review, kein Edit-Modus im MVP.
   erst beim Start gespeichert.
 - System-Abhängigkeiten: poppler-utils (pdftoppm/pdfinfo) und vips
   sind deklariert (auch fürs Deployment nötig).
+
+## Etappe 4: Neuer Viewer (Fahrplan — immer nur den aktuellen Schritt bauen)
+
+Der neue Viewer entsteht auf `/viewer-next` in vier Schritten, jeder als
+eigener Prompt. Der alte Viewer bleibt unberührt, bis 4d ihn löscht.
+
+- **4a — Panel.** Die rechte Seite nach `docs/viewer-spec.md` und den
+  Referenzen unter `docs/viewer-reference/`. 3D ist nur ein Platzhalter.
+- **4b — 3D-Viewport.** Modell aus der Messung, Maßlinien, Auswahlkasten,
+  Messlinie mit Snap.
+- **4c — Rechen-Bubble** und Durchgang durch die komplette Spec.
+- **4d — Alten Viewer löschen**, Links umbiegen, lib/viewer/,
+  anzeigeAdapterV15.ts und lib/berechnung/flaechen.ts entfernen.
+
+REGEL: immer nur bauen, was der laufende Prompt verlangt. Nichts aus
+einem späteren Schritt vorbereiten, kein Gerüst, keine leeren Dateien,
+keine „schon mal"-Komponenten. Was gerade nicht dran ist, bleibt
+Platzhalter.
+
+Panel-Inhalt ist auf allen Bildschirmgrößen gleich. Es gibt drei
+Referenz-Artboards (Desktop, Tablet hoch, Tablet quer) und bewusst
+keines fürs Handy: das Handy ist das Hochformat-Layout, nur schmaler.
