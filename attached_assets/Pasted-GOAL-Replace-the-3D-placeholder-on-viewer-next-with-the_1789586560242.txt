@@ -1,0 +1,102 @@
+GOAL
+Replace the 3D placeholder on /viewer-next with the real viewport. The panel from 4a stays
+as it is. The old viewer stays untouched.
+
+Read docs/viewer-spec.md first. Binding for this build: section 9 (what is drawn on the
+model - the always-on dimension lines and the selection box), section 10 (measure line and
+viewport controls, with the placement table in 10.4), section 11 (screen sizes), section 12
+("the viewer never throws").
+
+BUILD IT IN FOUR STEPS, IN THIS ORDER
+You cannot see your own result: this preview has no WebGL context, so the 3D canvas stays
+blank for you no matter how good the code is. Do not try to look at it, and never "fix" a
+blank canvas - that blankness is the environment, not a bug. The four steps below exist so
+that you can check your work anyway, by reading numbers and text instead of pixels.
+
+STEP 1 - the geometry, as a pure function, no graphics
+Write buildModel(measurement) in its own module. It takes a measurement and returns plain
+data: for every wall, roof face, edge, opening and attachment its id, its corner
+coordinates in mm, and its colour. No three.js, no DOM, no canvas - a function that could
+run in a terminal. This is the one place where the house is worked out.
+- Geometry comes from the measurement only, never from hard-coded shapes.
+- Colour per face from faces[].color.hex, secondary_hex as a subtle accent where present;
+  a face with no colour, or colour confidence low, comes back neutral grey.
+- Degrade, never throw (spec 12). The fixture is a plain gable house, but real measurements
+  carry roof_type "other", face classes you do not model and attachments you do not draw.
+  Whatever you cannot build becomes a simple massing or is left out, and the function
+  reports that in a list of notes - it never raises.
+
+STEP 2 - tests, so you can see the numbers
+These tests are how you find out whether your house is right. Run them before going on.
+Test against three different inputs, not one - the fixture alone would let you tune the
+code until that one house fits while every real measurement falls over.
+
+a) The fixture, fixtures/garage-house.json - for exact numbers:
+   - 6 roof faces, 6 walls, 20 openings, the garage included
+   - every opening lies fully inside the face its parent_face_id names
+   - overall width 40' 0" and eave height 18' 0", so a model at the wrong scale fails loudly
+
+b) A real measurement from export-messungen/ - for robustness, not for exact numbers.
+   These are messy on purpose: values are missing, many are estimated, the roof is not a
+   plain gable. Assert only that a model comes back, that the parts you could not build are
+   listed as notes, and that nothing throws. They are older v1.5 exports - if the type or
+   the validator rejects them outright, say so in your report and write a reduced
+   measurement by hand instead of forcing them through.
+
+c) A minimal measurement you write yourself, carrying only what the schema actually
+   requires: faces with id, face_class and area_mm2 - no widths, no heights, no gable, no
+   colours, no openings. This is the shape a poor photo run produces. It must return a
+   simple massing plus notes, in neutral grey, and must not throw.
+
+STEP 3 - an SVG debug view, so you can read your own drawing
+Add a route /viewer-next/debug.svg that takes the same buildModel output and projects it
+flat - a front elevation and a side elevation, walls as outlines, openings as rectangles
+inside them, roof faces outlined, each shape carrying its id. Plain SVG, no WebGL, no
+library.
+SVG is text: open it and read the coordinates back. A window that sits outside its wall, a
+roof that floats above the walls, a garage in the wrong place - all of that is visible in
+the numbers. Fix what the drawing shows before you touch three.js. Say in your report what
+you found this way.
+
+STEP 4 - the renderer
+Only now three.js, and only as the painter: it takes buildModel's output and draws it. No
+geometry decisions in this layer.
+- Free orbit, the three controls exactly where spec 10.4 puts them per width.
+- Windows, doors and garage doors are clickable in their own right, like faces and edges.
+- Clicking an element opens the selection box (spec 9.2) and highlights the matching panel
+  row; clicking a panel row highlights the element and orbits the camera to it.
+- The three dimension lines (spec 9.1): width, ridge, eave height, always visible, part of
+  the picture and not of the measure tool - clearing measure lines never removes them.
+- Measure line with edge and corner snapping (spec 10.1).
+- Selection stays visible on top of the real colours: outline or glow, never a fill swap.
+
+REPORT
+- the test output
+- what the SVG showed you and what you changed because of it
+- the browser console, which must be free of errors apart from the missing WebGL context
+- a short list of what I should check by eye in my own browser
+
+DO NOT
+- Do not touch the panel from 4a, the old viewer, lib/viewer/, the compute lib, the schema
+  or the fixture.
+- Do not put geometry maths inside the three.js layer - it belongs in buildModel.
+- Do not add view buttons, a perspective toggle or +/- zoom on any screen size.
+- Do not build the tally bubble - that is 4c.
+
+DONE WHEN
+- [ ] buildModel exists as a pure module with no three.js or DOM import - name the file
+- [ ] Its tests pass on all three inputs: the fixture with exact numbers (6 roof faces,
+      6 walls, 20 openings, every opening inside its parent face, 40' 0" wide, 18' 0" eave),
+      a real export-messungen measurement, and a minimal measurement with only the required
+      fields - the last two return a model plus notes and never throw
+- [ ] /viewer-next/debug.svg renders both elevations with ids, from the same buildModel
+      output - paste the first 20 lines into your report
+- [ ] The garage house renders orbitable in its real colours, both front walls visible
+- [ ] Clicking the garage door selects G-1 in the panel; clicking a wall row orbits to it
+- [ ] Width, ridge and eave height are drawn on the model and survive clearing the measure
+      lines
+- [ ] The selection box shows the right dimensions per element type (spec 9.2)
+- [ ] A measure line along an eave snaps and reads 40' 0"; a point in the middle of a wall
+      does not snap
+- [ ] Controls sit where spec 10.4 says, at every width - report the measured positions
+- [ ] pnpm test passes and the panel from 4a is unchanged
