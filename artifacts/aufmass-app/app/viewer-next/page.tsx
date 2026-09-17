@@ -17,5 +17,12 @@ export default async function ViewerNextPage() {
   const displayMeasurement = fixture as unknown as MinimalMeasurement;
   const cards = buildCards(derived, displayMeasurement, dict.viewerNext);
 
-  return <ViewerNextClient measurement={displayMeasurement} cards={cards} dict={dict.viewerNext} />;
+  return (
+    <ViewerNextClient
+      measurement={displayMeasurement}
+      cards={cards}
+      dict={dict.viewerNext}
+      webglMessage={dict.viewer.webglFehler}
+    />
+  );
 }

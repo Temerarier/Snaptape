@@ -100,6 +100,83 @@
   animation: ladebalken 1.4s ease-in-out infinite;
 }
 
+/* Viewer-next painter overlays. The canvas remains the only surface that
+   knows about Three.js; these labels are deliberately pointer-free and are
+   positioned from the model's projected anchors. */
+.viewer-next-viewport {
+  background: #f7fafc;
+}
+
+.viewer-next-dimension-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border: 1px solid color-mix(in srgb, var(--color-schrift-sekundaer) 42%, transparent);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  padding: 4px 9px;
+  color: var(--color-schrift);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: var(--shadow-karte);
+}
+
+.viewer-next-measure-label {
+  border-color: color-mix(in srgb, var(--color-fehler) 48%, transparent);
+  color: var(--color-fehler);
+}
+
+.viewer-next-selection-connector {
+  position: absolute;
+  height: 1px;
+  transform-origin: 0 50%;
+  background: var(--color-schrift);
+  opacity: 0.72;
+}
+
+.viewer-next-selection-box {
+  position: absolute;
+  z-index: 3;
+  max-width: calc(100% - 8px);
+  border-radius: 8px;
+  background: #101820;
+  padding: 10px 12px;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: normal;
+  box-shadow: 0 5px 18px rgba(15, 24, 32, 0.3);
+}
+
+.viewer-next-selection-box strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.viewer-next-selection-title {
+  margin-bottom: 3px;
+  color: #cbd5e1;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+/* Gesture help is capability-driven: a narrow desktop viewport is still
+   desktop, while a coarse-pointer tablet deserves the touch affordance. */
+.viewer-next-gesture {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .viewer-next-gesture {
+    display: block;
+  }
+}
+
 /* Viewer-next layout follows tablet orientation, not width alone. */
 @media (min-width: 768px) and (orientation: portrait) {
   .viewer-next-shell {
