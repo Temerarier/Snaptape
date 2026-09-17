@@ -111,12 +111,12 @@
   position: absolute;
   transform: translate(-50%, -50%);
   border: 1px solid color-mix(in srgb, var(--color-schrift-sekundaer) 42%, transparent);
-  border-radius: 999px;
+  border-radius: 4px;
   background: rgba(255, 255, 255, 0.94);
   padding: 4px 9px;
   color: var(--color-schrift);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 17px;
   font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;
@@ -124,8 +124,9 @@
 }
 
 .viewer-next-measure-label {
-  border-color: color-mix(in srgb, var(--color-fehler) 48%, transparent);
-  color: var(--color-fehler);
+  border-color: #991b1b;
+  background: #991b1b;
+  color: #fff;
 }
 
 .viewer-next-selection-connector {
@@ -145,7 +146,7 @@
   padding: 10px 12px;
   color: #fff;
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 17px;
   line-height: 1.45;
   white-space: normal;
   box-shadow: 0 5px 18px rgba(15, 24, 32, 0.3);
@@ -177,29 +178,107 @@
   }
 }
 
-/* Viewer-next layout follows tablet orientation, not width alone. */
-@media (min-width: 768px) and (orientation: portrait) {
-  .viewer-next-shell {
+/* Viewer-next layout: portrait is stacked viewport/panel, landscape side-by-side. */
+.viewer-next-shell {
+  --color-schrift-tertiaer: #4a5568;
+  --color-akzent: #1e40af;
+  display: grid;
+  grid-template-rows: var(--viewer-top, 42dvh) minmax(0, 1fr);
+}
+.viewer-next-shell[data-panel-detent="half"] {
+  --viewer-top: 42dvh;
+}
+.viewer-next-shell[data-panel-detent="peek"] {
+  --viewer-top: 72dvh;
+}
+.viewer-next-shell[data-panel-detent="full"] { --viewer-top: 12dvh; }
+.viewer-next-model-section { overflow-y: auto; }
+
+.viewer-next-shell button { min-height: 44px; min-width: 44px; }
+.viewer-next-stage > .viewer-next-viewport {
+  margin-top: max(var(--viewer-calc-bottom, 0px), var(--viewer-control-space, 0px));
+}
+.viewer-next-stage {
+  --viewer-control-space: 80px;
+  min-height: 240px;
+  flex-shrink: 0;
+}
+.viewer-next-stage:has([data-calc-bubble]) { min-height: 380px; }
+.viewer-next-calc-bubble {
+  top: 80px;
+  width: max-content;
+  max-width: min(680px, calc(100% - 24px));
+  max-height: clamp(64px, calc(100% - var(--viewer-control-space, 0px) - 52px), 164px);
+  overflow-y: auto;
+}
+.viewer-next-calc-bubble > div { min-width: 0; flex-shrink: 0; }
+.viewer-next-calc-bubble span { overflow-wrap: anywhere; }
+.viewer-next-panel { container-type: inline-size; }
+.viewer-next-panel-heading {
+  flex: 0 1 auto;
+  min-height: 48px;
+  max-height: calc(100% - 108px);
+  overflow-y: auto;
+}
+.viewer-next-panel-heading > div:first-child {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--color-hintergrund);
+}
+.viewer-next-panel [data-viewer-panel-scroll] { min-height: 64px; }
+.viewer-next-row-label { min-width: min(140px, 100%); }
+.viewer-next-row-value { width: auto; max-width: 100%; white-space: normal; flex-wrap: wrap; }
+.viewer-next-row-value > span { overflow-wrap: anywhere; }
+.viewer-next-shell [aria-pressed="true"][title="Tally"] {
+  background: var(--color-akzent);
+  color: white;
+}
+@container (max-width: 420px) {
+  [data-viewer-row-id] > button {
     display: grid;
-    grid-template-rows: 55dvh 45dvh;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
-
-  .viewer-next-panel {
-    position: static;
-    width: 100%;
-    height: 100% !important;
-    min-height: 0;
-    transform: none;
-    box-shadow: none;
-  }
-
-  .viewer-next-measure-portrait {
-    display: flex;
+  .viewer-next-row-label { grid-column: 1 / -1; }
+  .viewer-next-row-value { justify-content: flex-start; }
+}
+@media (max-width: 600px) {
+  .viewer-next-gesture { max-width: calc(100% - 24px); top: 4px; left: 12px; }
+  .viewer-next-measure-portrait { top: 34px; right: 12px; }
+  .viewer-next-stage { --viewer-control-space: 96px; }
+  .viewer-next-calc-bubble { top: 96px; }
+}
+@media (max-width: 600px) and (max-height: 700px) {
+  /* On a short phone, make the tally scroll rather than clip selection details. */
+  .viewer-next-stage:has(.viewer-next-selection-box) .viewer-next-calc-bubble {
+    max-height: 64px;
   }
 }
 
+.viewer-next-panel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform: none;
+  box-shadow: none;
+}
+
+.viewer-next-measure-portrait {
+  display: flex;
+}
+
+.viewer-next-measure-wide {
+  display: none;
+}
+
 @media (min-width: 768px) and (orientation: landscape) {
+  .viewer-next-model-section { overflow: hidden; }
+  .viewer-next-stage, .viewer-next-stage:has([data-calc-bubble]) { min-height: 0; }
+  .viewer-next-stage { --viewer-control-space: 0px; }
+  .viewer-next-calc-bubble { top: 12px; }
+  .viewer-next-panel-handle { display: none; }
   .viewer-next-shell {
+    display: flex;
     flex-direction: row;
   }
 
@@ -208,8 +287,12 @@
     width: 480px;
     height: auto;
     flex-shrink: 0;
-    transform: none;
-    box-shadow: none;
+    border-top: none;
+    border-left: 1px solid var(--color-linie);
+  }
+
+  .viewer-next-measure-portrait {
+    display: none;
   }
 
   .viewer-next-measure-wide {
@@ -218,7 +301,13 @@
 }
 
 @media (min-width: 1280px) {
+  .viewer-next-model-section { overflow: hidden; }
+  .viewer-next-stage, .viewer-next-stage:has([data-calc-bubble]) { min-height: 0; }
+  .viewer-next-stage { --viewer-control-space: 0px; }
+  .viewer-next-calc-bubble { top: 12px; }
+  .viewer-next-panel-handle { display: none; }
   .viewer-next-shell {
+    display: flex;
     flex-direction: row;
   }
 
@@ -227,16 +316,16 @@
     width: 480px;
     height: auto;
     flex-shrink: 0;
-    transform: none;
-    box-shadow: none;
-  }
-
-  .viewer-next-measure-wide {
-    display: flex;
+    border-top: none;
+    border-left: 1px solid var(--color-linie);
   }
 
   .viewer-next-measure-portrait,
   .viewer-next-gesture {
     display: none;
+  }
+
+  .viewer-next-measure-wide {
+    display: flex;
   }
 }

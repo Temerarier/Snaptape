@@ -1,0 +1,214 @@
+{
+  "results": [
+    {
+      "name": "fixture heroes and all nine cards",
+      "passed": true
+    },
+    {
+      "name": "RF-1 plus RF-2 uses raw fixture areas",
+      "passed": true
+    },
+    {
+      "name": "mixed length and area stay separate",
+      "passed": true
+    },
+    {
+      "name": "same unit, different semantic class stays separate",
+      "passed": true
+    },
+    {
+      "name": "tally survives trade filters with correct card sets",
+      "passed": true
+    },
+    {
+      "name": "copy subtotals and truthful clipboard error",
+      "passed": true
+    },
+    {
+      "name": "remove chip and clear preserve row expansion and selection",
+      "passed": true
+    },
+    {
+      "name": "single tap row expansion persists through filters",
+      "passed": true
+    },
+    {
+      "name": "collapsed card retains its hero",
+      "passed": true
+    },
+    {
+      "name": "WebGL viewport renders and selection has dimensions",
+      "passed": true
+    },
+    {
+      "name": "orbit drag does not select; reset restores framing",
+      "passed": true
+    },
+    {
+      "name": "measure two points, retain several lines, Clear and Esc",
+      "passed": true
+    },
+    {
+      "name": "conditions toggle shows on/off state",
+      "passed": true
+    },
+    {
+      "name": "desktop: no overflow, readable type, 44px controls",
+      "passed": true
+    },
+    {
+      "name": "desktop: bounded tally does not cover controls or model",
+      "passed": true
+    },
+    {
+      "name": "tablet-landscape: no overflow, readable type, 44px controls",
+      "passed": true
+    },
+    {
+      "name": "tablet-landscape: bounded tally does not cover controls or model",
+      "passed": true
+    },
+    {
+      "name": "tablet-portrait: no overflow, readable type, 44px controls",
+      "passed": true
+    },
+    {
+      "name": "tablet-portrait: bounded tally does not cover controls or model",
+      "passed": true
+    },
+    {
+      "name": "phone: no overflow, readable type, 44px controls",
+      "passed": true
+    },
+    {
+      "name": "phone: bounded tally does not cover controls or model",
+      "passed": true
+    },
+    {
+      "name": "narrow-phone: no overflow, readable type, 44px controls",
+      "passed": true
+    },
+    {
+      "name": "narrow-phone: bounded tally does not cover controls or model",
+      "passed": true
+    },
+    {
+      "name": "390x844: active-calc detent taps, drags, selection and scroll area",
+      "passed": true
+    },
+    {
+      "name": "320x640: active-calc detent taps, drags, selection and scroll area",
+      "passed": true
+    },
+    {
+      "name": "320x568: active-calc detent taps, drags, selection and scroll area",
+      "passed": true
+    },
+    {
+      "name": "no uncaught browser errors",
+      "passed": true
+    }
+  ],
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440,
+      "smallText": [],
+      "smallControls": [],
+      "panel": {
+        "x": 960,
+        "y": 0,
+        "width": 480,
+        "height": 1000
+      },
+      "viewport": {
+        "x": 0,
+        "y": 61,
+        "width": 960,
+        "height": 939
+      }
+    },
+    {
+      "name": "tablet-landscape",
+      "width": 1190,
+      "height": 830,
+      "scrollWidth": 1190,
+      "smallText": [],
+      "smallControls": [],
+      "panel": {
+        "x": 710,
+        "y": 0,
+        "width": 480,
+        "height": 830
+      },
+      "viewport": {
+        "x": 0,
+        "y": 61,
+        "width": 710,
+        "height": 769
+      }
+    },
+    {
+      "name": "tablet-portrait",
+      "width": 830,
+      "height": 1190,
+      "scrollWidth": 830,
+      "smallText": [],
+      "smallControls": [],
+      "panel": {
+        "x": 0,
+        "y": 499.796875,
+        "width": 830,
+        "height": 690.203125
+      },
+      "viewport": {
+        "x": 0,
+        "y": 141,
+        "width": 830,
+        "height": 358.796875
+      }
+    },
+    {
+      "name": "phone",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "smallText": [],
+      "smallControls": [],
+      "panel": {
+        "x": 0,
+        "y": 354.46875,
+        "width": 390,
+        "height": 489.53125
+      },
+      "viewport": {
+        "x": 0,
+        "y": 209,
+        "width": 390,
+        "height": 145.46875
+      }
+    },
+    {
+      "name": "narrow-phone",
+      "width": 320,
+      "height": 740,
+      "scrollWidth": 320,
+      "smallText": [],
+      "smallControls": [],
+      "panel": {
+        "x": 0,
+        "y": 310.796875,
+        "width": 320,
+        "height": 429.203125
+      },
+      "viewport": {
+        "x": 0,
+        "y": 217,
+        "width": 305,
+        "height": 144
+      }
+    }
+  ]
+}

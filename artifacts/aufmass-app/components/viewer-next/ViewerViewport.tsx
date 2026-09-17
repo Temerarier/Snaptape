@@ -13,7 +13,7 @@ import {
 } from "@/lib/viewer-next/interaction";
 import type { ModelPolygon, Point3, ViewerModel } from "@/lib/viewer-next/model";
 import { createCurrentCallback, startDampedRenderLoop } from "./painterLifecycle";
-import { applyExposedViewport, createTapGate } from "./viewportInput";
+import { applyExposedViewport, createTapGate, placeCameraWithoutMomentum } from "./viewportInput";
 
 export interface ViewerViewportHandle {
   resetView: () => void;
@@ -161,7 +161,7 @@ function addEdge(
   interactiveMeshes.push(line);
 }
 
-function updateLineGroup(group: THREE.Group, segments: readonly { start: Point3; end: Point3 }[]): void {
+function updateLineGroup(group: THREE.Group, segments: readonly { start: Point3; end: Point3 }[], color = "#334155"): void {
   while (group.children.length) {
     const child = group.children.pop();
     if (!child) continue;
@@ -180,7 +180,7 @@ function updateLineGroup(group: THREE.Group, segments: readonly { start: Point3;
     ]);
     group.add(new THREE.Line(
       geometry,
-      new THREE.LineBasicMaterial({ color: "#334155", transparent: true, opacity: 0.84 }),
+      new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.84 }),
     ));
   }
 }
@@ -512,9 +512,10 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
       if (!painter || !host) return;
       try {
         syncPainterViewport(painter, host);
-        painter.camera.position.copy(painter.initialPosition);
-        painter.controls.target.copy(painter.initialTarget);
-        painter.controls.update();
+        placeCameraWithoutMomentum(painter.controls, () => {
+          painter.camera.position.copy(painter.initialPosition);
+          painter.controls.target.copy(painter.initialTarget);
+        });
         updateOverlays();
       } catch {
         setWebglFailed(true);
@@ -666,6 +667,8 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
     };
     const resizeObserver = new ResizeObserver(setSize);
     resizeObserver.observe(host);
+    const scrollContainer = host.closest(".viewer-next-model-section");
+    scrollContainer?.addEventListener("scroll", render, { passive: true });
     const dampedRenderLoop = startDampedRenderLoop(
       () => controls.update(),
       () => {
@@ -821,6 +824,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
     updateSelection();
     return () => {
       resizeObserver.disconnect();
+      scrollContainer?.removeEventListener("scroll", render);
       dampedRenderLoop.stop();
       controls.removeEventListener("change", handleControlsChange);
       canvas.removeEventListener("pointermove", handleMove);
@@ -852,7 +856,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
           ...model.permanentDimensions.eaveHeight.segments,
         ],
       );
-      updateLineGroup(painter.measureGroup, measureLines);
+      updateLineGroup(painter.measureGroup, measureLines, "#991b1b");
       painter.marker.visible = false;
       updateSelection();
       painter.renderer.render(painter.scene, painter.camera);

@@ -1,0 +1,16 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "5n7xet_bzYemjoWvLlIvl"
+uri = "file://attached_assets/viewer-conformance/report.html"
+type = "text"
+title = "Verified viewer conformance report"
+description = "Reference inventory, complete design diff and spec checklist. Final evidence: 147 tests, 27 browser checks and typechecks pass. Includes exact three-way portrait detents and documented short-screen overflow behavior."
+logical_id = "c350357b-a62c-4bff-938e-e33bcfc1e550"
+content_hash = "sha256:e7d97ced2224ac62f95aede9bbc039f153edf88f5f75b40c810fbfbf0c7709c8"
+size = 70658
+mtime_ms = 1789654690353
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/c350357b-a62c-4bff-938e-e33bcfc1e550/a3e54c67-40aa-454b-8d81-756070a9ac4a"
+storage_version_token = "1789654690988570"
+content_type = "text/html"

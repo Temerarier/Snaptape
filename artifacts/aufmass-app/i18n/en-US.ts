@@ -166,8 +166,7 @@ export const enUS = {
         "A measurement can't be started in this project's current state.",
       referenzUnvollstaendig:
         "Please fill in reference object, value and unit — or leave all three empty.",
-      klassifizierung:
-        "The file check failed. Please try again in a moment.",
+      klassifizierung: "The file check failed. Please try again in a moment.",
       generisch: "Something went wrong. Please try again.",
       keineBilderGewaehlt: "No images selected for measurement.",
     },
@@ -259,8 +258,7 @@ export const enUS = {
     placeholderHint: "Available in a later stage",
     klassifizierungBestanden:
       "File check passed – measurement starts in a later stage.",
-    messungLaeuft:
-      "Measuring your building… this page updates automatically.",
+    messungLaeuft: "Measuring your building… this page updates automatically.",
     seitenNote: "{classified} pages classified, {used} used for measurement",
     cards: {
       dateien: {
@@ -372,6 +370,7 @@ export const enUS = {
       flashing: "Flashing",
       stepFlashing: "Step flashing",
       unclassified: "Unclassified edges",
+      pipeBoots: "Pipe boots",
       skylights: "Skylights",
       gutters: "Gutters",
       downspouts: "Downspouts",
@@ -393,6 +392,7 @@ export const enUS = {
       unassigned: "Unassigned",
       notCaptured: "Not captured",
       addPhoto: "Add photo",
+      photoCaptureUnavailable: "This viewer uses a fixed demo measurement. Adding photos is not available here.",
       verifyOnSite: "verify on site",
       pcs: "pcs",
       ea: "EA",
@@ -406,18 +406,44 @@ export const enUS = {
       resetView: "Reset view",
       copy: "Copy",
       tally: "Tally",
+      tallySelected: "{count} selected",
+      tallyCopy: "Copy",
+      tallyClear: "Clear",
+      removeTally: "Remove from tally",
+      tallyCopied: "Tally copied",
+      tallyCopyFailed:
+        "Could not copy tally. Check clipboard permissions and try again.",
+      copyFailed:
+        "Could not copy value. Check clipboard permissions and try again.",
+      copySuccess: "{label} copied",
+      calcClasses: {
+        roof: "Roof",
+        walls: "Walls",
+        openings: "Openings",
+        trim: "Trim",
+        condition: "Condition",
+        gutters: "Gutters",
+        height: "Height",
+        penetrations: "Penetrations",
+      },
       changePanelHeight: "Change measurements panel height",
-      warningsRequireReview: "Warnings require review in the quality block below.",
+      warningsRequireReview:
+        "Warnings require review in the quality block below.",
       noWarnings: "No warnings recorded.",
-      approximatedLayout: "Some geometry uses inferred placement · verify on site.",
-      omittedElements: "Some measured elements could not be placed and were omitted · verify on site.",
-      missingDimensions: "Some elements are missing dimensions and use an approximate footprint · verify on site.",
-      modelFailure: "The 3D model is unavailable; measurements remain available · verify on site.",
+      approximatedLayout:
+        "Some geometry uses inferred placement · verify on site.",
+      omittedElements:
+        "Some measured elements could not be placed and were omitted · verify on site.",
+      missingDimensions:
+        "Some elements are missing dimensions and use an approximate footprint · verify on site.",
+      modelFailure:
+        "The 3D model is unavailable; measurements remain available · verify on site.",
       referencesUsed: "Scale references are listed in the quality block below.",
       noReferences: "No scale references recorded.",
       breakdownUnavailable: "Wall breakdown unavailable · verify on site",
     },
-    disclaimer: "AI-generated estimates from photographs, for estimating purposes only. Accuracy depends on photo coverage and quality. The user remains responsible for verifying all numbers on site.",
+    disclaimer:
+      "AI-generated estimates from photographs, for estimating purposes only. Accuracy depends on photo coverage and quality. The user remains responsible for verifying all numbers on site.",
     warnings: "Warnings",
     references: "References",
     referenceObject: "Reference object",

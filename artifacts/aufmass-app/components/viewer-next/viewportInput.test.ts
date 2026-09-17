@@ -1,10 +1,26 @@
 import { describe, expect, it, vi } from "vitest";
-import { applyExposedViewport, createTapGate } from "./viewportInput";
+import { applyExposedViewport, createTapGate, placeCameraWithoutMomentum, nearestPanelDetent } from "./viewportInput";
 
 const sample = (pointerId = 1, clientX = 20, clientY = 40, button = 0) =>
   ({ pointerId, clientX, clientY, button });
 
 describe("viewport input safety", () => {
+  it("snaps a drag to each of the three portrait reference positions", () => {
+    expect(nearestPanelDetent(.1)).toBe("full");
+    expect(nearestPanelDetent(.40)).toBe("half");
+    expect(nearestPanelDetent(.7)).toBe("peek");
+    expect(nearestPanelDetent(.26)).toBe("full");
+    expect(nearestPanelDetent(.28)).toBe("half");
+    expect(nearestPanelDetent(.58)).toBe("peek");
+  });
+  it("clears old orbit momentum before reset and restores damping", () => {
+    const calls: string[] = [];
+    const controls = { enableDamping: true, update: () => { calls.push(`update:${controls.enableDamping}`); } };
+    placeCameraWithoutMomentum(controls, () => calls.push("place"));
+    expect(calls).toEqual(["update:false", "place", "update:false"]);
+    expect(controls.enableDamping).toBe(true);
+  });
+
   it("accepts each tap once, but rejects orbit drags even when returning to the start", () => {
     const gate = createTapGate();
     gate.down(sample());

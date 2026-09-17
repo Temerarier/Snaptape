@@ -5,6 +5,30 @@ interface PointerSample {
   button: number;
 }
 
+/** Portrait-source snap points, expressed as viewport proportions. */
+export function nearestPanelDetent(viewportFraction: number): "full" | "half" | "peek" {
+  const points = [["full", .12], ["half", .42], ["peek", .72]] as const;
+  return points.reduce((nearest, point) =>
+    Math.abs(point[1] - viewportFraction) < Math.abs(nearest[1] - viewportFraction) ? point : nearest
+  )[0];
+}
+
+/** Drain OrbitControls' pending damping before an explicit camera placement. */
+export function placeCameraWithoutMomentum(
+  controls: { enableDamping: boolean; update: () => unknown },
+  place: () => void,
+) {
+  const damping = controls.enableDamping;
+  try {
+    controls.enableDamping = false;
+    controls.update();
+    place();
+    controls.update();
+  } finally {
+    controls.enableDamping = damping;
+  }
+}
+
 /** One tap may pick. Any drag, cancellation or multi-pointer gesture may not. */
 export function createTapGate(thresholdPx = 6) {
   const pointers = new Map<number, { x: number; y: number }>();

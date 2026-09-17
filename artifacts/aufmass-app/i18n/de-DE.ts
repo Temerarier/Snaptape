@@ -121,7 +121,8 @@ export const deDE: Dictionary = {
     referenzTitel: "Referenzmaß angeben",
     referenzOptional: "(optional)",
     referenzObjektLabel: "Referenzobjekt",
-    referenzObjektPlaceholder: "z. B. Höhe der Eingangstür, Breite des Garagentors",
+    referenzObjektPlaceholder:
+      "z. B. Höhe der Eingangstür, Breite des Garagentors",
     referenzWertLabel: "Wert",
     referenzWertPlaceholder: "z. B. 2,03",
     referenzEinheitLabel: "Einheit",
@@ -171,7 +172,8 @@ export const deDE: Dictionary = {
       klassifizierung:
         "Die Dateiprüfung ist fehlgeschlagen. Bitte versuchen Sie es gleich erneut.",
       generisch: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
-      keineBilderGewaehlt: "Keine für die Messung ausgewählten Bilder vorhanden.",
+      keineBilderGewaehlt:
+        "Keine für die Messung ausgewählten Bilder vorhanden.",
     },
   },
   viewer: {
@@ -266,7 +268,8 @@ export const deDE: Dictionary = {
       "Dateiprüfung bestanden – die Vermessung startet in einer späteren Etappe.",
     messungLaeuft:
       "Ihr Gebäude wird vermessen… diese Seite aktualisiert sich automatisch.",
-    seitenNote: "{classified} Seiten klassifiziert, {used} für die Messung verwendet",
+    seitenNote:
+      "{classified} Seiten klassifiziert, {used} für die Messung verwendet",
     cards: {
       dateien: {
         title: "Fotos & Pläne",
@@ -377,6 +380,7 @@ export const deDE: Dictionary = {
       flashing: "Anschlussblech",
       stepFlashing: "Stufenblech",
       unclassified: "Nicht klassifizierte Kanten",
+      pipeBoots: "Rohrmanschetten",
       skylights: "Dachfenster",
       gutters: "Dachrinnen",
       downspouts: "Fallrohre",
@@ -398,6 +402,7 @@ export const deDE: Dictionary = {
       unassigned: "Nicht zugeordnet",
       notCaptured: "Nicht erfasst",
       addPhoto: "Foto hinzufügen",
+      photoCaptureUnavailable: "Dieser Viewer nutzt feste Demo-Messdaten. Hier können keine Fotos hinzugefügt werden.",
       verifyOnSite: "vor Ort prüfen",
       pcs: "Stk.",
       ea: "EA",
@@ -411,18 +416,46 @@ export const deDE: Dictionary = {
       resetView: "Ansicht zurücksetzen",
       copy: "Kopieren",
       tally: "Addieren",
+      tallySelected: "{count} ausgewählt",
+      tallyCopy: "Kopieren",
+      tallyClear: "Leeren",
+      removeTally: "Aus Summe entfernen",
+      tallyCopied: "Summen kopiert",
+      tallyCopyFailed:
+        "Summe konnte nicht kopiert werden. Bitte Zwischenablage-Berechtigungen prüfen.",
+      copyFailed:
+        "Wert konnte nicht kopiert werden. Bitte Zwischenablage-Berechtigungen prüfen.",
+      copySuccess: "{label} kopiert",
+      calcClasses: {
+        roof: "Dach",
+        walls: "Fassaden",
+        openings: "Öffnungen",
+        trim: "Verkleidung",
+        condition: "Schadstellen",
+        gutters: "Rinnen",
+        height: "Höhe",
+        penetrations: "Dachdurchdringungen",
+      },
       changePanelHeight: "Höhe des Maß-Panels ändern",
-      warningsRequireReview: "Warnungen müssen im Qualitätsblock unten geprüft werden.",
+      warningsRequireReview:
+        "Warnungen müssen im Qualitätsblock unten geprüft werden.",
       noWarnings: "Keine Warnungen erfasst.",
-      approximatedLayout: "Einige Geometrien verwenden eine angenäherte Platzierung · vor Ort prüfen.",
-      omittedElements: "Einige erfasste Elemente konnten nicht platziert werden und wurden ausgelassen · vor Ort prüfen.",
-      missingDimensions: "Bei einigen Elementen fehlen Maße; eine angenäherte Grundfläche wird verwendet · vor Ort prüfen.",
-      modelFailure: "Das 3D-Modell ist nicht verfügbar; Maße bleiben verfügbar · vor Ort prüfen.",
-      referencesUsed: "Maßstabsreferenzen sind im Qualitätsblock unten aufgeführt.",
+      approximatedLayout:
+        "Einige Geometrien verwenden eine angenäherte Platzierung · vor Ort prüfen.",
+      omittedElements:
+        "Einige erfasste Elemente konnten nicht platziert werden und wurden ausgelassen · vor Ort prüfen.",
+      missingDimensions:
+        "Bei einigen Elementen fehlen Maße; eine angenäherte Grundfläche wird verwendet · vor Ort prüfen.",
+      modelFailure:
+        "Das 3D-Modell ist nicht verfügbar; Maße bleiben verfügbar · vor Ort prüfen.",
+      referencesUsed:
+        "Maßstabsreferenzen sind im Qualitätsblock unten aufgeführt.",
       noReferences: "Keine Maßstabsreferenzen erfasst.",
-      breakdownUnavailable: "Fassadenaufschlüsselung nicht verfügbar · vor Ort prüfen",
+      breakdownUnavailable:
+        "Fassadenaufschlüsselung nicht verfügbar · vor Ort prüfen",
     },
-    disclaimer: "KI-generierte Schätzwerte aus Fotografien, ausschließlich für Kalkulationszwecke. Die Genauigkeit hängt von Abdeckung und Qualität der Fotos ab. Der Nutzer bleibt für die Prüfung aller Maße vor Ort verantwortlich.",
+    disclaimer:
+      "KI-generierte Schätzwerte aus Fotografien, ausschließlich für Kalkulationszwecke. Die Genauigkeit hängt von Abdeckung und Qualität der Fotos ab. Der Nutzer bleibt für die Prüfung aller Maße vor Ort verantwortlich.",
     warnings: "Warnungen",
     references: "Referenzen",
     referenceObject: "Referenzobjekt",
