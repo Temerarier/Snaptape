@@ -1,0 +1,59 @@
+GOAL
+Three things on /viewer-next, in this order: the calc bubble, a design diff against the
+reference exports in the repo, then the full spec checklist.
+
+FIRST - a quick sanity check on the references
+docs/viewer-reference/ holds the approved Claude Design exports from prompt 4a. They are
+source exports: full component markup plus a DCLogic class. Opening one in a browser shows
+raw {{ placeholders }} - that is normal, they are meant to be read, not rendered.
+For each file report name, size, and whether "cardsData" and "Roof Area" are present in
+plain text. Both present means the file is complete. If one is not, list it, do not compare
+against it, and carry on with the complete ones. Report this before changing anything.
+
+1. CALC BUBBLE
+Per docs/viewer-spec.md section 10.2: the tally icon adds a row's value to a floating
+bubble with removable chips, subtotal, Copy and Clear. It sums only same unit AND same
+class - a mixed selection shows separate subtotals, never one merged number. It survives
+chip switches and sits where spec 10.4 places it per device.
+
+2. DESIGN DIFF AGAINST THE REFERENCES
+Go through the reference files section by section and compare them with the running viewer
+at the matching width - the panel and the 3D viewport both. This is a structure- and
+styling-level pass, not a redesign. For every card and every row type check: order and
+grouping of cards, card header (title, colour bar, badge), hero number and its unit, the
+sub-line under the hero, row anatomy (label, sub-label, value, second value, unit, action
+icons), spacing, font sizes and weights, colours, badge styling, the collapsed and expanded
+look of a row, the chips row, and the quality block at the end. For the viewport check the
+placement and styling of the controls, the dimension lines and the selection box.
+Report it as a list: every difference found, and for each one whether you changed the app
+to match the reference, or why the reference could not be followed.
+THE ONE THING NOT TO COPY: the references show a different demo house (2,448 sq ft,
+8 facets, WL-4 "not captured"). Numbers, ids and row counts always come from
+computeDerived with fixtures/garage-house.json. Copy structure and styling, never data.
+
+3. SPEC CHECKLIST
+Then walk the whole spec end to end against the running viewer with the fixture and fix
+what does not match. Report it line by line: every rule checked, pass or fail, and what you
+changed. Where a rule is ambiguous, say so instead of guessing.
+
+DO NOT
+- Do not redesign anything or add ideas of your own. This run closes gaps against the
+  reference and the spec.
+- Do not rebuild the 3D viewport from 4b. Fixing it where it deviates from the spec or the
+  reference is in scope - report each such fix separately.
+- Do not touch the old viewer, the compute lib, the schema or the fixture.
+- Do not change any number the compute lib produces to make it match the reference.
+
+REPORTING
+When reporting test results, paste only the summary line (passed and failed counts) plus
+the failures, never the full output.
+
+DONE WHEN
+- [ ] Each reference file is reported as complete or not; only complete ones were used
+- [ ] Selecting RF-1 and RF-2 shows their sq-ft sum; selecting a length and an area shows
+      two subtotals, never one merged number
+- [ ] The bubble survives switching trade chips and clears properly
+- [ ] The design diff is reported card by card, with the fixes made, viewport included
+- [ ] The full spec checklist is reported line by line, with fixes
+- [ ] The fixture numbers are unchanged: 2,097 sq ft · 21.0 SQ · 6 facets
+- [ ] pnpm test passes; the 3D viewport still works and any deviation fixed in it is listed
