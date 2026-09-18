@@ -1,0 +1,199 @@
+GOAL
+Fix /viewer-next's mobile/tablet layout, label collisions, color system, panel clutter,
+and 3D rendering quality — including that the model is currently a hollow, open-bottomed
+shell visible from below. This is a polish and correctness pass, not new features. The
+desktop (>=1280px) side-by-side structure and all measurement logic stay untouched — only
+tokens, the removals named below, and 3D presentation there. Card spacing/padding is
+already correct - do not change it.
+
+CONTEXT
+- docs/viewer-spec.md sections 9-11 (model overlays, viewport controls, screen sizes).
+- docs/design/viewer-v4-tokens.md for the color/type scale.
+- /design/viewer-v4-desktop, the existing design export, for the background tone and the
+  card treatment.
+- Attached: (1) the existing round button cluster - use it as the component style for the
+  phone controls; (2) a low/rear camera angle showing the model is hollow from underneath;
+  (3) the Claude design reference viewer, showing dimension labels placed beside the house
+  rather than over it, and a translucent selection fill rather than an outline.
+- Known issues below come from a static code audit plus visual review of live screenshots -
+  trust the screenshots over the audit's guesses about what "looks fine."
+
+BUILD
+
+1. REPLACE THE DRAG-SHEET WITH TWO FIXED STATES (phone + tablet portrait)
+   Remove the 72/42/12dvh drag-detent system entirely - no drag handle, no swipe-to-resize.
+   Older users on a job site will trigger drag gestures by accident while scrolling the
+   panel, and the 12dvh state currently leaves them with almost no visible model and no
+   obvious way back.
+   - Default state: fixed ~50/50 split, model on top, panel below. Panel scrolls
+     independently; model never scrolls.
+   - One explicit toggle button, always visible, on the divider between model and panel,
+     labelled ("Show full model" / "Show measurements"). It switches between the split view
+     and a full-height view of just the model or just the panel. Two states only, both
+     reached by a single tap, never a drag.
+   - Model row must never compute to less than 260px tall in the split state, at any
+     supported phone height down to 667px (iPhone SE class). If the math would go lower,
+     widen the model row's share of the screen instead of shrinking further.
+
+2. PHONE CONTROLS: ROUND CLUSTER, TOP RIGHT
+   Phone (viewport width < 768px) gets its own control treatment instead of reusing
+   tablet-portrait's text header:
+   - A vertical cluster of round, icon-only 44x44px buttons anchored at the TOP RIGHT of
+     the model area: measure, conditions, reset - in that order, as the attached
+     button-cluster screenshot shows. Reuse that existing component/style if it is already
+     in the codebase rather than inventing a new one.
+   - This means the measure control keeps the same ANCHOR (top right of the model area) at
+     every breakpoint, but changes FORM: a labelled pill on desktop and tablet, the top
+     round button of the cluster on phone. Do not move it to a different corner or to the
+     bottom on any breakpoint.
+   - A bottom calc bar (full width, docked to the bottom edge of the screen) instead of the
+     floating top-centre calc bubble, so it never overlaps the model or dimension labels.
+     Desktop and tablet keep the calc bubble.
+   - "+ Add photo" stays in the header, compacted, and the header must not wrap to a second
+     line at 390px.
+   - Gesture hint text must never overlap the model or other controls; hide it after first
+     successful interaction or after a few seconds, whichever the codebase already
+     supports elsewhere.
+
+3. FIX LABEL COLLISIONS AND PLACEMENT (all breakpoints, worst on phone)
+   Currently permanent dimension labels (width/ridge/eave) and the selection/attribute
+   tooltip can render on top of the house and on top of each other - visible in the current
+   screenshots at both desktop and phone widths (a VENT tooltip sitting on top of a ridge
+   dimension label, dimension labels crossing over the model itself).
+   - Reposition permanent dimension labels so they sit BESIDE the house, never over it:
+     the width dimension on its own dimension line below the building, and ridge and eave
+     on a single shared vertical height axis to the right of the building, each with a
+     dashed extension line running back to the edge it measures. The Claude design
+     reference (attachment 3) shows this arrangement.
+   - Extend the existing selection-box collision/placement logic (right/left/below/above
+     candidate evaluation) to also treat OTHER visible dimension labels as obstacles, not
+     just `data-control` elements.
+   - The selection tooltip sits beside its element with a thin connector line to an anchor
+     dot on the element - never covering the element it describes.
+   - Permanent dimension labels need the same edge-clamping the selection box already has
+     (keep them fully inside the exposed viewport, never centered off-edge).
+   - On phone, scale dimension/tooltip label font down one step (17px -> 14px) so they take
+     less of the now-small model area; keep the 12px hard minimum from the tokens file.
+   - If two labels would still collide after clamping, offset the lower-priority one (the
+     transient tooltip beats the permanent dimension label) rather than letting them overlap.
+
+4. FIX THE "COPIED" TOAST POSITION
+   It currently renders centered over the model, covering the house on every screen size.
+   Move it to a small toast docked at the bottom edge of the model area (or bottom of
+   screen on phone), auto-dismissing, never covering the house or its labels.
+
+5. COLOR SYSTEM: ADOPT THE BLUE-TINTED BACKGROUND, REMOVE LITERAL COLORS
+   - Change the app shell background and the 3D scene background from the current near-
+     white (#fafbfc / #f7fafc) to a blue-tinted background matching the tone of the
+     /design/viewer-v4-desktop export and the Claude design reference. Add that export's
+     subtle background grid if present in its markup - it gives the 3D scene depth cues it
+     currently lacks against flat white.
+   - Audit every literal hex color in the viewer (measure red #991b1b, selection box
+     #101820/#cbd5e1, permanent line #334155, hemisphere light #aab6c4, calc border/chip
+     colors, and any Tailwind slate/red/emerald utility classes used for viewer UI) and
+     replace each with a value from docs/design/viewer-v4-tokens.md, or add it to that file
+     as a new named token if genuinely needed and note that addition in your report.
+   - Keep the existing colored left-rail treatment on measurement cards (roof/edges/gutters
+     etc.) and the existing card spacing/padding exactly as they are - both already match
+     what we want, do not touch them.
+
+6. PANEL CLEANUP AND FILTER PILLS
+   - DELETE THE "5 references · 5 warnings" ROW: the summary row and its expandable detail
+     at the top of the panel, above the filters and the cards, is removed entirely - not
+     moved, not collapsed, deleted. The quality/warnings block that already sits at the
+     BOTTOM of the panel covers this information and stays exactly as it is; the row at the
+     top was duplicating it and pushing the measurement numbers down. After this change the
+     panel reads: "Measurements" heading, filter pills, cards, existing bottom quality block.
+   - Filter pills (All/Roofing/Siding/Painting) KEEP their 44px height - touch targets stay
+     44px everywhere, no exceptions. Increase the horizontal GAP between the pills instead
+     so the row reads as separate filters rather than one solid block.
+   - Reduce the model stage's reserved control space (currently 80-96px) now that controls
+     are docked (see #2/#3) instead of floating - free that space back to the model.
+   - Do not change card-to-card gaps or card internal padding - leave those exactly as they
+     are today.
+
+7. CLEAN UP THE 3D RENDERING: CLOSE THE VOLUME, KEEP THE CAMERA FREE, FILL THE SELECTION
+   Current model reads as flat/cluttered - hatched window textures, harsh flat shading,
+   visibly busy roof icon clutter - and, more seriously, the building is a hollow, open
+   shell: any low or rear camera angle looks straight through the missing bottom into the
+   dark interior faces of the walls and roof underside (see attachment 2). Fix all of the
+   below. The camera must stay fully free to orbit in every direction, including underneath
+   the model - do not add any polar-angle or ground-clamp restriction to `OrbitControls`.
+   The fix for the see-through problem is a closed volume, not a locked camera.
+   - CLOSE THE BOTTOM: add a floor/foundation cap face at z=0 (or the model's base
+     elevation) spanning the building's footprint, so the volume reads as solid from any
+     camera angle including from below. This can be a simple flat opaque polygon per
+     footprint outline (including any attachments/garage footprint) - it does not need
+     texture or material fidelity, it only needs to stop the see-through.
+   - Check for other open seams in the same pass: gaps at wall-to-wall corners, wall-to-roof
+     joins, and the garage/attachment-to-main-volume seam, wherever a rear or low angle
+     could currently see through into the interior. Close any found.
+   - SELECTION HIGHLIGHT: change the selected-element highlight in the 3D scene from an
+     outline-only treatment to a translucent, light-blue filled overlay on the selected
+     face/element (as the Claude design reference shows) - a semi-transparent blue material
+     applied over the selected geometry, not just an edge line. Keep the edge accent if it
+     reads well combined with the fill; the fill is the required addition.
+   - Soften materials: replace the hatched window pattern with a simple semi-transparent
+     blue-tinted glass material (flat fill, subtle opacity, no hatch texture) unless the
+     hatching is meaningfully load-bearing data (i.e. representing a real condition/damage
+     overlay - keep it only there, remove it from plain window fill).
+   - Soften lighting: reduce the current hemisphere (1.9) and directional (2.2) intensities
+     to something less harsh, and/or add a second, weaker fill light so shaded faces aren't
+     flat black - target the softer, more even shading of the reference illustration,
+     without needing a full PBR/shadow-map pipeline.
+   - Add a ground contact shadow: a simple soft radial/elliptical shadow blob (a
+     transparent-edged plane with a gradient or blurred texture) positioned under the
+     house's footprint, darkest directly under the building and fading out - not a full
+     real-time shadow-mapped light, just a baked/decal-style contact shadow for visual
+     grounding. Scale it to the model's footprint (bounds.widthMm x bounds.depthMm).
+   - Do not change wall/roof/opening geometry, camera framing/controls, or any
+     measurement-driven logic beyond what's needed to close the volume - materials,
+     lighting, the floor cap, the selection fill, and the added shadow plane only.
+
+DO NOT
+- Do not change the desktop (>=1280px) layout structure, only its colors/tokens per #5 and
+  the panel cleanup per #6.
+- Do not change the side panel's 480px width or its breakpoints at any size - that stays
+  exactly as it is today, including in landscape below 1024px.
+- Do not touch the existing quality/warnings block at the bottom of the panel - only the
+  duplicate row at the top is removed.
+- Do not touch computeDerived, the measurement schema, or the old viewer route.
+- Do not reintroduce drag-to-resize anywhere on phone or tablet portrait.
+- Do not restrict OrbitControls' polar angle or add any ground/camera clamp - full free
+  orbit, including from underneath, must still work exactly as it does today.
+- Do not change card-to-card spacing or card internal padding anywhere.
+- Do not drop any touch target below 44px, and do not drop text below the 12px minimum.
+
+DONE WHEN
+- [ ] Phone (390px) and tablet portrait (768px) show the two fixed states, no drag handle
+      exists, and the toggle button on the divider reliably switches between them
+- [ ] Model row is never below 260px in the split state on any supported phone height
+- [ ] Phone shows the round measure/conditions/reset cluster at the top right of the model
+      area in the existing button style; desktop and tablet keep the measure pill at the
+      same top-right anchor; header never wraps at 390px
+- [ ] Phone has the docked bottom calc bar; desktop and tablet keep the calc bubble
+- [ ] Permanent dimension labels sit beside the house (width below, ridge + eave on a shared
+      right-hand height axis with dashed extension lines), never over it, at every
+      breakpoint - attach a screenshot per breakpoint
+- [ ] No two labels/tooltips overlap in a full walkthrough: click every model element and
+      every permanent dimension label visible at 390px, 768px, 1024px, 1440px
+- [ ] "Copied" toast never covers the model at any width
+- [ ] The side panel is still 480px wide at every size it was before - confirm by diff that
+      no panel width or breakpoint changed
+- [ ] The "5 references · 5 warnings" row no longer exists anywhere in the panel at any
+      breakpoint; the bottom quality/warnings block is unchanged and still shows the same
+      references and warnings it did before
+- [ ] Filter pills are still 44px tall with visibly more space between them; card
+      spacing/padding is unchanged from before this prompt (confirm by diff)
+- [ ] Background/grid matches the design export's tone; zero literal hex colors remain
+      outside the tokens file (grep and state the count found and fixed)
+- [ ] Orbiting the camera to a low/rear angle (below the eave line, behind the building) no
+      longer shows any hollow interior, missing floor, or open seam - attach a screenshot
+      from that angle specifically, before and after - and confirm the camera can still
+      orbit all the way underneath with no restriction added
+- [ ] Selecting a wall/roof face/opening shows a translucent light-blue fill on that
+      element, not just an outline - attach a screenshot
+- [ ] 3D model has a visible ground contact shadow and softer, less hatched materials at
+      every breakpoint (attach screenshots - describe what changed since WebGL renders
+      only on a real device/browser, not in your own preview)
+- [ ] pnpm test passes
