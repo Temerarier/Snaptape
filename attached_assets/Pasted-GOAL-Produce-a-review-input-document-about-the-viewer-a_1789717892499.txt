@@ -1,0 +1,50 @@
+GOAL
+Produce a review input document about the viewer at /viewer-next - responsiveness first,
+look and feel second. It will be read by another model that cannot see the app either, so
+it must contain facts, measurements and short code excerpts, not impressions.
+
+READ-ONLY: change nothing. The only file you may write is docs/viewer-review-input.md; also
+print it in the chat. Do not fix anything you find - fixes come in a separate prompt later.
+Where you cannot verify something, write "unknown" and why. You cannot render WebGL here,
+so never claim the 3D looks correct - report the code that decides how it is drawn.
+
+THE DOCUMENT - these sections
+
+1. LAYOUT PER WIDTH
+A table: for each of the four widths in docs/viewer-spec.md section 11, what the layout
+actually does - panel and viewport side by side or stacked, their sizes, which controls are
+visible, where the detents/sheet apply. Then the verbatim media queries or width checks that
+produce it (one excerpt, max 40 lines).
+
+2. THE 3D VIEWPORT
+How the canvas is sized and resized (excerpt), how it reacts to window resize and to
+orientation change, whether device pixel ratio is handled, what happens to the camera on a
+narrow screen, and how the always-on dimension lines, their labels and the selection box are
+positioned and sized. State explicitly whether the selection box can leave the visible area
+at the smallest width, and what the code does about it.
+
+3. FIXED SIZES AND OVERFLOW
+Every hardcoded pixel size, min-width, nowrap, fixed column count and absolute position in
+the viewer, with file, value and the width at which it starts to clip, overlap or scroll
+sideways. Include long content: long ids, long labels, big numbers, many chips.
+
+4. TYPE, COLOUR, SPACING
+The distinct font sizes, weights, colours, radii and shadows actually used in the viewer,
+each with where it is used. Mark every one that is not part of the Technical-Clean token set
+from docs/viewer-reference/. Add the smallest font size rendered on the model itself
+(dimension labels, selection box) per width.
+
+5. TOUCH AND STATES
+Interactive elements with a hit area under 44 x 44 px, and anything hover-only with no tap
+equivalent. Then: what the viewer renders while loading, when the model cannot be built, and
+when a measurement failed.
+
+6. DEVIATIONS AND OPEN QUESTIONS
+Where the built viewer differs from docs/viewer-reference/ in structure or styling, facts
+only. Then a short list of the things you are unsure about and would want checked by eye.
+
+DO NOT
+- Modify any file except docs/viewer-review-input.md.
+- Fix, refactor or redesign anything.
+- Run a real measurement or anything that calls a paid API.
+- Pad the document. Six focused sections beat twenty vague ones.
