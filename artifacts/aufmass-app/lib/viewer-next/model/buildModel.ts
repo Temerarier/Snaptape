@@ -29,10 +29,11 @@ import type {
   Vector3,
   ViewerModel,
 } from "./types";
+import { viewerTokens } from "../tokens";
 
 const EPSILON = 1e-6;
-const NEUTRAL_HEX = "#8B9299";
-const CONDITION_HEX = "#D97706";
+const NEUTRAL_HEX: string = viewerTokens.modelNeutral;
+const CONDITION_HEX: string = viewerTokens.modelConditionFallback;
 const FRONT = "front";
 const BACK = "back";
 const LEFT = "left";
@@ -838,7 +839,11 @@ function buildEdge(
 }
 
 function openingTypeColor(type: string): ModelColor {
-  const hex = type === "garage_door" ? "#46505A" : type === "skylight" ? "#79A8C7" : "#DCE7EF";
+  const hex = type === "garage_door"
+    ? viewerTokens.modelOpeningGarage
+    : type === "skylight"
+      ? viewerTokens.modelOpeningSkylight
+      : viewerTokens.modelOpeningDefault;
   return { hex, secondaryHex: null, confidence: null, neutral: false };
 }
 
@@ -939,9 +944,19 @@ function buildOpenings(
 
 function attachmentColor(type: string): ModelColor {
   if (type === "addition" || type === "bay" || type === "dormer") {
-    return { hex: "#A6ADB5", secondaryHex: null, confidence: null, neutral: true };
+    return {
+      hex: viewerTokens.modelAttachmentPrimary,
+      secondaryHex: null,
+      confidence: null,
+      neutral: true,
+    };
   }
-  return { hex: "#66727D", secondaryHex: null, confidence: null, neutral: true };
+  return {
+    hex: viewerTokens.modelAttachmentSecondary,
+    secondaryHex: null,
+    confidence: null,
+    neutral: true,
+  };
 }
 
 function buildAttachments(

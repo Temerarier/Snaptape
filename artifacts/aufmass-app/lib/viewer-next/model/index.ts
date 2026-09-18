@@ -1,4 +1,5 @@
 export { buildModel } from "./buildModel";
+export { buildPresentationClosure } from "./closure";
 export type { ViewerMeasurement } from "./input";
 export type {
   Bounds3,

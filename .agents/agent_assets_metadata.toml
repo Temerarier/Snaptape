@@ -28,3 +28,17 @@ mtime_ms = 1789718089518
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/dd3f448a-f67f-4f7c-a212-83f5ecdf544b/a06613cb-9448-4d6c-b770-67df0a3b3856"
 storage_version_token = "1789718308405045"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "CkpjjhfWIxa7uXQpbGXuq"
+uri = "file://attached_assets/viewer-polish/viewer-polish-evidence.html"
+type = "html"
+title = "Final viewer verification report"
+description = "Updated report: 181 tests, 40 browser checks, 488 element-selection checks, real WebGL screenshots, narrow-landscape control evidence and the complete token contract."
+logical_id = "5cc85b52-87c8-4759-97a6-9c297a48340b"
+content_hash = "sha256:16ee15fef4e85cd47e2a283ea734826fbfac641284a7c7b8ff852bf69067d3f8"
+size = 4417476
+mtime_ms = 1789732517903
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/5cc85b52-87c8-4759-97a6-9c297a48340b/ee5271be-ead7-4a5a-aae0-4a2baaa014b6"
+storage_version_token = "1789732535253969"
+content_type = "text/html"

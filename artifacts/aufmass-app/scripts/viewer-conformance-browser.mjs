@@ -160,8 +160,11 @@ try {
 
   await mkdir("attached_assets/viewer-conformance", { recursive:true });
   for (const [name, width, height] of [
-    ["desktop",1440,1000], ["tablet-landscape",1190,830],
-    ["tablet-portrait",830,1190], ["phone",390,844], ["narrow-phone",320,740],
+    ["desktop",1440,1000], ["tablet-landscape",1024,768],
+    ["tablet-portrait",768,1024], ["phone",390,844], ["short-phone",375,667],
+    ["phone-boundary",767,900], ["wide-landscape-boundary",1279,900],
+    ["desktop-boundary",1280,900],
+    ["narrow-landscape",768,600], ["compact-landscape",840,600],
   ]) {
     await browser.send("Emulation.setDeviceMetricsOverride", { width,height,deviceScaleFactor:1,mobile:false });
     await browser.send("Emulation.setTouchEmulationEnabled", { enabled:name!=="desktop", maxTouchPoints:5 });
@@ -183,64 +186,97 @@ try {
     });
     const shot = await browser.send("Page.captureScreenshot", { format:"jpeg",quality:85 });
     await writeFile(`attached_assets/viewer-conformance/${name}.jpg`, Buffer.from(shot.data,"base64"));
-    await check(`${name}: bounded tally does not cover controls or model`, async () => {
+    if (width >= 768 && width < 1024 && width > height) {
+      await check(`${name}: all header controls remain visible and operable`, async () => {
+        const controls = await evaluate(`(() => {
+          const header=document.querySelector('.viewer-next-header').getBoundingClientRect();
+          const panel=document.querySelector('.viewer-next-panel').getBoundingClientRect();
+          return {panelWidth:panel.width,items:[...document.querySelectorAll('.viewer-next-header button')].map(b=>{
+            const r=b.getBoundingClientRect(),top=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
+            return {label:b.textContent.trim(),contained:r.left>=header.left&&r.right<=header.right&&r.top>=header.top&&r.bottom<=header.bottom,hit:top===b||b.contains(top),x:r.x+r.width/2,y:r.y+r.height/2};
+          })};
+        })()`);
+        assert.equal(controls.panelWidth,480);
+        assert.ok(controls.items.every(c=>c.contained&&c.hit),JSON.stringify(controls));
+        for (const control of controls.items) {
+          await mouse("mousePressed",control.x,control.y,{button:"left",clickCount:1});
+          await mouse("mouseReleased",control.x,control.y,{button:"left",clickCount:1});
+          await pause(100);
+        }
+        assert.match(await evaluate(`document.querySelector('.viewer-next-toast')?.textContent ?? ''`),/photo|capture/i);
+        assert.equal(await evaluate(`document.querySelector('[data-control="conditions"]').getAttribute('aria-pressed')`),"true");
+        assert.equal(await evaluate(`document.querySelector('.viewer-next-selection-box')?.innerText ?? null`),null);
+        await click('[data-control="conditions"]');
+      });
+    }
+    await check(`${name}: tally presentation matches the responsive contract`, async () => {
       await tally("RF-1"); await tally("RF-2"); await tally("edge-eave"); await tally("WL-1");
       const geometry = await evaluate(`(() => {
         const rect=n=>{const r=n.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};};
         const bubble=document.querySelector('[data-calc-bubble]');
+         const pill=document.querySelector('.viewer-next-measure-wide');
         return {bubble:rect(bubble),canvas:rect(document.querySelector('.viewer-next-viewport canvas')),width:innerWidth,
+           pill:pill && getComputedStyle(pill).display!=="none" ? rect(pill) : null,
           targets:[...bubble.querySelectorAll('button')].every(b=>b.getBoundingClientRect().width>=44&&b.getBoundingClientRect().height>=44)};
       })()`);
       assert.ok(geometry.bubble.left>=0 && geometry.bubble.right<=geometry.width);
-      assert.ok(geometry.bubble.bottom<=geometry.canvas.top, JSON.stringify(geometry));
+       if (geometry.pill) {
+         const intersects = geometry.bubble.left < geometry.pill.right &&
+           geometry.bubble.right > geometry.pill.left &&
+           geometry.bubble.top < geometry.pill.bottom &&
+           geometry.bubble.bottom > geometry.pill.top;
+         assert.equal(intersects, false, JSON.stringify(geometry));
+       }
+       if (width < 768) {
+         assert.ok(Math.abs(geometry.bubble.bottom - height) < 1, JSON.stringify(geometry));
+         assert.ok(geometry.canvas.bottom <= geometry.bubble.top, JSON.stringify(geometry));
+         const calcScroll = await evaluate(`(() => {
+           const bubble=document.querySelector('[data-calc-bubble]');
+           bubble.scrollTop=bubble.scrollHeight;
+           return {top:bubble.scrollTop,max:bubble.scrollHeight-bubble.clientHeight};
+         })()`);
+         assert.ok(calcScroll.top >= calcScroll.max - 1, JSON.stringify(calcScroll));
+       }
       assert.equal(geometry.targets,true);
       const shot = await browser.send("Page.captureScreenshot",{format:"jpeg",quality:85});
       await writeFile(`attached_assets/viewer-conformance/${name}-calc.jpg`,Buffer.from(shot.data,"base64"));
       await button("Clear");
     });
   }
-  for (const [width,height] of [[390,844],[320,640],[320,568]]) {
-    await check(`${width}x${height}: active-calc detent taps, drags, selection and scroll area`, async () => {
+  for (const [width,height] of [[390,844],[375,667],[767,900],[768,1024]]) {
+    await check(`${width}x${height}: fixed split and full-model states`, async () => {
       await browser.send("Emulation.setDeviceMetricsOverride",{width,height,deviceScaleFactor:1,mobile:false});
       await browser.send("Page.navigate",{url:base});
       await waitUntil(browser,`!!document.querySelector('[data-viewer-row-id="RF-1"]')`);
       await tally("RF-1");
-      const heights = [];
       const metrics = () => evaluate(`(() => {
         const rect=n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom};};
-        return {detent:document.querySelector('.viewer-next-shell').dataset.panelDetent,panel:rect(document.querySelector('.viewer-next-panel')),
+         return {mode:document.querySelector('.viewer-next-shell').dataset.layoutMode,panel:rect(document.querySelector('.viewer-next-panel')),
+           model:rect(document.querySelector('.viewer-next-model-section')),
           scroller:rect(document.querySelector('[data-viewer-panel-scroll]')),canvas:rect(document.querySelector('.viewer-next-viewport canvas')),
-          bubble:rect(document.querySelector('[data-calc-bubble]'))};
+           bubble:rect(document.querySelector('[data-calc-bubble]')),
+           toggle:rect(document.querySelector('.viewer-next-layout-toggle')),
+           handle:document.querySelector('.viewer-next-panel-handle'),
+           modelOverflow:getComputedStyle(document.querySelector('.viewer-next-model-section')).overflowY};
       })()`);
-      for (const expected of ["half","full","peek"]) {
-        await pause(250);
-        const m=await metrics();
-        assert.equal(m.detent,expected);
-        assert.ok(Math.abs(m.panel.y - height*({half:.42,full:.12,peek:.72}[expected])) < 1, JSON.stringify(m));
-        assert.ok(m.scroller.height>=63,JSON.stringify(m));
-        assert.ok(m.canvas.height>0,JSON.stringify(m));
-        assert.ok(m.bubble.bottom<=m.canvas.y+1,JSON.stringify(m));
-        heights.push(m.panel.y);
-        await click('.viewer-next-panel-handle');
-      }
-      assert.equal(new Set(heights).size,3,`Collapsed detents: ${heights.join(',')}`);
-      const dragTo = async fraction => {
-        const r=await evaluate(`(() => {const r=document.querySelector('.viewer-next-panel-handle').getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
-        const targetY=height*fraction+22;
-        await mouse("mousePressed",r.x,r.y,{button:"left",clickCount:1});
-        await mouse("mouseMoved",r.x,targetY,{button:"left",buttons:1});
-        await mouse("mouseReleased",r.x,targetY,{button:"left",clickCount:1});
-        await pause(250);
-      };
-      for(const [detent,fraction] of [["full",.12],["half",.42],["peek",.72]]) {
-        await dragTo(fraction);
-        const m=await metrics();
-        assert.equal(m.detent,detent);
-        assert.ok(Math.abs(m.panel.y-height*fraction)<1,JSON.stringify(m));
-      }
-      await click('.viewer-next-panel-handle'); // peek -> half
+       let m=await metrics();
+       assert.equal(m.mode,"split");
+       assert.ok(m.model.height>=321,JSON.stringify(m));
+       assert.ok(m.canvas.height>=260,JSON.stringify(m));
+       assert.ok(m.panel.height>0 && m.scroller.height>=63,JSON.stringify(m));
+       assert.equal(m.handle,null);
+       assert.equal(m.modelOverflow,"hidden");
+       assert.ok(m.toggle.height>=44 && m.toggle.bottom<=height,JSON.stringify(m));
+       await click('.viewer-next-layout-toggle');
+       m=await metrics();
+       assert.equal(m.mode,"model");
+       assert.ok(m.model.height>260,JSON.stringify(m));
+       assert.ok(m.panel.height<1,JSON.stringify(m));
+       assert.ok(m.toggle.height>=44 && m.toggle.bottom<=height,JSON.stringify(m));
+       await click('.viewer-next-layout-toggle');
+       assert.equal((await metrics()).mode,"split");
       await click('[data-viewer-row-id="RF-2"] > button');
-      assert.equal((await metrics()).detent,"peek");
+       assert.equal((await metrics()).mode,"split");
       assert.match(await bubbleText(),/RF-1/);
       await tally("RF-2");
       assert.match(await bubbleText(),/1,346/);
@@ -255,7 +291,7 @@ try {
       await evaluate(`document.querySelector('[data-viewer-panel-scroll]').scrollTop = 500`);
       assert.ok(await evaluate(`document.querySelector('[data-viewer-panel-scroll]').scrollTop > 0`));
       const shot=await browser.send("Page.captureScreenshot",{format:"jpeg",quality:85});
-      await writeFile(`attached_assets/viewer-conformance/active-detents-${width}x${height}.jpg`,Buffer.from(shot.data,"base64"));
+       await writeFile(`attached_assets/viewer-conformance/two-state-${width}x${height}.jpg`,Buffer.from(shot.data,"base64"));
       await button("Clear");
     });
   }

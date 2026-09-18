@@ -333,6 +333,7 @@ export const enUS = {
   },
   viewerNext: {
     measurements: "Measurements",
+    overlayConstraintMessage: "Limited label space at this view",
     demoProject: "Demo project",
     cards: {
       roofArea: "Roof Area",
@@ -400,6 +401,8 @@ export const enUS = {
       showConditions: "Show conditions",
       measureLine: "Measure line",
       clear: "Clear",
+      showFullModel: "Show full model",
+      showMeasurements: "Show measurements",
       dragOrbit: "drag orbit · pinch zoom · 2-finger pan",
       viewportPlaceholder: "3D VIEWPORT",
       placeholder: "Placeholder",

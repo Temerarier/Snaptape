@@ -29,17 +29,50 @@ export function CalcBubble({
   useLayoutEffect(() => {
     const bubble = bubbleRef.current;
     const stage = bubble?.parentElement;
-    if (!bubble || !stage) return;
+    const shell = bubble?.closest<HTMLElement>(".viewer-next-shell");
+    if (!bubble || !stage || !shell) return;
     const reserveSpace = () => {
-      stage.style.setProperty("--viewer-calc-bottom", `${bubble.offsetTop + bubble.offsetHeight + 8}px`);
+      shell.style.setProperty("--viewer-calc-height", `${bubble.offsetHeight}px`);
+      const pill = stage.querySelector<HTMLElement>(".viewer-next-measure-wide");
+      const stageRect = stage.getBoundingClientRect();
+      const pillRect = pill?.getBoundingClientRect();
+      if (!pillRect || pillRect.width === 0) return;
+
+      const gap = 12;
+      const edge = 12;
+      const pillLeft = pillRect.left - stageRect.left;
+      const centredMax = Math.max(
+        0,
+        2 * (pillLeft - gap - stageRect.width / 2),
+      );
+      if (centredMax >= 240) {
+        stage.style.setProperty("--viewer-calc-left", "50%");
+        stage.style.setProperty("--viewer-calc-transform", "translateX(-50%)");
+        stage.style.setProperty(
+          "--viewer-calc-max-width",
+          `${Math.min(680, centredMax)}px`,
+        );
+      } else {
+        stage.style.setProperty("--viewer-calc-left", `${edge}px`);
+        stage.style.setProperty("--viewer-calc-transform", "none");
+        stage.style.setProperty(
+          "--viewer-calc-max-width",
+          `${Math.max(44, pillLeft - gap - edge)}px`,
+        );
+      }
     };
     const observer = new ResizeObserver(reserveSpace);
     observer.observe(bubble);
     observer.observe(stage);
+    const pill = stage.querySelector<HTMLElement>(".viewer-next-measure-wide");
+    if (pill) observer.observe(pill);
     reserveSpace();
     return () => {
       observer.disconnect();
-      stage.style.removeProperty("--viewer-calc-bottom");
+      shell.style.removeProperty("--viewer-calc-height");
+      stage.style.removeProperty("--viewer-calc-left");
+      stage.style.removeProperty("--viewer-calc-transform");
+      stage.style.removeProperty("--viewer-calc-max-width");
     };
   }, [items.length > 0]);
   if (items.length === 0) return null;
@@ -60,7 +93,7 @@ export function CalcBubble({
   return (
     <div
       ref={bubbleRef}
-      className="viewer-next-calc-bubble pointer-events-auto absolute left-1/2 top-[72px] md:top-3 z-30 flex max-w-[min(72%,680px)] -translate-x-1/2 flex-col gap-2 rounded-[14px] bg-[#16233A] p-2.5 text-white shadow-[0_8px_28px_rgba(20,30,50,0.35)]"
+      className="viewer-next-calc-bubble pointer-events-auto z-30 flex flex-col gap-2 rounded-[14px] p-2.5"
       data-calc-bubble
     >
       <div className="flex flex-wrap items-center gap-2.5">
@@ -83,7 +116,7 @@ export function CalcBubble({
         <button
           type="button"
           onClick={copy}
-          className="min-h-11 rounded-[10px] bg-white px-3.5 text-sm font-semibold text-[#16233A]"
+          className="viewer-next-calc-primary min-h-11 rounded-[10px] px-3.5 text-sm font-semibold"
         >
           {dict.labels.tallyCopy}
         </button>
@@ -93,7 +126,7 @@ export function CalcBubble({
             onClear();
             setCopyState("idle");
           }}
-          className="min-h-11 rounded-[10px] border-2 border-[#7C8CA8] bg-transparent px-3.5 text-sm font-semibold text-white"
+          className="viewer-next-calc-secondary min-h-11 rounded-[10px] border-2 bg-transparent px-3.5 text-sm font-semibold"
         >
           {dict.labels.tallyClear}
         </button>
@@ -102,16 +135,16 @@ export function CalcBubble({
         {items.map((item) => (
           <span
             key={item.id}
-            className="inline-flex items-center gap-1 rounded-full bg-[#22324D] py-0.5 pl-3 pr-0.5 font-mono text-xs"
+            className="viewer-next-calc-chip inline-flex items-center gap-1 rounded-full py-0.5 pl-3 pr-0.5 font-mono text-xs"
           >
             {item.label} {formatTallyValue(item.value, item.unit)} {item.unit}
             <button
               type="button"
               onClick={() => onRemove(item.id)}
               aria-label={`${item.label}: ${dict.labels.removeTally}`}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-white"
+              className="flex h-11 w-11 items-center justify-center rounded-full"
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#45577A] text-xs leading-none">
+              <span className="viewer-next-calc-chip-control flex h-5 w-5 items-center justify-center rounded-full text-xs leading-none">
                 ×
               </span>
             </button>
@@ -123,7 +156,9 @@ export function CalcBubble({
           role="status"
           className={cn(
             "text-xs",
-            copyState === "error" ? "text-red-200" : "text-emerald-200",
+            copyState === "error"
+              ? "viewer-next-calc-error"
+              : "viewer-next-calc-success",
           )}
         >
           {copyState === "error"

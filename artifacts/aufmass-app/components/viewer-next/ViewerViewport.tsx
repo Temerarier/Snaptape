@@ -3,8 +3,8 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { useDictionary } from "@/i18n/LocaleProvider";
 import {
-  chooseSelectionPlacement,
   findSelectableElement,
   getExposedViewport,
   getSelectionDetails,
@@ -12,6 +12,10 @@ import {
   type MeasureLine,
 } from "@/lib/viewer-next/interaction";
 import type { ModelPolygon, Point3, ViewerModel } from "@/lib/viewer-next/model";
+import { buildPresentationClosure } from "@/lib/viewer-next/model/closure";
+import { viewerTokens } from "@/lib/viewer-next/tokens";
+import { convexHull, dimensionRails, layoutLabels, screenBounds, type DimensionStroke, type LabelRequest } from "@/lib/viewer-next/overlayLayout";
+import { clearRenderGroup, createContactShadow, createSelectionVisual, disposeRenderObject, isRayDistanceVisible, polygonGeometry, polygonMaterial } from "@/lib/viewer-next/renderResources";
 import { createCurrentCallback, startDampedRenderLoop } from "./painterLifecycle";
 import { applyExposedViewport, createTapGate, placeCameraWithoutMomentum } from "./viewportInput";
 
@@ -30,7 +34,7 @@ export interface ViewerViewportProps {
   onSnapPreview: (result: ReturnType<typeof snapMeasurePoint> | null) => void;
   showConditions: boolean;
   webglMessage: string;
-  sheetDetent: "peek" | "half" | "full";
+  layoutMode: "split" | "model";
   modelState?: "ready" | "notready";
 }
 
@@ -42,7 +46,6 @@ interface PainterState {
   readonly interactiveMeshes: THREE.Object3D[];
   readonly conditionsGroup: THREE.Group;
   readonly measureGroup: THREE.Group;
-  readonly permanentGroup: THREE.Group;
   readonly selectionGroup: THREE.Group;
   readonly marker: THREE.Mesh;
   readonly initialPosition: THREE.Vector3;
@@ -55,6 +58,7 @@ interface PainterState {
 }
 
 interface OverlayPosition {
+  readonly id: string;
   readonly left: number;
   readonly top: number;
   readonly text: string;
@@ -85,62 +89,22 @@ function toVector(point: Point3): THREE.Vector3 {
   return new THREE.Vector3(point.x, point.y, point.z);
 }
 
-function polygonGeometry(part: ModelPolygon): THREE.BufferGeometry {
-  const values: number[] = [];
-  for (const triangle of part.triangles) {
-    for (const point of triangle) values.push(point.x, point.y, point.z);
-  }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(values, 3));
-  geometry.computeVertexNormals();
-  return geometry;
-}
-
-function colourMaterial(part: ModelPolygon): THREE.Material | THREE.Material[] {
-  const base = new THREE.MeshStandardMaterial({
-    color: part.color.hex,
-    roughness: 0.82,
-    metalness: 0.02,
-    side: THREE.DoubleSide,
-  });
-  if (!part.color.secondaryHex || part.triangles.length < 2) return base;
-  const accent = new THREE.MeshStandardMaterial({
-    color: part.color.secondaryHex,
-    roughness: 0.88,
-    metalness: 0.01,
-    side: THREE.DoubleSide,
-    transparent: true,
-    opacity: 0.42,
-  });
-  return [base, accent];
-}
-
 function addPolygon(
   part: ModelPolygon,
   group: THREE.Group,
   interactiveMeshes: THREE.Object3D[],
   interactive: boolean,
-): void {
+): THREE.Mesh {
   const geometry = polygonGeometry(part);
-  const material = colourMaterial(part);
+  const material = polygonMaterial(part);
   const elementKind = "type" in part
     ? ("depthMm" in part ? "attachment" : "opening")
     : "face";
-  if (Array.isArray(material)) {
-    const materials = material;
-    for (let index = 0; index < part.triangles.length; index += 1) {
-      geometry.addGroup(index * 3, 3, index % 2 === 0 ? 0 : 1);
-    }
-    const mesh = new THREE.Mesh(geometry, materials);
-    mesh.userData = { elementId: part.id, elementKind };
-    group.add(mesh);
-    if (interactive) interactiveMeshes.push(mesh);
-    return;
-  }
   const mesh = new THREE.Mesh(geometry, material);
   mesh.userData = { elementId: part.id, elementKind };
   group.add(mesh);
   if (interactive) interactiveMeshes.push(mesh);
+  return mesh;
 }
 
 function addEdge(
@@ -161,18 +125,8 @@ function addEdge(
   interactiveMeshes.push(line);
 }
 
-function updateLineGroup(group: THREE.Group, segments: readonly { start: Point3; end: Point3 }[], color = "#334155"): void {
-  while (group.children.length) {
-    const child = group.children.pop();
-    if (!child) continue;
-    child.traverse(item => {
-      if (item instanceof THREE.Mesh || item instanceof THREE.Line || item instanceof THREE.LineSegments) {
-        item.geometry.dispose();
-        if (Array.isArray(item.material)) item.material.forEach(material => material.dispose());
-        else item.material.dispose();
-      }
-    });
-  }
+function updateLineGroup(group: THREE.Group, segments: readonly { start: Point3; end: Point3 }[], color: string = viewerTokens.dimensionLine): void {
+  clearRenderGroup(group);
   for (const segment of segments) {
     const geometry = new THREE.BufferGeometry().setFromPoints([
       toVector(segment.start),
@@ -240,12 +194,7 @@ function getViewportMetrics(host: HTMLElement): ViewportMetrics {
   };
 }
 
-/**
- * The measurements sheet is an overlay, not part of the flex layout. Keep
- * Three's drawing viewport and projection aligned with the exposed area above
- * its current animated detent, rather than centring a focused element under
- * the sheet.
- */
+/** Align the drawing viewport with the exposed model row, without reframing. */
 function syncPainterViewport(painter: PainterState, host: HTMLElement): ViewportMetrics {
   const next = getViewportMetrics(host);
   painter.viewport.width = next.width;
@@ -263,20 +212,10 @@ function midpoint(start: Point3, end: Point3): Point3 {
   };
 }
 
-function disposeObject(root: THREE.Object3D): void {
-  root.traverse(item => {
-    if (item instanceof THREE.Mesh || item instanceof THREE.Line || item instanceof THREE.LineSegments) {
-      item.geometry.dispose();
-      if (Array.isArray(item.material)) item.material.forEach(material => material.dispose());
-      else item.material.dispose();
-    }
-  });
-}
-
 function overlaysEqual(previous: readonly OverlayPosition[], next: readonly OverlayPosition[]): boolean {
   return previous.length === next.length && previous.every((item, index) => {
     const candidate = next[index];
-    return item.left === candidate.left &&
+    return item.id === candidate.id && item.left === candidate.left &&
       item.top === candidate.top &&
       item.text === candidate.text &&
       item.kind === candidate.kind;
@@ -304,9 +243,10 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
   onSnapPreview,
   showConditions,
   webglMessage,
-  sheetDetent,
+  layoutMode,
   modelState = "ready",
 }, ref) {
+  const dict = useDictionary();
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const painterRef = useRef<PainterState | null>(null);
@@ -322,12 +262,15 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
   const [webglFailed, setWebglFailed] = useState(false);
   const [selectionOverlay, setSelectionOverlay] = useState<SelectionOverlay | null>(null);
   const [overlays, setOverlays] = useState<OverlayPosition[]>([]);
+  const [dimensionStrokes, setDimensionStrokes] = useState<DimensionStroke[]>([]);
+  const [overlayConstraint, setOverlayConstraint] = useState("");
+  const labelSizesRef = useRef(new Map<string, { width: number; height: number }>());
   const selectionBoxRef = useRef<HTMLDivElement>(null);
   const [selectionBoxSize, setSelectionBoxSize] = useState({ width: 0, height: 0 });
   const selectionBoxSizeRef = useRef(selectionBoxSize);
   const updateOverlaysRef = useRef(createCurrentCallback<[], void>(() => undefined));
   const renderViewportRef = useRef(createCurrentCallback<[], void>(() => undefined));
-  const previousSheetDetentRef = useRef(sheetDetent);
+  const previousLayoutModeRef = useRef(layoutMode);
   selectionBoxSizeRef.current = selectionBoxSize;
 
   stateRef.current = {
@@ -347,44 +290,10 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
     const viewport = syncPainterViewport(painter, host);
     const width = viewport.width;
     const height = viewport.height;
-    const nextOverlays: OverlayPosition[] = [];
-    const permanent = [
-      model.permanentDimensions.width,
-      model.permanentDimensions.ridge,
-      model.permanentDimensions.eaveHeight,
-    ];
-    for (const dimension of permanent) {
-      const segment = dimension.segments[0];
-      if (!segment) continue;
-      const position = projectPoint(midpoint(segment.start, segment.end), painter.camera, width, height);
-      nextOverlays.push({
-        ...position,
-        text: dimension.label,
-        kind: "dimension",
-      });
-    }
-    for (const line of stateRef.current.measureLines) {
-      const position = projectPoint(midpoint(line.start, line.end), painter.camera, width, height);
-      nextOverlays.push({ ...position, text: line.label, kind: "measure" });
-    }
-    setOverlays(previous => overlaysEqual(previous, nextOverlays) ? previous : nextOverlays);
-
-    const selected = findSelectableElement(model, stateRef.current.selectedId);
-    if (!selected) {
-      setSelectionOverlay(previous => previous === null ? previous : null);
-      return;
-    }
-    const details = getSelectionDetails(selected);
-    const anchor = projectPoint(details.anchor, painter.camera, width, height);
-    const projectedCorners = selected.corners.map(corner => projectPoint(corner, painter.camera, width, height));
-    const elementBounds = {
-      left: Math.min(...projectedCorners.map(item => item.left), anchor.left),
-      top: Math.min(...projectedCorners.map(item => item.top), anchor.top),
-      right: Math.max(...projectedCorners.map(item => item.left), anchor.left),
-      bottom: Math.max(...projectedCorners.map(item => item.top), anchor.top),
-    };
     const hostRect = host.getBoundingClientRect();
-    const avoid = Array.from(document.querySelectorAll<HTMLElement>("[data-control]"))
+    const avoid = Array.from(document.querySelectorAll<HTMLElement>(
+      "[data-control], .viewer-next-calc-bubble, .viewer-next-calc-bar, .viewer-next-toast, .viewer-next-layout-toggle",
+    ))
       .map(control => {
         const controlRect = control.getBoundingClientRect();
         return {
@@ -400,26 +309,80 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
         rect.bottom > 0 &&
         rect.top < height
       );
-    const placement = chooseSelectionPlacement({
-      element: elementBounds,
-      box: selectionBoxSizeRef.current,
-      viewport: { width, height },
-      avoid,
-    });
-    const nextSelectionOverlay: SelectionOverlay = {
-      left: placement.left,
-      top: placement.top,
-      anchorLeft: placement.anchorLeft,
-      anchorTop: placement.anchorTop,
-      title: details.title,
-      dimensions: details.dimensions,
-      value: details.value,
+    const screenPoint = (point: Point3) => {
+      const position = projectPoint(point, painter.camera, width, height);
+      return { x: position.left, y: position.top };
     };
-    setSelectionOverlay(previous =>
-      previous && selectionOverlaysEqual(previous, nextSelectionOverlay)
-        ? previous
-        : nextSelectionOverlay,
-    );
+    const modelPoints = [...model.walls, ...model.roofFaces, ...model.openings, ...model.attachments, ...model.massing]
+      .flatMap(part => part.corners);
+    const silhouette = convexHull(modelPoints.map(screenPoint));
+    if (silhouette.length < 3) {
+      setOverlayConstraint("Projection cannot fit dimension overlays.");
+      return;
+    }
+    const bounds = screenBounds(silhouette);
+    const sizeOf = (id: string) => labelSizesRef.current.get(id) ?? { width: 0, height: 0 };
+    const permanent = [
+      { id: "width" as const, dimension: model.permanentDimensions.width },
+      { id: "ridge" as const, dimension: model.permanentDimensions.ridge },
+      { id: "eave" as const, dimension: model.permanentDimensions.eaveHeight },
+    ].filter(({ dimension }) => dimension.segments.length > 0);
+    const rails = dimensionRails(bounds, permanent.map(({ id, dimension }) => ({
+      id, ...sizeOf(id),
+      start: screenPoint(dimension.segments[0].start), end: screenPoint(dimension.segments[0].end),
+    })), { width, height });
+    const requests: LabelRequest[] = [...rails.labels];
+    const labels = permanent.map(({ id, dimension }) => ({
+      id, text: dimension.label,
+      kind: "dimension" as const,
+    }));
+    const measureLabels = stateRef.current.measureLines.map((line, index) => {
+      const id = `measure-${index}`, size = sizeOf(id);
+      const anchor = screenPoint(midpoint(line.start, line.end));
+      requests.push({ id, ...size, priority: 0, preferred: { x: anchor.x - size.width / 2, y: anchor.y - size.height / 2 } });
+      return { id, text: line.label, kind: "measure" as const };
+    });
+    const selected = findSelectableElement(model, stateRef.current.selectedId);
+    const details = selected ? getSelectionDetails(selected) : null;
+    const selectionAnchor = details ? screenPoint(details.target) : null;
+    if (selected && selectionAnchor) {
+      requests.push({
+        id: "selection", ...selectionBoxSizeRef.current, priority: 1,
+        preferred: { x: selectionAnchor.x + 12, y: selectionAnchor.y - selectionBoxSizeRef.current.height / 2 },
+      });
+    }
+    const placements = layoutLabels({ viewport: { width, height }, labels: requests, obstacles: avoid, silhouette });
+    const nextOverlays = [...labels, ...measureLabels].map(label => {
+      const placement = placements.find(p => p.id === label.id)!;
+      return { ...label, left: (placement.left + placement.right) / 2, top: (placement.top + placement.bottom) / 2 };
+    });
+    setOverlays(previous => overlaysEqual(previous, nextOverlays) ? previous : nextOverlays);
+    // A displaced dimension remains connected to its own rail rather than losing its association.
+    const strokes = [...rails.strokes];
+    for (const label of rails.labels) {
+      const placed = placements.find(p => p.id === label.id)!;
+      if (Math.hypot(placed.left - label.preferred.x, placed.top - label.preferred.y) > 8) {
+        strokes.push({
+          start: { x: label.preferred.x, y: label.preferred.y + label.height / 2 },
+          end: { x: placed.left, y: (placed.top + placed.bottom) / 2 }, dashed: true, dimensionId: label.id,
+        });
+      }
+    }
+    setDimensionStrokes(previous => JSON.stringify(previous) === JSON.stringify(strokes) ? previous : strokes);
+    const conflicts = placements.flatMap(label => label.conflicts.map(conflict => `${label.id}: ${conflict}`));
+    if (modelPoints.some(point => !projectScreenPoint(point, painter.camera, width, height).visible)) conflicts.push("model crosses camera clipping plane");
+    setOverlayConstraint(conflicts.length ? `Limited overlay space — ${[...new Set(conflicts)].join("; ")}.` : "");
+    if (!details || !selectionAnchor) {
+      setSelectionOverlay(previous => previous === null ? previous : null);
+    } else {
+      const placement = placements.find(p => p.id === "selection")!;
+      const nextSelectionOverlay = {
+        left: placement.left, top: placement.top,
+        anchorLeft: selectionAnchor.x, anchorTop: selectionAnchor.y,
+        title: details.title, dimensions: details.dimensions, value: details.value,
+      };
+      setSelectionOverlay(previous => previous && selectionOverlaysEqual(previous, nextSelectionOverlay) ? previous : nextSelectionOverlay);
+    }
   };
   updateOverlaysRef.current.set(updateOverlays);
   const renderViewport = () => {
@@ -462,46 +425,52 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
   }, [selectionBoxSize.width, selectionBoxSize.height]);
 
   useEffect(() => {
-    if (previousSheetDetentRef.current === sheetDetent) return;
-    previousSheetDetentRef.current = sheetDetent;
-    let frames = 0;
-    let handle = 0;
-    const followSheetTransition = () => {
-      renderViewportRef.current.invoke();
-      frames += 1;
-      if (frames < 24) handle = requestAnimationFrame(followSheetTransition);
-    };
-    handle = requestAnimationFrame(followSheetTransition);
+    if (previousLayoutModeRef.current === layoutMode) return;
+    previousLayoutModeRef.current = layoutMode;
+    const handle = requestAnimationFrame(() => renderViewportRef.current.invoke());
     return () => cancelAnimationFrame(handle);
-  }, [sheetDetent]);
+  }, [layoutMode]);
+
+  // The collision solver uses actual DOM dimensions (including responsive font,
+  // padding and border), not character counts or assumed text sizes.
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    const measure = () => {
+      let changed = false;
+      for (const label of host.querySelectorAll<HTMLElement>("[data-overlay-label]")) {
+        const id = label.dataset.overlayLabel!;
+        const rect = label.getBoundingClientRect();
+        const previous = labelSizesRef.current.get(id);
+        if (previous?.width !== rect.width || previous?.height !== rect.height) {
+          labelSizesRef.current.set(id, { width: rect.width, height: rect.height });
+          changed = true;
+        }
+      }
+      if (changed) updateOverlaysRef.current.invoke();
+    };
+    const observer = new ResizeObserver(() => { measure(); updateOverlaysRef.current.invoke(); });
+    host.querySelectorAll<HTMLElement>("[data-overlay-label]").forEach(label => observer.observe(label));
+    // Changes to calc/toast/control bounds are higher priority obstacles.
+    document.querySelectorAll<HTMLElement>("[data-control], .viewer-next-calc-bubble, .viewer-next-calc-bar, .viewer-next-toast")
+      .forEach(element => observer.observe(element));
+    measure();
+    let active = true;
+    void document.fonts.ready.then(() => { if (active) measure(); });
+    return () => { active = false; observer.disconnect(); };
+  }, [overlays.map(label => `${label.id}:${label.text}`).join("|")]);
 
   const updateSelection = () => {
     const painter = painterRef.current;
     if (!painter) return;
-    while (painter.selectionGroup.children.length) {
-      const child = painter.selectionGroup.children.pop();
-      if (child) disposeObject(child);
-    }
+    clearRenderGroup(painter.selectionGroup);
     const selected = findSelectableElement(model, stateRef.current.selectedId);
     if (!selected) {
       updateOverlays();
       return;
     }
     const target = painter.interactiveMeshes.find(item => item.userData.elementId === selected.id);
-    if (target instanceof THREE.Mesh) {
-      const outline = new THREE.LineSegments(
-        new THREE.EdgesGeometry(target.geometry, 12),
-        new THREE.LineBasicMaterial({ color: "#0f6fff", transparent: true, opacity: 0.96 }),
-      );
-      outline.scale.setScalar(1.008);
-      painter.selectionGroup.add(outline);
-    } else if (target instanceof THREE.Line) {
-      const outline = new THREE.Line(
-        target.geometry.clone(),
-        new THREE.LineBasicMaterial({ color: "#0f6fff", linewidth: 3 }),
-      );
-      painter.selectionGroup.add(outline);
-    }
+    if (target instanceof THREE.Mesh || target instanceof THREE.Line) painter.selectionGroup.add(createSelectionVisual(target));
     updateOverlays();
   };
 
@@ -555,14 +524,15 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
     if (modelState === "notready") return;
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
     } catch {
       setWebglFailed(true);
       return;
     }
     setWebglFailed(false);
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color("#f7fafc");
+    scene.background = null;
+    renderer.setClearAlpha(0);
     const camera = new THREE.PerspectiveCamera(38, 1, 1, 1000000);
     camera.up.set(0, 0, 1);
     const bounds = model.bounds.overall;
@@ -597,30 +567,36 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
     controls.target.copy(centre);
     controls.update();
 
-    scene.add(new THREE.HemisphereLight("#ffffff", "#aab6c4", 1.9));
-    const key = new THREE.DirectionalLight("#ffffff", 2.2);
+    const hemisphere = new THREE.HemisphereLight(viewerTokens.rendererLight, viewerTokens.rendererGroundLight, viewerTokens.rendererHemisphereIntensity);
+    hemisphere.position.set(0, 0, 1);
+    scene.add(hemisphere);
+    const key = new THREE.DirectionalLight(viewerTokens.rendererLight, viewerTokens.rendererKeyIntensity);
     key.position.set(span, -span, span * 1.5);
     scene.add(key);
 
     const geometryGroup = new THREE.Group();
     const conditionsGroup = new THREE.Group();
     const measureGroup = new THREE.Group();
-    const permanentGroup = new THREE.Group();
     const selectionGroup = new THREE.Group();
     const interactiveMeshes: THREE.Object3D[] = [];
-    scene.add(geometryGroup, conditionsGroup, measureGroup, permanentGroup, selectionGroup);
+    const presentationOccluders: THREE.Object3D[] = [];
+    scene.add(geometryGroup, conditionsGroup, measureGroup, selectionGroup);
+    scene.add(createContactShadow(model.bounds.overall));
 
     for (const wall of model.walls) addPolygon(wall, geometryGroup, interactiveMeshes, true);
     for (const roof of model.roofFaces) addPolygon(roof, geometryGroup, interactiveMeshes, true);
     for (const opening of model.openings) addPolygon(opening, geometryGroup, interactiveMeshes, true);
     for (const attachment of model.attachments) addPolygon(attachment, geometryGroup, interactiveMeshes, true);
     for (const mass of model.massing) addPolygon(mass, geometryGroup, interactiveMeshes, false);
+    for (const closure of buildPresentationClosure(model)) {
+      presentationOccluders.push(addPolygon(closure, geometryGroup, [], false));
+    }
     for (const edge of model.edges) addEdge(edge, geometryGroup, interactiveMeshes);
     for (const condition of model.conditions) addPolygon(condition, conditionsGroup, [], false);
 
     const marker = new THREE.Mesh(
       new THREE.SphereGeometry(Math.max(span * 0.012, 50), 16, 12),
-      new THREE.MeshBasicMaterial({ color: "#2563eb" }),
+      new THREE.MeshBasicMaterial({ color: viewerTokens.accent }),
     );
     marker.visible = false;
     scene.add(marker);
@@ -633,7 +609,6 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
       interactiveMeshes,
       conditionsGroup,
       measureGroup,
-      permanentGroup,
       selectionGroup,
       marker,
       initialPosition: initialPosition.clone(),
@@ -691,7 +666,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
-    const opaqueMeshes = interactiveMeshes.filter(item => item instanceof THREE.Mesh);
+    const opaqueMeshes = [...interactiveMeshes.filter(item => item instanceof THREE.Mesh), ...presentationOccluders];
     const hitAt = (event: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
       const viewport = syncPainterViewport(state, host);
@@ -715,7 +690,10 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
         return (priority[a.object.userData.elementKind] ?? 9) -
           (priority[b.object.userData.elementKind] ?? 9);
       });
-      return hits[0] ?? null;
+      const hit = hits[0];
+      // Caps/seams block hidden source faces, but never become selectable or
+      // manufacture measurement/snap targets of their own.
+      return hit && isRayDistanceVisible(raycaster, presentationOccluders, hit.distance, 0.5) ? hit : null;
     };
     const isCandidateVisible = (candidate: Point3, projected: { x: number; y: number; visible?: boolean }) => {
       if (projected.visible === false) return false;
@@ -724,11 +702,10 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
       pointer.y = -(projected.y / viewport.height) * 2 + 1;
       raycaster.setFromCamera(pointer, camera);
       const candidateDistance = camera.position.distanceTo(toVector(candidate));
-      const nearest = raycaster.intersectObjects(opaqueMeshes, false)[0];
       // A few millimetres absorbs triangle-boundary rounding, but unlike NDC
       // depth it remains meaningful at this camera's 1e6 far plane.
       const epsilonMm = Math.max(8, candidateDistance * 1e-6);
-      return !nearest || nearest.distance >= candidateDistance - epsilonMm;
+      return isRayDistanceVisible(raycaster, opaqueMeshes, candidateDistance, epsilonMm);
     };
     const handleMove = (event: PointerEvent) => {
       if (!stateRef.current.measureArmed) {
@@ -835,7 +812,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
       canvas.removeEventListener("pointerup", tapGate.up, true);
       canvas.removeEventListener("pointercancel", tapGate.cancel, true);
       controls.dispose();
-      disposeObject(scene);
+      disposeRenderObject(scene);
       renderer.dispose();
       painterRef.current = null;
     };
@@ -848,15 +825,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
     if (!painter) return;
     try {
       painter.conditionsGroup.visible = showConditions;
-      updateLineGroup(
-        painter.permanentGroup,
-        [
-          ...model.permanentDimensions.width.segments,
-          ...model.permanentDimensions.ridge.segments,
-          ...model.permanentDimensions.eaveHeight.segments,
-        ],
-      );
-      updateLineGroup(painter.measureGroup, measureLines, "#991b1b");
+      updateLineGroup(painter.measureGroup, measureLines, viewerTokens.measure);
       painter.marker.visible = false;
       updateSelection();
       painter.renderer.render(painter.scene, painter.camera);
@@ -866,10 +835,32 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
     }
   }, [model, selectedId, measureArmed, measureLines, showConditions]);
 
+  useEffect(() => {
+    const host = hostRef.current;
+    const stage = host?.closest(".viewer-next-stage");
+    if (!host || !stage) return;
+    let frame = 0;
+    const observer = new MutationObserver(records => {
+      if (records.every(record => record.target instanceof Node && host.contains(record.target))) return;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => updateOverlaysRef.current.invoke());
+    });
+    observer.observe(stage, { subtree: true, childList: true, attributes: true, attributeFilter: ["class", "style", "hidden"] });
+    return () => { observer.disconnect(); cancelAnimationFrame(frame); };
+  }, []);
+
+  const selectionConnectorEnd = selectionOverlay ? {
+    left: Math.max(selectionOverlay.left, Math.min(selectionOverlay.left + selectionBoxSize.width, selectionOverlay.anchorLeft)),
+    top: Math.max(selectionOverlay.top, Math.min(selectionOverlay.top + selectionBoxSize.height, selectionOverlay.anchorTop)),
+  } : null;
+
   return (
     <div
       ref={hostRef}
       className="viewer-next-viewport relative min-h-0 min-w-0 flex-1 overflow-hidden"
+      data-testid="viewer-viewport"
+      data-overlay-status={overlayConstraint ? "constrained" : "clear"}
+      data-overlay-constraint={overlayConstraint || undefined}
       data-webgl-state={modelState === "notready" ? "notready" : webglFailed ? "unavailable" : "ready"}
     >
       {modelState !== "notready" && (
@@ -885,30 +876,50 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
         </div>
       )}
       {modelState !== "notready" && (
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        {overlays.map((overlay, index) => (
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <svg className="absolute inset-0 h-full w-full" data-testid="dimension-rails" aria-hidden="true">
+          {dimensionStrokes.map((stroke, index) => (
+            <line key={index} data-testid={`dimension-stroke-${index}`} data-extension={stroke.dashed}
+              data-dimension-id={stroke.dimensionId}
+              x1={stroke.start.x} y1={stroke.start.y} x2={stroke.end.x} y2={stroke.end.y}
+              stroke={viewerTokens.dimensionLine} strokeWidth={1}
+              strokeDasharray={stroke.dashed ? "4 4" : undefined} />
+          ))}
+        </svg>
+        {overlays.map(overlay => (
           <span
-            key={`${overlay.kind}-${index}`}
+            key={overlay.id}
+            data-testid={`label-${overlay.id}`}
+            data-overlay-label={overlay.id}
+            title={overlay.id === "ridge" ? dict.viewerNext.labels.ridge : overlay.id === "eave" ? dict.viewerNext.labels.eaveHeight : undefined}
+            aria-label={overlay.id === "ridge" ? `${dict.viewerNext.labels.ridge}: ${overlay.text}` : overlay.id === "eave" ? `${dict.viewerNext.labels.eaveHeight}: ${overlay.text}` : overlay.text}
             className={overlay.kind === "measure" ? "viewer-next-dimension-label viewer-next-measure-label" : "viewer-next-dimension-label"}
             style={{ left: overlay.left, top: overlay.top }}
           >
             {overlay.text}
           </span>
         ))}
-        {selectionOverlay && (
+        {selectionOverlay && selectionConnectorEnd && (
           <>
             <span
               className="viewer-next-selection-connector"
+              data-testid="selection-connector"
               style={{
                 left: selectionOverlay.anchorLeft,
                 top: selectionOverlay.anchorTop,
-                width: Math.hypot(selectionOverlay.left - selectionOverlay.anchorLeft, selectionOverlay.top - selectionOverlay.anchorTop),
-                transform: `rotate(${Math.atan2(selectionOverlay.top - selectionOverlay.anchorTop, selectionOverlay.left - selectionOverlay.anchorLeft)}rad)`,
+                width: Math.hypot(selectionConnectorEnd.left - selectionOverlay.anchorLeft, selectionConnectorEnd.top - selectionOverlay.anchorTop),
+                transform: `rotate(${Math.atan2(selectionConnectorEnd.top - selectionOverlay.anchorTop, selectionConnectorEnd.left - selectionOverlay.anchorLeft)}rad)`,
               }}
             />
+            <span className="viewer-next-selection-dot" data-testid="selection-anchor-dot"
+              style={{
+                position: "absolute", left: selectionOverlay.anchorLeft - 3, top: selectionOverlay.anchorTop - 3,
+                width: 6, height: 6, borderRadius: "50%", background: viewerTokens.accent,
+              }} />
             <div
               ref={selectionBoxRef}
               className="viewer-next-selection-box"
+              data-testid="selection-label"
               style={{ left: selectionOverlay.left, top: selectionOverlay.top }}
             >
               <div className="viewer-next-selection-title">{selectionOverlay.title}</div>
@@ -917,6 +928,13 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
             </div>
           </>
         )}
+        </div>
+      )}
+      {overlayConstraint && !webglFailed && (
+        <div className="viewer-next-overlay-constraint pointer-events-none absolute bottom-1 left-1 max-w-[calc(100%-8px)] rounded px-2 py-1 text-xs"
+          style={{ color: viewerTokens.warning, background: viewerTokens.surface }}
+          data-testid="overlay-constraint" role="status">
+          {dict.viewerNext.overlayConstraintMessage}
         </div>
       )}
     </div>

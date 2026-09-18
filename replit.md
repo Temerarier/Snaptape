@@ -119,6 +119,9 @@ einem späteren Schritt vorbereiten, kein Gerüst, keine leeren Dateien,
 keine „schon mal"-Komponenten. Was gerade nicht dran ist, bleibt
 Platzhalter.
 
-Panel-Inhalt ist auf allen Bildschirmgrößen gleich. Es gibt drei
-Referenz-Artboards (Desktop, Tablet hoch, Tablet quer) und bewusst
-keines fürs Handy: das Handy ist das Hochformat-Layout, nur schmaler.
+Panel-Inhalt ist auf allen Bildschirmgrößen gleich. Die aktuelle
+Viewer-Polish-Vorgabe vom 18.09.2026 ersetzt die frühere Übernahme der
+Tablet-Bedienelemente aufs Handy: unter 768px gelten runde Modell-Controls
+und die unten angedockte Rechenleiste. Hochformat hat genau zwei Zustände
+(geteilte Ansicht / ganzes Modell), keine ziehbare Panel-Höhe.
+Token-Vertrag und Herkunftsnachweise: `docs/design/viewer-v4-tokens.md`.

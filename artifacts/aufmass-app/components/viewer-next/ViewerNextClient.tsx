@@ -2,6 +2,7 @@
 
 import { Component, useEffect, useMemo, useRef, useState } from "react";
 import type {
+  CSSProperties,
   ErrorInfo,
   MouseEvent as ReactMouseEvent,
   ReactNode,
@@ -33,7 +34,7 @@ import {
 import { ViewerViewport, type ViewerViewportHandle } from "./ViewerViewport";
 import { presentViewerWarnings } from "./warningPresentation";
 import { CalcBubble } from "./CalcBubble";
-import { nearestPanelDetent } from "./viewportInput";
+import { viewerTokenStyles } from "@/lib/viewer-next/tokens";
 
 function emptyViewerModel(
   note: string,
@@ -193,17 +194,14 @@ export function ViewerNextClient({
   const [filter, setFilter] = useState<TradeFilter>("all");
   const [openCards, setOpenCards] = useState<Set<string>>(new Set());
   const [openRows, setOpenRows] = useState<Set<string>>(new Set());
-  const [statusOpen, setStatusOpen] = useState(false);
-  const [sheetDetent, setSheetDetent] = useState<"peek" | "half" | "full">(
-    "half",
-  );
+  const [layoutMode, setLayoutMode] = useState<"split" | "model">("split");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showConditions, setShowConditions] = useState(false);
   const [measureArmed, setMeasureArmed] = useState(false);
   const [measureStart, setMeasureStart] = useState<Point3 | null>(null);
   const [measureLines, setMeasureLines] = useState<MeasureLine[]>([]);
   const [snapPreview, setSnapPreview] = useState<SnapResult | null>(null);
-  const handleDragged = useRef(false);
+  const [gestureHintVisible, setGestureHintVisible] = useState(true);
   const [tallyItems, setTallyItems] = useState<TallyItem[]>([]);
   const [copyNotice, setCopyNotice] = useState<string | null>(null);
   const viewportRef = useRef<ViewerViewportHandle>(null);
@@ -229,15 +227,20 @@ export function ViewerNextClient({
     });
   };
 
-  const cycleSheet = () => {
-    setSheetDetent((prev) =>
-      prev === "peek" ? "half" : prev === "half" ? "full" : "peek",
-    );
-  };
-
   useEffect(() => {
     setOpenCards(new Set(cards.map((c) => c.id)));
   }, [cards]);
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setGestureHintVisible(false), 4500);
+    return () => window.clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    if (!copyNotice) return;
+    const timeout = window.setTimeout(() => setCopyNotice(null), 2600);
+    return () => window.clearTimeout(timeout);
+  }, [copyNotice]);
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -286,17 +289,6 @@ export function ViewerNextClient({
   const selectElement = (id: string | null, focus = false) => {
     setSelectedId(id);
     if (!id || !focus) return;
-    // Reveal the portrait model section before focusing. Its contents can scroll
-    // on short devices without altering the reference's three sheet positions.
-    if (window.matchMedia("(max-width: 1279px) and (orientation: portrait), (max-width: 767px)").matches) {
-      setSheetDetent("peek");
-      requestAnimationFrame(() => {
-        const section = document.querySelector<HTMLElement>(".viewer-next-model-section");
-        if (section) section.scrollTop = section.scrollHeight - section.clientHeight;
-        viewportRef.current?.focusElement(id);
-      });
-      return;
-    }
     viewportRef.current?.focusElement(id);
   };
 
@@ -386,7 +378,7 @@ export function ViewerNextClient({
         data-control="measure-clear"
         aria-label={dict.labels.clear}
         onClick={clearMeasureLines}
-        className="flex min-h-11 items-center rounded-full px-3 text-xs font-semibold text-fehler hover:bg-red-50"
+        className="viewer-next-clear flex min-h-11 items-center rounded-full px-3 text-xs font-semibold"
       >
         {dict.labels.clear}
       </button>
@@ -395,17 +387,18 @@ export function ViewerNextClient({
   return (
     <div
       className="viewer-next-shell h-[100dvh] w-full overflow-hidden bg-hintergrund font-sans text-schrift"
-      data-panel-detent={sheetDetent}
+      data-layout-mode={layoutMode}
+      style={viewerTokenStyles as CSSProperties}
     >
-      <div className="viewer-next-model-section relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-[#FAFBFC]">
-        <div className="flex min-h-[56px] flex-none flex-wrap items-center gap-2 border-b border-linie bg-flaeche px-4 py-2">
+      <div className="viewer-next-model-section relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+        <div className="viewer-next-header flex min-h-[56px] flex-none items-center gap-2 border-b border-linie bg-flaeche px-4 py-2">
           <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
             <div className="truncate text-sm font-semibold">{projectName}</div>
             <div className="font-mono text-xs text-schrift-sekundaer">
               {dict.labels.modelReady}
             </div>
           </div>
-          <Button variante="sekundaer" groesse="klein" onClick={() => setCopyNotice(dict.labels.photoCaptureUnavailable)}>
+          <Button className="viewer-next-add-photo whitespace-nowrap" variante="sekundaer" groesse="klein" onClick={() => setCopyNotice(dict.labels.photoCaptureUnavailable)}>
             {"+ "}
             {dict.labels.addPhoto}
           </Button>
@@ -413,7 +406,7 @@ export function ViewerNextClient({
             variante="sekundaer"
             groesse="klein"
             data-control="reset"
-            className="min-h-11 text-akzent"
+            className="viewer-next-header-control min-h-11 text-akzent"
             onClick={() => {
               viewportRef.current?.resetView();
               selectElement(null);
@@ -426,7 +419,7 @@ export function ViewerNextClient({
             data-control="conditions"
             aria-pressed={showConditions}
             onClick={() => setShowConditions((value) => !value)}
-            className="flex min-h-11 cursor-pointer select-none items-center gap-2 whitespace-nowrap rounded-lg px-2 text-left hover:bg-slate-50"
+            className="viewer-next-header-control viewer-next-hover flex min-h-11 cursor-pointer select-none items-center gap-2 whitespace-nowrap rounded-lg px-2 text-left"
           >
             <span className="text-xs font-medium text-schrift-sekundaer">
               {dict.labels.showConditions}
@@ -439,7 +432,7 @@ export function ViewerNextClient({
             >
               <span
                 className={cn(
-                  "h-4 w-4 rounded-full bg-white shadow transition-transform",
+                  "viewer-next-toggle-knob h-4 w-4 rounded-full shadow transition-transform",
                   showConditions && "translate-x-4",
                 )}
               />
@@ -447,7 +440,11 @@ export function ViewerNextClient({
           </button>
         </div>
 
-        <div className="viewer-next-stage relative flex min-h-0 flex-1">
+        <div
+          className="viewer-next-stage relative flex min-h-0 flex-1"
+          onPointerUp={() => setGestureHintVisible(false)}
+          onWheel={() => setGestureHintVisible(false)}
+        >
           <ViewportErrorBoundary message={viewportMessage}>
             <ViewerViewport
               ref={viewportRef}
@@ -460,14 +457,14 @@ export function ViewerNextClient({
               onSnapPreview={setSnapPreview}
               showConditions={showConditions}
               webglMessage={viewportMessage}
-              sheetDetent={sheetDetent}
+              layoutMode={layoutMode}
               modelState={modelState}
             />
           </ViewportErrorBoundary>
 
           <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center">
             {snapPreview && (
-              <span className="mt-3 rounded-full border border-akzent bg-white px-3 py-1 font-mono text-xs font-semibold text-akzent shadow-karte">
+              <span className="viewer-next-snap-label mt-3 rounded-full border border-akzent px-3 py-1 font-mono text-xs font-semibold text-akzent shadow-karte">
                 {snapPreview.targetKind === "corner"
                   ? "corner snap"
                   : "edge snap"}
@@ -488,21 +485,74 @@ export function ViewerNextClient({
           {copyNotice && (
             <div
               role="status"
-              className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full bg-[#16233A] px-4 py-2 text-xs font-semibold text-white shadow-karte"
+              className="viewer-next-toast pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full px-4 py-2 text-xs font-semibold shadow-karte"
             >
               {copyNotice}
             </div>
           )}
 
-          <div className="viewer-next-measure-portrait absolute right-4 top-4 z-10 flex items-center gap-1 rounded-full border border-linie bg-flaeche p-1 shadow-karte">
+          <div className="viewer-next-mobile-controls absolute right-3 top-3 z-10 flex flex-col gap-2">
+            <button
+              type="button"
+              data-control="measure"
+              aria-pressed={measureArmed}
+              aria-label={dict.labels.measureLine}
+              title={dict.labels.measureLine}
+              onClick={() => setMeasureArmed((value) => !value)}
+              className={cn(
+                "viewer-next-round-control",
+                measureArmed && "is-active",
+              )}
+            >
+              <RulerIcon />
+            </button>
+            <button
+              type="button"
+              data-control="conditions-mobile"
+              aria-label={dict.labels.showConditions}
+              title={dict.labels.showConditions}
+              aria-pressed={showConditions}
+              onClick={() => setShowConditions((value) => !value)}
+              className={cn("viewer-next-round-control", showConditions && "is-active")}
+            >
+              <ConditionsIcon />
+            </button>
+            <button
+              type="button"
+              data-control="reset-mobile"
+              aria-label={dict.labels.resetView}
+              title={dict.labels.resetView}
+              onClick={() => {
+                viewportRef.current?.resetView();
+                selectElement(null);
+              }}
+              className="viewer-next-round-control"
+            >
+              <ResetIcon />
+            </button>
+            {measureLines.length > 0 && (
+              <button
+                type="button"
+                data-control="measure-clear-mobile"
+                aria-label={dict.labels.clear}
+                title={dict.labels.clear}
+                onClick={clearMeasureLines}
+                className="viewer-next-round-control viewer-next-clear"
+              >
+                ×
+              </button>
+            )}
+          </div>
+
+          <div className="viewer-next-measure-wide absolute right-4 top-4 z-10 hidden items-center gap-1 rounded-full border border-linie bg-flaeche p-1 shadow-karte">
             <button
               type="button"
               data-control="measure"
               aria-pressed={measureArmed}
               onClick={() => setMeasureArmed((value) => !value)}
               className={cn(
-                "min-h-11 rounded-full px-3 text-xs font-semibold text-schrift-sekundaer transition-colors hover:bg-slate-100",
-                measureArmed && "bg-akzent text-white",
+                "viewer-next-hover min-h-11 rounded-full px-3 text-xs font-semibold text-schrift-sekundaer transition-colors",
+                measureArmed && "is-active",
               )}
             >
               {dict.labels.measureLine}
@@ -510,96 +560,34 @@ export function ViewerNextClient({
             {clearButton}
           </div>
 
-          <div className="viewer-next-measure-wide absolute bottom-4 left-1/2 z-10 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-linie bg-flaeche p-1 shadow-karte">
-            <button
-              type="button"
-              data-control="measure"
-              aria-pressed={measureArmed}
-              onClick={() => setMeasureArmed((value) => !value)}
-              className={cn(
-                "min-h-11 rounded-full px-3 text-xs font-semibold text-schrift-sekundaer transition-colors hover:bg-slate-100",
-                measureArmed && "bg-akzent text-white",
-              )}
-            >
-              {dict.labels.measureLine}
-            </button>
-            {clearButton}
-          </div>
-
-          <div className="viewer-next-gesture pointer-events-none absolute left-4 top-4 z-10 rounded-lg border-2 border-linie bg-white/95 px-2.5 py-1.5 font-mono text-xs font-medium text-schrift">
-            {dict.labels.dragOrbit}
-          </div>
+          {gestureHintVisible && (
+            <div className="viewer-next-gesture pointer-events-none absolute left-3 top-3 z-10 rounded-lg border-2 border-linie px-2.5 py-1.5 font-mono text-xs font-medium text-schrift">
+              {dict.labels.dragOrbit}
+            </div>
+          )}
         </div>
       </div>
+
+      <button
+        type="button"
+        data-testid="button-toggle-viewer-layout"
+        className="viewer-next-layout-toggle z-30 min-h-11 w-full border-y border-linie text-xs font-semibold"
+        aria-expanded={layoutMode === "split"}
+        onClick={() => setLayoutMode((mode) => mode === "split" ? "model" : "split")}
+      >
+        {layoutMode === "split"
+          ? dict.labels.showFullModel
+          : dict.labels.showMeasurements}
+      </button>
 
       <div
         className="viewer-next-panel z-20 flex min-h-0 flex-col bg-hintergrund border-t border-linie"
       >
-        <button
-          type="button"
-          className="viewer-next-panel-handle flex min-h-11 w-full flex-none touch-none items-center justify-center"
-          aria-label={dict.labels.changePanelHeight}
-          onClick={() => {
-            if (!handleDragged.current) cycleSheet();
-            handleDragged.current = false;
-          }}
-          onPointerDown={event => {
-            handleDragged.current = false;
-            event.currentTarget.dataset.startY = String(event.clientY);
-            event.currentTarget.dataset.startTop = String(event.currentTarget.closest(".viewer-next-panel")!.getBoundingClientRect().top);
-            event.currentTarget.setPointerCapture(event.pointerId);
-          }}
-          onPointerUp={event => {
-            const delta = event.clientY - Number(event.currentTarget.dataset.startY);
-            if (Math.abs(delta) < 24) return;
-            handleDragged.current = true;
-            event.preventDefault();
-            const shell = event.currentTarget.closest(".viewer-next-shell")!.getBoundingClientRect();
-            const desiredTop = Number(event.currentTarget.dataset.startTop) + delta - shell.top;
-            setSheetDetent(nearestPanelDetent(desiredTop / shell.height));
-          }}
-        >
-          <span className="h-1 w-10 rounded-full bg-schrift-sekundaer" />
-        </button>
         <div className="viewer-next-panel-heading flex flex-none flex-col gap-2.5 border-b border-linie px-4 py-3.5 pb-2.5">
           <div className="flex items-center gap-2">
             <div className="text-base font-bold">{dict.measurements}</div>
           </div>
-          <button
-            type="button"
-            aria-expanded={statusOpen}
-            aria-controls="viewer-quality-status"
-            onClick={() => setStatusOpen((open) => !open)}
-            className="flex min-h-11 items-center justify-between rounded-lg text-left text-xs text-schrift-sekundaer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-akzent"
-          >
-            <span>
-              {references.length} {dict.references.toLowerCase()} ·{" "}
-              {warnings.length} {dict.warnings.toLowerCase()}
-            </span>
-            <span
-              className={cn("transition-transform", statusOpen && "rotate-180")}
-            >
-              ▾
-            </span>
-          </button>
-          {statusOpen && (
-            <div
-              id="viewer-quality-status"
-              className="max-h-36 overflow-y-auto rounded-lg border border-linie bg-flaeche p-3 text-xs text-schrift-sekundaer"
-            >
-              <div>
-                {warnings.length > 0
-                  ? dict.labels.warningsRequireReview
-                  : dict.labels.noWarnings}
-              </div>
-              <div>
-                {references.length > 0
-                  ? dict.labels.referencesUsed
-                  : dict.labels.noReferences}
-              </div>
-            </div>
-          )}
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2.5">
             {(["all", "roofing", "siding", "painting"] as TradeFilter[]).map(
               (f) => (
                 <button
@@ -608,8 +596,8 @@ export function ViewerNextClient({
                   className={cn(
                     "min-h-11 rounded-full px-3 py-1.5 text-xs font-semibold capitalize transition-colors",
                     filter === f
-                      ? "bg-schrift text-white"
-                      : "border border-linie bg-flaeche text-schrift-sekundaer hover:bg-slate-50",
+                      ? "viewer-next-filter-active"
+                      : "viewer-next-hover border border-linie bg-flaeche text-schrift-sekundaer",
                   )}
                 >
                   {dict.filters[f]}
@@ -638,7 +626,7 @@ export function ViewerNextClient({
                   aria-expanded={isExpanded}
                   aria-controls={`card-${card.id}`}
                   onClick={() => toggleCard(card.id)}
-                  className="flex w-full cursor-pointer select-none items-center gap-3 px-3.5 py-3 text-left hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-akzent focus-visible:ring-inset"
+                  className="viewer-next-hover flex w-full cursor-pointer select-none items-center gap-3 px-3.5 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-akzent focus-visible:ring-inset"
                 >
                   <div className="flex min-w-0 flex-1 flex-col gap-1">
                     <div className="flex flex-wrap items-center gap-2">
@@ -670,7 +658,7 @@ export function ViewerNextClient({
                       </div>
                     )}
                     {card.sourceBadge && (
-                      <span className="w-fit rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-schrift-sekundaer">
+                      <span className="viewer-next-muted-surface w-fit rounded-full px-2 py-0.5 text-xs font-medium text-schrift-sekundaer">
                         {card.sourceBadge}
                       </span>
                     )}
@@ -714,7 +702,7 @@ export function ViewerNextClient({
 
           <div className="mt-4 flex flex-col gap-4 text-xs text-schrift-sekundaer">
             {warnings.length > 0 && (
-              <div className="flex flex-col gap-2 rounded-lg bg-orange-50 p-3 text-orange-900">
+              <div className="viewer-next-quality-warning flex flex-col gap-2 rounded-lg p-3">
                 <div className="font-semibold">{dict.warnings}</div>
                 <ul className="list-inside list-disc pl-2">
                   {warnings.map((w: string, i: number) => (
@@ -745,6 +733,32 @@ export function ViewerNextClient({
         </div>
       </div>
     </div>
+  );
+}
+
+function RulerIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="m5 16 11-11 3 3L8 19H5v-3Z" />
+      <path d="m13.5 7.5 3 3M10.5 10.5l2 2M7.5 13.5l3 3" />
+    </svg>
+  );
+}
+
+function ConditionsIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M12 3 3.5 19h17L12 3Z" />
+      <path d="M12 9v4.5M12 17h.01" />
+    </svg>
+  );
+}
+
+function ResetIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M5 8V4m0 0h4M5 4l3 3a7 7 0 1 1-2 7" />
+    </svg>
   );
 }
 
@@ -799,7 +813,7 @@ function RowItem({
         </span>
       )}
       {row.cta && (
-        <span className="flex min-h-11 items-center whitespace-nowrap rounded-lg bg-blue-50 px-2.5 py-1.5 text-xs font-semibold text-akzent">
+        <span className="viewer-next-accent-surface flex min-h-11 items-center whitespace-nowrap rounded-lg px-2.5 py-1.5 text-xs font-semibold text-akzent">
           {row.cta}
         </span>
       )}
@@ -842,7 +856,7 @@ function RowItem({
         data-viewer-row-id={row.id}
         className={cn(
           "group flex min-h-11 flex-wrap items-center justify-between",
-          rowIsSelected && "bg-blue-50 ring-1 ring-inset ring-akzent/30",
+          rowIsSelected && "viewer-next-selected-row ring-1 ring-inset ring-akzent/30",
         )}
       >
         {isExpandable ? (
@@ -873,7 +887,7 @@ function RowItem({
               event.stopPropagation();
               void onCopy(row);
             }}
-            className="flex h-11 w-11 items-center justify-center rounded text-[14px] text-schrift-sekundaer enabled:hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+            className="viewer-next-icon-button flex h-11 w-11 items-center justify-center rounded text-[14px] text-schrift-sekundaer disabled:cursor-not-allowed disabled:opacity-40"
             title={dict.labels.copy}
           >
             ⧉
@@ -888,7 +902,7 @@ function RowItem({
                 event.stopPropagation();
                 onTally(row);
               }}
-              className="flex h-11 w-11 items-center justify-center rounded text-[14px] text-schrift-sekundaer enabled:hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+              className="viewer-next-icon-button flex h-11 w-11 items-center justify-center rounded text-[14px] text-schrift-sekundaer disabled:cursor-not-allowed disabled:opacity-40"
               title={dict.labels.tally}
             >
               Σ
@@ -900,7 +914,7 @@ function RowItem({
       {isOpen && row.calcLines && row.calcLines.length > 0 && (
         <div
           id={`row-${row.id}`}
-          className="mb-2 ml-7 mr-3.5 mt-0.5 flex flex-col gap-0.5 rounded-[10px] border border-linie bg-slate-50 p-2"
+          className="viewer-next-muted-surface mb-2 ml-7 mr-3.5 mt-0.5 flex flex-col gap-0.5 rounded-[10px] border border-linie p-2"
         >
           {row.calcLines.map((line, i) => (
             <div key={i} className="flex min-h-[34px] items-center gap-3">
@@ -918,7 +932,7 @@ function RowItem({
       {isOpen && row.subRows && row.subRows.length > 0 && (
         <div
           id={`row-${row.id}`}
-          className="border-y border-linie bg-slate-50 py-1"
+          className="viewer-next-muted-surface border-y border-linie py-1"
         >
           {row.subRows.map((sr) => (
             <RowItem

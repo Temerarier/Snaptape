@@ -57,7 +57,7 @@
       "passed": true
     },
     {
-      "name": "desktop: bounded tally does not cover controls or model",
+      "name": "desktop: tally presentation matches the responsive contract",
       "passed": true
     },
     {
@@ -65,7 +65,7 @@
       "passed": true
     },
     {
-      "name": "tablet-landscape: bounded tally does not cover controls or model",
+      "name": "tablet-landscape: tally presentation matches the responsive contract",
       "passed": true
     },
     {
@@ -73,7 +73,7 @@
       "passed": true
     },
     {
-      "name": "tablet-portrait: bounded tally does not cover controls or model",
+      "name": "tablet-portrait: tally presentation matches the responsive contract",
       "passed": true
     },
     {
@@ -81,27 +81,79 @@
       "passed": true
     },
     {
-      "name": "phone: bounded tally does not cover controls or model",
+      "name": "phone: tally presentation matches the responsive contract",
       "passed": true
     },
     {
-      "name": "narrow-phone: no overflow, readable type, 44px controls",
+      "name": "short-phone: no overflow, readable type, 44px controls",
       "passed": true
     },
     {
-      "name": "narrow-phone: bounded tally does not cover controls or model",
+      "name": "short-phone: tally presentation matches the responsive contract",
       "passed": true
     },
     {
-      "name": "390x844: active-calc detent taps, drags, selection and scroll area",
+      "name": "phone-boundary: no overflow, readable type, 44px controls",
       "passed": true
     },
     {
-      "name": "320x640: active-calc detent taps, drags, selection and scroll area",
+      "name": "phone-boundary: tally presentation matches the responsive contract",
       "passed": true
     },
     {
-      "name": "320x568: active-calc detent taps, drags, selection and scroll area",
+      "name": "wide-landscape-boundary: no overflow, readable type, 44px controls",
+      "passed": true
+    },
+    {
+      "name": "wide-landscape-boundary: tally presentation matches the responsive contract",
+      "passed": true
+    },
+    {
+      "name": "desktop-boundary: no overflow, readable type, 44px controls",
+      "passed": true
+    },
+    {
+      "name": "desktop-boundary: tally presentation matches the responsive contract",
+      "passed": true
+    },
+    {
+      "name": "narrow-landscape: no overflow, readable type, 44px controls",
+      "passed": true
+    },
+    {
+      "name": "narrow-landscape: all header controls remain visible and operable",
+      "passed": true
+    },
+    {
+      "name": "narrow-landscape: tally presentation matches the responsive contract",
+      "passed": true
+    },
+    {
+      "name": "compact-landscape: no overflow, readable type, 44px controls",
+      "passed": true
+    },
+    {
+      "name": "compact-landscape: all header controls remain visible and operable",
+      "passed": true
+    },
+    {
+      "name": "compact-landscape: tally presentation matches the responsive contract",
+      "passed": true
+    },
+    {
+      "name": "390x844: fixed split and full-model states",
+      "passed": true
+    },
+    {
+      "name": "375x667: fixed split and full-model states",
+      "passed": true
+    },
+    {
+      "name": "767x900: fixed split and full-model states",
+      "passed": true
+    },
+    {
+      "name": "768x1024: fixed split and full-model states",
       "passed": true
     },
     {
@@ -132,42 +184,42 @@
     },
     {
       "name": "tablet-landscape",
-      "width": 1190,
-      "height": 830,
-      "scrollWidth": 1190,
+      "width": 1024,
+      "height": 768,
+      "scrollWidth": 1024,
       "smallText": [],
       "smallControls": [],
       "panel": {
-        "x": 710,
+        "x": 544,
         "y": 0,
         "width": 480,
-        "height": 830
+        "height": 768
       },
       "viewport": {
         "x": 0,
         "y": 61,
-        "width": 710,
-        "height": 769
+        "width": 544,
+        "height": 707
       }
     },
     {
       "name": "tablet-portrait",
-      "width": 830,
-      "height": 1190,
-      "scrollWidth": 830,
+      "width": 768,
+      "height": 1024,
+      "scrollWidth": 768,
       "smallText": [],
       "smallControls": [],
       "panel": {
         "x": 0,
-        "y": 499.796875,
-        "width": 830,
-        "height": 690.203125
+        "y": 534,
+        "width": 768,
+        "height": 490
       },
       "viewport": {
         "x": 0,
-        "y": 141,
-        "width": 830,
-        "height": 358.796875
+        "y": 61,
+        "width": 768,
+        "height": 429
       }
     },
     {
@@ -179,35 +231,135 @@
       "smallControls": [],
       "panel": {
         "x": 0,
-        "y": 354.46875,
+        "y": 444,
         "width": 390,
-        "height": 489.53125
+        "height": 400
       },
       "viewport": {
         "x": 0,
-        "y": 209,
+        "y": 61,
         "width": 390,
-        "height": 145.46875
+        "height": 339
       }
     },
     {
-      "name": "narrow-phone",
-      "width": 320,
-      "height": 740,
-      "scrollWidth": 320,
+      "name": "short-phone",
+      "width": 375,
+      "height": 667,
+      "scrollWidth": 375,
       "smallText": [],
       "smallControls": [],
       "panel": {
         "x": 0,
-        "y": 310.796875,
-        "width": 320,
-        "height": 429.203125
+        "y": 365,
+        "width": 375,
+        "height": 302
       },
       "viewport": {
         "x": 0,
-        "y": 217,
-        "width": 305,
-        "height": 144
+        "y": 61,
+        "width": 375,
+        "height": 260
+      }
+    },
+    {
+      "name": "phone-boundary",
+      "width": 767,
+      "height": 900,
+      "scrollWidth": 767,
+      "smallText": [],
+      "smallControls": [],
+      "panel": {
+        "x": 0,
+        "y": 472,
+        "width": 767,
+        "height": 428
+      },
+      "viewport": {
+        "x": 0,
+        "y": 61,
+        "width": 767,
+        "height": 367
+      }
+    },
+    {
+      "name": "wide-landscape-boundary",
+      "width": 1279,
+      "height": 900,
+      "scrollWidth": 1279,
+      "smallText": [],
+      "smallControls": [],
+      "panel": {
+        "x": 799,
+        "y": 0,
+        "width": 480,
+        "height": 900
+      },
+      "viewport": {
+        "x": 0,
+        "y": 61,
+        "width": 799,
+        "height": 839
+      }
+    },
+    {
+      "name": "desktop-boundary",
+      "width": 1280,
+      "height": 900,
+      "scrollWidth": 1280,
+      "smallText": [],
+      "smallControls": [],
+      "panel": {
+        "x": 800,
+        "y": 0,
+        "width": 480,
+        "height": 900
+      },
+      "viewport": {
+        "x": 0,
+        "y": 61,
+        "width": 800,
+        "height": 839
+      }
+    },
+    {
+      "name": "narrow-landscape",
+      "width": 768,
+      "height": 600,
+      "scrollWidth": 768,
+      "smallText": [],
+      "smallControls": [],
+      "panel": {
+        "x": 288,
+        "y": 0,
+        "width": 480,
+        "height": 600
+      },
+      "viewport": {
+        "x": 0,
+        "y": 157,
+        "width": 288,
+        "height": 443
+      }
+    },
+    {
+      "name": "compact-landscape",
+      "width": 840,
+      "height": 600,
+      "scrollWidth": 840,
+      "smallText": [],
+      "smallControls": [],
+      "panel": {
+        "x": 360,
+        "y": 0,
+        "width": 480,
+        "height": 600
+      },
+      "viewport": {
+        "x": 0,
+        "y": 157,
+        "width": 360,
+        "height": 443
       }
     }
   ]

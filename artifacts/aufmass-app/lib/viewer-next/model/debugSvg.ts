@@ -1,9 +1,10 @@
 import type { ModelEdge, ModelOpening, ModelPolygon, ModelRoofFace, ModelWall, Point3, ViewerModel } from "./types";
+import { viewerTokens } from "../tokens";
 
 const SVG_WIDTH = 900;
 const SVG_HEIGHT = 560;
 const MARGIN = 48;
-const NEUTRAL_STROKE = "#4B5563";
+const NEUTRAL_STROKE = viewerTokens.modelOutline;
 
 interface ProjectedPoint {
   readonly x: number;
@@ -108,7 +109,7 @@ function shapeLine(
       ? polygon.color.hex
       : "none";
   const opacity = shape.type === "opening" || shape.type === "condition" ? "0.65" : "1";
-  const stroke = shape.type === "opening" ? "#111827" : polygon.color.hex || NEUTRAL_STROKE;
+  const stroke = shape.type === "opening" ? viewerTokens.textPrimary : polygon.color.hex || NEUTRAL_STROKE;
   return `    <polygon id="${escapeXml(shape.id)}" data-model-id="${escapeXml(polygon.id)}" data-parent-face-id="${escapeXml("parentFaceId" in polygon && typeof polygon.parentFaceId === "string" ? polygon.parentFaceId : "")}" points="${pointString(projected, transform)}" fill="${fill}" fill-opacity="${opacity}" stroke="${stroke}" stroke-width="${shape.type === "opening" ? "1.5" : "2"}"><title>${escapeXml(polygon.id)}</title></polygon>`;
 }
 
@@ -171,7 +172,7 @@ export function renderDebugSvg(model: ViewerModel): string {
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     `<svg xmlns="http://www.w3.org/2000/svg" width="${SVG_WIDTH}" height="${SVG_HEIGHT}" viewBox="0 0 ${SVG_WIDTH} ${SVG_HEIGHT}" role="img" aria-label="Viewer model debug elevations">`,
-    "  <style>polygon { vector-effect: non-scaling-stroke; } .dimension { stroke: #111827; stroke-dasharray: 5 4; }</style>",
+    `  <style>polygon { vector-effect: non-scaling-stroke; } .dimension { stroke: ${viewerTokens.dimensionLine}; stroke-dasharray: 5 4; }</style>`,
     ...elevationGroup(model, false),
     ...elevationGroup(model, true),
     "  <g id=\"permanent-dimensions\" class=\"dimension\">",

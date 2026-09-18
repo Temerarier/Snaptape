@@ -9,6 +9,7 @@ import type {
   Vector3,
   ViewerModel,
 } from "./model";
+import { layoutLabels } from "./overlayLayout";
 
 const MM_PER_INCH = 25.4;
 const MM2_PER_SQ_FT = 92903.04;
@@ -124,11 +125,6 @@ export interface SelectionPlacement {
   readonly side: "right" | "left" | "below" | "above";
 }
 
-function overlapArea(a: SelectionScreenRect, b: SelectionScreenRect): number {
-  return Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) *
-    Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
-}
-
 /**
  * Chooses a side from projected element bounds instead of assuming a fixed
  * card size or viewport corner. Controls are supplied as projected rectangles
@@ -136,40 +132,23 @@ function overlapArea(a: SelectionScreenRect, b: SelectionScreenRect): number {
  */
 export function chooseSelectionPlacement(input: SelectionPlacementInput): SelectionPlacement {
   const { element, box, viewport, avoid = [] } = input;
-  const gap = 12;
-  const centreY = (element.top + element.bottom) / 2;
-  const centreX = (element.left + element.right) / 2;
-  const candidates: Array<{
-    side: SelectionPlacement["side"];
-    left: number;
-    top: number;
-  }> = [
-    { side: "right", left: element.right + gap, top: centreY - box.height / 2 },
-    { side: "left", left: element.left - gap - box.width, top: centreY - box.height / 2 },
-    { side: "below", left: centreX - box.width / 2, top: element.bottom + gap },
-    { side: "above", left: centreX - box.width / 2, top: element.top - gap - box.height },
-  ];
-  const score = (candidate: typeof candidates[number]): number => {
-    const rect = {
-      left: candidate.left,
-      top: candidate.top,
-      right: candidate.left + box.width,
-      bottom: candidate.top + box.height,
-    };
-    const overflow =
-      Math.max(0, -rect.left) +
-      Math.max(0, -rect.top) +
-      Math.max(0, rect.right - viewport.width) +
-      Math.max(0, rect.bottom - viewport.height);
-    const controlOverlap = avoid.reduce((sum, control) => sum + overlapArea(rect, control), 0);
-    return controlOverlap * 1000 + overflow * 10;
-  };
-  const chosen = candidates.slice().sort((a, b) => score(a) - score(b))[0] ?? candidates[0];
-  const left = Math.max(0, Math.min(Math.max(0, viewport.width - box.width), chosen.left));
-  const top = Math.max(0, Math.min(Math.max(0, viewport.height - box.height), chosen.top));
+  const placement = layoutLabels({
+    viewport, obstacles: avoid,
+    silhouette: [
+      { x: element.left, y: element.top }, { x: element.right, y: element.top },
+      { x: element.right, y: element.bottom }, { x: element.left, y: element.bottom },
+    ],
+    labels: [{
+      id: "selection", ...box, priority: 1,
+      preferred: { x: element.right + 12, y: (element.top + element.bottom - box.height) / 2 },
+    }],
+  })[0];
+  const { left, top } = placement;
+  const side = left >= element.right ? "right" : placement.right <= element.left ? "left"
+    : top >= element.bottom ? "below" : "above";
   const anchorLeft = Math.max(element.left, Math.min(element.right, left + box.width / 2));
   const anchorTop = Math.max(element.top, Math.min(element.bottom, top + box.height / 2));
-  return { left, top, anchorLeft, anchorTop, side: chosen.side };
+  return { left, top, anchorLeft, anchorTop, side };
 }
 
 function add(a: Point3, b: Vector3): Point3 {

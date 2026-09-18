@@ -1,10 +1,16 @@
 ---
 name: Viewer conformance decisions
-description: Authority of portrait source for phone conformance
+description: Reference provenance and the user's authorization of missing-token proposals
 ---
 
-Phone conformance uses the tablet-portrait source export, adapted through wrapping and reflow, not a distinct phone artboard.
+Do not assume the desktop design-reference route previously existed.
 
-**Why:** The user explicitly overrode the spec's phone-only round controls and bottom tally bar; no mobile source export was supplied. The export source, not unresolved placeholders rendered in a browser, is the comparison material.
+**Why:** Available history showed only the supplied HTML being added as a document, with no evidence of the design route being implemented or deleted. The earlier route assumption was unsupported; its historical origin is unknown.
 
-**How to apply:** Keep the portrait header controls and top-centre tally/top-right measure arrangement on narrow screens. Follow hard legibility requirements when a reference uses undersized text or targets. Preserve fixture values rather than copying decorative reference data.
+**How to apply:** Cite the actual HTML declarations. Do not invent a historical explanation or rebuild the nonexistent route as part of viewer presentation work. Current responsive requirements live in `replit.md`, not here.
+
+Missing reference tokens are not blockers.
+
+**Why:** The user explicitly authorized best-value proposals during implementation rather than waiting for approval.
+
+**How to apply:** Clearly mark absent values “proposed — not derived from reference,” cite actual source declarations for derived values, and collect all proposals at the end for approval. Never present screenshot sampling or app defaults as exact HTML-derived values.

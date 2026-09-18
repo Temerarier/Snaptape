@@ -343,6 +343,7 @@ export const deDE: Dictionary = {
   },
   viewerNext: {
     measurements: "Maße",
+    overlayConstraintMessage: "Begrenzter Platz für Maße in dieser Ansicht",
     demoProject: "Demoprojekt",
     cards: {
       roofArea: "Dachfläche",
@@ -410,6 +411,8 @@ export const deDE: Dictionary = {
       showConditions: "Schadstellen zeigen",
       measureLine: "Strecke messen",
       clear: "Löschen",
+      showFullModel: "Ganzes Modell zeigen",
+      showMeasurements: "Maße zeigen",
       dragOrbit: "ziehen: drehen · aufziehen: zoomen · 2 Finger: schieben",
       viewportPlaceholder: "3D-ANSICHT",
       placeholder: "Platzhalter",

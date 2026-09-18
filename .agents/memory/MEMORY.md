@@ -5,4 +5,4 @@
 - [Background processes die with the shell](background-process-reaping.md) — nohup/setsid processes are reaped when ShellExec ends; run long dev jobs inside the dev-server process (dev-only route) instead.
 - [Artifact path routing traps](artifact-path-routing.md) — /api/* on the shared proxy belongs to the api-server artifact; Next routes under app/api/ are unreachable (Express 404), use another prefix.
 - [Viewport verification](viewport-verification.md) — counts alone miss geometry errors; test SVG axes, contact, permutation stability and snapping with the real camera.
-- [Viewer conformance decisions](viewer-conformance-decisions.md) — the user's phone comparison follows portrait source rather than the original phone-only spec.
+- [Viewer reference provenance](viewer-conformance-decisions.md) — design-route history was unproven; missing reference tokens need labelled proposals, not blocked work.

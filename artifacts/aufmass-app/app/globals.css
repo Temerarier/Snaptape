@@ -104,15 +104,24 @@
    knows about Three.js; these labels are deliberately pointer-free and are
    positioned from the model's projected anchors. */
 .viewer-next-viewport {
-  background: #f7fafc;
+  background-color: var(--viewer-viewport-background-end);
+  background-image:
+    linear-gradient(rgb(from var(--viewer-grid-line) r g b / var(--viewer-grid-opacity)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(from var(--viewer-grid-line) r g b / var(--viewer-grid-opacity)) 1px, transparent 1px),
+    linear-gradient(145deg, var(--viewer-viewport-background-start), var(--viewer-viewport-background-end));
+  background-size:
+    var(--viewer-grid-size) var(--viewer-grid-size),
+    var(--viewer-grid-size) var(--viewer-grid-size),
+    100% 100%;
+  background-blend-mode: normal, normal, normal;
 }
 
 .viewer-next-dimension-label {
   position: absolute;
   transform: translate(-50%, -50%);
-  border: 1px solid color-mix(in srgb, var(--color-schrift-sekundaer) 42%, transparent);
+  border: 1px solid color-mix(in srgb, var(--viewer-text-secondary) 42%, transparent);
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.94);
+  background: color-mix(in srgb, var(--viewer-surface) 94%, transparent);
   padding: 4px 9px;
   color: var(--color-schrift);
   font-family: var(--font-mono);
@@ -124,9 +133,9 @@
 }
 
 .viewer-next-measure-label {
-  border-color: #991b1b;
-  background: #991b1b;
-  color: #fff;
+  border-color: var(--viewer-measure);
+  background: var(--viewer-measure);
+  color: var(--viewer-surface);
 }
 
 .viewer-next-selection-connector {
@@ -142,14 +151,14 @@
   z-index: 3;
   max-width: calc(100% - 8px);
   border-radius: 8px;
-  background: #101820;
+  background: var(--viewer-text-primary);
   padding: 10px 12px;
-  color: #fff;
+  color: var(--viewer-surface);
   font-family: var(--font-mono);
   font-size: 17px;
   line-height: 1.45;
   white-space: normal;
-  box-shadow: 0 5px 18px rgba(15, 24, 32, 0.3);
+  box-shadow: var(--viewer-toast-shadow);
 }
 
 .viewer-next-selection-box strong {
@@ -161,7 +170,7 @@
 
 .viewer-next-selection-title {
   margin-bottom: 3px;
-  color: #cbd5e1;
+  color: var(--viewer-border-strong);
   font-size: 12px;
   text-transform: uppercase;
 }
@@ -178,61 +187,140 @@
   }
 }
 
-/* Viewer-next layout: portrait is stacked viewport/panel, landscape side-by-side. */
+/* Viewer-next layout: portrait has two fixed states; landscape is side-by-side. */
 .viewer-next-shell {
-  --color-schrift-tertiaer: #4a5568;
-  --color-akzent: #1e40af;
+  --color-hintergrund: var(--viewer-page-background);
+  --color-flaeche: var(--viewer-surface);
+  --color-schrift: var(--viewer-text-primary);
+  --color-schrift-sekundaer: var(--viewer-text-secondary);
+  --color-schrift-tertiaer: var(--viewer-text-tertiary);
+  --color-linie: var(--viewer-border);
+  --color-akzent: var(--viewer-accent);
+  box-sizing: border-box;
   display: grid;
-  grid-template-rows: var(--viewer-top, 42dvh) minmax(0, 1fr);
+  /* The 321px model row reserves the observed 61px compact header plus a
+     genuinely exposed 260px viewport on the shortest supported phone. */
+  grid-template-rows: minmax(321px, 1fr) 44px minmax(0, 1fr);
+  background: var(--viewer-page-background);
 }
-.viewer-next-shell[data-panel-detent="half"] {
-  --viewer-top: 42dvh;
+.viewer-next-shell[data-layout-mode="model"] {
+  grid-template-rows: minmax(321px, 1fr) 44px 0;
 }
-.viewer-next-shell[data-panel-detent="peek"] {
-  --viewer-top: 72dvh;
+.viewer-next-shell[data-layout-mode="model"] .viewer-next-panel {
+  visibility: hidden;
+  overflow: hidden;
+  border-width: 0;
 }
-.viewer-next-shell[data-panel-detent="full"] { --viewer-top: 12dvh; }
-.viewer-next-model-section { overflow-y: auto; }
+.viewer-next-model-section {
+  overflow: hidden;
+  background: var(--viewer-page-background);
+}
 
 .viewer-next-shell button { min-height: 44px; min-width: 44px; }
-.viewer-next-stage > .viewer-next-viewport {
-  margin-top: max(var(--viewer-calc-bottom, 0px), var(--viewer-control-space, 0px));
-}
 .viewer-next-stage {
-  --viewer-control-space: 80px;
-  min-height: 240px;
-  flex-shrink: 0;
+  min-height: 260px;
+  overflow: hidden;
 }
-.viewer-next-stage:has([data-calc-bubble]) { min-height: 380px; }
 .viewer-next-calc-bubble {
-  top: 80px;
-  width: max-content;
-  max-width: min(680px, calc(100% - 24px));
-  max-height: clamp(64px, calc(100% - var(--viewer-control-space, 0px) - 52px), 164px);
+  position: fixed;
+  inset: auto 0 0;
+  width: 100%;
+  max-height: 128px;
   overflow-y: auto;
+  border-radius: 14px 14px 0 0;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  background: var(--viewer-tally-background);
+  color: var(--viewer-surface);
+  box-shadow: var(--viewer-tally-shadow);
 }
 .viewer-next-calc-bubble > div { min-width: 0; flex-shrink: 0; }
 .viewer-next-calc-bubble span { overflow-wrap: anywhere; }
+.viewer-next-calc-primary {
+  background: var(--viewer-surface);
+  color: var(--viewer-tally-background);
+}
+.viewer-next-calc-secondary {
+  border-color: var(--viewer-tally-control-border);
+  color: var(--viewer-surface);
+}
+.viewer-next-calc-chip { background: var(--viewer-tally-chip); }
+.viewer-next-calc-chip-control { background: var(--viewer-tally-chip-control); }
+.viewer-next-calc-error { color: var(--viewer-danger-soft); }
+.viewer-next-calc-success { color: var(--viewer-success-soft); }
+.viewer-next-quality-warning {
+  background: var(--viewer-quality-warning-background);
+  color: var(--viewer-quality-warning-text);
+}
 .viewer-next-panel { container-type: inline-size; }
 .viewer-next-panel-heading {
-  flex: 0 1 auto;
+  flex: none;
   min-height: 48px;
-  max-height: calc(100% - 108px);
-  overflow-y: auto;
-}
-.viewer-next-panel-heading > div:first-child {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: var(--color-hintergrund);
 }
 .viewer-next-panel [data-viewer-panel-scroll] { min-height: 64px; }
 .viewer-next-row-label { min-width: min(140px, 100%); }
 .viewer-next-row-value { width: auto; max-width: 100%; white-space: normal; flex-wrap: wrap; }
 .viewer-next-row-value > span { overflow-wrap: anywhere; }
 .viewer-next-shell [aria-pressed="true"][title="Tally"] {
-  background: var(--color-akzent);
-  color: white;
+  background: var(--viewer-accent);
+  color: var(--viewer-surface);
+}
+.viewer-next-hover:hover,
+.viewer-next-icon-button:enabled:hover { background: var(--viewer-surface-hover); }
+.viewer-next-muted-surface { background: var(--viewer-surface-hover); }
+.viewer-next-toggle-knob,
+.viewer-next-snap-label { background: var(--viewer-surface); }
+.viewer-next-accent-surface,
+.viewer-next-selected-row { background: var(--viewer-accent-soft); }
+.viewer-next-filter-active {
+  background: var(--viewer-text-primary);
+  color: var(--viewer-surface);
+}
+.viewer-next-clear {
+  color: var(--viewer-danger);
+}
+.viewer-next-clear:hover { background: var(--viewer-danger-soft); }
+.viewer-next-toast {
+  background: var(--viewer-tally-background);
+  color: var(--viewer-surface);
+}
+.viewer-next-layout-toggle {
+  background: var(--viewer-surface);
+  color: var(--viewer-accent);
+  box-shadow: var(--viewer-floating-control-shadow);
+}
+.viewer-next-layout-toggle:hover { background: var(--viewer-accent-soft); }
+.viewer-next-mobile-controls { display: flex; }
+.viewer-next-round-control {
+  display: flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--viewer-border);
+  border-radius: 999px;
+  background: var(--viewer-surface);
+  color: var(--viewer-text-secondary);
+  box-shadow: var(--viewer-floating-control-shadow);
+}
+.viewer-next-round-control:hover { background: var(--viewer-surface-hover); }
+.viewer-next-round-control.is-active {
+  border-color: var(--viewer-accent);
+  background: var(--viewer-accent);
+  color: var(--viewer-surface);
+}
+.viewer-next-measure-wide button.is-active {
+  background: var(--viewer-accent);
+  color: var(--viewer-surface);
+}
+.viewer-next-gesture {
+  max-width: calc(100% - 84px);
+  background: color-mix(in srgb, var(--viewer-surface) 95%, transparent);
+}
+.viewer-next-toast {
+  bottom: max(
+    calc(var(--viewer-calc-height, 0px) + 8px),
+    calc(env(safe-area-inset-bottom) + 8px)
+  );
 }
 @container (max-width: 420px) {
   [data-viewer-row-id] > button {
@@ -241,18 +329,6 @@
   }
   .viewer-next-row-label { grid-column: 1 / -1; }
   .viewer-next-row-value { justify-content: flex-start; }
-}
-@media (max-width: 600px) {
-  .viewer-next-gesture { max-width: calc(100% - 24px); top: 4px; left: 12px; }
-  .viewer-next-measure-portrait { top: 34px; right: 12px; }
-  .viewer-next-stage { --viewer-control-space: 96px; }
-  .viewer-next-calc-bubble { top: 96px; }
-}
-@media (max-width: 600px) and (max-height: 700px) {
-  /* On a short phone, make the tally scroll rather than clip selection details. */
-  .viewer-next-stage:has(.viewer-next-selection-box) .viewer-next-calc-bubble {
-    max-height: 64px;
-  }
 }
 
 .viewer-next-panel {
@@ -263,53 +339,64 @@
   box-shadow: none;
 }
 
-.viewer-next-measure-portrait {
-  display: flex;
-}
-
 .viewer-next-measure-wide {
   display: none;
 }
 
-@media (min-width: 768px) and (orientation: landscape) {
-  .viewer-next-model-section { overflow: hidden; }
-  .viewer-next-stage, .viewer-next-stage:has([data-calc-bubble]) { min-height: 0; }
-  .viewer-next-stage { --viewer-control-space: 0px; }
-  .viewer-next-calc-bubble { top: 12px; }
-  .viewer-next-panel-handle { display: none; }
+@media (max-width: 767px) {
   .viewer-next-shell {
-    display: flex;
-    flex-direction: row;
+    padding-bottom: var(--viewer-calc-height, 0px);
   }
-
-  .viewer-next-panel {
-    position: static;
-    width: 480px;
-    height: auto;
-    flex-shrink: 0;
-    border-top: none;
-    border-left: 1px solid var(--color-linie);
+  .viewer-next-header {
+    flex-wrap: nowrap;
+    padding-inline: 12px;
   }
-
-  .viewer-next-measure-portrait {
-    display: none;
+  .viewer-next-header-control { display: none; }
+  .viewer-next-add-photo {
+    flex: none;
+    padding-inline: 10px;
   }
-
-  .viewer-next-measure-wide {
-    display: flex;
+  .viewer-next-dimension-label,
+  .viewer-next-selection-box,
+  .viewer-next-selection-box strong {
+    font-size: 14px;
+  }
+  .viewer-next-toast {
+    position: fixed;
+    max-width: calc(100% - 24px);
   }
 }
 
-@media (min-width: 1280px) {
-  .viewer-next-model-section { overflow: hidden; }
-  .viewer-next-stage, .viewer-next-stage:has([data-calc-bubble]) { min-height: 0; }
-  .viewer-next-stage { --viewer-control-space: 0px; }
-  .viewer-next-calc-bubble { top: 12px; }
-  .viewer-next-panel-handle { display: none; }
+@media (min-width: 768px) {
+  .viewer-next-mobile-controls { display: none; }
+  .viewer-next-measure-wide { display: flex; }
+  .viewer-next-calc-bubble {
+    position: absolute;
+    top: 12px;
+    right: auto;
+    bottom: auto;
+    left: var(--viewer-calc-left, 50%);
+    width: max-content;
+    max-width: min(var(--viewer-calc-max-width, 680px), calc(100% - 24px));
+    max-height: 164px;
+    transform: var(--viewer-calc-transform, translateX(-50%));
+    border-radius: 14px;
+    padding-bottom: 10px;
+  }
+}
+
+/* Short phones need a narrower, wrapping tooltip beside a focused gable. */
+@media (max-width: 767px) and (max-height: 700px) {
+  .viewer-next-selection-box { max-width: 40vw; }
+}
+
+@media (min-width: 768px) and (orientation: landscape) {
   .viewer-next-shell {
     display: flex;
     flex-direction: row;
+    padding-bottom: 0;
   }
+  .viewer-next-stage { min-height: 0; }
 
   .viewer-next-panel {
     position: static;
@@ -320,12 +407,49 @@
     border-left: 1px solid var(--color-linie);
   }
 
-  .viewer-next-measure-portrait,
-  .viewer-next-gesture {
-    display: none;
+  .viewer-next-layout-toggle { display: none; }
+  .viewer-next-shell[data-layout-mode="model"] .viewer-next-panel {
+    visibility: visible;
+    overflow: visible;
+    border-left-width: 1px;
+  }
+}
+
+/* The fixed 480px panel leaves a 288px stage at the landscape breakpoint. */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+  .viewer-next-header { flex-wrap: wrap; }
+  .viewer-next-header > div:first-child {
+    flex: 1 0 calc(100% - 104px);
+  }
+  .viewer-next-header > div:first-child > div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .viewer-next-header-control { flex: none; }
+}
+
+@media (min-width: 1280px) {
+  .viewer-next-shell {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 0;
+  }
+  .viewer-next-stage { min-height: 0; }
+
+  .viewer-next-panel {
+    position: static;
+    width: 480px;
+    height: auto;
+    flex-shrink: 0;
+    border-top: none;
+    border-left: 1px solid var(--color-linie);
   }
 
-  .viewer-next-measure-wide {
-    display: flex;
+  .viewer-next-layout-toggle { display: none; }
+  .viewer-next-shell[data-layout-mode="model"] .viewer-next-panel {
+    visibility: visible;
+    overflow: visible;
+    border-left-width: 1px;
   }
 }
