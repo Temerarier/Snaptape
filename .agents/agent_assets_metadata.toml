@@ -4,7 +4,7 @@ generated = []
 [[outputs]]
 id = "5n7xet_bzYemjoWvLlIvl"
 uri = "file://attached_assets/viewer-conformance/report.html"
-type = "text"
+type = "html"
 title = "Verified viewer conformance report"
 description = "Reference inventory, complete design diff and spec checklist. Final evidence: 147 tests, 27 browser checks and typechecks pass. Includes exact three-way portrait detents and documented short-screen overflow behavior."
 logical_id = "c350357b-a62c-4bff-938e-e33bcfc1e550"
@@ -14,3 +14,17 @@ mtime_ms = 1789654690353
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/c350357b-a62c-4bff-938e-e33bcfc1e550/a3e54c67-40aa-454b-8d81-756070a9ac4a"
 storage_version_token = "1789654690988570"
 content_type = "text/html"
+
+[[outputs]]
+id = "viVSe67IW9d-SId1GhnaU"
+uri = "file://docs/viewer-review-input.md"
+type = "text"
+title = "Viewer review input document"
+description = "Read-only responsiveness-first audit of /viewer-next covering layout at four widths, viewport sizing and camera code, fixed sizes and overflow, typography/colour/spacing, touch states, deviations, and open visual questions."
+logical_id = "dd3f448a-f67f-4f7c-a212-83f5ecdf544b"
+content_hash = "sha256:d456fda21cfa2447e93aeae557503fe3f4027c83aef931cefc82e73c91e68d49"
+size = 23793
+mtime_ms = 1789718089518
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/dd3f448a-f67f-4f7c-a212-83f5ecdf544b/a06613cb-9448-4d6c-b770-67df0a3b3856"
+storage_version_token = "1789718308405045"
+content_type = "text/markdown"
