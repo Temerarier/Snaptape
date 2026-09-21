@@ -1,0 +1,112 @@
+GOAL
+Six last fixes on /viewer-next: the empty window-group row, the phone control icons,
+a working "Show conditions", an on/off switch for the dimension lines on the model,
+flickering windows while rotating, and the wrong set of permanent dimensions.
+
+CONTEXT
+- Reference: docs/viewer-reference/desktop.html (the authoritative desktop export).
+- Numbers come from computeDerived only - never computed in the UI.
+
+BUILD
+
+1. WINDOW GROUP ROW SHOWS "—"
+   Openings > Windows > "Front (WL-1)" shows "—" where count and area belong (screenshot 2).
+   The reference (desktop.html, the OPW-F row near line 769) shows the group as:
+   label "Front", sub "5 EA · Perimeter 92' 0"", value "104 sq ft".
+   - Find why the per-elevation group has no value and fix it in computeDerived: count,
+     summed sq ft and summed perimeter of the windows in that group. Same for every
+     elevation group and for doors if they use the same structure.
+   - Show it the way the reference does: count + perimeter in the sub line, sq ft as the
+     value. The tally (Σ) and copy actions on that row become active once it has a value.
+   - "—" stays only where a value is genuinely unknown (null in the measurement), never
+     where it can be summed from children.
+
+2. PHONE CONTROL ICONS
+   The round cluster icons read badly (screenshot 1). Redraw them as clear, conventional
+   line icons, same stroke width, centred in the 44px circle:
+   - measure: a ruler
+   - conditions: a warning triangle with an exclamation mark inside
+   - reset: a counter-clockwise return arrow with a clear arrowhead
+   Use the icon set the codebase already uses if it has these; otherwise inline SVG.
+   Each button gets an aria-label.
+
+3. "SHOW CONDITIONS" DOES NOTHING
+   First diagnose, then fix - report which of these it was:
+   a) the fixture has no condition_areas, b) they exist but are not drawn, c) they are
+   drawn but hidden (behind the face, z-fighting, wrong parent face, wrong coordinates).
+   - If the fixture has none: add two condition areas to the fixture, matching the
+     reference's example data (failing paint on the back wall, 120 sq ft, moderate,
+     photo #7; rot on the front fascia, 8 sq ft, severe, photo #12), so the feature can be
+     tested. Mark them as test data.
+   - When on: each condition area is highlighted on its parent face with a translucent
+     red/orange hatched overlay and a red outline (reference: hatchWarn pattern), slightly
+     offset from the face so it never z-fights.
+   - Next to each area, a callout in a DARK box in the same style as the selection box,
+     with a thin connector line to the area. Content like the reference:
+     line 1 "Rot · Fascia (FC-1)", line 2 "8 sq ft · severe · photo #12". Show the
+     severity as a coloured accent (severe red, moderate amber) - not as a light box.
+   - Callouts use the same collision/edge-clamping logic as the other labels.
+   - When the measurement has no condition areas at all, the switch still toggles but
+     shows a short notice "No conditions recorded" instead of silently doing nothing.
+   - The Condition Areas card in the panel and the overlay stay in sync: clicking a
+     condition row highlights its area.
+
+4. ON/OFF SWITCH FOR THE DIMENSION LINES ON THE MODEL
+   The permanent dimension lines on the model can be switched off (screenshot 3).
+   - Desktop/tablet: a "Show dimensions" switch in the header next to "Show conditions",
+     same style.
+   - Phone: a fourth round button in the cluster, below reset, same style as the others.
+   - Default: on. Off hides the permanent dimension lines and their labels only - user
+     measure lines and the selection box stay.
+   - While off, the permanent labels must not keep their space reserved or still take part
+     in collision placement.
+
+5. WINDOWS FLICKER WHEN THE MODEL ROTATES
+   Openings flicker while orbiting - almost certainly z-fighting: the opening geometry is
+   coplanar with its wall, so the depth test alternates between the two.
+   - Offset every surface-mounted element (windows, doors, garage door, condition overlays,
+     selection fill) a small distance outward along its parent face's normal (a few mm in
+     model units - enough to be stable at every zoom level within minDistance..maxDistance,
+     not so much that it visibly floats).
+   - Additionally set polygonOffset on those materials (polygonOffset: true, negative
+     factor/units) so they win the depth test even at grazing angles.
+   - Do not fix this by disabling depthTest or by changing the camera near/far planes
+     unless the offset alone demonstrably fails - if you do change near/far, state the old
+     and new values and why.
+
+6. WRONG SET OF PERMANENT DIMENSIONS
+   The model currently shows the house length twice (40' 0" along the ridge at the top and
+   40' 0" along the ground at the bottom) and never shows the depth (screenshot 3).
+   - Remove the length label along the ridge at the top, including its dimension and
+     extension lines.
+   - Keep the length along the ground on the long side.
+   - Add the depth: a dimension line along the ground on the short side (the gable-end
+     wall), with extension lines and a label, styled and placed like the length line.
+     Take the value from the measurement footprint via computeDerived; if it is unknown,
+     show no depth line rather than a guessed one.
+   - Keep the eave height as it is.
+   - Result: length, depth and eave height - each exactly once. All three follow the
+     on/off switch from #4 and the collision/edge-clamping rules.
+
+DO NOT
+- Do not change the layout, the fixed split states, the panel width or the card spacing.
+- Do not compute any value in the UI.
+- Do not restrict the camera.
+
+DONE WHEN
+- [ ] Every window group row (Front, Back, Left, Right) shows count, perimeter and sq ft;
+      the numbers add up to the Windows total; Σ and copy work on them
+- [ ] The three phone icons read clearly as ruler, warning triangle with "!", return arrow
+      (screenshot)
+- [ ] Report states which cause (a/b/c) made "Show conditions" do nothing
+- [ ] With conditions on: each area is hatched on its face with a dark callout beside it;
+      clicking a condition row highlights its area (screenshot at 1440 and 390)
+- [ ] With no condition data the switch shows "No conditions recorded"
+- [ ] Dimension switch works on desktop, tablet and phone; off hides only the permanent
+      dimension lines and labels
+- [ ] Orbiting slowly around the whole house at close, mid and far zoom shows no flicker
+      on any window, door, garage door, condition overlay or selection fill
+- [ ] The model shows length, depth and eave height each exactly once - no length label at
+      the ridge; the depth value matches the measurement (state it); screenshot at 1440
+      and 390
+- [ ] pnpm test passes, including a test that the window group sums equal the total
