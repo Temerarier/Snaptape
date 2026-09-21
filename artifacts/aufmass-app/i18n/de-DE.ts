@@ -40,6 +40,8 @@ export const deDE: Dictionary = {
     loginButton: "Anmelden",
     registerButton: "Registrieren",
     loginPending: "Wird angemeldet …",
+    outdatedPage: "Diese Seite ist veraltet. Bitte lade sie neu und sende das Formular erneut ab.",
+    reloadPage: "Seite neu laden",
     registerPending: "Wird registriert …",
     noAccountYet: "Noch kein Konto?",
     switchToRegister: "Jetzt registrieren",
@@ -345,6 +347,11 @@ export const deDE: Dictionary = {
     measurements: "Maße",
     overlayConstraintMessage: "Begrenzter Platz für Maße in dieser Ansicht",
     demoProject: "Demoprojekt",
+    projectMessages: {
+      olderVersion:
+        "Dieses Projekt wurde mit einer älteren Version vermessen. Vermessen Sie es erneut, um das 3D-Modell zu sehen.",
+      unreadable: "Messung konnte nicht gelesen werden",
+    },
     cards: {
       roofArea: "Dachfläche",
       roofEdges: "Dachkanten",
@@ -409,6 +416,8 @@ export const deDE: Dictionary = {
       pcs: "Stk.",
       ea: "EA",
       modelReady: "Modell bereit · Testdaten",
+      projectModelReady: "Modell bereit",
+      projectPhotoCaptureUnavailable: "In diesem Viewer können keine Fotos hinzugefügt werden.",
       showConditions: "Schadstellen zeigen",
       showDimensions: "Maße zeigen",
       noConditions: "Keine Schadstellen erfasst.",

@@ -81,7 +81,7 @@ export function UserMenu({ email }: { email: string }) {
             {email}
           </p>
           <Link
-            href="/app/viewer"
+            href="/viewer-next"
             role="menuitem"
             onClick={() => setOffen(false)}
             className="block rounded-lg px-2.5 py-1.5 text-sm text-schrift transition hover:bg-hintergrund"

@@ -185,12 +185,16 @@ export function ViewerNextClient({
   cards,
   dict,
   webglMessage,
+  projectName,
+  projectAddress,
 }: {
   measurement: MinimalMeasurement;
   derived: DerivedMeasurement;
   cards: ViewerCard[];
   dict: Dictionary["viewerNext"];
   webglMessage?: string;
+  projectName?: string;
+  projectAddress?: string | null;
 }) {
   const [filter, setFilter] = useState<TradeFilter>("all");
   const [openCards, setOpenCards] = useState<Set<string>>(new Set());
@@ -321,7 +325,7 @@ export function ViewerNextClient({
 
   const handleRowSelect = (row: CardRow) => {
     if (row.cta) {
-      setCopyNotice(dict.labels.photoCaptureUnavailable);
+      setCopyNotice(projectName === undefined ? dict.labels.photoCaptureUnavailable : dict.labels.projectPhotoCaptureUnavailable);
       return;
     }
     if (!findSelectableElement(model, row.id)) return;
@@ -373,7 +377,10 @@ export function ViewerNextClient({
       : (webglMessage ??
         "The 3D view could not be started. Measurements remain available in the panel.");
   const references = measurement.references ?? [];
-  const projectName = dict.demoProject;
+  const headerProjectName = projectName ?? dict.demoProject;
+  const headerSubtitle = projectName === undefined
+    ? dict.labels.modelReady
+    : projectAddress?.trim() || dict.labels.projectModelReady;
   const clearButton =
     measureLines.length > 0 ? (
       <button
@@ -396,12 +403,12 @@ export function ViewerNextClient({
       <div className="viewer-next-model-section relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         <div className="viewer-next-header flex min-h-[56px] flex-none items-center gap-2 border-b border-linie bg-flaeche px-4 py-2">
           <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-            <div className="truncate text-sm font-semibold">{projectName}</div>
+            <div className="truncate text-sm font-semibold">{headerProjectName}</div>
             <div className="font-mono text-xs text-schrift-sekundaer">
-              {dict.labels.modelReady}
+              {headerSubtitle}
             </div>
           </div>
-          <Button className="viewer-next-add-photo whitespace-nowrap" variante="sekundaer" groesse="klein" onClick={() => setCopyNotice(dict.labels.photoCaptureUnavailable)}>
+          <Button className="viewer-next-add-photo whitespace-nowrap" variante="sekundaer" groesse="klein" onClick={() => setCopyNotice(projectName === undefined ? dict.labels.photoCaptureUnavailable : dict.labels.projectPhotoCaptureUnavailable)}>
             {"+ "}
             {dict.labels.addPhoto}
           </Button>

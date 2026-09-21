@@ -12,9 +12,11 @@ export async function connectBrowser() {
   let sequence = 0;
   const pending = new Map();
   const exceptions = [];
+  const consoleMessages = [];
   socket.addEventListener("message", event => {
     const data = JSON.parse(event.data);
     if (data.method === "Runtime.exceptionThrown") exceptions.push(data.params);
+    if (data.method === "Runtime.consoleAPICalled") consoleMessages.push(data.params);
     if (!data.id) return;
     const callback = pending.get(data.id);
     if (!callback) return;
@@ -41,7 +43,13 @@ export async function connectBrowser() {
     if (response.exceptionDetails) throw new Error(JSON.stringify(response.exceptionDetails));
     return response.result.value;
   };
-  return { send, evaluate, exceptions, close: () => socket.close() };
+  return {
+    send,
+    evaluate,
+    exceptions,
+    consoleMessages,
+    close: () => socket.close(),
+  };
 }
 
 export const pause = ms => new Promise(resolve => setTimeout(resolve, ms));

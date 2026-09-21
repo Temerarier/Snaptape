@@ -4,6 +4,7 @@ import type { MeasurementInput } from "@workspace/measurement";
 import fixture from "../../../../../fixtures/garage-house.json";
 import realExport from "../../../../../export-messungen/neuengamme-mixed.json";
 import { buildModel } from "./index";
+import type { ViewerMeasurement } from "./index";
 import type { Point3, ViewerModel } from "./types";
 
 const EPSILON = 1e-6;
@@ -230,6 +231,29 @@ describe("viewer-next pure model", () => {
     expect(model.roofFaces[0]?.color.neutral).toBe(true);
     expect(model.walls[0]?.color.neutral).toBe(true);
     expect(model.bounds.main.widthMm).toBeGreaterThan(0);
+    assertFiniteModel(model);
+  });
+
+  it("omits one malformed part without discarding usable geometry", () => {
+    const wall = fixture.faces.find(face => face.id === "WL-1")!;
+    const partial = {
+      ...fixture,
+      faces: [fixture.faces[0], null, wall],
+      openings: [fixture.openings[0], "unreadable", fixture.openings[1]],
+      edges: [fixture.edges[0], { ...fixture.edges[1], id: 42 }],
+    };
+
+    expect(() => buildModel(partial as unknown as ViewerMeasurement)).not.toThrow();
+    const model = buildModel(partial as unknown as ViewerMeasurement);
+
+    expect(model.roofFaces.some(face => face.id === fixture.faces[0].id)).toBe(true);
+    expect(model.walls.some(item => item.id === wall.id)).toBe(true);
+    expect(model.openings.some(opening => opening.id === fixture.openings[0].id)).toBe(true);
+    expect(model.notes).toEqual(expect.arrayContaining([
+      "face-2: malformed face entry omitted.",
+      "opening-2: malformed opening entry omitted.",
+      "edge-2: malformed id ignored; generated a stable display id.",
+    ]));
     assertFiniteModel(model);
   });
 

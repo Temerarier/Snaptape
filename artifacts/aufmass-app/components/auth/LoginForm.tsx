@@ -8,15 +8,17 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { useDictionary } from "@/i18n/LocaleProvider";
 import { loginAction, type AuthState } from "@/lib/auth/actions";
+import { recoverStaleAction, type RecoverableAuthState } from "@/lib/auth/recoverStaleAction";
 
 const initialState: AuthState = {};
 
 export function LoginForm() {
-  const [state, formAction, pending] = useActionState(
-    loginAction,
-    initialState,
-  );
   const t = useDictionary().auth;
+  const [state, formAction, pending] = useActionState(
+    (previous: RecoverableAuthState, data: FormData) =>
+      recoverStaleAction(loginAction, previous, data, t.outdatedPage),
+    initialState as RecoverableAuthState,
+  );
 
   return (
     <form action={formAction} noValidate className="space-y-4">
@@ -45,7 +47,12 @@ export function LoginForm() {
           {state.error}
         </p>
       ) : null}
-      <Button type="submit" disabled={pending} className="w-full py-2.5">
+      {state.refreshRequired ? (
+        <Button type="button" onClick={() => window.location.reload()} className="w-full py-2.5">
+          {t.reloadPage}
+        </Button>
+      ) : null}
+      <Button type="submit" disabled={pending || state.refreshRequired} className="w-full py-2.5">
         {pending ? t.loginPending : t.loginButton}
       </Button>
     </form>

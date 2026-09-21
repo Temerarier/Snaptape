@@ -5,8 +5,8 @@ import { notFound } from "next/navigation";
 import { and, eq } from "drizzle-orm";
 import { db, projectsTable } from "@workspace/db";
 import { requireUser } from "@/lib/auth/session";
-import { ModellViewer } from "@/components/viewer/ModellViewer";
-import { adaptiereV15FuerAnzeige } from "@/lib/messung/anzeigeAdapterV15";
+import { ProjectViewer } from "@/components/viewer-next/ProjectViewer";
+import { getDictionary, toLocale } from "@/i18n";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -37,20 +37,14 @@ export default async function ProjektViewerSeite({
   // Viewer nur für fertig gemessene Projekte freigeben.
   if (project.status !== "model_ready") notFound();
 
-  // model_ready ohne gespeichertes Measurement wäre ein Datenfehler –
-  // explizit 404 statt stillem Fallback auf Testdaten.
-  if (project.measurement === null || project.measurement === undefined) {
-    notFound();
-  }
-  // Wegwerf-Adapter: gespeichertes v1.5-JSON nur für die Anzeige auf
-  // den v1.2-Vertrag des bestehenden Viewers mappen (wirft bei
-  // inkompatiblen Daten, kein stiller Fallback).
-  const mess = adaptiereV15FuerAnzeige(project.measurement);
+  const dict = getDictionary(toLocale(user.locale));
   return (
-    <ModellViewer
-      mess={mess}
-      projektName={project.name}
-      projektAdresse={project.adresse}
+    <ProjectViewer
+      measurement={project.measurement}
+      projectName={project.name}
+      projectAddress={project.adresse}
+      dict={dict.viewerNext}
+      webglMessage={dict.viewer.webglFehler}
     />
   );
 }

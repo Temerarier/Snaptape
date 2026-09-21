@@ -40,6 +40,8 @@ export const enUS = {
     loginButton: "Sign in",
     registerButton: "Create account",
     loginPending: "Signing in …",
+    outdatedPage: "This page is out of date. Reload it, then submit the form again.",
+    reloadPage: "Reload page",
     registerPending: "Creating account …",
     noAccountYet: "No account yet?",
     switchToRegister: "Create one now",
@@ -335,6 +337,11 @@ export const enUS = {
     measurements: "Measurements",
     overlayConstraintMessage: "Limited label space at this view",
     demoProject: "Demo project",
+    projectMessages: {
+      olderVersion:
+        "This project was measured with an older version. Measure it again to see the 3D model.",
+      unreadable: "Measurement could not be read",
+    },
     cards: {
       roofArea: "Roof Area",
       roofEdges: "Roof Edges",
@@ -399,6 +406,8 @@ export const enUS = {
       pcs: "pcs",
       ea: "EA",
       modelReady: "Model ready · Test data",
+      projectModelReady: "Model ready",
+      projectPhotoCaptureUnavailable: "Adding photos is not available in this viewer.",
       showConditions: "Show conditions",
       showDimensions: "Show dimensions",
       noConditions: "No conditions recorded.",

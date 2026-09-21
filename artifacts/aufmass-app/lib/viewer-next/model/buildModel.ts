@@ -540,8 +540,28 @@ function makeDimension(
   };
 }
 
-function asArray<T>(value: readonly T[] | null | undefined): readonly T[] {
-  return Array.isArray(value) ? value : [];
+function modelParts<T extends { readonly id?: string }>(
+  value: readonly T[] | null | undefined,
+  kind: string,
+  notes: string[],
+): readonly T[] {
+  if (!Array.isArray(value)) {
+    if (value !== null && value !== undefined) {
+      notes.push(`${kind}: expected a list; omitted malformed collection.`);
+    }
+    return [];
+  }
+  return value.flatMap((part, index) => {
+    if (!isRecord(part)) {
+      notes.push(`${kind}-${index + 1}: malformed ${kind} entry omitted.`);
+      return [];
+    }
+    if (part.id !== undefined && typeof part.id !== "string") {
+      notes.push(`${kind}-${index + 1}: malformed id ignored; generated a stable display id.`);
+      return [{ ...part, id: undefined } as T];
+    }
+    return [part as T];
+  });
 }
 
 function roofPitch(face: MeasurementFaceLike): number | null {
@@ -1225,7 +1245,7 @@ export function buildModel(
 ): ViewerModel {
   const measurement = input ?? {};
   const notes: string[] = [];
-  const faces = asArray(measurement.faces);
+  const faces = modelParts(measurement.faces, "face", notes);
   const wallFaces = faces.filter(face => face.face_class === "wall");
   const roofFaces = faces.filter(face => face.face_class === "roof_face");
   const dimensions = footprintSize(measurement, faces);
@@ -1235,7 +1255,8 @@ export function buildModel(
   if (measurement.meta?.schema_version === "1.5") {
     notes.push("v1.5 export accepted structurally; absent v1.6 parent links are degraded by elevation matching.");
   }
-  const additions = asArray(measurement.attachments).filter(item => item.type === "addition");
+  const attachmentInputs = modelParts(measurement.attachments, "attachment", notes);
+  const additions = attachmentInputs.filter(item => item.type === "addition");
   if (additions.length > 0 && dimensions.overall.width > dimensions.main.width + EPSILON) {
     notes.push(
       `Overall envelope is ${dimensions.overall.width} mm; permanent width dimension remains the main footprint ${dimensions.main.width} mm.`,
@@ -1498,25 +1519,25 @@ export function buildModel(
     notes.push("Required-fields-only measurement: added an area-derived neutral massing block.");
   }
 
-  const edgeModels = asArray(measurement.edges)
+  const edgeModels = modelParts(measurement.edges, "edge", notes)
     .map((edge, index) => buildEdge(edge, index, walls, roofs, dimensions.main, eaveHeight, notes))
     .filter((edge): edge is ModelEdge => edge !== null);
   const openingModels = buildOpenings(
-    asArray(measurement.openings),
+    modelParts(measurement.openings, "opening", notes),
     walls,
     roofs,
     dimensions.main,
     notes,
   );
   const attachmentModels = buildAttachments(
-    asArray(measurement.attachments),
+    attachmentInputs,
     walls,
     roofs,
     dimensions,
     notes,
   );
   const conditionModels = buildConditions(
-    asArray(measurement.condition_areas),
+    modelParts(measurement.condition_areas, "condition", notes),
     walls,
     roofs,
     dimensions.main,

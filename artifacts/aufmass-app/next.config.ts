@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants";
 
 const replitDomains = (process.env.REPLIT_DOMAINS ?? "")
   .split(",")
@@ -16,4 +17,8 @@ const nextConfig: NextConfig = {
   ],
 };
 
-export default nextConfig;
+export default (phase: string): NextConfig => ({
+  ...nextConfig,
+  // A production build must never replace the running dev server's manifests.
+  distDir: phase === PHASE_DEVELOPMENT_SERVER ? ".next-dev" : ".next",
+});

@@ -1,5 +1,5 @@
 // Messpipeline: läuft nach bestandener Klassifizierung im Hintergrund.
-// Extrahieren (echt oder Stub) → gegen den v1.5-Vertrag validieren →
+// Extrahieren (echt oder Stub) → gegen den Measurement-Vertrag validieren →
 // Ergebnis nur anwenden, wenn das Projekt noch zu genau diesem Lauf
 // gehört. Jeder Lauf hinterlässt eine Protokollzeile in measure_runs –
 // auch veraltete – inkl. Modell, Route, Tokens, Kosten und Kennzahlen.
@@ -62,6 +62,19 @@ function kennzahlen(roh: unknown): {
     netWallAreaMm2: wandNetto,
     openingCount: openings ? openings.length : null,
   };
+}
+
+// Das Laufprotokoll beschreibt genau das erhaltene JSON. Insbesondere bei
+// fehlgeschlagenen Extraktionen darf es keine erfundene Schema-Version
+// behaupten.
+export function schemaVersionFuerProtokoll(roh: unknown): string {
+  if (!roh || typeof roh !== "object") return "unknown";
+  const meta = (roh as { meta?: unknown }).meta;
+  if (!meta || typeof meta !== "object") return "unknown";
+  const schemaVersion = (meta as { schema_version?: unknown }).schema_version;
+  return typeof schemaVersion === "string" && schemaVersion.trim() !== ""
+    ? schemaVersion
+    : "unknown";
 }
 
 export async function fuehreMessLaufAus(args: {
@@ -176,7 +189,7 @@ export async function fuehreMessLaufAus(args: {
   };
   await db.insert(measureRunsTable).values({
     projectId: args.projektId,
-    schemaVersion: "1.5",
+    schemaVersion: schemaVersionFuerProtokoll(roh),
     measureJson: roh,
     quality: args.quality,
     durationMs: Date.now() - start,

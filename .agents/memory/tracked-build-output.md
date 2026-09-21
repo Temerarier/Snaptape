@@ -13,3 +13,11 @@ description: Why git-tracked .next/dist build files cause recurring client runti
 - **Order matters:** the dev server must be STOPPED (kill its process; workflow skill has no stop, and `restart_workflow` regenerates `.next` within seconds) and must stay stopped until a checkpoint commit happens — otherwise the regenerated files are re-committed as modified and remain tracked. `git update-index --force-remove` and `git rm --cached` are both blocked in the main agent.
 - After the checkpoint, restart the workflow; regenerated files are then ignored for good.
 - Users with an open preview tab still hold stale chunks after any dev-server restart; a hard reload of the preview clears it.
+
+**Separate development and production output as well.** Never run `next build`
+against the directory used by a live `next dev` process.
+**Why:** even ignored build output can replace live Server Action manifests;
+an already-open login page then submits an action ID the server no longer knows.
+**How to apply:** keep phase-specific output directories, ignore both, and
+recover obsolete auth actions with an explicit reload prompt rather than
+automatically replaying a password-bearing submission.

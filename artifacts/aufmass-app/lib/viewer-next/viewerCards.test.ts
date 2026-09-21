@@ -172,6 +172,38 @@ describe("viewer-next fixture presentation", () => {
     ]);
   });
 
+  it("keeps cards usable when one grouped opening reference cannot be displayed", () => {
+    const derived = computeDerived(measurement);
+    const windows = derived.openings.parentGroups.find(
+      group => group.type === "window",
+    )!;
+    const withUnreadableReference = {
+      ...derived,
+      openings: {
+        ...derived.openings,
+        parentGroups: derived.openings.parentGroups.map(group =>
+          group === windows
+            ? { ...group, openingIds: [...group.openingIds, "missing-opening"] }
+            : group
+        ),
+      },
+    };
+
+    expect(() =>
+      buildCards(withUnreadableReference, displayMeasurement, enUS.viewerNext)
+    ).not.toThrow();
+    const windowRows = buildCards(
+      withUnreadableReference,
+      displayMeasurement,
+      enUS.viewerNext,
+    ).find(card => card.id === "openings")!.rows
+      .find(row => row.id === "op_window")!.subRows!
+      .flatMap(row => row.subRows ?? []);
+
+    expect(windowRows).toHaveLength(16);
+    expect(windowRows.some(row => row.id === "missing-opening")).toBe(false);
+  });
+
   it("exposes raw typed tally metadata instead of display-string values", () => {
     const roof = cards.find((card) => card.id === "roof_area")!;
     const first = roof.rows.find((row) => row.id === "RF-1")!;

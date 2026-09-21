@@ -187,7 +187,7 @@ export default async function ProjectDetailPage({
           </div>
           <div className="mt-4">
             <Link
-              href="/app/viewer"
+              href="/viewer-next"
               className="inline-flex items-center rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-neutral-700"
             >
               {t.cards.modell3d.oeffnen}
@@ -219,7 +219,7 @@ export default async function ProjectDetailPage({
               wert={`${anzahlFenster}`}
             />
             <Link
-              href="/app/viewer"
+              href="/viewer-next"
               className="group rounded-lg border border-neutral-200 bg-neutral-50 p-4 transition hover:border-neutral-300 hover:bg-neutral-100"
             >
               <p className="text-xs font-medium text-neutral-500">

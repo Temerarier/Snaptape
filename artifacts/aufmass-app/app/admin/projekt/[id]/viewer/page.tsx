@@ -1,12 +1,12 @@
 // Staff-Viewer: 3D-Modell eines beliebigen Kundenprojekts
 // (kundenübergreifend, daher zwingend hinter dem Staff-Gate).
-// Nutzt denselben Anzeige-Adapter wie der Kunden-Viewer.
+// Nutzt dieselbe geschützte Messungsaufbereitung wie der Kunden-Viewer.
 import { notFound } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { db, projectsTable } from "@workspace/db";
 import { requireStaff } from "@/lib/auth/staff";
-import { ModellViewer } from "@/components/viewer/ModellViewer";
-import { adaptiereV15FuerAnzeige } from "@/lib/messung/anzeigeAdapterV15";
+import { ProjectViewer } from "@/components/viewer-next/ProjectViewer";
+import { getDictionary, toLocale } from "@/i18n";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +18,7 @@ export default async function AdminProjektViewerSeite({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  await requireStaff();
+  const user = await requireStaff();
   const { id } = await params;
   if (!UUID_PATTERN.test(id)) notFound();
 
@@ -36,16 +36,14 @@ export default async function AdminProjektViewerSeite({
   const project = rows[0];
   if (!project) notFound();
   if (project.status !== "model_ready") notFound();
-  if (project.measurement === null || project.measurement === undefined) {
-    notFound();
-  }
-
-  const mess = adaptiereV15FuerAnzeige(project.measurement);
+  const dict = getDictionary(toLocale(user.locale));
   return (
-    <ModellViewer
-      mess={mess}
-      projektName={project.name}
-      projektAdresse={project.adresse}
+    <ProjectViewer
+      measurement={project.measurement}
+      projectName={project.name}
+      projectAddress={project.adresse}
+      dict={dict.viewerNext}
+      webglMessage={dict.viewer.webglFehler}
     />
   );
 }

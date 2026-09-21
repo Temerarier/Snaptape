@@ -36,11 +36,13 @@
     "components/**/*",
     "lib/**/*",
     "i18n/**/*",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next-dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
     ".next",
+    ".next-dev",
     "dist"
   ],
   "references": [

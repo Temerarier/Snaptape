@@ -9,9 +9,12 @@ description: Fixed stack, iron rules, and artifact quirks for the Aufmaß-App (N
   **Why:** user brief says "Stack (fix, nicht ändern)".
 - The 9 "Eiserne Regeln" (mm unrounded internally, mess-schema.json contract, fixed English IDs, confidence/source on every value, reference-only hint, errors before payment, calculations only in lib/berechnung/, UI texts central in i18n, elevations front/back/left/right) live verbatim in root `replit.md` — read them before any feature work.
 - Schema contract is v1.2 (English, US market) since July 2026: IDs RF-/WL-/SF-/FC-, E-, W-/D-/G-/SK-, AT-; CAUTION: D- means door (was Dach) and W- means window (was Wand) — never assume v1.0 meanings. Status enum: draft/reviewing/ready/failed. Display imperial (ft-in, whole ft², pitch x/12), data stays unrounded mm. Contract file: `artifacts/aufmass-app/schema/mess-schema.json`.
-- Keep the legacy viewer contract separate from the newer shared measurement contract until an explicit viewer migration is requested.
-  **Why:** the user requires the old viewer calculation and its tests to remain byte-for-byte unchanged while shared display calculations are built alongside them.
-  **How to apply:** do not consolidate the two calculation layers or migrate old consumers as incidental cleanup.
+- Viewer cutover does not authorize data migration or shared-module cleanup.
+  **Why:** the user explicitly chose an older-version message over converting stored measurements, and requires login-house/overview dependencies to remain intact.
+  **How to apply:** treat stored geometry as authoritative; preserve shared legacy calculations and rendering dependencies even after the project viewer changes.
+- Safe rendering arrays must not imply complete measurement collections.
+  **Why:** normalizing missing/null collections to empty arrays made unknown takeoff totals look like exact zero during the viewer cutover.
+  **How to apply:** preserve completeness separately when sanitizing partial data; omitted or malformed records cannot justify exact totals, even if remaining geometry renders.
 - Do not alter the canonical fixture to make requested golden totals pass when independent arithmetic disagrees.
   **Why:** on 2026-09-10 the user approved correcting the net-wall expected value to match parent-linked dimension deductions, rather than trusting inconsistent stored net totals or changing the fixture.
   **How to apply:** explain and obtain approval for an inconsistent acceptance value; preserve the fixture and the independently correct calculation.

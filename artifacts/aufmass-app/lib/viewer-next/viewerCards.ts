@@ -51,6 +51,22 @@ export interface ViewerCard {
 }
 
 export interface MinimalMeasurement {
+  /**
+   * Preparation-only completeness flags. Collections remain safe arrays for
+   * model building, while totals stay unknown when source records were absent,
+   * malformed, or had to be omitted.
+   */
+  __viewerCollectionCompleteness?: Partial<
+    Record<
+      | "faces"
+      | "openings"
+      | "edges"
+      | "attachments"
+      | "condition_areas"
+      | "downspouts",
+      "complete" | "unknown"
+    >
+  >;
   meta?: { notes?: string[] };
   building?: {
     stories?: number;
@@ -188,6 +204,9 @@ export function buildCards(
   dict: Dictionary["viewerNext"],
 ): ViewerCard[] {
   const cards: ViewerCard[] = [];
+  const completeness = measurement.__viewerCollectionCompleteness;
+  const collectionKnown = (name: keyof NonNullable<typeof completeness>) =>
+    completeness?.[name] !== "unknown";
 
   // 1. Roof Area
   const roofFaces =
@@ -317,9 +336,12 @@ export function buildCards(
   cards.push({
     id: "penetrations",
     title: dict.cards.penetrations.toUpperCase(),
-    hero: penetrationRows
-      .reduce((sum, row) => sum + (row.tally?.value ?? 0), 0)
-      .toString(),
+    hero:
+      collectionKnown("openings") && collectionKnown("attachments")
+        ? penetrationRows
+            .reduce((sum, row) => sum + (row.tally?.value ?? 0), 0)
+            .toString()
+        : "—",
     heroUnit: dict.labels.total,
     accentClass: "border-l-viewer-penetrations",
     rows: penetrationRows,
@@ -476,15 +498,17 @@ export function buildCards(
 
   openingTypes.forEach((t) => {
     const count = derived.openings.byType[t]?.value;
-    if (count !== null && count !== undefined && count > 0) {
+    const items = derived.openings.items.filter((o) => o.type === t);
+    if (items.length > 0) {
       const typeLabel =
         t
           .split("_")
           .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-          .join(" ") + (count > 1 ? "s" : "");
-      openingSummaries.push(`${count} ${typeLabel.toLowerCase()}`);
+          .join(" ") + ((count ?? items.length) > 1 ? "s" : "");
+      if (count !== null && count !== undefined) {
+        openingSummaries.push(`${count} ${typeLabel.toLowerCase()}`);
+      }
 
-      const items = derived.openings.items.filter((o) => o.type === t);
       const typeAggregate = derived.openings.byTypeAggregate[t];
       let subRows: CardRow[] = [];
       if (items.length > 6) {
@@ -514,9 +538,10 @@ export function buildCards(
             unit: "sq ft",
             tally: tallyArea(groupAggregate.area_mm2.value, "openings"),
             hasSub: true,
-            subRows: groupAggregate.openingIds.map(
-              id => items.find(item => item.id === id)!,
-            ).map((o) => ({
+            subRows: groupAggregate.openingIds.flatMap(id => {
+              const opening = items.find(item => item.id === id);
+              return opening ? [opening] : [];
+            }).map((o) => ({
               id: o.id,
               label: `${o.id} · ${formatLen(o.width_mm.value)} × ${formatLen(o.height_mm.value)}`,
               sub: `${dict.labels.perimeter} ${formatLen(o.perimeter.total_mm.value)}`,
@@ -548,9 +573,12 @@ export function buildCards(
         sub: typeAggregate
           ? `${dict.labels.perimeter} ${formatLen(typeAggregate.perimeter.total_mm.value)}`
           : undefined,
-        value: count.toString(),
-        unit: dict.labels.ea,
-        tally: tallyCount(count, "openings"),
+        value: count?.toString() ?? "—",
+        unit: count === null || count === undefined ? undefined : dict.labels.ea,
+        tally:
+          count === null || count === undefined
+            ? undefined
+            : tallyCount(count, "openings"),
         hasSub: true,
         subRows,
       });
@@ -601,16 +629,20 @@ export function buildCards(
   trimRows.push({
     id: "t_out_c",
     label: dict.labels.outsideCorners,
-    value: outsideCornerCount.toString(),
-    unit: dict.labels.ea,
-    tally: tallyCount(outsideCornerCount, "trim"),
+    value: collectionKnown("edges") ? outsideCornerCount.toString() : "—",
+    unit: collectionKnown("edges") ? dict.labels.ea : undefined,
+    tally: collectionKnown("edges")
+      ? tallyCount(outsideCornerCount, "trim")
+      : undefined,
   });
   trimRows.push({
     id: "t_in_c",
     label: dict.labels.insideCorners,
-    value: insideCornerCount.toString(),
-    unit: dict.labels.ea,
-    tally: tallyCount(insideCornerCount, "trim"),
+    value: collectionKnown("edges") ? insideCornerCount.toString() : "—",
+    unit: collectionKnown("edges") ? dict.labels.ea : undefined,
+    tally: collectionKnown("edges")
+      ? tallyCount(insideCornerCount, "trim")
+      : undefined,
   });
 
   cards.push({
@@ -618,7 +650,7 @@ export function buildCards(
     title: dict.cards.trim.toUpperCase(),
     hero: formatArea(derived.trim.fascia_area_mm2.value),
     heroUnit: `sq ft ${dict.labels.fascia.toLowerCase()}`,
-    sub: `${dict.labels.soffit} ${formatArea(derived.trim.soffit_area_mm2.value)} sq ft · ${outsideCornerCount + insideCornerCount} ${dict.labels.corners}`,
+    sub: `${dict.labels.soffit} ${formatArea(derived.trim.soffit_area_mm2.value)} sq ft · ${collectionKnown("edges") ? outsideCornerCount + insideCornerCount : "—"} ${dict.labels.corners}`,
     accentClass: "border-l-viewer-trim",
     rows: trimRows,
   });
@@ -628,12 +660,14 @@ export function buildCards(
   cards.push({
     id: "condition_areas",
     title: dict.cards.conditionAreas.toUpperCase(),
-    hero: condAreas.length.toString(),
+    hero: collectionKnown("condition_areas")
+      ? condAreas.length.toString()
+      : "—",
     heroUnit: dict.labels.areas,
     accentClass: "border-l-viewer-conditions",
     rows: condAreas.map((c) => ({
       id: c.id,
-      label: `${c.type
+      label: `${(typeof c.type === "string" ? c.type : dict.labels.unassigned)
         .split("_")
         .map((s: string) => s.charAt(0).toUpperCase() + s.slice(1))
         .join(" ")} · ${c.parent_face_id || dict.labels.unassigned}`,
