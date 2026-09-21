@@ -6,6 +6,7 @@ tmp
 out-tsc
 *.tsbuildinfo
 .next
+.next-dev
 next-env.d.ts
 .expo
 .expo-shared
