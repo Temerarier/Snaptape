@@ -1,0 +1,55 @@
+{
+  "checkedBeforeSwitchImplementation": true,
+  "results": [
+    {
+      "w": 1440,
+      "h": 1000,
+      "webgl": "ready",
+      "labels": [
+        [
+          "length",
+          "40' 0\""
+        ],
+        [
+          "depth",
+          "28' 0\""
+        ],
+        [
+          "eave",
+          "18' 0\""
+        ]
+      ],
+      "strokes": [
+        "depth",
+        "eave",
+        "length"
+      ],
+      "dimensionButtons": 0
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "webgl": "ready",
+      "labels": [
+        [
+          "length",
+          "40' 0\""
+        ],
+        [
+          "depth",
+          "28' 0\""
+        ],
+        [
+          "eave",
+          "18' 0\""
+        ]
+      ],
+      "strokes": [
+        "depth",
+        "eave",
+        "length"
+      ],
+      "dimensionButtons": 0
+    }
+  ]
+}

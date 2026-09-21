@@ -122,6 +122,56 @@ describe("viewer-next fixture presentation", () => {
     ).toBe(true);
   });
 
+  it("adapts derived opening parent aggregates for display, copy, and tally", () => {
+    const windows = cards.find((card) => card.id === "openings")!.rows
+      .find((row) => row.id === "op_window")!;
+    const front = windows.subRows!.find((row) => row.id === "og_window_WL-1")!;
+
+    expect(windows.sub).toBe(`Perimeter 240' 0"`);
+    expect(front).toMatchObject({
+      label: "Front (WL-1)",
+      sub: `6 EA · Perimeter 90' 8"`,
+      value: "81",
+      unit: "sq ft",
+      tally: {
+        unit: "sq ft",
+        semanticClass: "openings",
+      },
+    });
+    expect(front.tally!.value).toBeCloseTo(
+      mm2ToSquareFeet(
+        computeDerived(measurement).openings.parentGroups.find(
+          group => group.type === "window" && group.parent_face_id === "WL-1",
+        )!.area_mm2.value!,
+      ),
+      10,
+    );
+  });
+
+  it("shows an incomplete grouped aggregate as unknown without losing its count", () => {
+    const unknownFixture = {
+      ...fixture,
+      openings: fixture.openings.map((opening) =>
+        opening.id === "W-1" ? { ...opening, width_mm: null } : opening
+      ),
+    };
+    const unknownCards = buildCards(
+      computeDerived(unknownFixture as unknown as MeasurementInput),
+      unknownFixture as unknown as MinimalMeasurement,
+      enUS.viewerNext,
+    );
+    const front = unknownCards.find((card) => card.id === "openings")!.rows
+      .find((row) => row.id === "op_window")!.subRows!
+      .find((row) => row.id === "og_window_WL-1")!;
+
+    expect([front.sub, front.value, front.unit, front.tally]).toEqual([
+      `6 EA · Perimeter —`,
+      "—",
+      "verify on site",
+      undefined,
+    ]);
+  });
+
   it("exposes raw typed tally metadata instead of display-string values", () => {
     const roof = cards.find((card) => card.id === "roof_area")!;
     const first = roof.rows.find((row) => row.id === "RF-1")!;

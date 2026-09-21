@@ -102,6 +102,7 @@ export interface ModelAttachment extends ModelPolygon {
 }
 
 export interface ModelConditionArea extends ModelPolygon {
+  readonly photoIndex: number | null;
   readonly type: string;
   readonly severity: string | null;
   readonly parentFaceId: string | null;
@@ -114,18 +115,16 @@ export interface DimensionSegment {
 }
 
 export interface PermanentDimension {
-  readonly kind: "width" | "ridge" | "eave_height";
+  readonly kind: "length" | "depth" | "eave_height";
   readonly valueMm: number;
   readonly label: string;
   readonly segments: readonly DimensionSegment[];
 }
 
 export interface ModelDimensions {
-  readonly width: PermanentDimension;
-  readonly ridge: PermanentDimension;
-  /** Aggregate source total for the panel; it is not a drawable segment. */
-  readonly ridgeAggregate: PermanentDimension;
-  readonly eaveHeight: PermanentDimension;
+  readonly length: PermanentDimension | null;
+  readonly depth: PermanentDimension | null;
+  readonly eaveHeight: PermanentDimension | null;
 }
 
 export type ModelDiagnosticCategory =

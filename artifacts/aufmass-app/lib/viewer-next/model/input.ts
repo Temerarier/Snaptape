@@ -66,6 +66,7 @@ export interface MeasurementAttachmentLike {
 }
 
 export interface MeasurementConditionLike {
+  readonly photo_index?: number | null;
   readonly id?: string;
   readonly type?: string;
   readonly elevation?: string | null;

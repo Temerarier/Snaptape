@@ -1,0 +1,243 @@
+{
+  "results": [
+    {
+      "name": "camera clipping limits remain unchanged",
+      "passed": true
+    },
+    {
+      "name": "surface meshes, condition patches, and selected fill are live",
+      "passed": true
+    },
+    {
+      "name": "slow close full-house 360 orbit",
+      "passed": true
+    },
+    {
+      "name": "slow middle full-house 360 orbit",
+      "passed": true
+    },
+    {
+      "name": "slow far full-house 360 orbit",
+      "passed": true
+    },
+    {
+      "name": "desktop rear-left keeps both condition patches and callouts",
+      "passed": true
+    },
+    {
+      "name": "phone full 360 orbit renders all 24 commanded steps",
+      "passed": true
+    },
+    {
+      "name": "phone rear-left keeps both condition patches, labels, and exact dimensions",
+      "passed": true
+    },
+    {
+      "name": "clean default phone shows four controls and exactly three dimensions",
+      "passed": true
+    },
+    {
+      "name": "clean desktop opening group is expanded",
+      "passed": true
+    },
+    {
+      "name": "orbit run has no browser exceptions or WebGL failure",
+      "passed": true
+    }
+  ],
+  "evidence": {
+    "browser": "realChromium9223 (Chromium CDP localhost:9223)",
+    "bridge": "live ViewerViewport painter useRef; no production test hook",
+    "limits": {
+      "near": 1,
+      "far": 1000000,
+      "minDistance": 2834.64,
+      "maxDistance": 151180.8,
+      "initialDistance": 56973.79842096893
+    },
+    "orbits": [
+      {
+        "name": "desktop-close",
+        "steps": 24,
+        "delayMsPerStep": 100,
+        "requestedDistance": 39881.65889467825,
+        "actualDistance": 39881.65889467824,
+        "startAzimuth": 3.141592653589793,
+        "endAzimuth": 3.1415926535897927,
+        "commandedRotationRadians": 6.283185307179586,
+        "renderFramesBefore": 10,
+        "renderFramesAfter": 82,
+        "renderedFrameDelta": 72,
+        "quarters": [
+          {
+            "step": 6,
+            "azimuth": -1.5707963267948968,
+            "renderFrame": 27,
+            "path": "attached_assets/viewer-final-fixes/orbit/desktop-close-quarter-1.png"
+          },
+          {
+            "step": 12,
+            "azimuth": -2.3691051151978204e-16,
+            "renderFrame": 45,
+            "path": "attached_assets/viewer-final-fixes/orbit/desktop-close-quarter-2.png"
+          },
+          {
+            "step": 18,
+            "azimuth": 1.5707963267948966,
+            "renderFrame": 63,
+            "path": "attached_assets/viewer-final-fixes/orbit/desktop-close-quarter-3.png"
+          },
+          {
+            "step": 24,
+            "azimuth": 3.1415926535897927,
+            "renderFrame": 81,
+            "path": "attached_assets/viewer-final-fixes/orbit/desktop-close-quarter-4.png"
+          }
+        ]
+      },
+      {
+        "name": "desktop-middle",
+        "steps": 24,
+        "delayMsPerStep": 100,
+        "requestedDistance": 56973.79842096893,
+        "actualDistance": 56973.798420968924,
+        "startAzimuth": 3.1415926535897927,
+        "endAzimuth": 3.1415926535897927,
+        "commandedRotationRadians": 6.283185307179586,
+        "renderFramesBefore": 85,
+        "renderFramesAfter": 157,
+        "renderedFrameDelta": 72,
+        "quarters": [
+          {
+            "step": 6,
+            "azimuth": -1.5707963267948968,
+            "renderFrame": 102,
+            "path": "attached_assets/viewer-final-fixes/orbit/desktop-middle-quarter-1.png"
+          },
+          {
+            "step": 12,
+            "azimuth": -2.6533977290215565e-16,
+            "renderFrame": 120,
+            "path": "attached_assets/viewer-final-fixes/orbit/desktop-middle-quarter-2.png"
+          },
+          {
+            "step": 18,
+            "azimuth": 1.5707963267948966,
+            "renderFrame": 138,
+            "path": "attached_assets/viewer-final-fixes/orbit/desktop-middle-quarter-3.png"
+          },
+          {
+            "step": 24,
+            "azimuth": 3.1415926535897927,
+            "renderFrame": 156,
+            "path": "attached_assets/viewer-final-fixes/orbit/desktop-middle-quarter-4.png"
+          }
+        ]
+      },
+      {
+        "name": "desktop-far",
+        "steps": 24,
+        "delayMsPerStep": 100,
+        "requestedDistance": 96855.45731564717,
+        "actualDistance": 96855.45731564716,
+        "startAzimuth": 3.1415926535897927,
+        "endAzimuth": 3.1415926535897927,
+        "commandedRotationRadians": 6.283185307179586,
+        "renderFramesBefore": 160,
+        "renderFramesAfter": 232,
+        "renderedFrameDelta": 72,
+        "quarters": [
+          {
+            "step": 6,
+            "azimuth": -1.5707963267948968,
+            "renderFrame": 177,
+            "path": "attached_assets/viewer-final-fixes/orbit/desktop-far-quarter-1.png"
+          },
+          {
+            "step": 12,
+            "azimuth": -1.9510277419276181e-16,
+            "renderFrame": 195,
+            "path": "attached_assets/viewer-final-fixes/orbit/desktop-far-quarter-2.png"
+          },
+          {
+            "step": 18,
+            "azimuth": 1.5707963267948966,
+            "renderFrame": 213,
+            "path": "attached_assets/viewer-final-fixes/orbit/desktop-far-quarter-3.png"
+          },
+          {
+            "step": 24,
+            "azimuth": 3.1415926535897927,
+            "renderFrame": 231,
+            "path": "attached_assets/viewer-final-fixes/orbit/desktop-far-quarter-4.png"
+          }
+        ]
+      },
+      {
+        "name": "phone-middle",
+        "steps": 24,
+        "delayMsPerStep": 100,
+        "requestedDistance": 56973.79842096893,
+        "actualDistance": 56973.798420968924,
+        "startAzimuth": -3.141592653589793,
+        "endAzimuth": 3.141592653589793,
+        "commandedRotationRadians": 6.283185307179586,
+        "renderFramesBefore": 9,
+        "renderFramesAfter": 81,
+        "renderedFrameDelta": 72,
+        "quarters": [
+          {
+            "step": 6,
+            "azimuth": -1.5707963267948966,
+            "renderFrame": 26,
+            "path": "attached_assets/viewer-final-fixes/orbit/phone-middle-quarter-1.png"
+          },
+          {
+            "step": 12,
+            "azimuth": 0,
+            "renderFrame": 44,
+            "path": "attached_assets/viewer-final-fixes/orbit/phone-middle-quarter-2.png"
+          },
+          {
+            "step": 18,
+            "azimuth": 1.5707963267948966,
+            "renderFrame": 62,
+            "path": "attached_assets/viewer-final-fixes/orbit/phone-middle-quarter-3.png"
+          },
+          {
+            "step": 24,
+            "azimuth": -3.141592653589793,
+            "renderFrame": 80,
+            "path": "attached_assets/viewer-final-fixes/orbit/phone-middle-quarter-4.png"
+          }
+        ]
+      }
+    ],
+    "screenshots": [
+      "attached_assets/viewer-final-fixes/orbit/desktop-close-quarter-1.png",
+      "attached_assets/viewer-final-fixes/orbit/desktop-close-quarter-2.png",
+      "attached_assets/viewer-final-fixes/orbit/desktop-close-quarter-3.png",
+      "attached_assets/viewer-final-fixes/orbit/desktop-close-quarter-4.png",
+      "attached_assets/viewer-final-fixes/orbit/desktop-middle-quarter-1.png",
+      "attached_assets/viewer-final-fixes/orbit/desktop-middle-quarter-2.png",
+      "attached_assets/viewer-final-fixes/orbit/desktop-middle-quarter-3.png",
+      "attached_assets/viewer-final-fixes/orbit/desktop-middle-quarter-4.png",
+      "attached_assets/viewer-final-fixes/orbit/desktop-far-quarter-1.png",
+      "attached_assets/viewer-final-fixes/orbit/desktop-far-quarter-2.png",
+      "attached_assets/viewer-final-fixes/orbit/desktop-far-quarter-3.png",
+      "attached_assets/viewer-final-fixes/orbit/desktop-far-quarter-4.png",
+      "attached_assets/viewer-final-fixes/orbit/rear-left-oblique-1440-conditions.png",
+      "attached_assets/viewer-final-fixes/orbit/phone-middle-quarter-1.png",
+      "attached_assets/viewer-final-fixes/orbit/phone-middle-quarter-2.png",
+      "attached_assets/viewer-final-fixes/orbit/phone-middle-quarter-3.png",
+      "attached_assets/viewer-final-fixes/orbit/phone-middle-quarter-4.png",
+      "attached_assets/viewer-final-fixes/orbit/rear-left-oblique-390-conditions.png",
+      "attached_assets/viewer-final-fixes/orbit/clean-default-front-390-four-controls.png",
+      "attached_assets/viewer-final-fixes/orbit/clean-desktop-window-groups-open.png",
+      "attached_assets/viewer-final-fixes/orbit/desktop-orbit-contact-sheet.png",
+      "attached_assets/viewer-final-fixes/orbit/phone-orbit-contact-sheet.png"
+    ],
+    "browserExceptions": [],
+    "physicalGpuOrSafariVerified": false
+  }
+}

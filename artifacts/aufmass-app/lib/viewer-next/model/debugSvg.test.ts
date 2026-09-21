@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { computeDerived } from "@workspace/measurement";
+import type { MeasurementInput } from "@workspace/measurement";
 import fixture from "../../../../../fixtures/garage-house.json";
 import { buildModel } from "./index";
 import { renderDebugSvg } from "./debugSvg";
@@ -14,7 +16,10 @@ function polygonCoordinates(svg: string, id: string): Array<[number, number]> {
 
 describe("viewer-next debug SVG", () => {
   it("projects front and side elevations from the model output with stable ids", () => {
-    const svg = renderDebugSvg(buildModel(fixture));
+    const svg = renderDebugSvg(buildModel(
+      fixture,
+      computeDerived(fixture as unknown as MeasurementInput),
+    ));
 
     expect(svg.startsWith('<?xml version="1.0" encoding="UTF-8"?>')).toBe(true);
     expect(svg).toContain('id="front-elevation"');
@@ -24,9 +29,9 @@ describe("viewer-next debug SVG", () => {
     expect(svg).toContain('data-model-id="G-1"');
     expect(svg).toContain('data-model-id="SK-1"');
     expect(svg).toContain('data-model-id="RF-6"');
-    expect(svg).toContain('data-dimension-label="width">40&apos; 0&quot;</text>');
-    expect(svg).toContain('data-dimension-label="ridge">40&apos; 0&quot;</text>');
-    expect(svg).toContain('data-dimension-label="ridge-aggregate">70&apos; 0&quot;</text>');
+    expect(svg).toContain('data-dimension-label="length">40&apos; 0&quot;</text>');
+    expect(svg).toContain('data-dimension-label="depth">28&apos; 0&quot;</text>');
+    expect(svg).not.toContain('data-dimension-label="ridge"');
   });
 
   it("keeps z upright and allocates front and side to separate columns", () => {

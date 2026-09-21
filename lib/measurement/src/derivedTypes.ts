@@ -37,7 +37,17 @@ export interface MeasurementInput {
   readonly faces: readonly MeasurementFace[];
   readonly openings: readonly MeasurementOpening[];
   readonly edges: readonly MeasurementEdge[];
-  readonly building?: { readonly roof_type?: string };
+  readonly building?: {
+    readonly roof_type?: string;
+    readonly footprint?: {
+      readonly points?: readonly (readonly number[])[];
+      readonly width_mm?: MeasurementValue | null;
+      readonly depth_mm?: MeasurementValue | null;
+    } | null;
+    readonly heights?: {
+      readonly eave_height_mm?: MeasurementValue | null;
+    } | null;
+  };
   readonly downspouts?: readonly {
     readonly id: string;
     readonly elevation?: string | null;
@@ -99,6 +109,21 @@ export interface OpeningCounts {
   readonly byType: Readonly<Record<string, DerivedValue<"count">>>;
 }
 
+export interface OpeningAggregate {
+  readonly count: DerivedValue<"count">;
+  readonly area_mm2: DerivedValue<"mm2">;
+  readonly perimeter: PerimeterBreakdown;
+}
+
+/** Aggregate for the parent/elevation rows used by the viewer. Parent identity
+ * remains explicit because an elevation can contain more than one wall. */
+export interface OpeningParentGroup extends OpeningAggregate {
+  readonly type: string;
+  readonly parent_face_id: string | null;
+  readonly elevation: string | null;
+  readonly openingIds: readonly string[];
+}
+
 export interface DerivedWall {
   readonly id: string;
   readonly elevation: string | null;
@@ -128,6 +153,11 @@ export interface CalculationDiagnostic {
 }
 
 export interface DerivedMeasurement {
+  readonly footprint: {
+    readonly length_mm: DerivedValue<"mm">;
+    readonly depth_mm: DerivedValue<"mm">;
+    readonly eave_height_mm: DerivedValue<"mm">;
+  };
   readonly roof: {
     readonly area_mm2: DerivedValue<"mm2">;
     readonly squares: DerivedValue<"SQ">;
@@ -153,6 +183,9 @@ export interface DerivedMeasurement {
   readonly openings: OpeningCounts & {
     readonly items: readonly DerivedOpening[];
     readonly byWall: Readonly<Record<string, OpeningCounts>>;
+    readonly aggregate: OpeningAggregate;
+    readonly byTypeAggregate: Readonly<Record<string, OpeningAggregate>>;
+    readonly parentGroups: readonly OpeningParentGroup[];
     readonly identicalGroups: readonly OpeningGroup[];
     /** Unknown sizes are not grouped together as if they were identical. */
     readonly ungroupedIds: readonly string[];

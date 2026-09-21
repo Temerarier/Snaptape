@@ -14,8 +14,8 @@ import {
 import type { ModelPolygon, Point3, ViewerModel } from "@/lib/viewer-next/model";
 import { buildPresentationClosure } from "@/lib/viewer-next/model/closure";
 import { viewerTokens } from "@/lib/viewer-next/tokens";
-import { convexHull, dimensionRails, layoutLabels, screenBounds, type DimensionStroke, type LabelRequest } from "@/lib/viewer-next/overlayLayout";
-import { clearRenderGroup, createContactShadow, createSelectionVisual, disposeRenderObject, isRayDistanceVisible, polygonGeometry, polygonMaterial } from "@/lib/viewer-next/renderResources";
+import { convexHull, dimensionRails, layoutLabels, screenBounds, visiblePermanentDimensions, type DimensionStroke, type LabelRequest } from "@/lib/viewer-next/overlayLayout";
+import { canonicalSurfaceHit, placeSurfaceVisual, clearRenderGroup, createContactShadow, createConditionVisual, createSelectionVisual, disposeRenderObject, isRayDistanceVisible, polygonGeometry, polygonMaterial } from "@/lib/viewer-next/renderResources";
 import { createCurrentCallback, startDampedRenderLoop } from "./painterLifecycle";
 import { applyExposedViewport, createTapGate, placeCameraWithoutMomentum } from "./viewportInput";
 
@@ -33,6 +33,7 @@ export interface ViewerViewportProps {
   onMeasurePoint: (point: Point3) => void;
   onSnapPreview: (result: ReturnType<typeof snapMeasurePoint> | null) => void;
   showConditions: boolean;
+  showDimensions: boolean;
   webglMessage: string;
   layoutMode: "split" | "model";
   modelState?: "ready" | "notready";
@@ -62,7 +63,10 @@ interface OverlayPosition {
   readonly left: number;
   readonly top: number;
   readonly text: string;
-  readonly kind: "dimension" | "measure";
+  readonly kind: "dimension" | "measure" | "condition";
+  readonly anchorLeft?: number;
+  readonly anchorTop?: number;
+  readonly accent?: string;
 }
 
 interface SelectionOverlay {
@@ -78,6 +82,7 @@ interface SelectionOverlay {
 interface ViewerState {
   readonly measureArmed: boolean;
   readonly showConditions: boolean;
+  readonly showDimensions: boolean;
   readonly selectedId: string | null;
   readonly measureLines: readonly MeasureLine[];
   readonly onSelect: (id: string | null) => void;
@@ -102,6 +107,7 @@ function addPolygon(
     : "face";
   const mesh = new THREE.Mesh(geometry, material);
   mesh.userData = { elementId: part.id, elementKind };
+  placeSurfaceVisual(mesh, part);
   group.add(mesh);
   if (interactive) interactiveMeshes.push(mesh);
   return mesh;
@@ -218,6 +224,8 @@ function overlaysEqual(previous: readonly OverlayPosition[], next: readonly Over
     return item.id === candidate.id && item.left === candidate.left &&
       item.top === candidate.top &&
       item.text === candidate.text &&
+      item.anchorLeft === candidate.anchorLeft && item.anchorTop === candidate.anchorTop &&
+      item.accent === candidate.accent &&
       item.kind === candidate.kind;
   });
 }
@@ -242,6 +250,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
   onMeasurePoint,
   onSnapPreview,
   showConditions,
+  showDimensions,
   webglMessage,
   layoutMode,
   modelState = "ready",
@@ -253,6 +262,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
   const stateRef = useRef<ViewerState>({
     measureArmed,
     showConditions,
+    showDimensions,
     selectedId,
     measureLines,
     onSelect,
@@ -276,6 +286,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
   stateRef.current = {
     measureArmed,
     showConditions,
+    showDimensions,
     selectedId,
     measureLines,
     onSelect,
@@ -322,15 +333,14 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
     }
     const bounds = screenBounds(silhouette);
     const sizeOf = (id: string) => labelSizesRef.current.get(id) ?? { width: 0, height: 0 };
-    const permanent = [
-      { id: "width" as const, dimension: model.permanentDimensions.width },
-      { id: "ridge" as const, dimension: model.permanentDimensions.ridge },
-      { id: "eave" as const, dimension: model.permanentDimensions.eaveHeight },
-    ].filter(({ dimension }) => dimension.segments.length > 0);
+    const permanent = visiblePermanentDimensions(
+      model.permanentDimensions,
+      stateRef.current.showDimensions,
+    );
     const rails = dimensionRails(bounds, permanent.map(({ id, dimension }) => ({
       id, ...sizeOf(id),
       start: screenPoint(dimension.segments[0].start), end: screenPoint(dimension.segments[0].end),
-    })), { width, height });
+    })), { width, height }, silhouette);
     const requests: LabelRequest[] = [...rails.labels];
     const labels = permanent.map(({ id, dimension }) => ({
       id, text: dimension.label,
@@ -343,8 +353,39 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
       return { id, text: line.label, kind: "measure" as const };
     });
     const selected = findSelectableElement(model, stateRef.current.selectedId);
-    const details = selected ? getSelectionDetails(selected) : null;
+    const details = selected && !("severity" in selected) ? getSelectionDetails(selected) : null;
     const selectionAnchor = details ? screenPoint(details.target) : null;
+    const conditionLabels = stateRef.current.showConditions ? model.conditions.map(condition => {
+      const id = `condition-${condition.id}`, size = sizeOf(id);
+      const details = getSelectionDetails(condition);
+      const anchor = screenPoint(details.target);
+      const parent = [...model.walls, ...model.roofFaces]
+        .find(item => item.id === condition.parentFaceId);
+      const parentClass = parent && "faceClass" in parent
+        ? parent.faceClass === "wall"
+          ? dict.viewerNext.labels.wall
+          : dict.viewerNext.labels.roof.toLowerCase()
+        : "";
+      const type = condition.type.split("_")
+        .map((word, index) =>
+          index === 0
+            ? word.charAt(0).toUpperCase() + word.slice(1)
+            : word
+        )
+        .join(" ");
+      const parentText = [
+        parent?.elevation ?? condition.elevation,
+        parentClass,
+      ].filter(Boolean).join(" ");
+      requests.push({ id, ...size, priority: 1, preferred: { x: anchor.x + 12, y: anchor.y - size.height / 2 } });
+      return {
+        id, kind: "condition" as const,
+        text: `${type} · ${parentText || dict.viewerNext.labels.unassigned} (${condition.parentFaceId ?? dict.viewerNext.labels.unassigned})\n${details.value} · ${condition.severity ?? "—"} · ${dict.viewerNext.photo} #${condition.photoIndex ?? "—"}`,
+        anchorLeft: anchor.x, anchorTop: anchor.y,
+        accent: condition.severity === "severe" ? viewerTokens.danger :
+          condition.severity === "moderate" ? viewerTokens.warning : viewerTokens.textTertiary,
+      };
+    }) : [];
     if (selected && selectionAnchor) {
       requests.push({
         id: "selection", ...selectionBoxSizeRef.current, priority: 1,
@@ -352,7 +393,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
       });
     }
     const placements = layoutLabels({ viewport: { width, height }, labels: requests, obstacles: avoid, silhouette });
-    const nextOverlays = [...labels, ...measureLabels].map(label => {
+    const nextOverlays = [...labels, ...measureLabels, ...conditionLabels].map(label => {
       const placement = placements.find(p => p.id === label.id)!;
       return { ...label, left: (placement.left + placement.right) / 2, top: (placement.top + placement.bottom) / 2 };
     });
@@ -465,7 +506,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
     if (!painter) return;
     clearRenderGroup(painter.selectionGroup);
     const selected = findSelectableElement(model, stateRef.current.selectedId);
-    if (!selected) {
+    if (!selected || ("severity" in selected && !stateRef.current.showConditions)) {
       updateOverlays();
       return;
     }
@@ -592,7 +633,12 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
       presentationOccluders.push(addPolygon(closure, geometryGroup, [], false));
     }
     for (const edge of model.edges) addEdge(edge, geometryGroup, interactiveMeshes);
-    for (const condition of model.conditions) addPolygon(condition, conditionsGroup, [], false);
+    for (const condition of model.conditions) {
+      const mesh = createConditionVisual(condition);
+      conditionsGroup.add(mesh);
+      interactiveMeshes.push(mesh);
+    }
+    conditionsGroup.visible = stateRef.current.showConditions;
 
     const marker = new THREE.Mesh(
       new THREE.SphereGeometry(Math.max(span * 0.012, 50), 16, 12),
@@ -666,7 +712,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
-    const opaqueMeshes = [...interactiveMeshes.filter(item => item instanceof THREE.Mesh), ...presentationOccluders];
+    const opaqueMeshes = [...interactiveMeshes.filter(item => item instanceof THREE.Mesh && item.userData.elementKind !== "condition"), ...presentationOccluders];
     const hitAt = (event: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
       const viewport = syncPainterViewport(state, host);
@@ -677,8 +723,13 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
       pointer.y = -(y / viewport.height) * 2 + 1;
       raycaster.setFromCamera(pointer, camera);
       raycaster.params.Line.threshold = Math.max(model.bounds.overall.widthMm * 0.015, 80);
-      const hits = raycaster.intersectObjects(interactiveMeshes, false);
+      // Raycasting does not exclude children of invisible groups. Decals never
+      // supply displaced measurement hits or snapping occluders.
+      const hits = raycaster.intersectObjects(interactiveMeshes.filter(item =>
+        item.userData.elementKind !== "condition" ||
+        (stateRef.current.showConditions && !stateRef.current.measureArmed)), false);
       const priority: Record<string, number> = {
+        condition: -1,
         opening: 0,
         attachment: 1,
         face: 2,
@@ -726,7 +777,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
         y: event.clientY - rect.top,
       };
       const snap = snapMeasurePoint(
-        { x: hit.point.x, y: hit.point.y, z: hit.point.z },
+        canonicalSurfaceHit(hit),
         model,
         {
           screenPoint,
@@ -766,7 +817,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
           y: event.clientY - rect.top,
         };
         const snap = snapMeasurePoint(
-          { x: hit.point.x, y: hit.point.y, z: hit.point.z },
+          canonicalSurfaceHit(hit),
           model,
           {
             screenPoint,
@@ -833,7 +884,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
     } catch {
       setWebglFailed(true);
     }
-  }, [model, selectedId, measureArmed, measureLines, showConditions]);
+  }, [model, selectedId, measureArmed, measureLines, showConditions, showDimensions]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -885,16 +936,24 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
               stroke={viewerTokens.dimensionLine} strokeWidth={1}
               strokeDasharray={stroke.dashed ? "4 4" : undefined} />
           ))}
+          {overlays.filter(label => label.kind === "condition").map(label => {
+            const size = labelSizesRef.current.get(label.id) ?? { width: 0, height: 0 };
+            return <line key={label.id} data-testid={`connector-${label.id}`}
+              x1={label.anchorLeft} y1={label.anchorTop}
+              x2={Math.max(label.left - size.width / 2, Math.min(label.left + size.width / 2, label.anchorLeft!))}
+              y2={Math.max(label.top - size.height / 2, Math.min(label.top + size.height / 2, label.anchorTop!))}
+              stroke={viewerTokens.dimensionLine} strokeWidth={1} />;
+          })}
         </svg>
         {overlays.map(overlay => (
           <span
             key={overlay.id}
             data-testid={`label-${overlay.id}`}
             data-overlay-label={overlay.id}
-            title={overlay.id === "ridge" ? dict.viewerNext.labels.ridge : overlay.id === "eave" ? dict.viewerNext.labels.eaveHeight : undefined}
-            aria-label={overlay.id === "ridge" ? `${dict.viewerNext.labels.ridge}: ${overlay.text}` : overlay.id === "eave" ? `${dict.viewerNext.labels.eaveHeight}: ${overlay.text}` : overlay.text}
-            className={overlay.kind === "measure" ? "viewer-next-dimension-label viewer-next-measure-label" : "viewer-next-dimension-label"}
-            style={{ left: overlay.left, top: overlay.top }}
+            title={overlay.id === "eave" ? dict.viewerNext.labels.eaveHeight : undefined}
+            aria-label={overlay.id === "eave" ? `${dict.viewerNext.labels.eaveHeight}: ${overlay.text}` : overlay.text}
+            className={overlay.kind === "condition" ? "viewer-next-selection-box viewer-next-condition-label" : overlay.kind === "measure" ? "viewer-next-dimension-label viewer-next-measure-label" : "viewer-next-dimension-label"}
+            style={{ left: overlay.left, top: overlay.top, ...(overlay.kind === "condition" ? { transform: "translate(-50%, -50%)", whiteSpace: "pre-line", borderColor: overlay.accent } : {}) }}
           >
             {overlay.text}
           </span>

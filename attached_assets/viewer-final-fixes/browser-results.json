@@ -1,0 +1,170 @@
+{
+  "results": [
+    {
+      "name": "all derived opening parent groups show count, perimeter, area, copy and tally",
+      "passed": true
+    },
+    {
+      "name": "conditions expose two truthful dark callouts and selection reveals hidden conditions",
+      "passed": true
+    },
+    {
+      "name": "conditions off remove labels, connectors, and their layout reservations",
+      "passed": true
+    },
+    {
+      "name": "empty live measurement retains toggle and shows exact notice",
+      "passed": true
+    },
+    {
+      "name": "desktop: corrected dimensions default on with exact labels",
+      "passed": true
+    },
+    {
+      "name": "desktop: dimensions off preserve measure, selection, and conditions; on restores exactly three",
+      "passed": true
+    },
+    {
+      "name": "desktop: desktop/tablet dimension switch is accessible",
+      "passed": true
+    },
+    {
+      "name": "desktop: no uncaught browser errors",
+      "passed": true
+    },
+    {
+      "name": "tablet: corrected dimensions default on with exact labels",
+      "passed": true
+    },
+    {
+      "name": "tablet: dimensions off preserve measure, selection, and conditions; on restores exactly three",
+      "passed": true
+    },
+    {
+      "name": "tablet: desktop/tablet dimension switch is accessible",
+      "passed": true
+    },
+    {
+      "name": "tablet: no uncaught browser errors",
+      "passed": true
+    },
+    {
+      "name": "phone: corrected dimensions default on with exact labels",
+      "passed": true
+    },
+    {
+      "name": "phone: dimensions off preserve measure, selection, and conditions; on restores exactly three",
+      "passed": true
+    },
+    {
+      "name": "phone: four accessible 44px phone controls use SVG icons",
+      "passed": true
+    },
+    {
+      "name": "phone: no uncaught browser errors",
+      "passed": true
+    },
+    {
+      "name": "short-phone: corrected dimensions default on with exact labels",
+      "passed": true
+    },
+    {
+      "name": "short-phone: dimensions off preserve measure, selection, and conditions; on restores exactly three",
+      "passed": true
+    },
+    {
+      "name": "short-phone: four accessible 44px phone controls use SVG icons",
+      "passed": true
+    },
+    {
+      "name": "short-phone: no uncaught browser errors",
+      "passed": true
+    },
+    {
+      "name": "narrow-landscape: corrected dimensions default on with exact labels",
+      "passed": true
+    },
+    {
+      "name": "narrow-landscape: dimensions off preserve measure, selection, and conditions; on restores exactly three",
+      "passed": true
+    },
+    {
+      "name": "narrow-landscape: desktop/tablet dimension switch is accessible",
+      "passed": true
+    },
+    {
+      "name": "narrow-landscape: every visible header control is contained and hit-testable",
+      "passed": true
+    },
+    {
+      "name": "narrow-landscape: no uncaught browser errors",
+      "passed": true
+    },
+    {
+      "name": "compact-landscape: corrected dimensions default on with exact labels",
+      "passed": true
+    },
+    {
+      "name": "compact-landscape: dimensions off preserve measure, selection, and conditions; on restores exactly three",
+      "passed": true
+    },
+    {
+      "name": "compact-landscape: desktop/tablet dimension switch is accessible",
+      "passed": true
+    },
+    {
+      "name": "compact-landscape: every visible header control is contained and hit-testable",
+      "passed": true
+    },
+    {
+      "name": "compact-landscape: no uncaught browser errors",
+      "passed": true
+    }
+  ],
+  "evidence": {
+    "browser": "realChromium9223 (real Chromium CDP on localhost:9223)",
+    "clipboard": "navigator.clipboard.writeText stub installed before navigation",
+    "testOnlyBridges": [
+      "live ViewerViewport onMeasurePoint callback with permanent-dimension endpoints",
+      "live ViewerNextClient measurement.condition_areas temporary in-memory mutation"
+    ],
+    "viewports": [
+      {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1000,
+        "screenshot": "desktop-1440x1000-conditions-dimensions.png"
+      },
+      {
+        "name": "tablet",
+        "width": 768,
+        "height": 1024,
+        "screenshot": "tablet-768x1024-conditions-dimensions.png"
+      },
+      {
+        "name": "phone",
+        "width": 390,
+        "height": 844,
+        "screenshot": "phone-390x844-conditions-dimensions.png"
+      },
+      {
+        "name": "short-phone",
+        "width": 375,
+        "height": 667,
+        "screenshot": "short-phone-375x667-conditions-dimensions.png"
+      },
+      {
+        "name": "narrow-landscape",
+        "width": 768,
+        "height": 600,
+        "screenshot": "narrow-landscape-768x600-conditions-dimensions.png"
+      },
+      {
+        "name": "compact-landscape",
+        "width": 840,
+        "height": 600,
+        "screenshot": "compact-landscape-840x600-conditions-dimensions.png"
+      }
+    ]
+  }
+}

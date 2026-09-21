@@ -42,3 +42,45 @@ mtime_ms = 1789732517903
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/5cc85b52-87c8-4759-97a6-9c297a48340b/ee5271be-ead7-4a5a-aae0-4a2baaa014b6"
 storage_version_token = "1789732535253969"
 content_type = "text/html"
+
+[[outputs]]
+id = "dEBwZjTg6URGF7fVeBXPF"
+uri = "file://attached_assets/viewer-final-fixes/orbit/rear-left-oblique-1440-conditions.png"
+type = "image"
+title = "Desktop: conditions and corrected dimensions"
+description = "Actual WebGL capture showing both preserved condition records and the 40′ / 28′ / 18′ dimension set."
+logical_id = "71a6d2d2-f34e-4e0c-af9d-a4292f28a2b2"
+content_hash = "sha256:3eba7c287764823057ac5c4cd4b41cb6acd06858c8af056ad7882e141b35b277"
+size = 339737
+mtime_ms = 1789991564271
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/71a6d2d2-f34e-4e0c-af9d-a4292f28a2b2/b6bd8684-2c5b-4767-a8a0-8395b6a6d152"
+storage_version_token = "1789991703392187"
+content_type = "image/png"
+
+[[outputs]]
+id = "F2FtukkGaWRRLUf6-b2ZB"
+uri = "file://attached_assets/viewer-final-fixes/orbit/rear-left-oblique-390-conditions.png"
+type = "image"
+title = "Phone: overlays and four controls"
+description = "Actual 390px WebGL capture with conditions, dimensions, selection and four 44px controls."
+logical_id = "272b1fff-b0ca-4e63-9056-d4f828c45935"
+content_hash = "sha256:61aa4021417dc935b1f216e4c52404f76465eab9c2ebc40ae7c17a4e8b01b842"
+size = 95897
+mtime_ms = 1789991572319
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/272b1fff-b0ca-4e63-9056-d4f828c45935/afec5561-e66d-484f-8078-b551f67a6f3a"
+storage_version_token = "1789991704260816"
+content_type = "image/png"
+
+[[outputs]]
+id = "kJb8UKeUT4XmNcadP6PML"
+uri = "file://attached_assets/viewer-final-fixes/orbit/clean-desktop-window-groups-open.png"
+type = "image"
+title = "Window groups: counts, perimeter and area"
+description = "Derived parent-group totals with Copy and Σ actions; fixture values preserved."
+logical_id = "7225a33c-d85a-44d9-a72c-1847ddf9af3f"
+content_hash = "sha256:a168c60f3b608a263e60b7faae8bdc52d44170680c88808cb31be7da3f5bb93a"
+size = 335248
+mtime_ms = 1789991576715
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/7225a33c-d85a-44d9-a72c-1847ddf9af3f/1f38979a-4b3e-4ed1-b299-98fcb18eade4"
+storage_version_token = "1789991705239284"
+content_type = "image/png"

@@ -25,6 +25,7 @@ import {
   type ViewerMeasurement,
   type ViewerModel,
 } from "@/lib/viewer-next/model";
+import type { DerivedMeasurement } from "@workspace/measurement";
 import {
   createMeasureLine,
   findSelectableElement,
@@ -35,6 +36,8 @@ import { ViewerViewport, type ViewerViewportHandle } from "./ViewerViewport";
 import { presentViewerWarnings } from "./warningPresentation";
 import { CalcBubble } from "./CalcBubble";
 import { viewerTokenStyles } from "@/lib/viewer-next/tokens";
+
+export const DEFAULT_SHOW_DIMENSIONS = true;
 
 function emptyViewerModel(
   note: string,
@@ -48,12 +51,6 @@ function emptyViewerModel(
     depthMm: 0,
     heightMm: 0,
   };
-  const dimension = (kind: "width" | "ridge" | "eave_height") => ({
-    kind,
-    valueMm: 0,
-    label: `0' 0"`,
-    segments: [{ start: origin, end: origin }],
-  });
   return {
     walls: [],
     roofFaces: [],
@@ -73,19 +70,21 @@ function emptyViewerModel(
       overallDepthMm: 0,
     },
     permanentDimensions: {
-      width: dimension("width"),
-      ridge: dimension("ridge"),
-      eaveHeight: dimension("eave_height"),
-      ridgeAggregate: dimension("ridge"),
+      length: null,
+      depth: null,
+      eaveHeight: null,
     },
     diagnostics,
     notes: [note],
   };
 }
 
-function safeBuildModel(measurement: MinimalMeasurement): ViewerModel {
+function safeBuildModel(
+  measurement: MinimalMeasurement,
+  derived: DerivedMeasurement,
+): ViewerModel {
   try {
-    return buildModel(measurement as unknown as ViewerMeasurement);
+    return buildModel(measurement as unknown as ViewerMeasurement, derived);
   } catch {
     return emptyViewerModel(
       "The viewport model could not be built; measurements remain available.",
@@ -182,11 +181,13 @@ export function revealSelection(
 
 export function ViewerNextClient({
   measurement,
+  derived,
   cards,
   dict,
   webglMessage,
 }: {
   measurement: MinimalMeasurement;
+  derived: DerivedMeasurement;
   cards: ViewerCard[];
   dict: Dictionary["viewerNext"];
   webglMessage?: string;
@@ -197,6 +198,7 @@ export function ViewerNextClient({
   const [layoutMode, setLayoutMode] = useState<"split" | "model">("split");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showConditions, setShowConditions] = useState(false);
+  const [showDimensions, setShowDimensions] = useState(DEFAULT_SHOW_DIMENSIONS);
   const [measureArmed, setMeasureArmed] = useState(false);
   const [measureStart, setMeasureStart] = useState<Point3 | null>(null);
   const [measureLines, setMeasureLines] = useState<MeasureLine[]>([]);
@@ -207,7 +209,7 @@ export function ViewerNextClient({
   const viewportRef = useRef<ViewerViewportHandle>(null);
   const rowRefs = useRef(new Map<string, HTMLDivElement>());
   const visibleCards = filterCards(cards, filter);
-  const model = useMemo(() => safeBuildModel(measurement), [measurement]);
+  const model = useMemo(() => safeBuildModel(measurement, derived), [measurement, derived]);
 
   const toggleCard = (id: string) => {
     setOpenCards((prev) => {
@@ -288,6 +290,7 @@ export function ViewerNextClient({
 
   const selectElement = (id: string | null, focus = false) => {
     setSelectedId(id);
+    if (model.conditions.some(condition => condition.id === id)) setShowConditions(true);
     if (!id || !focus) return;
     viewportRef.current?.focusElement(id);
   };
@@ -438,6 +441,30 @@ export function ViewerNextClient({
               />
             </span>
           </button>
+          <button
+            type="button"
+            data-control="dimensions"
+            aria-pressed={showDimensions}
+            onClick={() => setShowDimensions((value) => !value)}
+            className="viewer-next-header-control viewer-next-hover flex min-h-11 cursor-pointer select-none items-center gap-2 whitespace-nowrap rounded-lg px-2 text-left"
+          >
+            <span className="text-xs font-medium text-schrift-sekundaer">
+              {dict.labels.showDimensions}
+            </span>
+            <span
+              className={cn(
+                "flex h-5 w-9 rounded-full p-0.5 transition-colors",
+                showDimensions ? "bg-akzent" : "bg-linie",
+              )}
+            >
+              <span
+                className={cn(
+                  "viewer-next-toggle-knob h-4 w-4 rounded-full shadow transition-transform",
+                  showDimensions && "translate-x-4",
+                )}
+              />
+            </span>
+          </button>
         </div>
 
         <div
@@ -456,6 +483,7 @@ export function ViewerNextClient({
               onMeasurePoint={handleMeasurePoint}
               onSnapPreview={setSnapPreview}
               showConditions={showConditions}
+              showDimensions={showDimensions}
               webglMessage={viewportMessage}
               layoutMode={layoutMode}
               modelState={modelState}
@@ -482,12 +510,12 @@ export function ViewerNextClient({
             }
             onClear={() => setTallyItems([])}
           />
-          {copyNotice && (
+           {(copyNotice || (showConditions && !(measurement.condition_areas?.length))) && (
             <div
               role="status"
               className="viewer-next-toast pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full px-4 py-2 text-xs font-semibold shadow-karte"
             >
-              {copyNotice}
+               {copyNotice ?? dict.labels.noConditions}
             </div>
           )}
 
@@ -529,6 +557,17 @@ export function ViewerNextClient({
               className="viewer-next-round-control"
             >
               <ResetIcon />
+            </button>
+            <button
+              type="button"
+              data-control="dimensions-mobile"
+              aria-label={dict.labels.showDimensions}
+              title={dict.labels.showDimensions}
+              aria-pressed={showDimensions}
+              onClick={() => setShowDimensions((value) => !value)}
+              className={cn("viewer-next-round-control", showDimensions && "is-active")}
+            >
+              <DimensionsIcon />
             </button>
             {measureLines.length > 0 && (
               <button
@@ -736,28 +775,40 @@ export function ViewerNextClient({
   );
 }
 
+// All four control glyphs: proposed — not derived from reference.
+// A 22px SVG with a 2px rounded stroke stays readable in the existing 44px circle.
 function RulerIcon() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="m5 16 11-11 3 3L8 19H5v-3Z" />
-      <path d="m13.5 7.5 3 3M10.5 10.5l2 2M7.5 13.5l3 3" />
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="7" width="18" height="10" rx="1.5" />
+      <path d="M7 7v4m5-4v6m5-6v4" />
     </svg>
   );
 }
 
 function ConditionsIcon() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M12 3 3.5 19h17L12 3Z" />
-      <path d="M12 9v4.5M12 17h.01" />
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3 2.5 20h19L12 3Z" />
+      <path d="M12 9v4" />
+      <circle cx="12" cy="16.5" r=".75" fill="currentColor" stroke="none" />
     </svg>
   );
 }
 
 function ResetIcon() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M5 8V4m0 0h4M5 4l3 3a7 7 0 1 1-2 7" />
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 4v6h6M3.5 10a8 8 0 1 1 1 7" />
+    </svg>
+  );
+}
+
+function DimensionsIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 7v10M20 7v10M4 12h16" />
+      <path d="m8 9-4 3 4 3m8-6 4 3-4 3" />
     </svg>
   );
 }

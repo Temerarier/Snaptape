@@ -1,0 +1,86 @@
+GOAL
+Show the new viewer instead of the old one on the existing viewer pages, then delete the
+old viewer. No new URLs. Old measurements (schema 1.5) are not migrated: they get a
+"measured with an older version" message instead of a 3D model.
+
+WHAT IS WHERE (verified in the repo)
+- Old viewer: components/viewer/ModellViewer.tsx and BauteilPanel.tsx, plus the adapter
+  lib/messung/anzeigeAdapterV15.ts. Three pages use it:
+    app/app/projekt/[id]/viewer/page.tsx    user page, loads project.measurement from DB
+    app/admin/projekt/[id]/viewer/page.tsx  staff page, same without the userId filter
+    app/app/viewer/page.tsx                 test-house demo (linked from UserMenu and
+                                            the project page)
+- New viewer: components/viewer-next/ViewerNextClient.tsx and lib/viewer-next/*.
+  Today it is only rendered at app/viewer-next/page.tsx with fixtures/garage-house.json.
+- The redirect after a measurement already goes to /app/projekt/[id]/viewer. Keep it.
+- New measurements are schema 1.6. Older stored projects are schema 1.5.
+
+SHARED FILES - DO NOT TOUCH
+These sit next to the old viewer but other pages depend on them. Deleting or editing them
+breaks the login page or the project overview:
+- lib/viewer/baukasten.ts and lib/viewer/buehne.ts  -> draw the house on the login page
+                                                       (components/auth/HausBuehne.tsx)
+- lib/viewer/anzeige.ts                              -> number formatting on the project
+                                                       overview (app/app/projekt/[id]/page.tsx)
+- lib/berechnung/flaechen.ts                         -> summary tiles on the same page
+
+BUILD
+
+1. PUT THE NEW VIEWER ON THE EXISTING PAGES
+   - app/app/projekt/[id]/viewer/page.tsx: keep the DB query, auth and status checks as
+     they are. Replace ModellViewer + adapter with the new viewer, built the same way
+     app/viewer-next/page.tsx builds it for the fixture (computeDerived -> buildCards ->
+     ViewerNextClient). The header shows the project's name and address.
+   - app/admin/projekt/[id]/viewer/page.tsx: same swap, keep requireStaff and the
+     unfiltered query.
+   - Delete app/app/viewer/page.tsx (test house). Point its two links
+     (components/auth/UserMenu.tsx, app/app/projekt/[id]/page.tsx) at /viewer-next.
+   - /viewer-next stays as it is, labelled "Test data".
+
+2. OLD MEASUREMENTS GET A MESSAGE, NOT A MODEL
+   - If the stored measurement's meta.schema_version is not "1.6", do not render the
+     viewer. Show a plain page with the project name and the message: "This project was
+     measured with an older version. Measure it again to see the 3D model." Keep the
+     project and its row in the admin table untouched.
+   - A measurement that cannot be read at all gets the same page with "Measurement could
+     not be read" - never a blank page, never a 500.
+
+3. NEW MEASUREMENTS MAY HAVE GAPS
+   - A 1.6 measurement can have missing values or parts the model builder cannot draw.
+     The viewer degrades, never throws (spec section 12): unbuildable parts become
+     simple massing or are left out, missing values show "—".
+   - Test: open every project in the DB with status model_ready. For each, note: schema
+     version, rendered / message shown, what was left out, console errors.
+
+   CHECK BEFORE STEP 4: every project shows either the new viewer or the message. If
+   any page throws or goes blank, stop here, delete nothing, and report.
+
+4. DELETE THE OLD VIEWER
+   - Delete components/viewer/ModellViewer.tsx, components/viewer/BauteilPanel.tsx,
+     lib/messung/anzeigeAdapterV15.ts, and any test that only covers them.
+   - lib/viewer/szene.ts: delete only if nothing outside the deleted files imports it.
+   - Before each deletion, search the whole codebase for imports. If a file is still
+     imported somewhere, keep it and say so in the report.
+   - Run the production build and all tests. If something fails because of a deletion,
+     restore that file and report it - do not patch around it.
+
+5. SMALL FIX ON THE WAY
+   - lib/messung/pipeline.ts stores schemaVersion "1.5" although it produces 1.6.
+     Store the value from the measurement's meta.schema_version instead.
+
+DO NOT
+- Do not touch the shared files listed above.
+- Do not change URLs, the post-measurement redirect, or the new viewer's layout.
+- Do not convert or migrate 1.5 measurements.
+- Do not start a new measurement run or call any paid API.
+
+DONE WHEN
+- [ ] /app/projekt/<id>/viewer and /admin/projekt/<id>/viewer show the new viewer for a
+      1.6 project and the "older version" message for a 1.5 project (screenshot each)
+- [ ] /viewer-next still shows the labelled fixture; no link to /app/viewer remains
+- [ ] Table of every model_ready project: schema version, viewer or message, gaps,
+      console errors
+- [ ] List of deleted files and of any file kept, with the import that keeps it
+- [ ] No import of ModellViewer or anzeigeAdapterV15 remains anywhere
+- [ ] Production build clean; pnpm test passes, including a test that a 1.5 measurement
+      shows the message and does not throw

@@ -1,9 +1,68 @@
 import * as THREE from "three";
-import type { Bounds3, ModelPolygon } from "./model";
+import type { Bounds3, ModelPolygon, ModelConditionArea, Point3 } from "./model";
 import { viewerTokens } from "./tokens";
 
 function isGlazing(part: ModelPolygon): boolean {
   return "type" in part && (part.type === "window" || part.type === "skylight");
+}
+
+function isSurfaceOpening(part: ModelPolygon): boolean {
+  return "type" in part && "parentFaceId" in part && "widthMm" in part && !("depthMm" in part);
+}
+
+/** Translation is presentation-only; local geometry and source model stay canonical. */
+export function placeSurfaceVisual(mesh: THREE.Mesh, part: ModelPolygon, offsetMm = isSurfaceOpening(part) ? viewerTokens.openingOffsetMm : 0): void {
+  const normal = new THREE.Vector3(part.normal.x, part.normal.y, part.normal.z).normalize();
+  mesh.position.copy(normal.clone().multiplyScalar(offsetMm));
+  mesh.userData.surfaceNormal = normal;
+  mesh.userData.surfaceOffset = mesh.position.clone();
+}
+
+/** Undo only our decal translation before unsnapped measurement or snap lookup. */
+export function canonicalSurfaceHit(hit: Pick<THREE.Intersection, "object" | "point">): Point3 {
+  const point = hit.point.clone();
+  const offset = hit.object.userData.surfaceOffset;
+  if (offset instanceof THREE.Vector3) point.sub(offset);
+  return { x: point.x, y: point.y, z: point.z };
+}
+
+/** Render-only decal; source corners remain authoritative for measurements. */
+export function createConditionVisual(part: ModelConditionArea): THREE.Mesh {
+  const geometry = polygonGeometry(part);
+  const tangent = new THREE.Vector3(part.frame.tangent.x, part.frame.tangent.y, part.frame.tangent.z);
+  const normal = new THREE.Vector3(part.normal.x, part.normal.y, part.normal.z).normalize();
+  const up = new THREE.Vector3().crossVectors(normal, tangent).normalize();
+  const positions = geometry.getAttribute("position");
+  const uv: number[] = [];
+  for (let i = 0; i < positions.count; i++) {
+    const point = new THREE.Vector3().fromBufferAttribute(positions, i);
+    uv.push(point.dot(tangent) / viewerTokens.conditionHatchMm, point.dot(up) / viewerTokens.conditionHatchMm);
+  }
+  geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+  const pixels = new Uint8Array(16 * 16 * 4);
+  const color = new THREE.Color(part.severity === "severe" ? viewerTokens.danger : viewerTokens.condition);
+  for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+    const i = (y * 16 + x) * 4;
+    pixels.set([Math.round(color.r * 255), Math.round(color.g * 255), Math.round(color.b * 255),
+      Math.round(255 * ((x + y) % 16 < 3 ? viewerTokens.conditionHatchOpacity : viewerTokens.conditionFillOpacity))], i);
+  }
+  const texture = new THREE.DataTexture(pixels, 16, 16, THREE.RGBAFormat);
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.needsUpdate = true;
+  const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+    map: texture, transparent: true, side: THREE.DoubleSide, depthWrite: false,
+    polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2,
+  }));
+  mesh.renderOrder = 1;
+  mesh.userData = { elementId: part.id, elementKind: "condition" };
+  placeSurfaceVisual(mesh, part, viewerTokens.conditionOffsetMm);
+  const outline = new THREE.LineLoop(
+    new THREE.BufferGeometry().setFromPoints(part.corners.map(p => new THREE.Vector3(p.x, p.y, p.z))),
+    new THREE.LineBasicMaterial({ color: viewerTokens.danger, depthWrite: false }),
+  );
+  outline.renderOrder = 2;
+  mesh.add(outline);
+  return mesh;
 }
 
 export function polygonGeometry(part: ModelPolygon): THREE.BufferGeometry {
@@ -22,9 +81,9 @@ export function polygonGeometry(part: ModelPolygon): THREE.BufferGeometry {
 /** One continuous glazing material, never alternating triangle groups. */
 export function polygonMaterial(part: ModelPolygon): THREE.MeshStandardMaterial | THREE.MeshStandardMaterial[] {
   const glass = isGlazing(part);
-  const opening = "type" in part && "parentFaceId" in part && "widthMm" in part && !("depthMm" in part);
-  // Openings intentionally retain measured, coplanar geometry. Bias raster
-  // depth only, keeping raycasting/snapping coordinates exactly unchanged.
+  const opening = isSurfaceOpening(part);
+  // Local vertices stay measured/coplanar; placeSurfaceVisual supplies the
+  // outward render translation, complemented by this raster-depth bias.
   const openingDepthBias = {
     polygonOffset: opening,
     polygonOffsetFactor: opening ? -1 : 0,
@@ -76,20 +135,30 @@ export function createSelectionVisual(target: THREE.Mesh | THREE.Line): THREE.Gr
       side: THREE.DoubleSide,
       depthWrite: false,
       polygonOffset: true,
-      polygonOffsetFactor: -2,
-      polygonOffsetUnits: -2,
+      polygonOffsetFactor: -3,
+      polygonOffsetUnits: -3,
     }));
-    fill.renderOrder = 2;
+    fill.renderOrder = 3;
     const outline = new THREE.LineSegments(
       new THREE.EdgesGeometry(target.geometry, 12),
       new THREE.LineBasicMaterial({ color: viewerTokens.accent, transparent: true, opacity: 0.96, depthWrite: false }),
     );
-    outline.renderOrder = 3;
+    outline.renderOrder = 4;
     group.add(fill, outline);
   } else {
     group.add(new THREE.Line(target.geometry.clone(), new THREE.LineBasicMaterial({ color: viewerTokens.accent })));
   }
-  group.applyMatrix4(target.matrix);
+  target.updateWorldMatrix(true, false);
+  group.applyMatrix4(target.matrixWorld);
+  if (target instanceof THREE.Mesh) {
+    // Use the authoritative outward parent normal rather than triangle winding.
+    // Geometry normal is a fallback for standalone callers without model metadata.
+    const normal = target.userData.surfaceNormal instanceof THREE.Vector3
+      ? target.userData.surfaceNormal.clone()
+      : new THREE.Vector3().fromBufferAttribute(target.geometry.getAttribute("normal"), 0);
+    normal.transformDirection(target.matrixWorld);
+    group.position.addScaledVector(normal, viewerTokens.selectionOffsetMm);
+  }
   return group;
 }
 

@@ -20,6 +20,7 @@ export default async function ViewerNextPage() {
   return (
     <ViewerNextClient
       measurement={displayMeasurement}
+      derived={derived}
       cards={cards}
       dict={dict.viewerNext}
       webglMessage={dict.viewer.webglFehler}

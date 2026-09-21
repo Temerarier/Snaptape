@@ -29,6 +29,7 @@ import type {
   Vector3,
   ViewerModel,
 } from "./types";
+import type { DerivedMeasurement } from "@workspace/measurement";
 import { viewerTokens } from "../tokens";
 
 const EPSILON = 1e-6;
@@ -1128,6 +1129,7 @@ function buildConditions(
       ...base,
       type: condition.type ?? "condition",
       severity: condition.severity ?? null,
+      photoIndex: condition.photo_index ?? null,
       parentFaceId,
       areaMm2: area,
     });
@@ -1183,12 +1185,6 @@ function diagnosticsForNotes(notes: readonly string[]): readonly ModelDiagnostic
   );
 }
 
-function measuredWidth(main: FootprintSize, walls: readonly WallSurface[]): number {
-  return main.width > EPSILON
-    ? main.width
-    : Math.max(...walls.filter(wall => wall.elevation === FRONT || wall.elevation === BACK).map(wall => wall.span), 1);
-}
-
 function stableBucket(id: string, count: number): number {
   if (count <= 1) return 0;
   return [...id].reduce((sum, character) => sum + character.charCodeAt(0), 0) % count;
@@ -1223,7 +1219,10 @@ function stableMainRoofRoles(
  * decisions.  Missing geometry is represented by a simple massing block or a
  * note; malformed input is never allowed to bring the panel down.
  */
-export function buildModel(input: ViewerMeasurement | null | undefined): ViewerModel {
+export function buildModel(
+  input: ViewerMeasurement | null | undefined,
+  derived?: DerivedMeasurement,
+): ViewerModel {
   const measurement = input ?? {};
   const notes: string[] = [];
   const faces = asArray(measurement.faces);
@@ -1573,49 +1572,21 @@ export function buildModel(input: ViewerMeasurement | null | undefined): ViewerM
     heightMm: overallBounds.heightMm,
   };
 
-  const ridgeEdges = edgeModels.filter(edge => edge.edgeClass === "ridge");
-  const suppliedRidgeValue = asArray(measurement.edges)
-    .filter(edge => edge.edge_class === "ridge")
-    .reduce((sum, edge) => sum + nonNegative(valueOf(edge.length_mm)), 0);
-  const mainRoofId = mainRoofFaces
-    .find(item => mainRoofRoles.get(item) === FRONT)?.face.id;
-  const mainRoof = mainRoofId ? roofs.find(roof => roof.id === mainRoofId) : undefined;
-  const mainRoofRidge = mainRoof ? roofRidgeSegment(mainRoof) : null;
-  const measuredMainRidge = ridgeEdges
-    .map(edge => ({ start: edge.corners[0], end: edge.corners[1], length: edge.lengthMm }))
-    .find(edge => mainRoofRidge && Math.abs(edge.length - distance(mainRoofRidge[0], mainRoofRidge[1])) <= 20);
-  const ridgeDimensionSegments: DimensionSegment[] = measuredMainRidge
-    ? [{ start: measuredMainRidge.start, end: measuredMainRidge.end }]
-    : mainRoofRidge
-      ? [{ start: mainRoofRidge[0], end: mainRoofRidge[1] }]
-      : [];
-  const physicalRidgeValue = ridgeDimensionSegments.length > 0
-    ? distance(ridgeDimensionSegments[0].start, ridgeDimensionSegments[0].end)
-    : 0;
-  const ridgeAggregateValue = suppliedRidgeValue > EPSILON
-    ? suppliedRidgeValue
-    : ridgeEdges.reduce((sum, edge) => sum + edge.lengthMm, 0);
-  if (physicalRidgeValue <= EPSILON && roofs.length > 0) {
-    notes.push("No measured main ridge geometry was available; ridge dimension omitted.");
-  }
-  if (ridgeAggregateValue > physicalRidgeValue + EPSILON) {
-    notes.push(`Aggregate ridge total is ${ridgeAggregateValue} mm; visible ridge dimension uses the main physical segment ${physicalRidgeValue} mm.`);
-  }
-  const aggregateRidge = makeDimension(
-    "ridge",
-    ridgeAggregateValue > EPSILON ? ridgeAggregateValue : physicalRidgeValue,
-    [],
-  );
+  const lengthValue = derived?.footprint.length_mm.value ?? null;
+  const depthValue = derived?.footprint.depth_mm.value ?? null;
+  const eaveValue = derived?.footprint.eave_height_mm.value ?? null;
   const permanentDimensions: ModelDimensions = {
-    width: makeDimension("width", measuredWidth(dimensions.main, walls), [{
+    length: lengthValue === null ? null : makeDimension("length", lengthValue, [{
       start: point(0, 0, 0),
-      end: point(measuredWidth(dimensions.main, walls), 0, 0),
+      end: point(lengthValue, 0, 0),
     }]),
-    ridge: makeDimension("ridge", physicalRidgeValue, ridgeDimensionSegments),
-    ridgeAggregate: aggregateRidge,
-    eaveHeight: makeDimension("eave_height", eaveHeight, [{
+    depth: depthValue === null ? null : makeDimension("depth", depthValue, [{
       start: point(0, 0, 0),
-      end: point(0, 0, eaveHeight),
+      end: point(0, depthValue, 0),
+    }]),
+    eaveHeight: eaveValue === null ? null : makeDimension("eave_height", eaveValue, [{
+      start: point(0, 0, 0),
+      end: point(0, 0, eaveValue),
     }]),
   };
 

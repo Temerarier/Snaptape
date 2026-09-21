@@ -365,6 +365,7 @@ export const deDE: Dictionary = {
     labels: {
       facets: "Dachflächen",
       roof: "Dach",
+      wall: "Wand",
       eaves: "Traufen",
       rakes: "Ortgänge",
       total: "gesamt",
@@ -409,6 +410,8 @@ export const deDE: Dictionary = {
       ea: "EA",
       modelReady: "Modell bereit · Testdaten",
       showConditions: "Schadstellen zeigen",
+      showDimensions: "Maße zeigen",
+      noConditions: "Keine Schadstellen erfasst.",
       measureLine: "Strecke messen",
       clear: "Löschen",
       showFullModel: "Ganzes Modell zeigen",

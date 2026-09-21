@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { ViewerCard } from "./viewerCards";
-import { revealSelection } from "../../components/viewer-next/ViewerNextClient";
+import {
+  DEFAULT_SHOW_DIMENSIONS,
+  revealSelection,
+} from "../../components/viewer-next/ViewerNextClient";
 
 const cards: ViewerCard[] = [
   {
@@ -27,6 +30,10 @@ const cards: ViewerCard[] = [
 ];
 
 describe("viewer-next panel selection reveal", () => {
+  it("defaults permanent dimensions on", () => {
+    expect(DEFAULT_SHOW_DIMENSIONS).toBe(true);
+  });
+
   it("opens every ancestor and switches an incompatible trade filter", () => {
     expect(revealSelection(cards, "W-1", "roofing")).toEqual({
       cardId: "openings",

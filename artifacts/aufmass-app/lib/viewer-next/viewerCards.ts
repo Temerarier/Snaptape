@@ -485,17 +485,15 @@ export function buildCards(
       openingSummaries.push(`${count} ${typeLabel.toLowerCase()}`);
 
       const items = derived.openings.items.filter((o) => o.type === t);
+      const typeAggregate = derived.openings.byTypeAggregate[t];
       let subRows: CardRow[] = [];
       if (items.length > 6) {
-        const byWall: Record<string, typeof items> = {};
-        items.forEach((o) => {
-          const key = o.parent_face_id || dict.labels.unassigned;
-          if (!byWall[key]) byWall[key] = [];
-          byWall[key].push(o);
-        });
-        Object.keys(byWall).forEach((wId) => {
+        derived.openings.parentGroups
+          .filter((group) => group.type === t)
+          .forEach((groupAggregate) => {
+          const wId = groupAggregate.parent_face_id;
           const wall = derived.walls.faces.find((f) => f.id === wId);
-          let label = wId;
+          let label = wId ?? dict.labels.unassigned;
           if (wall && wall.elevation) {
             const sameElev = derived.walls.faces.filter(
               (f) => f.elevation === wall.elevation,
@@ -503,14 +501,22 @@ export function buildCards(
             const elevName =
               wall.elevation.charAt(0).toUpperCase() + wall.elevation.slice(1);
             label = sameElev.length > 1 ? `${elevName} (${wId})` : elevName;
-          } else if (wId === dict.labels.unassigned) {
-            label = dict.labels.unassigned;
+          } else if (wId === null && groupAggregate.elevation) {
+            const elevName = groupAggregate.elevation.charAt(0).toUpperCase() +
+              groupAggregate.elevation.slice(1);
+            label = `${elevName} (${dict.labels.unassigned})`;
           }
           subRows.push({
-            id: `og_${t}_${wId}`,
+            id: `og_${t}_${wId ?? `unassigned_${groupAggregate.elevation ?? "unknown"}`}`,
             label,
+            sub: `${groupAggregate.count.value} ${dict.labels.ea} · ${dict.labels.perimeter} ${formatLen(groupAggregate.perimeter.total_mm.value)}`,
+            value: formatArea(groupAggregate.area_mm2.value),
+            unit: "sq ft",
+            tally: tallyArea(groupAggregate.area_mm2.value, "openings"),
             hasSub: true,
-            subRows: byWall[wId].map((o) => ({
+            subRows: groupAggregate.openingIds.map(
+              id => items.find(item => item.id === id)!,
+            ).map((o) => ({
               id: o.id,
               label: `${o.id} · ${formatLen(o.width_mm.value)} × ${formatLen(o.height_mm.value)}`,
               sub: `${dict.labels.perimeter} ${formatLen(o.perimeter.total_mm.value)}`,
@@ -539,6 +545,9 @@ export function buildCards(
       openingRows.push({
         id: `op_${t}`,
         label: typeLabelForTitle,
+        sub: typeAggregate
+          ? `${dict.labels.perimeter} ${formatLen(typeAggregate.perimeter.total_mm.value)}`
+          : undefined,
         value: count.toString(),
         unit: dict.labels.ea,
         tally: tallyCount(count, "openings"),

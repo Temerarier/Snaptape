@@ -55,7 +55,7 @@ try {
   for (const [width,height] of [[390,844],[375,667],[767,1024],[768,1024],[1024,768],[1279,900],[1280,900],[1440,1000]]) {
     await browser.send("Emulation.setDeviceMetricsOverride", { width,height,deviceScaleFactor:1,mobile:false });
     await browser.send("Page.navigate", { url:base });
-    await waitUntil(browser, `!!document.querySelector('[data-testid="label-width"]')`);
+    await waitUntil(browser, `!!document.querySelector('[data-testid="label-length"]') && !!document.querySelector('[data-testid="label-depth"]') && !!document.querySelector('[data-testid="label-eave"]') && !document.querySelector('[data-testid="label-ridge"]')`);
     await pause(600);
     const initial=await geometry();
     assert.equal(initial.webgl,"ready");

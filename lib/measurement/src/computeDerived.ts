@@ -4,7 +4,7 @@ import { mm2ToSquares, mmToInches } from "./formatMeasurement";
 import type {
   CalculationDiagnostic, Confidence, DerivedMeasurement, DerivedOpening,
   DerivedUnit, DerivedValue, DerivedWall, MeasurementInput, MeasurementValue,
-  OpeningCounts, OpeningGroup, PerimeterBreakdown,
+  OpeningAggregate, OpeningCounts, OpeningGroup, OpeningParentGroup, PerimeterBreakdown,
 } from "./derivedTypes";
 
 const EDGE_CLASSES = [
@@ -79,6 +79,54 @@ function perimeter(items: readonly DerivedOpening[]): PerimeterBreakdown {
   };
 }
 
+function openingAggregate(items: readonly DerivedOpening[]): OpeningAggregate {
+  return {
+    count: count(items.map(o => o.id)),
+    area_mm2: sum("mm2", items.map(o => o.area_mm2)),
+    perimeter: perimeter(items),
+  };
+}
+
+function parentGroups(
+  items: readonly DerivedOpening[],
+  faceMap: ReadonlyMap<string, MeasurementInput["faces"][number]>,
+): OpeningParentGroup[] {
+  const groups = new Map<string, {
+    type: string;
+    parent_face_id: string | null;
+    elevation: string | null;
+    items: DerivedOpening[];
+  }>();
+  for (const opening of items) {
+    const parent = opening.parent_face_id === null
+      ? undefined
+      : faceMap.get(opening.parent_face_id);
+    // A real parent is the stable identity. For parentless records, elevation
+    // prevents unrelated sides from being collapsed into one "Unassigned" row.
+    const elevation = parent?.elevation ?? opening.elevation;
+    const key = JSON.stringify([
+      opening.type,
+      opening.parent_face_id,
+      opening.parent_face_id === null ? elevation : null,
+    ]);
+    const group = groups.get(key) ?? {
+      type: opening.type,
+      parent_face_id: opening.parent_face_id,
+      elevation,
+      items: [],
+    };
+    group.items.push(opening);
+    groups.set(key, group);
+  }
+  return [...groups.values()].map(group => ({
+    type: group.type,
+    parent_face_id: group.parent_face_id,
+    elevation: group.elevation,
+    openingIds: group.items.map(item => item.id),
+    ...openingAggregate(group.items),
+  }));
+}
+
 function groupOpenings(items: readonly DerivedOpening[]): OpeningGroup[] {
   const groups = new Map<string, DerivedOpening[]>();
   for (const o of items) {
@@ -103,6 +151,26 @@ function groupOpenings(items: readonly DerivedOpening[]): OpeningGroup[] {
   });
 }
 
+function footprintDimension(
+  input: MeasurementValue | null | undefined,
+  points: readonly (readonly number[])[],
+  axis: 0 | 1,
+  field: "width_mm" | "depth_mm",
+): DerivedValue<"mm"> {
+  const supplied = read(input, "mm", "building.footprint", field);
+  // Explicit null is an authoritative unknown. Only an omitted scalar may be
+  // reconstructed from the measured footprint polygon.
+  if (input !== undefined) return supplied;
+  const coordinates = points
+    .map(point => point[axis])
+    .filter((value): value is number => Number.isFinite(value));
+  if (coordinates.length < 2) return supplied;
+  const extent = Math.max(...coordinates) - Math.min(...coordinates);
+  return extent >= 0
+    ? result(extent, "mm", "low", ["building.footprint.points"])
+    : supplied;
+}
+
 /**
  * Derive takeoff/display values without mutating the stored measurement.
  * All dimensional arithmetic uses mm/mm², with unrounded convenience conversions.
@@ -113,6 +181,25 @@ function groupOpenings(items: readonly DerivedOpening[]): OpeningGroup[] {
  */
 export function computeDerived(measurement: MeasurementInput): DerivedMeasurement {
   const diagnostics: CalculationDiagnostic[] = [];
+  const footprintPoints = measurement.building?.footprint?.points ?? [];
+  const footprintLength = footprintDimension(
+    measurement.building?.footprint?.width_mm,
+    footprintPoints,
+    0,
+    "width_mm",
+  );
+  const footprintDepth = footprintDimension(
+    measurement.building?.footprint?.depth_mm,
+    footprintPoints,
+    1,
+    "depth_mm",
+  );
+  const eaveHeight = read(
+    measurement.building?.heights?.eave_height_mm,
+    "mm",
+    "building.heights",
+    "eave_height_mm",
+  );
   const faceMap = new Map(measurement.faces.map(f => [f.id, f]));
   if (faceMap.size !== measurement.faces.length) throw new Error("Duplicate face IDs are ambiguous");
   const openings: DerivedOpening[] = measurement.openings.map(o => {
@@ -215,8 +302,14 @@ export function computeDerived(measurement: MeasurementInput): DerivedMeasuremen
     length_mm: read(d.length_mm, "mm", d.id, "length_mm"),
   })) ?? [];
   const united = sum("mm", openings.map(o => o.united_mm));
+  const openingTypes = unique([...OPENING_TYPES, ...openings.map(o => o.type)]);
 
   return {
+    footprint: {
+      length_mm: footprintLength,
+      depth_mm: footprintDepth,
+      eave_height_mm: eaveHeight,
+    },
     roof: { area_mm2: roofArea, squares: calculate("SQ", [roofArea], ([area]) => mm2ToSquares(area)),
       facet_count: count(roofFaces.map(face => face.id)),
       suggestedWasteFactor: waste },
@@ -228,6 +321,11 @@ export function computeDerived(measurement: MeasurementInput): DerivedMeasuremen
     trim: { fascia_area_mm2: fasciaArea, soffit_area_mm2: soffitArea },
     openings: { ...counts(openings), items: openings,
       byWall: Object.fromEntries(walls.map(w => [w.id, counts(w.deductedOpenings)])),
+      aggregate: openingAggregate(openings),
+      byTypeAggregate: Object.fromEntries(openingTypes.map(type => [
+        type, openingAggregate(openings.filter(opening => opening.type === type)),
+      ])),
+      parentGroups: parentGroups(openings, faceMap),
       identicalGroups: groupOpenings(openings),
       ungroupedIds: openings.filter(o => !o.width_mm.complete || !o.height_mm.complete).map(o => o.id),
       unassigned: openings.filter(o => o.assignment === "unassigned"),

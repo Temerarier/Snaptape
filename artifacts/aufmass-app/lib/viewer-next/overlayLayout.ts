@@ -1,4 +1,6 @@
 /** Screen-space presentation only: never changes measurement values or camera framing. */
+import type { ModelDimensions, PermanentDimension } from "./model/types";
+
 export interface ScreenPoint { readonly x: number; readonly y: number }
 export interface ScreenRect { readonly left: number; readonly top: number; readonly right: number; readonly bottom: number }
 export interface LabelRequest {
@@ -129,7 +131,7 @@ export function layoutLabels(input: {
 }
 
 export interface DimensionProjection {
-  readonly id: "width" | "ridge" | "eave";
+  readonly id: "length" | "depth" | "eave";
   readonly start: ScreenPoint;
   readonly end: ScreenPoint;
   readonly width: number;
@@ -141,7 +143,38 @@ export interface DimensionStroke {
   readonly dashed: boolean;
   readonly dimensionId: string;
 }
-export function dimensionRails(bounds: ScreenRect, dimensions: readonly DimensionProjection[], viewport: { width: number; height: number }) {
+
+export interface PermanentDimensionEntry {
+  readonly id: "length" | "depth" | "eave";
+  readonly dimension: PermanentDimension;
+}
+
+/** The visibility gate is applied before rail and label requests are built, so
+ * hidden dimensions reserve no collision-layout space. */
+export function visiblePermanentDimensions(
+  dimensions: ModelDimensions,
+  showDimensions: boolean,
+): PermanentDimensionEntry[] {
+  if (!showDimensions) return [];
+  return [
+    { id: "length" as const, dimension: dimensions.length },
+    { id: "depth" as const, dimension: dimensions.depth },
+    { id: "eave" as const, dimension: dimensions.eaveHeight },
+  ].filter((item): item is PermanentDimensionEntry =>
+    item.dimension !== null && item.dimension.segments.length > 0
+  );
+}
+export function dimensionRails(
+  bounds: ScreenRect,
+  dimensions: readonly DimensionProjection[],
+  viewport: { width: number; height: number },
+  silhouette: readonly ScreenPoint[] = [
+    { x: bounds.left, y: bounds.top },
+    { x: bounds.right, y: bounds.top },
+    { x: bounds.right, y: bounds.bottom },
+    { x: bounds.left, y: bounds.bottom },
+  ],
+) {
   const right = Math.max(4, Math.min(bounds.right + 14, viewport.width - 6));
   const below = Math.max(4, Math.min(bounds.bottom + 18, viewport.height - 38));
   const strokes: DimensionStroke[] = [];
@@ -149,21 +182,77 @@ export function dimensionRails(bounds: ScreenRect, dimensions: readonly Dimensio
   for (const dimension of dimensions) {
     const add = (start: ScreenPoint, end: ScreenPoint, dashed = false) =>
       strokes.push({ start, end, dashed, dimensionId: dimension.id });
-    const horizontal = dimension.id === "width";
-    const a = horizontal ? { x: dimension.start.x, y: below } : { x: right, y: dimension.start.y };
-    const b = horizontal ? { x: dimension.end.x, y: below } : { x: right, y: dimension.end.y };
+    const ground = dimension.id === "length" || dimension.id === "depth";
+    const dx = dimension.end.x - dimension.start.x;
+    const dy = dimension.end.y - dimension.start.y;
+    const magnitude = Math.hypot(dx, dy) || 1;
+    const baseNormal = { x: -dy / magnitude, y: dx / magnitude };
+    const dot = (point: ScreenPoint) => point.x * baseNormal.x + point.y * baseNormal.y;
+    const sourceProjection = dot(dimension.start);
+    const hullProjections = silhouette.map(dot);
+    const clearance = 14;
+    const signedCandidates = [
+      Math.max(clearance, Math.max(...hullProjections) - sourceProjection + clearance),
+      Math.min(-clearance, Math.min(...hullProjections) - sourceProjection - clearance),
+    ];
+    const overflow = (point: ScreenPoint) =>
+      Math.max(0, 4 - point.x) + Math.max(0, point.x - viewport.width + 4) +
+      Math.max(0, 4 - point.y) + Math.max(0, point.y - viewport.height + 4);
+    const candidateScore = (signedOffset: number) => {
+      const a = {
+        x: dimension.start.x + baseNormal.x * signedOffset,
+        y: dimension.start.y + baseNormal.y * signedOffset,
+      };
+      const b = {
+        x: dimension.end.x + baseNormal.x * signedOffset,
+        y: dimension.end.y + baseNormal.y * signedOffset,
+      };
+      const side = Math.sign(signedOffset) || 1;
+      const labelCentre = {
+        x: (a.x + b.x) / 2 + baseNormal.x * side * (7 + dimension.width / 2),
+        y: (a.y + b.y) / 2 + baseNormal.y * side * (7 + dimension.height / 2),
+      };
+      return (overflow(a) + overflow(b) + overflow(labelCentre)) * 1e6 +
+        Math.abs(signedOffset);
+    };
+    const signedOffset = ground
+      ? signedCandidates.slice().sort((a, b) => candidateScore(a) - candidateScore(b))[0]
+      : 0;
+    const side = Math.sign(signedOffset) || 1;
+    const normal = {
+      x: baseNormal.x * side,
+      y: baseNormal.y * side,
+    };
+    const a = ground
+      ? {
+        x: dimension.start.x + baseNormal.x * signedOffset,
+        y: dimension.start.y + baseNormal.y * signedOffset,
+      }
+      : { x: right, y: dimension.start.y };
+    const b = ground
+      ? {
+        x: dimension.end.x + baseNormal.x * signedOffset,
+        y: dimension.end.y + baseNormal.y * signedOffset,
+      }
+      : { x: right, y: dimension.end.y };
     add(dimension.start, a, true);
     add(dimension.end, b, true);
     add(a, b);
-    for (const point of [a, b]) add(
-      { x: point.x - (horizontal ? 0 : 4), y: point.y - (horizontal ? 4 : 0) },
-      { x: point.x + (horizontal ? 0 : 4), y: point.y + (horizontal ? 4 : 0) },
-    );
+    const tick = ground ? normal : { x: 1, y: 0 };
+    for (const point of [a, b]) {
+      add(
+        { x: point.x - tick.x * 4, y: point.y - tick.y * 4 },
+        { x: point.x + tick.x * 4, y: point.y + tick.y * 4 },
+      );
+    }
     labels.push({
       id: dimension.id, width: dimension.width, height: dimension.height, priority: 2,
-      region: horizontal ? "below" : "right",
-      preferred: horizontal
-        ? { x: (a.x + b.x - dimension.width) / 2, y: below + 5 }
+      region: ground ? undefined : "right",
+      preferred: ground
+        ? {
+          x: (a.x + b.x - dimension.width) / 2 + normal.x * 7,
+          y: (a.y + b.y - dimension.height) / 2 + normal.y * 7,
+        }
         : { x: right + 8 + dimension.width <= viewport.width - 4 ? right + 8 : right - 8 - dimension.width, y: (a.y + b.y - dimension.height) / 2 },
     });
   }

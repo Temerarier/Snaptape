@@ -110,10 +110,9 @@ function syntheticModel(roofs: readonly ModelPolygon[], attachments: readonly Mo
       overallDepthMm: overall.depthMm,
     },
     permanentDimensions: {
-      width: { kind: "width", valueMm: 0, label: "", segments: [] },
-      ridge: { kind: "ridge", valueMm: 0, label: "", segments: [] },
-      ridgeAggregate: { kind: "ridge", valueMm: 0, label: "", segments: [] },
-      eaveHeight: { kind: "eave_height", valueMm: 0, label: "", segments: [] },
+      length: null,
+      depth: null,
+      eaveHeight: null,
     },
     diagnostics: [],
     notes: [],

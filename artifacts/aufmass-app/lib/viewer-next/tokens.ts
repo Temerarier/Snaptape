@@ -97,6 +97,16 @@ export const viewerTokens = {
   rendererKeyIntensity: 1.3,
   // proposed — not derived from reference: readable selection without hiding material color.
   selectionFillOpacity: 0.32,
+  // proposed — not derived from reference: render-only decal spacing and hatch period.
+  conditionOffsetMm: 3,
+  // proposed — not derived from reference: opening layer below conditions,
+  // selection one further millimetre above its selected surface.
+  openingOffsetMm: 2,
+  selectionOffsetMm: 1,
+  conditionHatchMm: 240,
+  // proposed — not derived from reference: translucent decal/hatch alpha.
+  conditionFillOpacity: 0.25,
+  conditionHatchOpacity: 0.82,
   // proposed — not derived from reference: restrained glazing over the reference window blue.
   glassOpacity: 0.38,
   // proposed — not derived from reference: subtle footprint-scaled grounding.

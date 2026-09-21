@@ -1,3 +1,10 @@
+# Control icon proposal
+
+The four round controls use 22px SVG glyphs with 2px rounded strokes.
+These values and glyph paths are **proposed — not derived from reference**.
+They retain the existing 44px control circles and use `currentColor`, without
+introducing new colors or changing control spacing.
+
 # Viewer v4 runtime tokens
 
 Runtime source: `artifacts/aufmass-app/lib/viewer-next/tokens.ts`. Its `viewerTokens` export is the single named runtime source; `viewerTokenStyles` exposes every entry as `--viewer-<kebab-name>`. Values are primitive strings/numbers.
@@ -93,3 +100,23 @@ Every entry below is **proposed — not derived from reference**. The HTML has n
 | `selectionFillOpacity` | `0.32` | Visible selection while retaining material identity. |
 | `glassOpacity` | `0.38` | Restrained glazing over the reference window blue. |
 | `contactShadowOpacity` | `0.2` | Subtle grounding without resembling model geometry. |
+
+### Render-only surface placement and hatch spacing
+
+These four values are **proposed — not derived from reference**. They are renderer implementation parameters in millimetres, not measured building quantities or reference-derived design dimensions. The brief requires slight outward placement and hatching, but does not prescribe these numeric values. Canonical model corners, measurement totals and snapping locations remain authoritative and unchanged.
+
+| Token | Value | Purpose / rationale |
+|---|---:|---|
+| `openingOffsetMm` | `2` mm | Translate surface-opening visuals outward along the parent normal to separate them from the parent face, supplementing negative polygon offset. |
+| `conditionOffsetMm` | `3` mm | Translate condition patches outward along the parent normal, above the opening layer, without changing recorded condition geometry or area. |
+| `selectionOffsetMm` | `1` mm | Add outward separation relative to the selected visual: selected openings sit at 3 mm and selected conditions at 4 mm, with stronger negative polygon offset for selection fills. |
+| `conditionHatchMm` | `240` mm | Set the repeating condition-texture period in surface coordinates; this is presentation spacing, not a condition measurement or a pixel size copied from the reference. |
+
+### Condition decal transparency
+
+These two values are **proposed — not derived from reference**. They control WebGL texture alpha; the existing reference-derived semantic colour tokens remain the colour source.
+
+| Token | Value | Purpose / rationale |
+|---|---:|---|
+| `conditionFillOpacity` | `0.25` | Keep the patch background translucent so the actual parent material remains visible. |
+| `conditionHatchOpacity` | `0.82` | Give hatch strokes stronger contrast than the patch background while retaining translucency. |

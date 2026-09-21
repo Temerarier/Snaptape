@@ -129,6 +129,31 @@ describe("computeDerived public API and canonical fixture", () => {
     expect(computeDerived(loadFixture()).roof.facet_count.value).toBe(6);
   });
 
+  it("derives canonical permanent dimensions from the measured footprint and height", () => {
+    const footprint = computeDerived(loadFixture()).footprint;
+
+    expect(footprint.length_mm.value).toBe(12192);
+    expect(footprint.depth_mm.value).toBe(8534.4);
+    expect(footprint.eave_height_mm.value).toBe(5486.4);
+  });
+
+  it("keeps an unknown footprint depth null instead of using wall dimensions", () => {
+    const input = loadFixture();
+    const unknownDepth = {
+      ...input,
+      building: {
+        ...input.building,
+        footprint: {
+          ...input.building?.footprint,
+          points: undefined,
+          depth_mm: null,
+        },
+      },
+    };
+
+    expect(computeDerived(unknownDepth).footprint.depth_mm.value).toBeNull();
+  });
+
   it("totals 322 square feet of gables in the canonical fixture", () => {
     const area = computeDerived(loadFixture()).walls.gable_area_mm2.value;
     expect(area).not.toBeNull();
@@ -180,6 +205,34 @@ describe("computeDerived public API and canonical fixture", () => {
     expect(wallSix?.deductedOpenings).toEqual([]);
     expect(derived.openings.byWall["WL-5"].total.value).toBe(1);
     expect(derived.openings.byWall["WL-6"].total.value).toBe(0);
+  });
+
+  it("reconciles canonical parent-group opening sums with their type totals", () => {
+    const derived = computeDerived(loadFixture());
+    const windowTotal = derived.openings.byTypeAggregate.window;
+    const windowGroups = derived.openings.parentGroups.filter(
+      group => group.type === "window",
+    );
+
+    expect(windowGroups.map(group => [
+      group.parent_face_id,
+      group.count.value,
+      group.area_mm2.value,
+      group.perimeter.total_mm.value,
+    ])).toEqual([
+      ["WL-1", 6, 7556357.759999999, 27635.600000000002],
+      ["WL-2", 5, 6565270.079999999, 23571.4],
+      ["WL-3", 3, 3778178.88, 13817.8],
+      ["WL-4", 2, 1982175.36, 8128.4],
+    ]);
+    expect(windowGroups.reduce((total, group) => total + group.count.value!, 0))
+      .toBe(windowTotal.count.value);
+    expect(windowGroups.reduce((total, group) => total + group.area_mm2.value!, 0))
+      .toBeCloseTo(windowTotal.area_mm2.value!, 8);
+    expect(windowGroups.reduce(
+      (total, group) => total + group.perimeter.total_mm.value!,
+      0,
+    )).toBeCloseTo(windowTotal.perimeter.total_mm.value!, 8);
   });
 });
 
@@ -419,6 +472,12 @@ describe("unknown values and confidence", () => {
     expect(openingResult.perimeter.total_mm.value).toBeNull();
     expect(derived.openings.perimeter.total_mm.value).toBeNull();
     expect(derived.openings.united_mm.value).toBeNull();
+    expect(derived.openings.aggregate.count.value).toBe(1);
+    expect(derived.openings.aggregate.area_mm2.value).toBeNull();
+    expect(derived.openings.byTypeAggregate.window.area_mm2.value).toBeNull();
+    expect(derived.openings.parentGroups[0].count.value).toBe(1);
+    expect(derived.openings.parentGroups[0].area_mm2.value).toBeNull();
+    expect(derived.openings.parentGroups[0].perimeter.total_mm.value).toBeNull();
 
     expect(wallResult.reconstructed_area_mm2.value).toBeNull();
     expect(wallResult.gross_area_mm2.value).toBeNull();
@@ -514,6 +573,34 @@ describe("unknown values and confidence", () => {
     expect(doorGroup?.count.value).toBe(1);
     expect(doorGroup?.openingIds).toEqual(["door-same-dimensions"]);
     expect(derived.openings.ungroupedIds).toEqual(["unknown-size"]);
+  });
+
+  it("keeps same-elevation openings separated by parent identity", () => {
+    const derived = computeDerived(measurement({
+      faces: [
+        wall("front-main", { elevation: "front" }),
+        wall("front-garage", { elevation: "front" }),
+      ],
+      openings: [
+        opening("main-window", "window", {
+          elevation: "front",
+          parent_face_id: "front-main",
+        }),
+        opening("garage-window", "window", {
+          elevation: "front",
+          parent_face_id: "front-garage",
+        }),
+      ],
+    }));
+
+    expect(derived.openings.parentGroups.map(group => ({
+      parent: group.parent_face_id,
+      elevation: group.elevation,
+      ids: group.openingIds,
+    }))).toEqual([
+      { parent: "front-main", elevation: "front", ids: ["main-window"] },
+      { parent: "front-garage", elevation: "front", ids: ["garage-window"] },
+    ]);
   });
 });
 

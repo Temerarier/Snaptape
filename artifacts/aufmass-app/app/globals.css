@@ -168,6 +168,14 @@
   font-weight: 600;
 }
 
+/* Reuse selection-card styling and reference subtitle typography. */
+.viewer-next-selection-box.viewer-next-condition-label {
+  width: max-content;
+  max-width: calc(100% - 8px);
+  border-left: 3px solid;
+  font-size: 12px;
+}
+
 .viewer-next-selection-title {
   margin-bottom: 3px;
   color: var(--viewer-border-strong);
@@ -416,10 +424,10 @@
 }
 
 /* The fixed 480px panel leaves a 288px stage at the landscape breakpoint. */
-@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: landscape) {
   .viewer-next-header { flex-wrap: wrap; }
   .viewer-next-header > div:first-child {
-    flex: 1 0 calc(100% - 104px);
+    flex: 1 0 100%;
   }
   .viewer-next-header > div:first-child > div {
     white-space: nowrap;

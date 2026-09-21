@@ -1,5 +1,6 @@
 import type {
   ModelAttachment,
+  ModelConditionArea,
   ModelEdge,
   ModelOpening,
   ModelPolygon,
@@ -21,11 +22,12 @@ export type SelectableElement =
   | ModelRoofFace
   | ModelEdge
   | ModelOpening
-  | ModelAttachment;
+  | ModelAttachment
+  | ModelConditionArea;
 
 export interface SelectionDetails {
   readonly id: string;
-  readonly kind: "wall" | "roof" | "edge" | "opening" | "attachment";
+  readonly kind: "wall" | "roof" | "edge" | "opening" | "attachment" | "condition";
   readonly title: string;
   readonly dimensions: readonly string[];
   readonly value: string;
@@ -171,6 +173,7 @@ function formatNumber(value: number | null | undefined): string {
 }
 
 function selectionKind(element: SelectableElement): SelectionDetails["kind"] {
+  if ("severity" in element) return "condition";
   if ("faceClass" in element) return element.faceClass === "wall" ? "wall" : "roof";
   if ("edgeClass" in element) return "edge";
   if ("parentFaceId" in element && "type" in element && "depthMm" in element) return "attachment";
@@ -191,6 +194,15 @@ export function getSelectionDetails(element: SelectableElement): SelectionDetail
     z: element.normal.z * 120,
   });
 
+  if (kind === "condition") {
+    const condition = element as ModelConditionArea;
+    return {
+      id: condition.id, kind, target, anchor,
+      title: `${condition.type.replace(/_/g, " ")} · ${condition.id}`,
+      dimensions: [condition.parentFaceId ?? "—", condition.severity ?? "—"],
+      value: formatArea(condition.areaMm2),
+    };
+  }
   if (kind === "wall") {
     const wall = element as ModelWall;
     const dimensions = [`${formatFeetInches(wall.widthMm)} × ${formatFeetInches(wall.heightMm)}`];
@@ -270,6 +282,7 @@ export function findSelectableElement(
     model.edges.find(item => item.id === id) ??
     model.openings.find(item => item.id === id) ??
     model.attachments.find(item => item.id === id) ??
+    model.conditions.find(item => item.id === id) ??
     null
   );
 }

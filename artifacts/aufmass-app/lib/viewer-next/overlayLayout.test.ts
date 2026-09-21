@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { computeDerived } from "@workspace/measurement";
+import type { MeasurementInput } from "@workspace/measurement";
 import * as THREE from "three";
 import fixture from "../../../../fixtures/garage-house.json";
 import { buildModel } from "./model";
-import { convexHull, dimensionRails, layoutLabels, overlapArea, screenBounds, silhouetteOverlap } from "./overlayLayout";
+import { convexHull, dimensionRails, layoutLabels, overlapArea, screenBounds, silhouetteOverlap, visiblePermanentDimensions } from "./overlayLayout";
 
 describe("screen-space overlay layout", () => {
   const silhouette = [{ x: 150, y: 130 }, { x: 340, y: 130 }, { x: 340, y: 310 }, { x: 150, y: 310 }];
@@ -49,7 +51,84 @@ describe("screen-space overlay layout", () => {
     expect(silhouetteOverlap({ left: 180, top: 180, right: 220, bottom: 220 }, hull)).toBe(1600);
   });
 
-  const model = buildModel(fixture);
+  it("draws depth on a projected ground rail parallel to its measured edge", () => {
+    const source = { start: { x: 120, y: 220 }, end: { x: 205, y: 115 } };
+    const rails = dimensionRails(
+      { left: 80, top: 60, right: 330, bottom: 260 },
+      [{ id: "depth", ...source, width: 72, height: 28 }],
+      { width: 390, height: 330 },
+      convexHull([
+        { x: 80, y: 190 },
+        { x: 180, y: 60 },
+        { x: 330, y: 120 },
+        { x: 280, y: 260 },
+      ]),
+    );
+    const rail = rails.strokes.find(
+      stroke => stroke.dimensionId === "depth" && !stroke.dashed &&
+        Math.hypot(stroke.end.x - stroke.start.x, stroke.end.y - stroke.start.y) > 8,
+    )!;
+    const sourceVector = {
+      x: source.end.x - source.start.x,
+      y: source.end.y - source.start.y,
+    };
+    const railVector = {
+      x: rail.end.x - rail.start.x,
+      y: rail.end.y - rail.start.y,
+    };
+
+    expect(sourceVector.x * railVector.y - sourceVector.y * railVector.x)
+      .toBeCloseTo(0, 8);
+    expect(rails.strokes.filter(stroke =>
+      stroke.dimensionId === "depth" && stroke.dashed,
+    )).toHaveLength(2);
+    expect(rails.strokes.some(stroke => stroke.dimensionId === "ridge")).toBe(false);
+  });
+
+  const model = buildModel(
+    fixture,
+    computeDerived(fixture as unknown as MeasurementInput),
+  );
+  it("gates all permanent reservations while leaving contextual requests available", () => {
+    expect(visiblePermanentDimensions(model.permanentDimensions, true).map(item => item.id))
+      .toEqual(["length", "depth", "eave"]);
+    const hidden = visiblePermanentDimensions(model.permanentDimensions, false);
+    expect(hidden).toEqual([]);
+    const hiddenRails = dimensionRails(
+      { left: 80, top: 60, right: 330, bottom: 260 },
+      hidden.map(({ id, dimension }) => ({
+        id,
+        width: 80,
+        height: 28,
+        start: dimension.segments[0].start,
+        end: dimension.segments[0].end,
+      })),
+      { width: 390, height: 330 },
+    );
+    expect(hiddenRails.labels).toEqual([]);
+    expect(hiddenRails.strokes).toEqual([]);
+
+    const contextual = layoutLabels({
+      viewport: { width: 390, height: 330 },
+      silhouette: convexHull([
+        { x: 80, y: 90 },
+        { x: 300, y: 90 },
+        { x: 300, y: 250 },
+        { x: 80, y: 250 },
+      ]),
+      obstacles: [],
+      labels: [
+        { id: "measure-0", width: 70, height: 28, priority: 0, preferred: { x: 8, y: 8 } },
+        { id: "condition-CA-1", width: 120, height: 48, priority: 1, preferred: { x: 8, y: 48 } },
+        { id: "selection", width: 120, height: 70, priority: 1, preferred: { x: 8, y: 104 } },
+      ],
+    });
+    expect(contextual.map(item => item.id)).toEqual([
+      "measure-0",
+      "condition-CA-1",
+      "selection",
+    ]);
+  });
   const bounds = model.bounds.overall;
   const centre = new THREE.Vector3((bounds.min.x + bounds.max.x) / 2, (bounds.min.y + bounds.max.y) / 2, Math.max(0, (bounds.min.z + bounds.max.z) / 2));
   const span = Math.max(bounds.widthMm, bounds.depthMm, bounds.heightMm, 1);
@@ -68,14 +147,37 @@ describe("screen-space overlay layout", () => {
       };
       const hull = convexHull(points.map(project));
       const dimensions = [
-        { id: "width" as const, dimension: model.permanentDimensions.width },
-        { id: "ridge" as const, dimension: model.permanentDimensions.ridge },
+        { id: "length" as const, dimension: model.permanentDimensions.length! },
+        { id: "depth" as const, dimension: model.permanentDimensions.depth! },
         { id: "eave" as const, dimension: model.permanentDimensions.eaveHeight },
-      ].filter(item => item.dimension.segments.length);
+      ].filter(item => item.dimension && item.dimension.segments.length);
       const rails = dimensionRails(screenBounds(hull), dimensions.map(({ id, dimension }) => ({
         id, width: width < 768 ? 80 : 94, height: width < 768 ? 27 : 31,
-        start: project(dimension.segments[0].start), end: project(dimension.segments[0].end),
-      })), { width, height });
+        start: project(dimension!.segments[0].start), end: project(dimension!.segments[0].end),
+      })), { width, height }, hull);
+      for (const id of ["length", "depth"] as const) {
+        const rail = rails.strokes
+          .filter(stroke => stroke.dimensionId === id && !stroke.dashed)
+          .sort((a, b) =>
+            Math.hypot(b.end.x - b.start.x, b.end.y - b.start.y) -
+            Math.hypot(a.end.x - a.start.x, a.end.y - a.start.y),
+          )[0];
+        const source = dimensions.find(item => item.id === id)!.dimension!.segments[0];
+        const projectedStart = project(source.start);
+        const projectedEnd = project(source.end);
+        const sourceVector = {
+          x: projectedEnd.x - projectedStart.x,
+          y: projectedEnd.y - projectedStart.y,
+        };
+        const normal = { x: -sourceVector.y, y: sourceVector.x };
+        const railProjection = rail.start.x * normal.x + rail.start.y * normal.y;
+        const hullProjections = hull.map(point => point.x * normal.x + point.y * normal.y);
+        expect(
+          railProjection < Math.min(...hullProjections) ||
+          railProjection > Math.max(...hullProjections),
+          `${width}×${height} ${id} rail crossed the projected silhouette`,
+        ).toBe(true);
+      }
       const obstacles = [{ left: width - 56, top: 12, right: width - 12, bottom: 156 }];
       const placed = layoutLabels({ viewport: { width, height }, silhouette: hull, obstacles, labels: rails.labels });
       expect(placed.flatMap(label => label.conflicts), JSON.stringify({ bounds: screenBounds(hull), placed })).toEqual([]);
@@ -99,14 +201,36 @@ describe("screen-space overlay layout", () => {
         };
         const hull = convexHull(points.map(project));
         const dimensions = [
-          { id: "width" as const, dimension: model.permanentDimensions.width },
-          { id: "ridge" as const, dimension: model.permanentDimensions.ridge },
+          { id: "length" as const, dimension: model.permanentDimensions.length! },
+          { id: "depth" as const, dimension: model.permanentDimensions.depth! },
           { id: "eave" as const, dimension: model.permanentDimensions.eaveHeight },
-        ].filter(item => item.dimension.segments.length);
+        ].filter(item => item.dimension && item.dimension.segments.length);
         const rails = dimensionRails(screenBounds(hull), dimensions.map(({ id, dimension }) => ({
           id, width: width < 768 ? 80 : 94, height: width < 768 ? 27 : 31,
-          start: project(dimension.segments[0].start), end: project(dimension.segments[0].end),
-        })), { width, height });
+          start: project(dimension!.segments[0].start), end: project(dimension!.segments[0].end),
+        })), { width, height }, hull);
+        for (const id of ["length", "depth"] as const) {
+          const rail = rails.strokes
+            .filter(stroke => stroke.dimensionId === id && !stroke.dashed)
+            .sort((a, b) =>
+              Math.hypot(b.end.x - b.start.x, b.end.y - b.start.y) -
+              Math.hypot(a.end.x - a.start.x, a.end.y - a.start.y),
+            )[0];
+          const source = dimensions.find(item => item.id === id)!.dimension!.segments[0];
+          const projectedStart = project(source.start);
+          const projectedEnd = project(source.end);
+          const normal = {
+            x: -(projectedEnd.y - projectedStart.y),
+            y: projectedEnd.x - projectedStart.x,
+          };
+          const railProjection = rail.start.x * normal.x + rail.start.y * normal.y;
+          const hullProjections = hull.map(point => point.x * normal.x + point.y * normal.y);
+          expect(
+            railProjection < Math.min(...hullProjections) ||
+            railProjection > Math.max(...hullProjections),
+            `${width}×${height} ${name} ${id} rail crossed the projected silhouette`,
+          ).toBe(true);
+        }
         const vertical = rails.strokes.filter(stroke => !stroke.dashed && stroke.start.x === stroke.end.x && Math.abs(stroke.start.y - stroke.end.y) > 8);
         expect(vertical.every(stroke => stroke.start.x === rails.right)).toBe(true);
         expect(rails.strokes.filter(stroke => stroke.dashed)).toHaveLength(dimensions.length * 2);
@@ -125,8 +249,7 @@ describe("screen-space overlay layout", () => {
           if (placed.slice(0, index).some(other => overlapArea(label, other) > 0.5)) expect(label.conflicts).toContain("higher-priority label");
           if (obstacles.some(other => overlapArea(label, other) > 0.5)) expect(label.conflicts).toContain("controls");
         });
-        // Ridge remains the actual physical segment length, never replaced with ridge height.
-        expect(dimensions.find(d => d.id === "ridge")?.dimension).toBe(model.permanentDimensions.ridge);
+        expect(dimensions.find(d => d.id === "depth")?.dimension).toBe(model.permanentDimensions.depth);
       });
     }
   }

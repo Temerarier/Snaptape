@@ -23,7 +23,8 @@ description: Fixed stack, iron rules, and artifact quirks for the Aufmaß-App (N
 
 - CSS2DRenderer (three ~0.178) rewrites each label's `element.style.display` every frame from `object.visible` (+frustum/layers), and skips whole subtrees whose parent has `visible === false`. Control CSS2D label visibility via the `.visible` flag — manual `style.display` writes get clobbered next frame.
   **How to apply:** any toggle/thinning of Maß-Labels in `lib/viewer/szene.ts` must set `CSS2DObject.visible` (group flag alone also works for all-off).
-- Headless verification: neither the E2E test browser nor local tooling has WebGL — `erstelleSzene` throws and the fallback shows. Keep viewer logic testable by extracting pure functions (see `szene.ts` exports + `szene.test.ts`); visual 3D checks only the user's preview can confirm.
+- Headless verification: the standard screenshot browser may lack WebGL, but local Chromium with ANGLE/SwiftShader has successfully rendered the viewer. Distinguish software-WebGL evidence from fallback screenshots and physical-device/hardware verification.
+  **Why:** A blanket assumption that all local browsers lack WebGL prevented actual 3D verification; explicitly enabled software rendering works here.
 
 # Form validation convention
 

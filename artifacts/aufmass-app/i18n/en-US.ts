@@ -355,6 +355,7 @@ export const enUS = {
     labels: {
       facets: "facets",
       roof: "Roof",
+      wall: "wall",
       eaves: "Eaves",
       rakes: "Rakes",
       total: "total",
@@ -399,6 +400,8 @@ export const enUS = {
       ea: "EA",
       modelReady: "Model ready · Test data",
       showConditions: "Show conditions",
+      showDimensions: "Show dimensions",
+      noConditions: "No conditions recorded.",
       measureLine: "Measure line",
       clear: "Clear",
       showFullModel: "Show full model",

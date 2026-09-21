@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { validateMeasurement } from "@workspace/measurement";
+import { computeDerived, validateMeasurement } from "@workspace/measurement";
+import type { MeasurementInput } from "@workspace/measurement";
 import fixture from "../../../../../fixtures/garage-house.json";
 import realExport from "../../../../../export-messungen/neuengamme-mixed.json";
 import { buildModel } from "./index";
@@ -109,7 +110,10 @@ function containsCorners(parent: { corners: readonly Point3[]; normal: Point3 },
 
 describe("viewer-next pure model", () => {
   it("builds the complete garage fixture at measured scale", () => {
-    const model = buildModel(fixture);
+    const model = buildModel(
+      fixture,
+      computeDerived(fixture as unknown as MeasurementInput),
+    );
 
     expect(model.roofFaces).toHaveLength(6);
     expect(model.walls).toHaveLength(6);
@@ -122,19 +126,19 @@ describe("viewer-next pure model", () => {
     )).toBe(true);
     expect(model.bounds.main.widthMm).toBeCloseTo(12192, 6);
     expect(model.bounds.overall.widthMm).toBeCloseTo(18897.6, 6);
-    expect(model.permanentDimensions.width.valueMm).toBeCloseTo(12192, 6);
-    expect(model.permanentDimensions.width.label).toBe(`40' 0"`);
-    expect(model.permanentDimensions.ridge.valueMm).toBeCloseTo(12192, 6);
-    expect(model.permanentDimensions.ridge.label).toBe(`40' 0"`);
-    expect(model.permanentDimensions.ridgeAggregate.valueMm).toBeCloseTo(21336, 6);
-    expect(model.permanentDimensions.ridgeAggregate.label).toBe(`70' 0"`);
-    expect(model.permanentDimensions.eaveHeight.valueMm).toBeCloseTo(5486.4, 6);
-    expect(model.permanentDimensions.eaveHeight.label).toBe(`18' 0"`);
+    expect(model.permanentDimensions.length?.valueMm).toBeCloseTo(12192, 6);
+    expect(model.permanentDimensions.length?.label).toBe(`40' 0"`);
+    expect(model.permanentDimensions.depth?.valueMm).toBeCloseTo(8534.4, 6);
+    expect(model.permanentDimensions.depth?.label).toBe(`28' 0"`);
+    expect(model.permanentDimensions.eaveHeight?.valueMm).toBeCloseTo(5486.4, 6);
+    expect(model.permanentDimensions.eaveHeight?.label).toBe(`18' 0"`);
     for (const dimension of [
-      model.permanentDimensions.width,
-      model.permanentDimensions.ridge,
+      model.permanentDimensions.length,
+      model.permanentDimensions.depth,
       model.permanentDimensions.eaveHeight,
     ]) {
+      expect(dimension).not.toBeNull();
+      if (!dimension) continue;
       expect(dimension.segments.length).toBeGreaterThan(0);
       expect(dimension.segments.reduce((sum, segment) => sum + segmentLength(segment), 0))
         .toBeCloseTo(dimension.valueMm, 6);
@@ -157,6 +161,28 @@ describe("viewer-next pure model", () => {
       }
     }
     assertFiniteModel(model);
+  });
+
+  it("omits an unknown footprint depth instead of using model bounds", () => {
+    const withoutDepth = {
+      ...fixture,
+      building: {
+        ...fixture.building,
+        footprint: {
+          ...fixture.building.footprint,
+          points: undefined,
+          depth_mm: null,
+        },
+      },
+    };
+    const derived = computeDerived(withoutDepth as unknown as MeasurementInput);
+    const model = buildModel(withoutDepth, derived);
+
+    expect(derived.footprint.depth_mm.value).toBeNull();
+    expect(model.bounds.main.depthMm).toBeGreaterThan(0);
+    expect(model.permanentDimensions.depth).toBeNull();
+    expect(model.permanentDimensions.length?.label).toBe(`40' 0"`);
+    expect(model.permanentDimensions.eaveHeight?.label).toBe(`18' 0"`);
   });
 
   it("accepts a real older v1.5 export and reports degraded geometry", () => {
