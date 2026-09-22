@@ -1,0 +1,40 @@
+GOAL
+While a project is still measuring, the project page shows test-house values
+("Values from the test house model", 1.015 ft² roof, 2.141 ft² walls, 8 windows).
+Replace this with a proper waiting state. The test-house fixture must never be
+shown on a real project, in any status.
+
+STEPS
+1. Find where the project detail page (and its Measurements card / 3D preview)
+   falls back to the fixture or demo data when measurement is null. Report file +
+   line first. Remove that fallback from all production code paths
+   (project page, project viewer, admin project page).
+2. Render by project status:
+   - measuring / queued: Measurements card shows skeleton tiles plus
+     "Measuring your building… this page updates automatically."
+     3D card shows the placeholder with a subtle loading indicator.
+     "Open 3D" disabled with tooltip "Available once the measurement is complete".
+     If the user opens the viewer URL directly: same waiting state, no house.
+   - failed: short message "The measurement could not be completed." plus a
+     "Measure again" button linking to the existing re-measure flow
+     (do not trigger it automatically). No values, no house.
+   - model_ready: real values from the project's own measurement (current behaviour).
+3. Keep the existing auto-refresh; when status switches to model_ready, the page
+   shows the real values without a manual reload.
+4. The fixture may only stay importable from app/viewer-next (dev demo) and tests.
+   Add a test that fails if any file under app/app/, app/admin/ or
+   components/viewer-next/ imports the fixture.
+
+DO NOT
+- Do not change the measurement pipeline or start a run / call any paid API.
+- Do not touch lib/viewer/baukasten.ts, buehne.ts, anzeige.ts or
+  lib/berechnung/flaechen.ts.
+- Do not change units or labels on model_ready projects (separate task).
+
+DONE WHEN
+- [ ] File + line of the removed fallback reported
+- [ ] Screenshot: project in "measuring" -> skeletons + waiting text, Open 3D disabled
+- [ ] Screenshot: viewer URL of a measuring project -> waiting state, no garage house
+- [ ] Screenshot: failed project -> error + "Measure again" button
+- [ ] Screenshot: model_ready project -> real values unchanged
+- [ ] Import-guard test green, pnpm test + production build clean
