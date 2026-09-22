@@ -13,7 +13,7 @@ styling; this file adds the behavior and data rules the export cannot carry.
 - **Rules & behavior:** this file.
 - **Numbers:** `computeDerived(measurement)` from the shared lib, fed with
   `fixtures/garage-house.json`. The viewer never calculates and never hard-codes a value.
-- **Contract:** `shared/schema/measurement-v1.6.json`.
+- **Contract:** `shared/schema/measurement-v1.7.json`.
 
 ## 2. One thing to know about the reference
 

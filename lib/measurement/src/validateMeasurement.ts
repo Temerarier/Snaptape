@@ -1,5 +1,5 @@
 // Validates measurement JSON against the canonical SnapTape contract
-// shared/schema/measurement-v1.6.json (JSON Schema draft 2020-12).
+// shared/schema/measurement-v1.7.json (JSON Schema draft 2020-12).
 // The schema file at the workspace root is the single source of truth
 // (docs/plan.md); it is loaded from disk on first use so no second copy
 // of the contract exists anywhere in the repo.
@@ -16,7 +16,7 @@ export interface ValidationResult {
   errors: ErrorObject[];
 }
 
-const SCHEMA_REL_PATH = join("shared", "schema", "measurement-v1.6.json");
+const SCHEMA_REL_PATH = join("shared", "schema", "measurement-v1.7.json");
 
 /** Walk upward from `startDir` until the workspace root is found. */
 function findRepoRoot(startDir: string): string | null {
@@ -63,7 +63,7 @@ function getValidator(): ValidateFunction {
 }
 
 /**
- * Validate a measurement JSON document against measurement-v1.6.json.
+ * Validate a measurement JSON document against measurement-v1.7.json.
  * Never throws on invalid input; returns all violations (including the
  * conditional if/then material rules for roof vs. wall faces).
  */

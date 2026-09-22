@@ -2,7 +2,7 @@
   "meta": {
     "country": "US",
     "unit": "mm",
-    "schema_version": "1.6",
+    "schema_version": "1.7",
     "photos": [
       {
         "index": 1,
@@ -187,7 +187,8 @@
         "confidence": "medium",
         "secondary_hex": null,
         "note": null
-      }
+      },
+      "parent_attachment_id": null
     },
     {
       "id": "RF-2",
@@ -213,7 +214,8 @@
         "confidence": "medium",
         "secondary_hex": null,
         "note": null
-      }
+      },
+      "parent_attachment_id": null
     },
     {
       "id": "RF-3",
@@ -239,7 +241,8 @@
         "confidence": "medium",
         "secondary_hex": null,
         "note": null
-      }
+      },
+      "parent_attachment_id": null
     },
     {
       "id": "RF-4",
@@ -265,7 +268,8 @@
         "confidence": "medium",
         "secondary_hex": null,
         "note": null
-      }
+      },
+      "parent_attachment_id": null
     },
     {
       "id": "RF-5",
@@ -291,7 +295,8 @@
         "confidence": "medium",
         "secondary_hex": null,
         "note": null
-      }
+      },
+      "parent_attachment_id": "AT-7"
     },
     {
       "id": "RF-6",
@@ -317,7 +322,8 @@
         "confidence": "medium",
         "secondary_hex": null,
         "note": null
-      }
+      },
+      "parent_attachment_id": "AT-7"
     },
     {
       "id": "WL-1",
@@ -1696,6 +1702,7 @@
     {
       "id": "AT-2",
       "type": "pipe",
+      "subtype": "plumbing_stack",
       "elevation": "roof",
       "width_mm": {
         "value": 76,
@@ -1716,6 +1723,7 @@
     {
       "id": "AT-3",
       "type": "pipe",
+      "subtype": "plumbing_stack",
       "elevation": "roof",
       "width_mm": {
         "value": 76,
@@ -1736,6 +1744,7 @@
     {
       "id": "AT-4",
       "type": "pipe",
+      "subtype": "plumbing_stack",
       "elevation": "roof",
       "width_mm": {
         "value": 76,
@@ -1757,6 +1766,7 @@
     {
       "id": "AT-5",
       "type": "vent",
+      "subtype": "static_vent",
       "elevation": "roof",
       "width_mm": {
         "value": 356.6,
@@ -1777,6 +1787,7 @@
     {
       "id": "AT-6",
       "type": "vent",
+      "subtype": "static_vent",
       "elevation": "roof",
       "width_mm": {
         "value": 356.6,
@@ -1826,8 +1837,9 @@
       "elevation": "front",
       "length_mm": {
         "value": 5486.4,
-        "confidence": "high",
-        "source": "scaled"
+        "confidence": "medium",
+        "source": "estimated",
+        "reference_used": "eave height of parent elevation (downspout run not measured directly)"
       },
       "position_mm": {
         "x": 152.4
@@ -1839,8 +1851,9 @@
       "elevation": "front",
       "length_mm": {
         "value": 5486.4,
-        "confidence": "high",
-        "source": "scaled"
+        "confidence": "medium",
+        "source": "estimated",
+        "reference_used": "eave height of parent elevation (downspout run not measured directly)"
       },
       "position_mm": {
         "x": 12039.6
@@ -1853,7 +1866,8 @@
       "length_mm": {
         "value": 5486.4,
         "confidence": "medium",
-        "source": "scaled"
+        "source": "estimated",
+        "reference_used": "eave height of parent elevation (downspout run not measured directly)"
       },
       "position_mm": {
         "x": 152.4
@@ -1866,7 +1880,8 @@
       "length_mm": {
         "value": 2743.2,
         "confidence": "medium",
-        "source": "scaled"
+        "source": "estimated",
+        "reference_used": "eave height of parent elevation (downspout run not measured directly)"
       },
       "position_mm": {
         "x": 6553.2

@@ -1,4 +1,4 @@
-// Contract tests for shared/schema/measurement-v1.6.json (docs/plan.md, Step 0).
+// Contract tests for shared/schema/measurement-v1.7.json (docs/plan.md, Step 0).
 // The fixture fixtures/garage-house.json is the canonical example house and
 // must always validate; a misclassified material must always fail.
 import { readFileSync } from "node:fs";
@@ -24,7 +24,7 @@ function loadFixture(): Fixture {
   return JSON.parse(readFileSync(fixturePath, "utf8")) as Fixture;
 }
 
-describe("measurement contract v1.6", () => {
+describe("measurement contract v1.7", () => {
   it("validates the garage-house fixture against the schema (Test 1)", () => {
     const { valid, errors } = validateMeasurement(loadFixture());
     expect(errors).toEqual([]);
@@ -46,6 +46,23 @@ describe("measurement contract v1.6", () => {
     expect(
       errors.some((e) => e.instancePath === `/faces/${faceIndex}/material`),
     ).toBe(true);
+  });
+
+  it("v1.7: fixture links the garage roof facets to the garage attachment", () => {
+    const fixture = loadFixture() as unknown as { faces: Array<Record<string, unknown>> };
+    const linked = fixture.faces.filter((f) => f.parent_attachment_id === "AT-7").map((f) => f.id);
+    expect(linked).toEqual(["RF-5", "RF-6"]);
+  });
+
+  it("v1.7: rejects a parent_attachment_id that is not an AT-n id", () => {
+    const mutated = loadFixture() as unknown as { faces: Array<Record<string, unknown>> };
+    const roofFace = mutated.faces.find((f) => f.face_class === "roof_face");
+    if (!roofFace) throw new Error("fixture contains no roof_face");
+    roofFace.parent_attachment_id = "WL-4";
+    const { valid, errors } = validateMeasurement(mutated);
+    expect(valid).toBe(false);
+    const faceIndex = mutated.faces.indexOf(roofFace);
+    expect(errors.some((e) => e.instancePath === `/faces/${faceIndex}/parent_attachment_id`)).toBe(true);
   });
 
   it("returns {valid, errors} without throwing on junk input", () => {

@@ -213,7 +213,7 @@ describe("viewer-next pure model", () => {
 
   it("degrades a required-fields-only measurement to neutral massing", () => {
     const minimal = {
-      meta: { country: "US", unit: "mm", schema_version: "1.6" },
+      meta: { country: "US", unit: "mm", schema_version: "1.7" },
       building: { roof_type: "other" },
       references: [],
       faces: [

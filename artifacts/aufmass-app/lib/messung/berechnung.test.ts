@@ -247,3 +247,101 @@ describe("B2: Öffnungen über der Traufe reduzieren die Wandfläche nicht", () 
     expect(p.result.faces[0].net_area_mm2.value).toBe(50_000_000);
   });
 });
+
+// v1.7: Werte aus dem Leipzig-Plan-Lauf (Lausicker Str. 26, 22.09.2026) –
+// Walmdach 44,3°, Wand-Footprint 12,94 x 10,00 m, Dachüberstand 617 mm,
+// flache Garage RF-5 (3,6°) auf AT-2. Vor v1.7 meldete dieser korrekte
+// Lauf "eave total 18% off" und "roof area 35% off".
+const leipzig = (garageVerknuepft: boolean) => ({
+  result: {
+    meta: { country: "DE" },
+    building: {
+      roof_type: "hip",
+      footprint: { width_mm: mess(12_940), depth_mm: mess(10_000) },
+      heights: { eave_height_mm: mess(8_475), ridge_height_mm: mess(13_355) },
+    },
+    references: [],
+    attachments: [
+      { id: "AT-2", type: "addition", attached: true, width_mm: mess(3_520), depth_mm: mess(6_010), height_mm: mess(2_920), parent_face_id: "WL-4" },
+    ],
+    faces: [
+      { id: "RF-1", face_class: "roof_face", elevation: "front", pitch: { degrees_original: 44.3 }, area_mm2: mess(67_567_500) },
+      { id: "RF-2", face_class: "roof_face", elevation: "back", pitch: { degrees_original: 44.3 }, area_mm2: mess(67_567_500) },
+      { id: "RF-3", face_class: "roof_face", elevation: "left", pitch: { degrees_original: 44.3 }, area_mm2: mess(43_543_500) },
+      { id: "RF-4", face_class: "roof_face", elevation: "right", pitch: { degrees_original: 44.3 }, area_mm2: mess(43_543_500) },
+      {
+        id: "RF-5", face_class: "roof_face", elevation: "right", pitch: { degrees_original: 3.6 }, area_mm2: mess(21_155_200),
+        ...(garageVerknuepft ? { parent_attachment_id: "AT-2" } : {}),
+      },
+      { id: "SF-1", face_class: "soffit", elevation: "roof", area_mm2: mess(30_000_000), soffit_depth_mm: mess(617) },
+      { id: "WL-1", face_class: "wall", elevation: "front", area_mm2: mess(100_000_000) },
+    ],
+    edges: [
+      { id: "E-1", edge_class: "ridge", length_mm: mess(3_080) },
+      { id: "E-2", edge_class: "eave", length_mm: mess(54_340) },
+      { id: "E-3", edge_class: "hip", length_mm: mess(38_368) },
+    ],
+    openings: [],
+  },
+});
+
+describe("v1.7: Geometrie-Checks auf Dachumriss inkl. Überstand, Anbau-Dächer getrennt", () => {
+  it("meldet beim korrekten Leipzig-Plan-Lauf keine Traufen-, Dachflächen- oder Grat-Warnung", () => {
+    for (const verknuepft of [true, false]) {
+      const out = validiereUndAssembliere(leipzig(verknuepft) as any);
+      const w = out.result.quality.warnings as string[];
+      expect(w.filter(x => x.startsWith("geometry check"))).toEqual([]);
+      expect(out.violations).toEqual([]);
+    }
+  });
+
+  it("schliesst verknüpfte Anbau-Dachflächen aus Neigungsstatistik und Dachflächensumme aus", () => {
+    // Garage mit 30°-Pultdach auf 45°-Walm: ohne Verknüpfung wäre das 'unequal pitch'
+    const input: any = leipzig(true);
+    input.result.faces[4].pitch.degrees_original = 30;
+    const w = validiereUndAssembliere(input).result.quality.warnings as string[];
+    expect(w.some(x => x.includes("unequal facet pitches"))).toBe(false);
+  });
+
+  it("ohne Soffit-Tiefe bleibt die Rechnung beim Wand-Footprint (Verhalten wie v1.6)", () => {
+    const input: any = leipzig(true);
+    input.result.faces = input.result.faces.filter((f: any) => f.id !== "SF-1");
+    const w = validiereUndAssembliere(input).result.quality.warnings as string[];
+    expect(w.some(x => x.startsWith("geometry check eave total"))).toBe(true);
+  });
+
+  it("verwirft parent_attachment_id auf unbekanntes Attachment oder Nicht-Dachfläche", () => {
+    const input: any = leipzig(true);
+    input.result.faces[4].parent_attachment_id = "AT-99";
+    input.result.faces[6].parent_attachment_id = "AT-2";
+    const out = validiereUndAssembliere(input);
+    expect(out.violations).toContain("RF-5: parent_attachment_id AT-99 not found in attachments");
+    expect(out.violations).toContain("WL-1: parent_attachment_id is only valid on roof faces");
+  });
+});
+
+describe("v1.7: Untertyp für Rohre und Lüfter", () => {
+  const mitAnbauten = (attachments: any[]) => {
+    const input: any = leipzig(true);
+    input.result.attachments = [...input.result.attachments, ...attachments];
+    return validiereUndAssembliere(input);
+  };
+
+  it("akzeptiert passende Untertypen und null", () => {
+    const out = mitAnbauten([
+      { id: "AT-7", type: "pipe", subtype: "flue" },
+      { id: "AT-8", type: "vent", subtype: "turbine" },
+      { id: "AT-9", type: "vent", subtype: null },
+    ]);
+    expect(out.violations).toEqual([]);
+  });
+
+  it("verwirft Lüfter-Untertyp am Rohr und Untertyp an Nicht-Durchdringungen", () => {
+    const out = mitAnbauten([
+      { id: "AT-7", type: "pipe", subtype: "turbine" },
+      { id: "AT-8", type: "chimney", subtype: "flue" },
+    ]);
+    expect(out.violations).toContain("AT-7: subtype turbine does not fit type pipe");
+    expect(out.violations).toContain("AT-8: subtype is only valid on pipe and vent attachments");
+  });
+});

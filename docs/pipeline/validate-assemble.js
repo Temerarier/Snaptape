@@ -81,6 +81,22 @@ const faceIdsV = {};
 (r.openings || []).forEach(o => {
   if (o && o.parent_face_id && !faceIdsV[o.parent_face_id]) v.push(String(o.id) + ': parent_face_id ' + String(o.parent_face_id) + ' not found in faces');
 });
+// v1.7: parent_attachment_id must point at an existing attachment and is only valid on roof faces
+const attIdsV = {};
+(r.attachments || []).forEach(a => { if (a && typeof a.id === 'string') attIdsV[a.id] = true; });
+(r.faces || []).forEach(f => {
+  if (!f || f.parent_attachment_id === null || f.parent_attachment_id === undefined) return;
+  if (f.face_class !== 'roof_face') v.push(String(f.id) + ': parent_attachment_id is only valid on roof faces');
+  else if (!attIdsV[f.parent_attachment_id]) v.push(String(f.id) + ': parent_attachment_id ' + String(f.parent_attachment_id) + ' not found in attachments');
+});
+// v1.7: a penetration subtype must fit its type (pipe subtypes on pipes, vent subtypes on vents)
+const SUBTYPES = { pipe: ['plumbing_stack', 'flue', 'other'], vent: ['static_vent', 'ridge_vent', 'turbine', 'power_vent', 'exhaust_cap', 'soffit_vent', 'other'] };
+(r.attachments || []).forEach((a) => {
+  if (!a || a.subtype === null || a.subtype === undefined) return;
+  const allowed = SUBTYPES[a.type];
+  if (!allowed) v.push(String(a.id) + ': subtype is only valid on pipe and vent attachments');
+  else if (allowed.indexOf(a.subtype) < 0) v.push(String(a.id) + ': subtype ' + String(a.subtype) + ' does not fit type ' + String(a.type));
+});
 (r.faces || []).forEach(f => {
   if (!f || f.face_class !== 'wall') return;
   const w = num(f.width_mm); const h = num(f.height_mm);
@@ -96,7 +112,8 @@ v.forEach(x => q.warnings.push('VALIDATION: ' + x));
   const wV = num(fpV.width_mm), dV = num(fpV.depth_mm);
   const facesV = Array.isArray(r.faces) ? r.faces : [];
   const edgesV = Array.isArray(r.edges) ? r.edges : [];
-  const pList0 = facesV.filter(f => f && f.face_class === 'roof_face' && f.pitch && typeof f.pitch.degrees_original === 'number').map(f => f.pitch.degrees_original);
+  const isMainRoof = (f) => f && f.face_class === 'roof_face' && !f.parent_attachment_id; // v1.7: attachment roofs (garage, annex) have their own pitch and area
+  const pList0 = facesV.filter(f => isMainRoof(f) && f.pitch && typeof f.pitch.degrees_original === 'number').map(f => f.pitch.degrees_original);
   const pList = (pList0.some(x => x >= 15) ? pList0.filter(x => x >= 10) : pList0).sort((a, b) => a - b); // B1: ignore near-flat faces (<10 deg) in pitch stats and ridge/geometry checks when other faces are >=15 deg
   const pdeg = pList.length ? pList[Math.floor((pList.length - 1) / 2)] : null;
   const pMin = pList.length ? pList[0] : null, pMax = pList.length ? pList[pList.length - 1] : null;
@@ -116,20 +133,24 @@ v.forEach(x => q.warnings.push('VALIDATION: ' + x));
     if (unequalPitch) q.warnings.push('geometry checks adapted: unequal facet pitches (' + Math.round(pMin) + '-' + Math.round(pMax) + ' deg), single-pitch formulas skipped');
     let L2 = Math.max(wV, dV), S2 = Math.min(wV, dV);
     if (rt2 === 'gable' && mRidge !== null) { if (Math.abs(mRidge - wV) <= Math.abs(mRidge - dV)) { L2 = wV; S2 = dV; } else { L2 = dV; S2 = wV; } }
-    const slope = (S2 / 2) / cosp;
+    // v1.7: eaves and roof area sit on the roof outline, which is the wall footprint plus the overhang (median soffit depth) on each side
+    const ohList = facesV.filter(f => f && (f.face_class === 'soffit' || f.face_class === 'fascia')).map(f => num(f.soffit_depth_mm)).filter(x => typeof x === 'number' && x > 0 && x < 2000).sort((a, b) => a - b);
+    const oh = ohList.length ? ohList[Math.floor((ohList.length - 1) / 2)] : 0;
+    const L2o = L2 + 2 * oh, S2o = S2 + 2 * oh;
+    const slope = (S2o / 2) / cosp;
     if (rt2 === 'gable') {
       gcheck('ridge length', mRidge, L2, 0.12);
-      gcheck('eave total', sumE('eave'), 2 * L2, 0.12);
+      gcheck('eave total', sumE('eave'), 2 * L2o, 0.12);
       if (!unequalPitch) gcheck('rake total', sumE('rake'), 4 * slope, 0.12);
     } else {
       const ridgeGeo = unequalPitch ? Math.max(L2 - S2 * Math.tan(pMin * Math.PI / 180) / Math.tan(pMax * Math.PI / 180), 0) : Math.max(L2 - S2, 0);
       gcheck('ridge length', mRidge, ridgeGeo, unequalPitch ? 0.25 : 0.15);
-      gcheck('eave total', sumE('eave'), 2 * (L2 + S2), 0.12);
-      if (!unequalPitch) gcheck('hip total', sumE('hip'), 4 * (S2 / 2) * Math.sqrt(tanp * tanp + 2), 0.15);
+      gcheck('eave total', sumE('eave'), 2 * (L2o + S2o), 0.12);
+      if (!unequalPitch) gcheck('hip total', sumE('hip'), 4 * (S2o / 2) * Math.sqrt(tanp * tanp + 2), 0.15);
     }
     let rSum = 0, rAny = false;
-    facesV.forEach(f => { if (f && f.face_class === 'roof_face') { const a = num(f.area_mm2); if (typeof a === 'number') { rSum += a; rAny = true; } } });
-    if (!unequalPitch) gcheck('roof area', rAny ? rSum : null, (L2 * S2) / cosp, 0.12);
+    facesV.forEach(f => { if (isMainRoof(f)) { const a = num(f.area_mm2); if (typeof a === 'number') { rSum += a; rAny = true; } } });
+    if (!unequalPitch) gcheck('roof area', rAny ? rSum : null, (L2o * S2o) / cosp, 0.12);
     if (!unequalPitch && eave !== null && ridge !== null) gcheck('rise (ridge height minus eave height)', ridge - eave, (S2 / 2) * tanp, 0.15);
   }
   const wallByElev = {};

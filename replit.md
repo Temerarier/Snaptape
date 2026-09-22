@@ -12,7 +12,7 @@
 1. Alle Maße intern IMMER in Millimetern, ungerundet als Zahl speichern.
    Gerundet wird nur in der Anzeige. Keine Ausnahmen.
 2. Der Vertrag zwischen Messung, Datenbank, Viewer und Report ist
-   shared/schema/measurement-v1.6.json. Änderungen nur auf
+   shared/schema/measurement-v1.7.json. Änderungen nur auf
    ausdrückliche Anweisung. (Historisch: schema/mess-schema.json v1.2 —
    nicht mehr verwenden.)
 3. Jedes Bauteil hat eine feste ID (W-1 = Fenster/Window, D-1 =
