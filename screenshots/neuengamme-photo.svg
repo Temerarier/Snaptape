@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560" role="img" aria-label="Viewer model debug elevations">
+  <style>polygon { vector-effect: non-scaling-stroke; } .dimension { stroke: #3A4A63; stroke-dasharray: 5 4; }</style>
+  <g id="front-elevation" data-elevation="front">
+    <title>Front elevation</title>
+    <polygon id="front-RF-1" data-model-id="RF-1" data-parent-face-id="" points="205.91,148.37 297.46,79.71" fill="none" fill-opacity="1" stroke="#46484B" stroke-width="2"><title>RF-1</title></polygon>
+    <polygon id="front-WL-1" data-model-id="WL-1" data-parent-face-id="" points="48.00,480.25 317.19,480.25 317.19,303.25 48.00,303.25" fill="none" fill-opacity="1" stroke="#D6CEB6" stroke-width="2"><title>WL-1</title></polygon>
+    <polygon id="front-WL-2" data-model-id="WL-2" data-parent-face-id="" points="48.00,480.25 317.19,480.25 317.19,362.25 48.00,362.25" fill="none" fill-opacity="1" stroke="#87392C" stroke-width="2"><title>WL-2</title></polygon>
+    <polygon id="front-WL-3" data-model-id="WL-3" data-parent-face-id="" points="48.00,480.25 276.63,480.25 276.63,303.25 48.00,303.25" fill="none" fill-opacity="1" stroke="#D6CEB6" stroke-width="2"><title>WL-3</title></polygon>
+    <polygon id="front-WL-4" data-model-id="WL-4" data-parent-face-id="" points="48.00,480.25 276.63,480.25 276.63,325.37 162.31,220.61 48.00,325.37" fill="none" fill-opacity="1" stroke="#87392C" stroke-width="2"><title>WL-4</title></polygon>
+    <polygon id="front-W-7" data-model-id="W-7" data-parent-face-id="WL-1" points="125.44,402.81 177.06,402.81 177.06,336.44 125.44,336.44" fill="#DCE7EF" fill-opacity="0.65" stroke="#16233A" stroke-width="1.5"><title>W-7</title></polygon>
+    <polygon id="front-W-8" data-model-id="W-8" data-parent-face-id="WL-3" points="191.81,402.81 276.63,402.81 276.63,336.44 191.81,336.44" fill="#DCE7EF" fill-opacity="0.65" stroke="#16233A" stroke-width="1.5"><title>W-8</title></polygon>
+    <polygon id="front-W-9" data-model-id="W-9" data-parent-face-id="WL-3" points="245.28,402.81 276.63,402.81 276.63,336.44 245.28,336.44" fill="#DCE7EF" fill-opacity="0.65" stroke="#16233A" stroke-width="1.5"><title>W-9</title></polygon>
+    <polygon id="front-D-3" data-model-id="D-3" data-parent-face-id="WL-1" points="230.53,436.00 289.53,436.00 289.53,327.22 230.53,327.22" fill="#DCE7EF" fill-opacity="0.65" stroke="#16233A" stroke-width="1.5"><title>D-3</title></polygon>
+    <polygon id="front-D-4" data-model-id="D-4" data-parent-face-id="WL-4" points="213.94,379.62 276.63,379.62 276.63,296.65 213.94,296.65" fill="#DCE7EF" fill-opacity="0.65" stroke="#16233A" stroke-width="1.5"><title>D-4</title></polygon>
+    <polygon id="front-SK-1" data-model-id="SK-1" data-parent-face-id="RF-1" points="274.45,96.97 297.46,79.71" fill="#79A8C7" fill-opacity="0.65" stroke="#16233A" stroke-width="1.5"><title>SK-1</title></polygon>
+    <polygon id="front-SK-2" data-model-id="SK-2" data-parent-face-id="RF-1" points="274.45,96.97 297.46,79.71" fill="#79A8C7" fill-opacity="0.65" stroke="#16233A" stroke-width="1.5"><title>SK-2</title></polygon>
+    <polygon id="front-AT-1" data-model-id="AT-1" data-parent-face-id="WL-3" points="276.63,480.25 402.00,480.25 276.63,358.56 402.00,358.56" fill="none" fill-opacity="1" stroke="#A6ADB5" stroke-width="2"><title>AT-1</title></polygon>
+    <polygon id="front-AT-2" data-model-id="AT-2" data-parent-face-id="WL-4" points="276.63,303.25 402.00,303.25 276.63,266.37 402.00,266.37" fill="none" fill-opacity="1" stroke="#66727D" stroke-width="2"><title>AT-2</title></polygon>
+    <polygon id="front-AT-5" data-model-id="AT-5" data-parent-face-id="WL-4" points="276.63,203.69 372.50,203.69 276.63,198.15 372.50,198.15" fill="none" fill-opacity="1" stroke="#66727D" stroke-width="2"><title>AT-5</title></polygon>
+    <line id="front-E-7" data-model-id="E-7" x1="48.00" y1="325.37" x2="162.31" y2="220.61" stroke="#87392C" stroke-width="2" />
+    <line id="front-E-8" data-model-id="E-8" x1="48.00" y1="325.37" x2="162.31" y2="220.61" stroke="#87392C" stroke-width="2" />
+  </g>
+  <g id="side-elevation" data-elevation="side">
+    <title>Side elevation (right/left)</title>
+    <polygon id="side-RF-4" data-model-id="RF-4" data-parent-face-id="" points="498.00,166.40 675.00,62.04" fill="none" fill-opacity="1" stroke="#8B9299" stroke-width="2"><title>RF-4</title></polygon>
+    <polygon id="side-RF-5" data-model-id="RF-5" data-parent-face-id="" points="852.00,166.40 675.00,62.04" fill="none" fill-opacity="1" stroke="#8B9299" stroke-width="2"><title>RF-5</title></polygon>
+    <polygon id="side-RF-1" data-model-id="RF-1" data-parent-face-id="" points="498.00,166.40 498.00,97.81 675.00,97.81 675.00,166.40" fill="none" fill-opacity="1" stroke="#46484B" stroke-width="2"><title>RF-1</title></polygon>
+    <polygon id="side-RF-2" data-model-id="RF-2" data-parent-face-id="" points="498.00,97.81 498.00,166.40 675.00,166.40 675.00,97.81" fill="none" fill-opacity="1" stroke="#4A4C4E" stroke-width="2"><title>RF-2</title></polygon>
+    <polygon id="side-RF-3" data-model-id="RF-3" data-parent-face-id="" points="498.00,166.40 498.00,97.81 613.34,97.81 613.34,166.40" fill="none" fill-opacity="1" stroke="#8B9299" stroke-width="2"><title>RF-3</title></polygon>
+    <polygon id="side-WL-10" data-model-id="WL-10" data-parent-face-id="" points="498.00,497.93 851.63,497.93 851.63,166.40 498.00,166.40" fill="none" fill-opacity="1" stroke="#8B9299" stroke-width="2"><title>WL-10</title></polygon>
+    <line id="side-E-5" data-model-id="E-5" x1="498.00" y1="166.40" x2="851.63" y2="166.40" stroke="#8B9299" stroke-width="2" />
+  </g>
+  <g id="permanent-dimensions" class="dimension">
+  </g>
+</svg>

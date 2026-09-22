@@ -84,3 +84,31 @@ mtime_ms = 1789991576715
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/7225a33c-d85a-44d9-a72c-1847ddf9af3f/1f38979a-4b3e-4ed1-b299-98fcb18eade4"
 storage_version_token = "1789991705239284"
 content_type = "image/png"
+
+[[outputs]]
+id = "jbdrdUeNwCwk5pYUoVXkf"
+uri = "file://screenshots/new-project-sep-21.png"
+type = "image"
+title = "New project – Sep 21 model"
+description = "Read-only debug render generated from this model_ready project’s stored measurement."
+logical_id = "a962d85b-bf6e-4985-801c-df98cedc1e16"
+content_hash = "sha256:b5f1eb5ad71a2e52366f7a938519e1b49b797d873360846f18b4c95d3f2fe03e"
+size = 23368
+mtime_ms = 1790070401592
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/a962d85b-bf6e-4985-801c-df98cedc1e16/aa6c8bcf-521e-41b3-9c8a-a2acb26fbe0b"
+storage_version_token = "1790070433480981"
+content_type = "image/png"
+
+[[outputs]]
+id = "zoRgEUl_kuUcJ2Q9TKT7E"
+uri = "file://screenshots/neuengamme-photo.png"
+type = "image"
+title = "Neuengamme photo model"
+description = "Read-only debug render generated from a second model_ready project’s stored measurement."
+logical_id = "17cf4df3-8e63-45b2-bb69-3fd2c07f7647"
+content_hash = "sha256:b21f3f2838bae54aad445ef773940cb9568e52b16e8ced573ccddf9caf0b6a15"
+size = 24842
+mtime_ms = 1790070401688
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/17cf4df3-8e63-45b2-bb69-3fd2c07f7647/e81048cf-c97c-418f-a498-57662fdf6ec4"
+storage_version_token = "1790070434097847"
+content_type = "image/png"
