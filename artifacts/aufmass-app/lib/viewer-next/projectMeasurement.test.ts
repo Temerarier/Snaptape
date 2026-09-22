@@ -1,11 +1,16 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { enUS } from "@/i18n/en-US";
 import { deDE } from "@/i18n/de-DE";
 import { ProjectViewer } from "@/components/viewer-next/ProjectViewer";
+import { ProjectMeasurementState } from "@/components/projekte/ProjectMeasurementState";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
 import { prepareProjectMeasurement } from "./projectMeasurement";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ refresh: vi.fn() }),
+}));
 
 describe("prepareProjectMeasurement", () => {
   const completeEmptyV16 = {
@@ -303,4 +308,57 @@ describe("prepareProjectMeasurement", () => {
       expect(html).not.toContain("canvas");
     },
   );
+});
+
+describe("ProjectMeasurementState", () => {
+  it.each([enUS, deDE])("renders a waiting state without a house", (dictionary) => {
+    const html = renderToStaticMarkup(
+      createElement(ProjectMeasurementState, {
+        status: "processing",
+        projectName: "In progress",
+        projectAddress: null,
+        dict: dictionary.projectDetail,
+        retryHref: "/retry",
+      }),
+    );
+
+    expect(html).toContain('data-project-viewer-state="waiting"');
+    expect(html).toContain(dictionary.projectDetail.messungLaeuft);
+    expect(html).not.toContain("viewer-next-shell");
+    expect(html).not.toContain(dictionary.projectDetail.measureAgain);
+  });
+
+  it.each([enUS, deDE])("does not poll or claim to measure an unavailable project", (dictionary) => {
+    const html = renderToStaticMarkup(
+      createElement(ProjectMeasurementState, {
+        status: "files_uploaded",
+        projectName: "Not started",
+        projectAddress: null,
+        dict: dictionary.projectDetail,
+      }),
+    );
+
+    expect(html).toContain('data-project-viewer-state="unavailable"');
+    expect(html).toContain(dictionary.projectDetail.measurementUnavailable);
+    expect(html).not.toContain(dictionary.projectDetail.messungLaeuft);
+    expect(html).not.toContain("viewer-next-shell");
+  });
+
+  it.each([enUS, deDE])("renders a failed state with an explicit retry link", (dictionary) => {
+    const html = renderToStaticMarkup(
+      createElement(ProjectMeasurementState, {
+        status: "failed",
+        projectName: "Failed project",
+        projectAddress: null,
+        dict: dictionary.projectDetail,
+        retryHref: "/app/projekt/project-id/upload",
+      }),
+    );
+
+    expect(html).toContain('data-project-viewer-state="failed"');
+    expect(html).toContain(dictionary.projectDetail.measurementFailed);
+    expect(html).toContain(dictionary.projectDetail.measureAgain);
+    expect(html).toContain("/app/projekt/project-id/upload");
+    expect(html).not.toContain("viewer-next-shell");
+  });
 });

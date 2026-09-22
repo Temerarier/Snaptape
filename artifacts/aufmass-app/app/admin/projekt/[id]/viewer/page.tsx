@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { db, projectsTable } from "@workspace/db";
 import { requireStaff } from "@/lib/auth/staff";
 import { ProjectViewer } from "@/components/viewer-next/ProjectViewer";
+import { ProjectMeasurementState } from "@/components/projekte/ProjectMeasurementState";
 import { getDictionary, toLocale } from "@/i18n";
 
 export const dynamic = "force-dynamic";
@@ -35,8 +36,17 @@ export default async function AdminProjektViewerSeite({
     .limit(1);
   const project = rows[0];
   if (!project) notFound();
-  if (project.status !== "model_ready") notFound();
   const dict = getDictionary(toLocale(user.locale));
+  if (project.status !== "model_ready") {
+    return (
+      <ProjectMeasurementState
+        status={project.status}
+        projectName={project.name}
+        projectAddress={project.adresse}
+        dict={dict.projectDetail}
+      />
+    );
+  }
   return (
     <ProjectViewer
       measurement={project.measurement}

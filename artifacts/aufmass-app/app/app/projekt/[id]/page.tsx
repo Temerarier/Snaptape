@@ -6,33 +6,22 @@ import { getDictionary, toLocale } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
 import { AutoRefresh } from "@/components/projekte/AutoRefresh";
 import { StatusBadge } from "@/components/projekte/StatusBadge";
-import { kategorieSummen } from "@/lib/berechnung/flaechen";
-import { ladeTesthaus } from "@/lib/messung/testhaus";
-import { formatMm2Roh, formatQuadratfuss } from "@/lib/viewer/anzeige";
+import { projectMeasurementState } from "@/lib/projekte/measurementState";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-// Kachel der Messwerte-Karte: gerundeter Wert sichtbar, Roh-Wert im
-// Tooltip (Eiserne Regel 1: Rundung nur in der Anzeige).
-function Kachel({
-  label,
-  wert,
-  wertTitel,
-}: {
-  label: string;
-  wert: string;
-  wertTitel?: string;
-}) {
+function SkeletonKachel({ label }: { label: string }) {
   return (
-    <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
+    <div
+      className="rounded-lg border border-neutral-200 bg-neutral-50 p-4"
+      aria-label={label}
+    >
       <p className="text-xs font-medium text-neutral-500">{label}</p>
-      <p
-        className="mt-1 text-xl font-semibold tabular-nums tracking-tight text-neutral-900"
-        title={wertTitel}
-      >
-        {wert}
-      </p>
+      <span
+        className="mt-2 block h-6 w-20 animate-pulse rounded bg-neutral-200"
+        aria-hidden="true"
+      />
     </div>
   );
 }
@@ -55,12 +44,11 @@ export default async function ProjectDetailPage({
   const project = rows[0];
   if (!project) notFound();
 
-  // Statusabhängige Navigation: draft/files_uploaded/failed → Upload,
+  // Statusabhängige Navigation: draft/files_uploaded → Upload,
   // model_ready → Viewer. processing und Legacy-Status bleiben hier.
   if (
     project.status === "draft" ||
-    project.status === "files_uploaded" ||
-    project.status === "failed"
+    project.status === "files_uploaded"
   ) {
     redirect(`/app/projekt/${id}/upload`);
   }
@@ -76,11 +64,9 @@ export default async function ProjectDetailPage({
 
   const dict = getDictionary(toLocale(user.locale));
   const t = dict.projectDetail;
-  const mess = ladeTesthaus();
-  const summen = kategorieSummen(mess);
-  const anzahlFenster = mess.openings.filter(
-    (o) => o.type === "window",
-  ).length;
+  const measurementState = projectMeasurementState(project.status);
+  const failed = measurementState === "failed";
+  const processing = measurementState === "processing";
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
@@ -100,7 +86,7 @@ export default async function ProjectDetailPage({
             {t.klassifizierungBestanden}
           </span>
         ) : null}
-        {project.status === "processing" ? (
+        {processing ? (
           <>
             <span className="text-sm text-neutral-500">{t.messungLaeuft}</span>
             <AutoRefresh />
@@ -131,6 +117,19 @@ export default async function ProjectDetailPage({
         <p className="mt-1 text-neutral-500">{project.adresse}</p>
       ) : null}
 
+      {failed ? (
+        <section className="mt-10 rounded-xl border border-red-200 bg-red-50 p-6">
+          <p className="text-sm font-medium text-red-900">
+            {t.measurementFailed}
+          </p>
+          <Link
+            href={`/app/projekt/${project.id}/upload`}
+            className="mt-4 inline-flex rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-neutral-700"
+          >
+            {t.measureAgain}
+          </Link>
+        </section>
+      ) : processing ? (
       <div className="mt-10 grid gap-4 lg:grid-cols-2">
         {/* Fotos & Pläne (Etappe 1: Einstieg in den Upload) */}
         <section className="flex flex-col rounded-xl border border-neutral-200 bg-white p-6">
@@ -164,34 +163,20 @@ export default async function ProjectDetailPage({
             {t.cards.modell3d.title}
           </h2>
           <div className="mt-4 flex flex-1 items-center justify-center rounded-lg bg-gradient-to-b from-neutral-100 to-neutral-200 py-10">
-            {/* Platzhalter-Vorschau: stilisiertes Haus */}
-            <svg
-              viewBox="0 0 120 90"
-              className="h-28 w-auto text-neutral-400"
+            <span
+              className="h-9 w-9 animate-spin rounded-full border-2 border-neutral-300 border-t-neutral-600"
               aria-hidden="true"
-            >
-              <g
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-              >
-                <path d="M20 48 60 18l40 30" />
-                <path d="M28 44v34h64V44" />
-                <path d="M50 78V58h20v20" />
-                <rect x="36" y="52" width="8" height="8" />
-                <rect x="76" y="52" width="8" height="8" />
-              </g>
-            </svg>
+            />
           </div>
           <div className="mt-4">
-            <Link
-              href="/viewer-next"
-              className="inline-flex items-center rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-neutral-700"
+            <button
+              type="button"
+              disabled
+              title={t.availableWhenComplete}
+              className="inline-flex cursor-not-allowed items-center rounded-lg bg-neutral-200 px-4 py-2 text-sm font-medium text-neutral-500"
             >
               {t.cards.modell3d.oeffnen}
-            </Link>
+            </button>
           </div>
         </section>
 
@@ -201,34 +186,13 @@ export default async function ProjectDetailPage({
             <h2 className="font-semibold text-neutral-900">
               {t.cards.messwerte.title}
             </h2>
-            <p className="text-xs text-neutral-400">{t.cards.messwerte.quelle}</p>
+            <p className="text-xs text-neutral-400">{t.messungLaeuft}</p>
           </div>
           <div className="mt-4 grid flex-1 grid-cols-2 gap-3">
-            <Kachel
-              label={t.cards.messwerte.dach}
-              wert={formatQuadratfuss(summen.dachMm2)}
-              wertTitel={formatMm2Roh(summen.dachMm2)}
-            />
-            <Kachel
-              label={t.cards.messwerte.wandflaeche}
-              wert={formatQuadratfuss(summen.waendeNettoMm2)}
-              wertTitel={formatMm2Roh(summen.waendeNettoMm2)}
-            />
-            <Kachel
-              label={t.cards.messwerte.fenster}
-              wert={`${anzahlFenster}`}
-            />
-            <Link
-              href="/viewer-next"
-              className="group rounded-lg border border-neutral-200 bg-neutral-50 p-4 transition hover:border-neutral-300 hover:bg-neutral-100"
-            >
-              <p className="text-xs font-medium text-neutral-500">
-                {t.cards.messwerte.gesamt}
-              </p>
-              <p className="mt-1 text-sm font-medium text-neutral-700 group-hover:text-neutral-900">
-                {t.cards.messwerte.gesamtText} →
-              </p>
-            </Link>
+            <SkeletonKachel label={t.cards.messwerte.dach} />
+            <SkeletonKachel label={t.cards.messwerte.wandflaeche} />
+            <SkeletonKachel label={t.cards.messwerte.fenster} />
+            <SkeletonKachel label={t.cards.messwerte.gesamt} />
           </div>
           <div className="mt-4">
             <button
@@ -245,6 +209,13 @@ export default async function ProjectDetailPage({
           </div>
         </section>
       </div>
+      ) : (
+        <section className="mt-10 rounded-xl border border-neutral-200 bg-neutral-50 p-6">
+          <p className="text-sm text-neutral-700">
+            {t.measurementUnavailable}
+          </p>
+        </section>
+      )}
     </main>
   );
 }

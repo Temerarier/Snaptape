@@ -258,6 +258,10 @@ export const enUS = {
     notFoundText:
       "This project does not exist or does not belong to your account.",
     placeholderHint: "Available in a later stage",
+    availableWhenComplete: "Available once the measurement is complete",
+    measurementFailed: "The measurement could not be completed.",
+    measurementUnavailable: "A measurement is not available for this project yet.",
+    measureAgain: "Measure again",
     klassifizierungBestanden:
       "File check passed – measurement starts in a later stage.",
     messungLaeuft: "Measuring your building… this page updates automatically.",
@@ -277,7 +281,7 @@ export const enUS = {
       },
       messwerte: {
         title: "Measurements",
-        quelle: "Values from the test house model",
+        quelle: "Values from this project’s measurement",
         dach: "Roof area",
         wandflaeche: "Wall area (net)",
         fenster: "Windows",

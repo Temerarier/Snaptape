@@ -112,3 +112,59 @@ mtime_ms = 1790070401688
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/17cf4df3-8e63-45b2-bb69-3fd2c07f7647/e81048cf-c97c-418f-a498-57662fdf6ec4"
 storage_version_token = "1790070434097847"
 content_type = "image/png"
+
+[[outputs]]
+id = "0ZmorNtssAOHwIdbdMis7"
+uri = "file://screenshots/processing-detail.png"
+type = "image"
+title = "Processing project detail"
+description = "Skeleton measurement tiles, loading 3D placeholder, and disabled Open 3D action."
+logical_id = "dcca5328-b447-4ea7-acbc-f3f496ccba7d"
+content_hash = "sha256:2c1dbb7b2a3fa0bf950e513fdf3f3d6764937ea7cc6852c65af508d055df2837"
+size = 66752
+mtime_ms = 1790073195793
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/dcca5328-b447-4ea7-acbc-f3f496ccba7d/1fa0821d-394a-4d7b-b438-efdd96dabaff"
+storage_version_token = "1790073552524083"
+content_type = "image/png"
+
+[[outputs]]
+id = "XQv4yg9J8FJayvBuLEuIQ"
+uri = "file://screenshots/processing-viewer.png"
+type = "image"
+title = "Processing project viewer"
+description = "Direct viewer URL shows the waiting state with no demo house."
+logical_id = "c368ef55-d3b1-4fcf-8b61-a3b051a5ccbe"
+content_hash = "sha256:94d9ee46e8fdd98c8e94e4e229a373d50bcb054e301bf30efa9e0adddcf7508a"
+size = 37312
+mtime_ms = 1790073200785
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/c368ef55-d3b1-4fcf-8b61-a3b051a5ccbe/bd6d8278-6e8b-41c4-ae5f-560b0858d0ce"
+storage_version_token = "1790073553284847"
+content_type = "image/png"
+
+[[outputs]]
+id = "YQAUjsNJmtyr5i2OQi8na"
+uri = "file://screenshots/failed-detail.png"
+type = "image"
+title = "Failed project detail"
+description = "Failure message and navigation-only Measure again action."
+logical_id = "47f22398-a37c-46f4-9ae3-d4aea1acb295"
+content_hash = "sha256:b49deafaef09de37f441f31c74e199a0c9052acc36cad4f7088ab762fc776b62"
+size = 39321
+mtime_ms = 1790073202405
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/47f22398-a37c-46f4-9ae3-d4aea1acb295/317f080f-2a2c-4055-a942-93d1df2e23a7"
+storage_version_token = "1790073553945622"
+content_type = "image/png"
+
+[[outputs]]
+id = "-nA3Izj9Eu4CT3LLXarCG"
+uri = "file://screenshots/model-ready-viewer.png"
+type = "image"
+title = "Model-ready project viewer"
+description = "Existing v1.6 project measurement remains visible in the real viewer."
+logical_id = "9a3231a4-bba2-470b-890d-e2247edea762"
+content_hash = "sha256:fded58b224816750ce3100f2beeaea9e4ec6276072a3ec7e174b1182b362c3a2"
+size = 294257
+mtime_ms = 1790073246257
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/9a3231a4-bba2-470b-890d-e2247edea762/4604cd60-cb9e-4f93-a6d6-941021ce6c96"
+storage_version_token = "1790073554798371"
+content_type = "image/png"

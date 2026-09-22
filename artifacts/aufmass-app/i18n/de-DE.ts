@@ -266,6 +266,11 @@ export const deDE: Dictionary = {
     notFoundText:
       "Dieses Projekt existiert nicht oder gehört nicht zu Ihrem Konto.",
     placeholderHint: "Verfügbar in einer späteren Etappe",
+    availableWhenComplete: "Verfügbar, sobald die Messung abgeschlossen ist",
+    measurementFailed: "Die Messung konnte nicht abgeschlossen werden.",
+    measurementUnavailable:
+      "Für dieses Projekt ist noch keine Messung verfügbar.",
+    measureAgain: "Erneut messen",
     klassifizierungBestanden:
       "Dateiprüfung bestanden – die Vermessung startet in einer späteren Etappe.",
     messungLaeuft:
@@ -287,7 +292,7 @@ export const deDE: Dictionary = {
       },
       messwerte: {
         title: "Messwerte",
-        quelle: "Werte aus dem Test-Haus-Modell",
+        quelle: "Werte aus der Messung dieses Projekts",
         dach: "Dachfläche",
         wandflaeche: "Wandfläche (netto)",
         fenster: "Fenster",
