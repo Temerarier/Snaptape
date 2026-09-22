@@ -1,0 +1,36 @@
+GOAL
+Measurements with schema_version "1.7" (live since the v1.7 patch) are treated as
+"older version": project 536235c3-131d-4279-92b0-007c9cea831b is model_ready with
+meta.schema_version "1.7", but its project page shows
+viewerNext.projectMessages.olderVersion ("This project was measured with an older
+version..."). v1.6 projects still render. Make the version gate accept 1.7.
+
+STEPS
+1. Find where the olderVersion message is chosen (project page / viewer page /
+   prepareProjectMeasurement or similar). Report file + line and the exact
+   condition before changing anything.
+2. Replace any single-version check with a list of supported versions:
+   SUPPORTED_SCHEMA_VERSIONS = ["1.6", "1.7"] (1.5 keeps its existing adapter
+   path). Put it in ONE shared constant and use it everywhere.
+3. Search the whole repo (not only lib/viewer-next) for other hard-coded "1.6"
+   checks or references to measurement-v1.6.json added after commit 884646f and
+   list them. Switch the ones that gate or validate stored measurements to the
+   shared constant / measurement-v1.7.json. Leave comments and docs alone.
+4. If the gate validates stored data against the schema: v1.6 data must be
+   checked against measurement-v1.6.json, v1.7 data against measurement-v1.7.json
+   (both files exist). Do not validate old data against the new schema.
+5. Add a test: a "1.7" measurement and a "1.6" measurement both pass the gate;
+   "1.5" still goes through the adapter; an unknown version (e.g. "0.9") shows
+   olderVersion.
+
+DO NOT
+- Do not change stored data, the schema files, the pipeline or the prompts.
+- Do not start a measurement run.
+- Do not touch the 3D model builder (separate task).
+
+DONE WHEN
+- [ ] File + line + old condition of the gate reported
+- [ ] List of all other hard-coded version checks found, and what was changed
+- [ ] Project 536235c3... opens with its 3D model and measurement cards (screenshot)
+- [ ] Project a847416a... (v1.6) still renders unchanged (screenshot)
+- [ ] pnpm test + production build clean
