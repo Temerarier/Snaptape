@@ -22,6 +22,10 @@ describe("prepareProjectMeasurement", () => {
     condition_areas: [],
     downspouts: [],
   };
+  const completeEmptyV17 = {
+    ...completeEmptyV16,
+    meta: { schema_version: "1.7" },
+  };
 
   const prepareViewer = (measurement: unknown) => {
     const result = prepareProjectMeasurement(measurement, enUS.viewerNext);
@@ -35,18 +39,22 @@ describe("prepareProjectMeasurement", () => {
     id: string,
   ) => result.cards.find((candidate) => candidate.id === id)!;
 
-  it("keeps older measurements out of viewer preprocessing", () => {
-    const result = prepareProjectMeasurement(
-      {
-        meta: { schema_version: "1.5" },
-        get faces() {
-          throw new Error("legacy data must not be read");
-        },
-      },
-      enUS.viewerNext,
-    );
+  it.each([completeEmptyV16, completeEmptyV17])(
+    "accepts supported schema version $meta.schema_version",
+    (measurement) => {
+      expect(
+        prepareProjectMeasurement(measurement, enUS.viewerNext).kind,
+      ).toBe("viewer");
+    },
+  );
 
-    expect(result).toEqual({ kind: "older-version" });
+  it("keeps the v1.5 measurement on the existing adapter path", () => {
+    expect(
+      prepareProjectMeasurement(
+        { ...completeEmptyV16, meta: { schema_version: "1.5" } },
+        enUS.viewerNext,
+      ).kind,
+    ).toBe("viewer");
   });
 
   it.each([null, undefined, "bad", 42])(
@@ -58,12 +66,18 @@ describe("prepareProjectMeasurement", () => {
     },
   );
 
-  it("treats a readable payload without metadata or a v1.6 marker as older", () => {
+  it("treats missing or unknown schema versions as older", () => {
     expect(
       prepareProjectMeasurement({ meta: {} }, enUS.viewerNext),
     ).toEqual({ kind: "older-version" });
     expect(
       prepareProjectMeasurement({ faces: [], openings: [], edges: [] }, enUS.viewerNext),
+    ).toEqual({ kind: "older-version" });
+    expect(
+      prepareProjectMeasurement(
+        { ...completeEmptyV16, meta: { schema_version: "0.9" } },
+        enUS.viewerNext,
+      ),
     ).toEqual({ kind: "older-version" });
   });
 
@@ -294,7 +308,7 @@ describe("prepareProjectMeasurement", () => {
     (dict, webglMessage) => {
       const html = renderToStaticMarkup(
         createElement(ProjectViewer, {
-          measurement: { meta: { schema_version: "1.5" } },
+          measurement: { meta: { schema_version: "0.9" } },
           projectName: "Altbau",
           projectAddress: "Musterstraße 1",
           dict,

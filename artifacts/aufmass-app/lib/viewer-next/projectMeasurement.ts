@@ -1,4 +1,7 @@
-import { computeDerived } from "@workspace/measurement";
+import {
+  computeDerived,
+  isSupportedSchemaVersion,
+} from "@workspace/measurement";
 import type {
   DerivedMeasurement,
   MeasurementInput,
@@ -465,7 +468,8 @@ export function prepareProjectMeasurement(
 
   if (
     !isRecord(rawMeasurement.meta) ||
-    rawMeasurement.meta.schema_version !== "1.6"
+    (!isSupportedSchemaVersion(rawMeasurement.meta.schema_version) &&
+      rawMeasurement.meta.schema_version !== "1.5")
   ) {
     return { kind: "older-version" };
   }

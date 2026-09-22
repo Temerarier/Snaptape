@@ -9,6 +9,10 @@ import {
   sessionsTable,
   usersTable,
 } from "@workspace/db";
+import {
+  isSupportedSchemaVersion,
+  type SupportedSchemaVersion,
+} from "@workspace/measurement";
 import { istStaff } from "../lib/auth/staff";
 import { getDictionary } from "../i18n";
 import { prepareProjectMeasurement } from "../lib/viewer-next/projectMeasurement";
@@ -24,7 +28,12 @@ import {
 
 type ProjectResult = {
   ref: string;
-  schema: "1.6" | "1.5" | "missing" | "unreadable";
+  schema:
+    | SupportedSchemaVersion
+    | "1.5"
+    | "missing"
+    | "unsupported"
+    | "unreadable";
   expected: "viewer" | "older message" | "unreadable message";
   owner: string;
   ownerResult: string;
@@ -59,9 +68,10 @@ const schemaOf = (measurement: unknown): ProjectResult["schema"] => {
     return "unreadable";
   const meta = (measurement as { meta?: unknown }).meta;
   if (!meta || typeof meta !== "object" || Array.isArray(meta))
-    return "unreadable";
+    return "unsupported";
   const version = (meta as { schema_version?: unknown }).schema_version;
-  return version === "1.6" || version === "1.5" ? version : "unreadable";
+  if (isSupportedSchemaVersion(version)) return version;
+  return version === "1.5" ? version : "unsupported";
 };
 
 let browser: Awaited<ReturnType<typeof connectBrowser>>;
@@ -306,15 +316,15 @@ async function main() {
   for (const project of projects) {
     const schema = schemaOf(project.measurement);
     const expected =
-      schema === "1.6"
+      isSupportedSchemaVersion(schema) || schema === "1.5"
         ? "viewer"
-        : schema === "1.5"
+        : schema === "unsupported"
           ? "older message"
           : "unreadable message";
     const ref = project.id;
     const owner = shortHash(project.userId);
     let diagnostics = "not applicable";
-    if (schema === "1.6") {
+    if (isSupportedSchemaVersion(schema)) {
       const prepared = prepareProjectMeasurement(
         project.measurement,
         getDictionary("en-US").viewerNext,
@@ -348,12 +358,12 @@ async function main() {
         project.name,
         project.address,
       );
-      if (schema === "1.6" && !capturedOwnerViewer) {
-        await capture("screenshots/viewer-cutover/owner-v16.jpg");
+      if (isSupportedSchemaVersion(schema) && !capturedOwnerViewer) {
+        await capture("screenshots/viewer-cutover/owner-supported.jpg");
         capturedOwnerViewer = true;
       }
       if (schema === "1.5" && !capturedOwnerLegacy) {
-        await capture("screenshots/viewer-cutover/owner-v15.jpg");
+        await capture("screenshots/viewer-cutover/owner-v15-adapter.jpg");
         capturedOwnerLegacy = true;
       }
     } catch (error) {
@@ -403,12 +413,12 @@ async function main() {
         ...staffCheck.problems,
       ].filter(Boolean);
       row.console = combined.join("; ") || "none";
-      if (row.schema === "1.6" && !capturedStaffViewer) {
-        await capture("screenshots/viewer-cutover/staff-v16.jpg");
+      if (isSupportedSchemaVersion(row.schema) && !capturedStaffViewer) {
+        await capture("screenshots/viewer-cutover/staff-supported.jpg");
         capturedStaffViewer = true;
       }
       if (row.schema === "1.5" && !capturedStaffLegacy) {
-        await capture("screenshots/viewer-cutover/staff-v15.jpg");
+        await capture("screenshots/viewer-cutover/staff-v15-adapter.jpg");
         capturedStaffLegacy = true;
       }
     } catch (error) {
@@ -542,7 +552,7 @@ ${reportRows
   )
   .join("\n")}
 
-## Schema 1.6 diagnostics and localized visible warnings
+## Supported-schema diagnostics and localized visible warnings
 
 Diagnostic IDs/categories are the actual model-builder diagnostics from the
 same prepared measurement rendered by the browser. Visible warning text is
@@ -551,7 +561,7 @@ captured from the owner and staff route DOM; model part IDs are not hidden.
 | Project UUID | Model diagnostic category/code and IDs | Owner-route visible warning text | Staff-route visible warning text |
 | --- | --- | --- | --- |
 ${reportRows
-  .filter((row) => row.schema === "1.6")
+  .filter((row) => isSupportedSchemaVersion(row.schema))
   .map(
     (row) =>
       `| \`${row.ref}\` | ${row.diagnostics.replaceAll("|", "\\|")} | ${row.ownerWarnings} | ${row.staffWarnings} |`,
@@ -560,10 +570,10 @@ ${reportRows
 
 ## Screenshots
 
-- \`screenshots/viewer-cutover/owner-v16.jpg\`
-- \`screenshots/viewer-cutover/owner-v15.jpg\`
-- \`screenshots/viewer-cutover/staff-v16.jpg\`
-- \`screenshots/viewer-cutover/staff-v15.jpg\`
+- \`screenshots/viewer-cutover/owner-supported.jpg\`
+- \`screenshots/viewer-cutover/owner-v15-adapter.jpg\`
+- \`screenshots/viewer-cutover/staff-supported.jpg\`
+- \`screenshots/viewer-cutover/staff-v15-adapter.jpg\`
 - \`screenshots/viewer-cutover/fixture.jpg\`
 - \`screenshots/viewer-cutover/login.jpg\`
 - \`screenshots/viewer-cutover/overview.jpg\`

@@ -168,3 +168,31 @@ mtime_ms = 1790073246257
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/9a3231a4-bba2-470b-890d-e2247edea762/4604cd60-cb9e-4f93-a6d6-941021ce6c96"
 storage_version_token = "1790073554798371"
 content_type = "image/png"
+
+[[outputs]]
+id = "bqBxtJG3Z2gvigHe2mpaS"
+uri = "file://screenshots/schema-versions/v17.png"
+type = "image"
+title = "Schema v1.7 project viewer"
+description = "Project 536235c3 opens with its stored 3D model and measurement cards."
+logical_id = "4d2c4f19-a4f3-4171-b8c2-d3c66827d1e1"
+content_hash = "sha256:ac046b8dd6a70f896ad8808df1dffc2d46bc370ceb71dc7fc59a4eab537f521a"
+size = 326859
+mtime_ms = 1790087862294
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/4d2c4f19-a4f3-4171-b8c2-d3c66827d1e1/e721328c-d9b6-4355-9d57-9422cce94f58"
+storage_version_token = "1790088156914116"
+content_type = "image/png"
+
+[[outputs]]
+id = "q8_K6bYN6XIS7V74RPwGp"
+uri = "file://screenshots/schema-versions/v16.png"
+type = "image"
+title = "Schema v1.6 project viewer"
+description = "Project a847416a continues to render its existing 3D model and measurements."
+logical_id = "ef51c19a-701c-4ce5-927d-e63add002cf7"
+content_hash = "sha256:2e3dbcd06958eda79f01dc57f8f17b9687b8f3cc1cb6bfd910f1ac8d86ed0be9"
+size = 348513
+mtime_ms = 1790087868326
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/ef51c19a-701c-4ce5-927d-e63add002cf7/e74f0009-7beb-4e26-bf4b-15518d47510f"
+storage_version_token = "1790088157994050"
+content_type = "image/png"

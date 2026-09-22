@@ -17,6 +17,7 @@ interface FixtureFace {
 }
 
 interface Fixture {
+  meta: { schema_version: string };
   faces: FixtureFace[];
 }
 
@@ -69,5 +70,31 @@ describe("measurement contract v1.7", () => {
     const result = validateMeasurement({ hello: "world" });
     expect(result.valid).toBe(false);
     expect(result.errors.length).toBeGreaterThan(0);
+  });
+
+  it("validates v1.6 with its own schema instead of the v1.7 contract", () => {
+    const fixture = loadFixture() as unknown as {
+      meta: { schema_version: string };
+      faces: Array<Record<string, unknown>>;
+    };
+    fixture.meta.schema_version = "1.6";
+    fixture.faces[0]!.parent_attachment_id = "not-an-attachment-id";
+
+    expect(validateMeasurement(fixture)).toEqual({ valid: true, errors: [] });
+  });
+
+  it("rejects an unknown schema version", () => {
+    const fixture = loadFixture();
+    fixture.meta.schema_version = "0.9";
+
+    const result = validateMeasurement(fixture);
+    expect(result.valid).toBe(false);
+    expect(
+      result.errors.some(
+        (error) =>
+          error.instancePath === "/meta/schema_version" &&
+          error.keyword === "const",
+      ),
+    ).toBe(true);
   });
 });
