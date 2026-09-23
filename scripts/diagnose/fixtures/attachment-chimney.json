@@ -1,0 +1,356 @@
+{
+  "meta": {
+    "country": "US",
+    "unit": "mm",
+    "schema_version": "1.7",
+    "notes": [
+      "Analysis-only synthetic fixture: Chimney.",
+      "Dimensions encode the intended discriminating case; this is not a real measurement."
+    ]
+  },
+  "building": {
+    "building_type": "detached",
+    "stories": 2,
+    "roof_type": "gable",
+    "footprint": {
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          12000,
+          0
+        ],
+        [
+          12000,
+          8000
+        ],
+        [
+          0,
+          8000
+        ]
+      ],
+      "width_mm": {
+        "value": 12000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "depth_mm": {
+        "value": 8000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "perimeter_mm": {
+        "value": 40000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "area_mm2": {
+        "value": 96000000,
+        "confidence": "high",
+        "source": "measured"
+      }
+    },
+    "footprint_overall": {
+      "width_mm": {
+        "value": 12000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "depth_mm": {
+        "value": 8000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "note": "Main body only."
+    },
+    "heights": {
+      "eave_height_mm": {
+        "value": 6000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "ridge_height_mm": {
+        "value": 9000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "parapet_height_mm": null,
+      "datum_note": "Level synthetic datum at the front-left corner.",
+      "per_elevation": null
+    },
+    "shared_walls": []
+  },
+  "references": [],
+  "attachments": [
+    {
+      "id": "AT-1",
+      "type": "chimney",
+      "elevation": "roof",
+      "width_mm": {
+        "value": 900,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "height_mm": {
+        "value": 1800,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "depth_mm": {
+        "value": 700,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "position_mm": {
+        "x": 1800,
+        "y": 1200
+      },
+      "parent_face_id": "RF-1",
+      "attached": true,
+      "include_in_footprint": false
+    }
+  ],
+  "faces": [
+    {
+      "id": "RF-1",
+      "face_class": "roof_face",
+      "elevation": "front",
+      "material": "shingle_asphalt",
+      "area_mm2": {
+        "value": 60000000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "parent_attachment_id": null,
+      "pitch": {
+        "degrees_original": 36.9,
+        "degrees_rounded": 36.9,
+        "rise_over_12_snapped": 9
+      },
+      "color": {
+        "hex": "#5B6470",
+        "name": "synthetic gray",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "RF-2",
+      "face_class": "roof_face",
+      "elevation": "back",
+      "material": "shingle_asphalt",
+      "area_mm2": {
+        "value": 60000000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "parent_attachment_id": null,
+      "pitch": {
+        "degrees_original": 36.9,
+        "degrees_rounded": 36.9,
+        "rise_over_12_snapped": 9
+      },
+      "color": {
+        "hex": "#5B6470",
+        "name": "synthetic gray",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "WL-1",
+      "face_class": "wall",
+      "elevation": "front",
+      "material": "siding",
+      "area_mm2": {
+        "value": 72000000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "width_mm": {
+        "value": 12000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "height_mm": {
+        "value": 6000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "gable_height_mm": null,
+      "color": {
+        "hex": "#D2C7B8",
+        "name": "synthetic beige",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "WL-2",
+      "face_class": "wall",
+      "elevation": "right",
+      "material": "siding",
+      "area_mm2": {
+        "value": 60000000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "width_mm": {
+        "value": 8000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "height_mm": {
+        "value": 6000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "gable_height_mm": {
+        "value": 3000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "color": {
+        "hex": "#D2C7B8",
+        "name": "synthetic beige",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "WL-3",
+      "face_class": "wall",
+      "elevation": "back",
+      "material": "siding",
+      "area_mm2": {
+        "value": 72000000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "width_mm": {
+        "value": 12000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "height_mm": {
+        "value": 6000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "gable_height_mm": null,
+      "color": {
+        "hex": "#D2C7B8",
+        "name": "synthetic beige",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "WL-4",
+      "face_class": "wall",
+      "elevation": "left",
+      "material": "siding",
+      "area_mm2": {
+        "value": 60000000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "width_mm": {
+        "value": 8000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "height_mm": {
+        "value": 6000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "gable_height_mm": {
+        "value": 3000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "color": {
+        "hex": "#D2C7B8",
+        "name": "synthetic beige",
+        "confidence": "high"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "E-1",
+      "edge_class": "ridge",
+      "length_mm": {
+        "value": 12000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-2",
+      "edge_class": "eave",
+      "length_mm": {
+        "value": 12000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-3",
+      "edge_class": "eave",
+      "length_mm": {
+        "value": 12000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-4",
+      "edge_class": "rake",
+      "length_mm": {
+        "value": 5000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "belongs_to_elevation": "left"
+    },
+    {
+      "id": "E-5",
+      "edge_class": "rake",
+      "length_mm": {
+        "value": 5000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "belongs_to_elevation": "left"
+    },
+    {
+      "id": "E-6",
+      "edge_class": "rake",
+      "length_mm": {
+        "value": 5000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "belongs_to_elevation": "right"
+    },
+    {
+      "id": "E-7",
+      "edge_class": "rake",
+      "length_mm": {
+        "value": 5000,
+        "confidence": "high",
+        "source": "measured"
+      },
+      "belongs_to_elevation": "right"
+    }
+  ],
+  "openings": [],
+  "quality": {
+    "references_used": 0,
+    "warnings": [
+      "Synthetic analysis fixture; not for production use."
+    ]
+  }
+}

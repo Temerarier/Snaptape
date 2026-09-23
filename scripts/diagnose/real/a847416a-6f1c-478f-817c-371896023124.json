@@ -1,0 +1,3410 @@
+{
+  "meta": {
+    "unit": "mm",
+    "notes": [
+      "Country determination: Germany, certainty high (plan title block 'Lausicker Str. 26, 04299 Leipzig', German-language drawings by luka architekten Leipzig, EU license plate 'L KD 3455' = Leipzig, EN 840 wheelie bins, green wooden fence). Calc profile DE.",
+      "All 8 PDF pages are ONE plan set (luka architekten, 11.06.2012, scale 1:100, Entwurfsplanung 'Sanierung EFH'). No rotated scans detected.",
+      "Red line work on the plans marks PLANNED refurbishment elements; black is the existing building. Photos show the as-built state and win on existence per conflict rule.",
+      "Elevation mapping: front = street side = 'Ansicht von Nordosten' (entry door, garage right); back = 'Ansicht von Südwesten' (garden, veranda/terrace); left = 'Ansicht von Südosten'; right = 'Ansicht von Nordwesten' (attached garage).",
+      "Building is a ~1920s/30s villa: stucco with dark clinker brick base and quoin bands; clinker coursing treated as Reichsformat-like ~78 mm incl. joint (format not stated - market-typical at best).",
+      "Section levels (page 1): Keller -1.15½, EG +0.94, OG +4.36½, Traufe +7.29/+7.34½, First +12.22½ - used for all height fields.",
+      "Photos 6 and 9: facade corners lie close to the frame edges; mild wide-angle compression possible on width chains from these photos.",
+      "Roof covering appears as small-format flat dark-grey elements; classified as slate but flat dark tile cannot be fully excluded (see warnings)."
+    ],
+    "photos": [
+      {
+        "index": 1,
+        "view_angle": "slightly_angled",
+        "shows_elevation": "multiple",
+        "perspective_corrected": false
+      },
+      {
+        "index": 2,
+        "view_angle": "steeply_angled",
+        "shows_elevation": "front",
+        "perspective_corrected": false
+      },
+      {
+        "index": 3,
+        "view_angle": "steeply_angled",
+        "shows_elevation": "multiple",
+        "perspective_corrected": false
+      },
+      {
+        "index": 4,
+        "view_angle": "steeply_angled",
+        "shows_elevation": "multiple",
+        "perspective_corrected": false
+      },
+      {
+        "index": 5,
+        "view_angle": "slightly_angled",
+        "shows_elevation": "multiple",
+        "perspective_corrected": false
+      },
+      {
+        "index": 6,
+        "view_angle": "frontal",
+        "shows_elevation": "front",
+        "perspective_corrected": false
+      },
+      {
+        "index": 7,
+        "view_angle": "steeply_angled",
+        "shows_elevation": "right",
+        "perspective_corrected": false
+      },
+      {
+        "index": 8,
+        "view_angle": "frontal",
+        "shows_elevation": "back",
+        "perspective_corrected": false
+      },
+      {
+        "index": 9,
+        "view_angle": "frontal",
+        "shows_elevation": "front",
+        "perspective_corrected": false
+      }
+    ],
+    "country": "DE",
+    "schema_version": "1.6"
+  },
+  "edges": [
+    {
+      "id": "E-1",
+      "length_mm": {
+        "value": 3080,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "eave rect 14245-11165 (equal-pitch hip, roof plan p4)"
+      },
+      "edge_class": "ridge",
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-2",
+      "length_mm": {
+        "value": 9592,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "sqrt(5582.5^2+5582.5^2+5448^2) from plan geometry"
+      },
+      "edge_class": "hip",
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-3",
+      "length_mm": {
+        "value": 9592,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan geometry"
+      },
+      "edge_class": "hip",
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-4",
+      "length_mm": {
+        "value": 9592,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan geometry"
+      },
+      "edge_class": "hip",
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-5",
+      "length_mm": {
+        "value": 9592,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan geometry"
+      },
+      "edge_class": "hip",
+      "belongs_to_elevation": "roof"
+    },
+    {
+      "id": "E-6",
+      "length_mm": {
+        "value": 14245,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "roof plan p4 chain 14,24½"
+      },
+      "edge_class": "eave",
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-7",
+      "length_mm": {
+        "value": 14245,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "roof plan p4 chain 14,24½"
+      },
+      "edge_class": "eave",
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-8",
+      "length_mm": {
+        "value": 11165,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "roof plan p4 chain 11,16½"
+      },
+      "edge_class": "eave",
+      "belongs_to_elevation": "left"
+    },
+    {
+      "id": "E-9",
+      "length_mm": {
+        "value": 11165,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "roof plan p4 chain 11,16½"
+      },
+      "edge_class": "eave",
+      "belongs_to_elevation": "right"
+    },
+    {
+      "id": "E-10",
+      "length_mm": {
+        "value": 7265,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "front eave height at grade +0,08"
+      },
+      "edge_class": "outside_corner",
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-11",
+      "length_mm": {
+        "value": 7265,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "front eave height at grade +0,08"
+      },
+      "edge_class": "outside_corner",
+      "belongs_to_elevation": "front"
+    },
+    {
+      "id": "E-12",
+      "length_mm": {
+        "value": 8475,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "back eave height at grade -1,13"
+      },
+      "edge_class": "outside_corner",
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-13",
+      "length_mm": {
+        "value": 8475,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "back eave height at grade -1,13"
+      },
+      "edge_class": "outside_corner",
+      "belongs_to_elevation": "back"
+    },
+    {
+      "id": "E-14",
+      "length_mm": {
+        "value": 3520,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "garage front width 3,52"
+      },
+      "edge_class": "eave",
+      "belongs_to_elevation": "right"
+    },
+    {
+      "id": "E-15",
+      "length_mm": {
+        "value": 6010,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "derived via stated scale, not independently verified",
+        "reference_used": "garage side roof edge, graphic via sheet scale"
+      },
+      "edge_class": "unclassified",
+      "belongs_to_elevation": "right"
+    },
+    {
+      "id": "E-16",
+      "length_mm": {
+        "value": 5600,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "veranda/terrace front edge = plan 5,60"
+      },
+      "edge_class": "unclassified",
+      "belongs_to_elevation": "back"
+    }
+  ],
+  "faces": [
+    {
+      "id": "WL-1",
+      "color": {
+        "hex": "#C9B58F",
+        "name": "beige roughcast stucco",
+        "note": "clinker brick base and quoin bands in dark red-brown; evening light",
+        "confidence": "medium",
+        "secondary_hex": "#5A3A34"
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 94009100,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "12940 x 7265 (plan width x front eave height)"
+      },
+      "material": "stucco",
+      "width_mm": {
+        "value": 12940,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan chain NO 12,94"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 7265,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "+7,34½ minus grade +0,08"
+      },
+      "face_class": "wall",
+      "net_area_mm2": {
+        "value": 81042100,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "gross minus 12.967 m2 openings"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "WL-2",
+      "color": {
+        "hex": "#C9B58F",
+        "name": "beige roughcast stucco",
+        "note": "clinker base and pilaster bands",
+        "confidence": "medium",
+        "secondary_hex": "#5A3A34"
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 109666500,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "12940 x 8475 (back eave height, grade -1,13)"
+      },
+      "material": "stucco",
+      "width_mm": {
+        "value": 12940,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan chain SW 5,85+5,60+1,49 = 12,94"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 8475,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "+7,34½ minus grade -1,13"
+      },
+      "face_class": "wall",
+      "net_area_mm2": {
+        "value": 99320400,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "gross minus 10.346 m2 openings; veranda block AT-1 additionally covers ~30 m2 of this face"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "WL-3",
+      "color": {
+        "hex": "#C9B58F",
+        "name": "beige roughcast stucco",
+        "note": null,
+        "confidence": "medium",
+        "secondary_hex": "#5A3A34"
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 78450000,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "10000 x 7845 (mean grade between +0,12½ front and -1,11 back on SO side)"
+      },
+      "material": "stucco",
+      "width_mm": {
+        "value": 10000,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan chain SO 10,00"
+      },
+      "elevation": "left",
+      "height_mm": {
+        "value": 7845,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "average of 7265/8475 on sloping grade"
+      },
+      "face_class": "wall",
+      "net_area_mm2": {
+        "value": 73716000,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "gross minus 4.734 m2 openings; veranda side block covers part near back corner"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "WL-4",
+      "color": {
+        "hex": "#C9B58F",
+        "name": "beige roughcast stucco",
+        "note": "crack-mapping marks visible in plans and faintly on photos 1/7",
+        "confidence": "medium",
+        "secondary_hex": "#5A3A34"
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 78450000,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "10000 x 7845 (mean grade 0,00 front to -1,00½ back on NW side)"
+      },
+      "material": "stucco",
+      "width_mm": {
+        "value": 10000,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan chain NW 0,18½+6,41½+3,40 = 10,00"
+      },
+      "elevation": "right",
+      "height_mm": {
+        "value": 7845,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "average of 7345/8345 above sloping grade"
+      },
+      "face_class": "wall",
+      "net_area_mm2": {
+        "value": 75887700,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "gross minus 2.562 m2 openings; garage AT-2 covers part of the lower wall"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "WL-5",
+      "color": {
+        "hex": "#C9B58F",
+        "name": "beige roughcast stucco",
+        "note": "yellow fascia band above (photo 2)",
+        "confidence": "medium",
+        "secondary_hex": "#D9A93F"
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 10278400,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "garage front 3520 x 2920 (plan levels)"
+      },
+      "material": "stucco",
+      "width_mm": {
+        "value": 3520,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan chain NO 3,52"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 2920,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan level +2,92"
+      },
+      "face_class": "wall",
+      "net_area_mm2": {
+        "value": 4404400,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "gross minus garage door G-1"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "WL-6",
+      "color": {
+        "hex": "#C9B58F",
+        "name": "beige roughcast stucco",
+        "note": "clinker base band (photo 5)",
+        "confidence": "medium",
+        "secondary_hex": "#5A3A34"
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 8940800,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "garage rear 3520 x 2540 (plan level +2,54)"
+      },
+      "material": "stucco",
+      "width_mm": {
+        "value": 3520,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan chain SW 3,52"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 2540,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan level +2,54"
+      },
+      "face_class": "wall",
+      "net_area_mm2": {
+        "value": 6807800,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "gross minus D-3 and W-17"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "WL-7",
+      "color": {
+        "hex": "#C4B08C",
+        "name": "beige stucco over clinker base",
+        "note": "lower half dark clinker brick (photos 3/4), face in shadow",
+        "confidence": "medium",
+        "secondary_hex": "#4E3430"
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 15510625,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "veranda block SE face 2875 x 5395"
+      },
+      "material": "stucco",
+      "width_mm": {
+        "value": 2875,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan chain SO 2,87½"
+      },
+      "elevation": "left",
+      "height_mm": {
+        "value": 5395,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "+4,26½ terrace / +5,43½ top minus back grade -1,13"
+      },
+      "face_class": "wall",
+      "net_area_mm2": {
+        "value": 9257625,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "gross minus D-2, W-15, W-16"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "WL-8",
+      "color": {
+        "hex": "#C9B58F",
+        "name": "beige stucco with clinker piers",
+        "note": "photo 8; large glazed band dominates EG",
+        "confidence": "medium",
+        "secondary_hex": "#5A3A34"
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 30212000,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "veranda SW face 5600 x 5395"
+      },
+      "material": "stucco",
+      "width_mm": {
+        "value": 5600,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan chain SW 5,60"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 5395,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "block top +5,43½ area minus back grade"
+      },
+      "face_class": "wall",
+      "net_area_mm2": {
+        "value": 19712000,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "gross minus veranda window band W-23..W-26"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "RF-1",
+      "color": {
+        "hex": "#4A4A52",
+        "name": "anthracite grey",
+        "note": "small-format flat dark covering; slate vs flat tile ambiguous",
+        "confidence": "medium",
+        "secondary_hex": null
+      },
+      "pitch": {
+        "degrees_rounded": 44,
+        "degrees_original": 44.3,
+        "rise_over_12_snapped": 12
+      },
+      "area_mm2": {
+        "value": 67567500,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "trapezoid (14245+3080)/2 x 7800 slant from plan geometry (roof plan p4 + section levels)"
+      },
+      "material": "slate",
+      "width_mm": null,
+      "elevation": "front",
+      "height_mm": null,
+      "face_class": "roof_face",
+      "net_area_mm2": {
+        "value": 65567500,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "minus eyebrow dormer footprint ~2.0 m2"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "RF-2",
+      "color": {
+        "hex": "#4A4A52",
+        "name": "anthracite grey",
+        "note": null,
+        "confidence": "medium",
+        "secondary_hex": null
+      },
+      "pitch": {
+        "degrees_rounded": 44,
+        "degrees_original": 44.3,
+        "rise_over_12_snapped": 12
+      },
+      "area_mm2": {
+        "value": 67567500,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "trapezoid (14245+3080)/2 x 7800 slant"
+      },
+      "material": "slate",
+      "width_mm": null,
+      "elevation": "back",
+      "height_mm": null,
+      "face_class": "roof_face",
+      "net_area_mm2": {
+        "value": 56145500,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "minus 3 dormer footprints and 2 skylights (~11.4 m2)"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "RF-3",
+      "color": {
+        "hex": "#4A4A52",
+        "name": "anthracite grey",
+        "note": null,
+        "confidence": "medium",
+        "secondary_hex": null
+      },
+      "pitch": {
+        "degrees_rounded": 44,
+        "degrees_original": 44.3,
+        "rise_over_12_snapped": 12
+      },
+      "area_mm2": {
+        "value": 43543500,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "hip triangle 0.5 x 11165 x 7800 slant"
+      },
+      "material": "slate",
+      "width_mm": null,
+      "elevation": "left",
+      "height_mm": null,
+      "face_class": "roof_face",
+      "net_area_mm2": {
+        "value": 43543500,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "no openings"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "RF-4",
+      "color": {
+        "hex": "#4A4A52",
+        "name": "anthracite grey",
+        "note": null,
+        "confidence": "medium",
+        "secondary_hex": null
+      },
+      "pitch": {
+        "degrees_rounded": 44,
+        "degrees_original": 44.3,
+        "rise_over_12_snapped": 12
+      },
+      "area_mm2": {
+        "value": 43543500,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "hip triangle 0.5 x 11165 x 7800 slant"
+      },
+      "material": "slate",
+      "width_mm": null,
+      "elevation": "right",
+      "height_mm": null,
+      "face_class": "roof_face",
+      "net_area_mm2": {
+        "value": 43543500,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "no openings"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "RF-5",
+      "color": {
+        "hex": "#8A8A8A",
+        "name": "grey membrane/gravel",
+        "note": "seen obliquely in photos 1/5 only",
+        "confidence": "low",
+        "secondary_hex": null
+      },
+      "pitch": {
+        "degrees_rounded": 4,
+        "degrees_original": 3.6,
+        "rise_over_12_snapped": 1
+      },
+      "area_mm2": {
+        "value": 21155200,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "garage depth derived graphically via sheet scale",
+        "reference_used": "garage 3520 x 6010, near-flat (+2,92 to +2,54)"
+      },
+      "material": "membrane",
+      "width_mm": null,
+      "elevation": "right",
+      "height_mm": null,
+      "face_class": "roof_face",
+      "net_area_mm2": {
+        "value": 21155200,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "garage depth derived graphically via sheet scale",
+        "reference_used": "no openings"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": null
+    },
+    {
+      "id": "SF-1",
+      "color": {
+        "hex": "#D9A93F",
+        "name": "ochre yellow",
+        "note": "distinct yellow soffit band on all photos",
+        "confidence": "high",
+        "secondary_hex": null
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 29645425,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "eave rectangle 14245x11165 minus wall rectangle 12940x10000 (roof plan p4)"
+      },
+      "material": "wood",
+      "width_mm": null,
+      "elevation": "roof",
+      "height_mm": null,
+      "face_class": "soffit",
+      "net_area_mm2": {
+        "value": 29645425,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "no penetrations visible"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": {
+        "value": 617,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "overhang 582.5 front/back, 652.5 sides from plan; mean stated"
+      }
+    },
+    {
+      "id": "FC-1",
+      "color": {
+        "hex": "#D9A93F",
+        "name": "ochre yellow",
+        "note": null,
+        "confidence": "high",
+        "secondary_hex": null
+      },
+      "pitch": null,
+      "area_mm2": {
+        "value": 12705000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "fascia height estimated from photos only",
+        "reference_used": "fascia run 50820 x ~250 high (photo 6 proportion)"
+      },
+      "material": "wood",
+      "width_mm": null,
+      "elevation": "roof",
+      "height_mm": null,
+      "face_class": "fascia",
+      "net_area_mm2": {
+        "value": 12705000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "fascia height estimated from photos only",
+        "reference_used": "no openings"
+      },
+      "gable_height_mm": null,
+      "orientation_deg": null,
+      "soffit_depth_mm": {
+        "value": 617,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "plan overhang"
+      }
+    }
+  ],
+  "quality": {
+    "warnings": [
+      "Plan vs. photo: roof windows/solar panels are drawn RED (planned) on the 2012 plans; photos show 2 rooflights (SK-1/SK-2) and 3 back dormer windows as-built - photo wins on existence, elements included.",
+      "Plan vs. photo: OG windows on SO and NW elevations drawn red (planned alterations); photos 1/7 confirm windows exist as-built - included with plan-scaled sizes.",
+      "openings likely undercounted on back - base zone occluded by dense vegetation (photo occlusion up to 35%); basement windows on the back not verifiable.",
+      "openings likely undercounted on right - attached garage and firewood store occlude the EG/basement zone of the NW wall.",
+      "Garage depth (AT-2, RF-5, E-15) carries no written chain; derived graphically via the 1:100 sheet scale - confidence low.",
+      "Two openings covered by fabric sheets (W-16 veranda side glazing, W-30 center dormer window); their dimensions are estimated behind the covering - confidence low.",
+      "Sloped site: front grade +0,08, back grade -1,13 (plan levels). Single eave/ridge heights are referenced to the lowest grade; heights.per_elevation filled - photo-based height estimates reference different local grades.",
+      "Entry door D-1 height implied by plan proportions/photos ~2200 mm exceeds the DE table value 1985/2110 mm - consistent with a pre-1950 building; door-based scale chains treated as statistical per catalog rule.",
+      "Roof covering ambiguous: small-format flat dark-grey elements read as slate, but a flat dark tile cannot be excluded from the photos - material 'slate' set with reservation.",
+      "Wall gross areas of WL-2/WL-3/WL-4 include zones covered by the attached veranda block and garage (interior overlap); net areas subtract openings only.",
+      "Width chains: vehicle-based 12800 mm vs plate-based 13150 mm vs plan 12940 mm agree within ~3%; written plan dimension governs.",
+      "Opening positions (position_mm) are partly estimated from photos (source estimated); the plan elevations are not dimensioned per opening axis.",
+      "Sidelight windows W-2/W-3 flanking the entry are inferred from the EG dimension chain (47½ values) and partially visible in photo 9 - heights low confidence.",
+      "eave_height: 2 outlier estimate(s) more than 10% from median removed in consolidation",
+      "eave_height: photo-derived median 7300 mm differs from plan value 8475 mm; plan value kept",
+      "ridge_height: photo-derived median 12200 mm differs from plan value 13355 mm; plan value kept",
+      "geometry check eave total: model 54340 vs derived 45880 (18% off)",
+      "geometry check roof area: model 243377200 vs derived 180803848 (35% off)"
+    ],
+    "raw_estimates": [
+      {
+        "target": "total_width",
+        "estimate_mm": 12800,
+        "photo_index": 6,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 4700,
+        "reference_object": "vehicle length VW Tiguan Allspace (horizontal)"
+      },
+      {
+        "target": "total_width",
+        "estimate_mm": 13150,
+        "photo_index": 9,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 520,
+        "reference_object": "EU license plate 520 mm (horizontal)"
+      },
+      {
+        "target": "total_width",
+        "estimate_mm": 12950,
+        "photo_index": 6,
+        "reliability": "medium",
+        "via_transfer": false,
+        "assumed_size_mm": 1010,
+        "reference_object": "plan dimension of D-1 width 1,01 m (horizontal)"
+      },
+      {
+        "target": "total_depth",
+        "estimate_mm": 10300,
+        "photo_index": 1,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 1200,
+        "reference_object": "IBC tote pallet length 1200 mm (horizontal)"
+      },
+      {
+        "target": "total_depth",
+        "estimate_mm": 9700,
+        "photo_index": 7,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 78,
+        "reference_object": "clinker stretcher coursing counted across base (horizontal)"
+      },
+      {
+        "target": "eave_height",
+        "estimate_mm": 7300,
+        "photo_index": 6,
+        "reliability": "medium",
+        "via_transfer": false,
+        "assumed_size_mm": 2200,
+        "reference_object": "plan dimension of D-1 height ~2200 (vertical chain)"
+      },
+      {
+        "target": "eave_height",
+        "estimate_mm": 8400,
+        "photo_index": 8,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 1750,
+        "reference_object": "adult person, back grade (vertical chain)"
+      },
+      {
+        "target": "eave_height",
+        "estimate_mm": 8600,
+        "photo_index": 1,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 1075,
+        "reference_object": "wheelie bin EN 840 height, back grade (vertical chain)"
+      },
+      {
+        "target": "eave_height",
+        "estimate_mm": 7250,
+        "photo_index": 9,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 2900,
+        "reference_object": "storey-height chain 2 x ~2900 + plinth (vertical)"
+      },
+      {
+        "target": "ridge_height",
+        "estimate_mm": 12200,
+        "photo_index": 6,
+        "reliability": "medium",
+        "via_transfer": false,
+        "assumed_size_mm": 2200,
+        "reference_object": "plan dimension of D-1 height ~2200 (vertical chain)"
+      },
+      {
+        "target": "ridge_height",
+        "estimate_mm": 13300,
+        "photo_index": 8,
+        "reliability": "low",
+        "via_transfer": false,
+        "assumed_size_mm": 1750,
+        "reference_object": "adult person, back grade (vertical chain)"
+      }
+    ],
+    "spread_percent": 9,
+    "references_used": 9,
+    "dimension_chains": [
+      {
+        "page": 3,
+        "label": "Ansicht von Nordosten (front): house + garage; assigned_to: footprint.width_mm (12940) and AT-2 width",
+        "values_mm": [
+          12940,
+          3520
+        ],
+        "computed_sum_mm": 16460,
+        "stated_total_mm": null,
+        "deviation_percent": 0
+      },
+      {
+        "page": 3,
+        "label": "Ansicht von Südosten (left): veranda projection + main body; assigned_to: footprint.depth_mm (10000) and AT-1 depth",
+        "values_mm": [
+          2875,
+          10000
+        ],
+        "computed_sum_mm": 12875,
+        "stated_total_mm": null,
+        "deviation_percent": 0
+      },
+      {
+        "page": 2,
+        "label": "Ansicht von Nordwesten (right): 0,18½ + 6,41½ + 3,40 + 2,87½; cross-check depth incl. veranda",
+        "values_mm": [
+          185,
+          6415,
+          3400,
+          2875
+        ],
+        "computed_sum_mm": 12875,
+        "stated_total_mm": null,
+        "deviation_percent": 0
+      },
+      {
+        "page": 2,
+        "label": "Ansicht von Südwesten (back): garage 3,52 + 5,85 + veranda 5,60 + 1,49; assigned_to: WL-2 segmentation / AT-1 position",
+        "values_mm": [
+          3520,
+          5850,
+          5600,
+          1490
+        ],
+        "computed_sum_mm": 16460,
+        "stated_total_mm": null,
+        "deviation_percent": 0
+      },
+      {
+        "page": 4,
+        "label": "Grundriß Spitzboden / roof plan: eave rectangle; assigned_to: roof geometry (RF-1..4, E-6..E-9, SF-1)",
+        "values_mm": [
+          14245,
+          11165
+        ],
+        "computed_sum_mm": null,
+        "stated_total_mm": null,
+        "deviation_percent": null
+      },
+      {
+        "page": 5,
+        "label": "Grundriß DG total width; cross-check footprint.width_mm",
+        "values_mm": [
+          12940
+        ],
+        "computed_sum_mm": 12940,
+        "stated_total_mm": 12940,
+        "deviation_percent": 0
+      },
+      {
+        "page": 6,
+        "label": "Grundriß OG front chain (window band): 4,71 + 61½ + 55 + 1,07½ + 55 + 61½ + 4,82½; assigned_to: W-7/W-8/W-9 widths",
+        "values_mm": [
+          4710,
+          615,
+          550,
+          1075,
+          550,
+          615,
+          4825
+        ],
+        "computed_sum_mm": 12940,
+        "stated_total_mm": 12940,
+        "deviation_percent": 0
+      },
+      {
+        "page": 7,
+        "label": "Grundriß EG top chain: 1,49 + 5,63 + 2,92 + 2,90; cross-check footprint.width_mm",
+        "values_mm": [
+          1490,
+          5630,
+          2920,
+          2900
+        ],
+        "computed_sum_mm": 12940,
+        "stated_total_mm": 12940,
+        "deviation_percent": 0
+      },
+      {
+        "page": 7,
+        "label": "Grundriß EG front chain (openings): ... 1,94 ... 47½ 1,01 47½ ... 2,15 ... 2,67; assigned_to: W-1, W-2, D-1, W-3, W-4, G-1 widths",
+        "values_mm": [
+          995,
+          1705,
+          1940,
+          755,
+          475,
+          1010,
+          475,
+          790,
+          2150,
+          1705,
+          935,
+          315,
+          2670,
+          535
+        ],
+        "computed_sum_mm": 16455,
+        "stated_total_mm": 16460,
+        "deviation_percent": 0.03
+      },
+      {
+        "page": 8,
+        "label": "Grundriß KG total width; cross-check footprint.width_mm",
+        "values_mm": [
+          12940
+        ],
+        "computed_sum_mm": 12940,
+        "stated_total_mm": 12940,
+        "deviation_percent": 0
+      },
+      {
+        "page": 8,
+        "label": "Grundriß KG side chain total 10,06 (KG outline); note: main-body depth per elevations is 10,00",
+        "values_mm": [
+          10060
+        ],
+        "computed_sum_mm": 10060,
+        "stated_total_mm": 10060,
+        "deviation_percent": 0
+      },
+      {
+        "page": 1,
+        "label": "Schnitt levels: Keller -1,15½ / EG +0,94 / OG +4,36½ / Traufe +7,29 / First +12,22½; assigned_to: heights.eave_height_mm, heights.ridge_height_mm",
+        "values_mm": [
+          -1155,
+          940,
+          4365,
+          7290,
+          12225
+        ],
+        "computed_sum_mm": null,
+        "stated_total_mm": null,
+        "deviation_percent": null
+      }
+    ]
+  },
+  "building": {
+    "heights": {
+      "datum_note": "Grade zero taken at the lowest visible grade point (garden/SW side, plan level -1,13). Site slopes ~1.2 m: street/front grade at plan +0,08, back garden at -1,13. Per-elevation values use the local grade of each side.",
+      "per_elevation": [
+        {
+          "elevation": "front",
+          "eave_height_mm": {
+            "value": 7265,
+            "source": "measured",
+            "confidence": "high",
+            "reference_used": "+7,34½ eave minus front grade +0,08"
+          },
+          "grade_offset_mm": {
+            "value": 1210,
+            "source": "measured",
+            "confidence": "high",
+            "reference_used": "front grade +0,08 vs datum -1,13"
+          },
+          "ridge_height_mm": {
+            "value": 12145,
+            "source": "measured",
+            "confidence": "high",
+            "reference_used": "+12,22½ minus front grade +0,08"
+          }
+        },
+        {
+          "elevation": "back",
+          "eave_height_mm": {
+            "value": 8475,
+            "source": "measured",
+            "confidence": "high",
+            "reference_used": "+7,34½ eave minus back grade -1,13"
+          },
+          "grade_offset_mm": {
+            "value": 0,
+            "source": "measured",
+            "confidence": "high",
+            "reference_used": "datum at back garden grade"
+          },
+          "ridge_height_mm": {
+            "value": 13355,
+            "source": "measured",
+            "confidence": "high",
+            "reference_used": "+12,22½ minus back grade -1,13"
+          }
+        }
+      ],
+      "eave_height_mm": {
+        "value": 8475,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan levels: Traufe +7,34½ minus lowest grade -1,13 (back garden)"
+      },
+      "ridge_height_mm": {
+        "value": 13355,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan levels: First +12,22½ (section) minus lowest grade -1,13"
+      },
+      "parapet_height_mm": null
+    },
+    "stories": 2,
+    "footprint": {
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          12940,
+          0
+        ],
+        [
+          12940,
+          10000
+        ],
+        [
+          0,
+          10000
+        ]
+      ],
+      "area_mm2": {
+        "value": 129400000,
+        "source": "scaled",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "shoelace area from footprint points, computed in code"
+      },
+      "depth_mm": {
+        "value": 10000,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan chain p3 SO elevation 10,00 + p6/p7 side chains 10,00"
+      },
+      "width_mm": {
+        "value": 12940,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan chains p3 NO elevation 12,94 + p5/p6/p7 floor plans 12,94"
+      },
+      "perimeter_mm": {
+        "value": 45880,
+        "source": "scaled",
+        "confidence": "medium",
+        "low_reason": null,
+        "reference_used": "perimeter from footprint points, computed in code"
+      }
+    },
+    "roof_type": "hip",
+    "shared_walls": [],
+    "building_type": "detached",
+    "footprint_overall": {
+      "note": "Includes attached garage (3.52 m on NW/right side) and attached veranda/terrace block (2.875 m projection on SW/back). Detached: none.",
+      "depth_mm": {
+        "value": 12875,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan chain p3 SO: 10,00 + veranda 2,87½"
+      },
+      "width_mm": {
+        "value": 16460,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan chain p3 NO: 12,94 + garage 3,52"
+      }
+    }
+  },
+  "openings": [
+    {
+      "id": "D-1",
+      "note": "Reference only, not for ordering",
+      "type": "door",
+      "area_mm2": {
+        "value": 2222000,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1010,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "EG plan chain 1,01"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 2200,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 6/9 proportion vs plan width; historic tall entry door"
+      },
+      "position_mm": {
+        "x": 5450,
+        "y": 920
+      },
+      "perimeter_mm": {
+        "value": 6420,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-1",
+      "sill_height_mm": {
+        "value": 920,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "entry landing +1,00 minus grade +0,08"
+      }
+    },
+    {
+      "id": "W-1",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 2716000,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1940,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "EG front chain value 1,94"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 1400,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 6 proportion, sill 800 above EG floor"
+      },
+      "position_mm": {
+        "x": 2300,
+        "y": 1660
+      },
+      "perimeter_mm": {
+        "value": 6680,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-1",
+      "sill_height_mm": {
+        "value": 1660,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "EG +0,94 + 0,80 sill minus grade +0,08"
+      }
+    },
+    {
+      "id": "W-2",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 427500,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "height estimated"
+      },
+      "group_id": "WG-0",
+      "width_mm": {
+        "value": 475,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "EG chain 47½ flanking door"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "partly occluded by vegetation",
+        "reference_used": "photo 9 proportion"
+      },
+      "position_mm": {
+        "x": 4900,
+        "y": 1400
+      },
+      "perimeter_mm": {
+        "value": 2750,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "height estimated"
+      },
+      "parent_face_id": "WL-1",
+      "sill_height_mm": {
+        "value": 1400,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "landing zone occluded"
+      }
+    },
+    {
+      "id": "W-3",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 427500,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "height estimated"
+      },
+      "group_id": "WG-0",
+      "width_mm": {
+        "value": 475,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "EG chain 47½ flanking door"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "partly occluded",
+        "reference_used": "photo 9 proportion"
+      },
+      "position_mm": {
+        "x": 6500,
+        "y": 1400
+      },
+      "perimeter_mm": {
+        "value": 2750,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "height estimated"
+      },
+      "parent_face_id": "WL-1",
+      "sill_height_mm": {
+        "value": 1400,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "landing zone occluded"
+      }
+    },
+    {
+      "id": "W-4",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 3440000,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 2150,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "EG front chain value 2,15"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 1600,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 6/9 (roller shutter closed)"
+      },
+      "position_mm": {
+        "x": 8500,
+        "y": 1660
+      },
+      "perimeter_mm": {
+        "value": 7500,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-1",
+      "sill_height_mm": {
+        "value": 1660,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "EG sill level"
+      }
+    },
+    {
+      "id": "W-5",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 304000,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "scaled"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 760,
+        "source": "scaled",
+        "confidence": "medium",
+        "reference_used": "NO elevation basement window via 1:100 scale"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 400,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "derived via stated scale, not independently verified"
+      },
+      "position_mm": {
+        "x": 2500,
+        "y": 300
+      },
+      "perimeter_mm": {
+        "value": 2320,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "scaled"
+      },
+      "parent_face_id": "WL-1",
+      "sill_height_mm": {
+        "value": 300,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "base zone occluded by fence/plants"
+      }
+    },
+    {
+      "id": "W-6",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 304000,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "scaled"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 760,
+        "source": "scaled",
+        "confidence": "medium",
+        "reference_used": "NO elevation basement window via 1:100 scale"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 400,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "derived via stated scale, not independently verified"
+      },
+      "position_mm": {
+        "x": 9000,
+        "y": 300
+      },
+      "perimeter_mm": {
+        "value": 2320,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "scaled"
+      },
+      "parent_face_id": "WL-1",
+      "sill_height_mm": {
+        "value": 300,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "base zone occluded"
+      }
+    },
+    {
+      "id": "W-7",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 738000,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "group_id": "WG-1",
+      "width_mm": {
+        "value": 615,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "OG plan front chain 61½"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 1200,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 6 proportion"
+      },
+      "position_mm": {
+        "x": 4650,
+        "y": 5080
+      },
+      "perimeter_mm": {
+        "value": 3630,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-1",
+      "sill_height_mm": {
+        "value": 5080,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "OG +4,36½ + 0,80 sill minus grade"
+      }
+    },
+    {
+      "id": "W-8",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 1290000,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "group_id": "WG-1",
+      "width_mm": {
+        "value": 1075,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "OG plan front chain 1,07½"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 1200,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 6 proportion"
+      },
+      "position_mm": {
+        "x": 5820,
+        "y": 5080
+      },
+      "perimeter_mm": {
+        "value": 4550,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-1",
+      "sill_height_mm": {
+        "value": 5080,
+        "source": "measured",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "W-9",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 738000,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "group_id": "WG-1",
+      "width_mm": {
+        "value": 615,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "OG plan front chain 61½"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 1200,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 6 proportion"
+      },
+      "position_mm": {
+        "x": 7450,
+        "y": 5080
+      },
+      "perimeter_mm": {
+        "value": 3630,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-1",
+      "sill_height_mm": {
+        "value": 5080,
+        "source": "measured",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "W-10",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 360000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 600,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 6 small stair window below OG band"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 600,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 6 proportion"
+      },
+      "position_mm": {
+        "x": 6150,
+        "y": 3800
+      },
+      "perimeter_mm": {
+        "value": 2400,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-1",
+      "sill_height_mm": {
+        "value": 3800,
+        "source": "estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "W-11",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 1260000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1800,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photos 6/9 eyebrow dormer arched sash vs facade width"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 700,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 6 proportion"
+      },
+      "position_mm": {
+        "x": 6050,
+        "y": 1700
+      },
+      "perimeter_mm": {
+        "value": 5000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "RF-1",
+      "sill_height_mm": null
+    },
+    {
+      "id": "W-12",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 2380000,
+        "source": "scaled",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1700,
+        "source": "scaled",
+        "confidence": "medium",
+        "reference_used": "SO elevation drawing via 1:100 scale"
+      },
+      "elevation": "left",
+      "height_mm": {
+        "value": 1400,
+        "source": "scaled",
+        "confidence": "medium",
+        "reference_used": "SO elevation drawing"
+      },
+      "position_mm": {
+        "x": 4500,
+        "y": 2400
+      },
+      "perimeter_mm": {
+        "value": 6200,
+        "source": "scaled",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-3",
+      "sill_height_mm": {
+        "value": 2400,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "EG sill vs sloping local grade"
+      }
+    },
+    {
+      "id": "W-13",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 2114000,
+        "source": "scaled",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1510,
+        "source": "scaled",
+        "confidence": "medium",
+        "reference_used": "SO elevation OG window (drawn red = planned; confirmed built in photos)"
+      },
+      "elevation": "left",
+      "height_mm": {
+        "value": 1400,
+        "source": "scaled",
+        "confidence": "medium",
+        "reference_used": "SO elevation drawing"
+      },
+      "position_mm": {
+        "x": 4200,
+        "y": 5600
+      },
+      "perimeter_mm": {
+        "value": 5820,
+        "source": "scaled",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-3",
+      "sill_height_mm": {
+        "value": 5600,
+        "source": "estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "W-14",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 240000,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "scaled"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 600,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "derived via stated scale, not independently verified",
+        "reference_used": "SO elevation small basement window"
+      },
+      "elevation": "left",
+      "height_mm": {
+        "value": 400,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "derived via stated scale, not independently verified"
+      },
+      "position_mm": {
+        "x": 7800,
+        "y": 400
+      },
+      "perimeter_mm": {
+        "value": 2000,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "scaled"
+      },
+      "parent_face_id": "WL-3",
+      "sill_height_mm": {
+        "value": 400,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "base occluded"
+      }
+    },
+    {
+      "id": "D-2",
+      "note": "Reference only, not for ordering",
+      "type": "door",
+      "area_mm2": {
+        "value": 1773000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 900,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photos 3/4 vs assumed leaf height 1970"
+      },
+      "elevation": "left",
+      "height_mm": {
+        "value": 1970,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "DE market-typical basement door"
+      },
+      "position_mm": {
+        "x": 800,
+        "y": 0
+      },
+      "perimeter_mm": {
+        "value": 5740,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-7",
+      "sill_height_mm": {
+        "value": 0,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "opens at garden grade (KG level -1,15½ ~ grade -1,13)"
+      }
+    },
+    {
+      "id": "W-15",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 300000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 600,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photos 3/4 vs door D-2"
+      },
+      "elevation": "left",
+      "height_mm": {
+        "value": 500,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photos 3/4"
+      },
+      "position_mm": {
+        "x": 1900,
+        "y": 900
+      },
+      "perimeter_mm": {
+        "value": 2200,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-7",
+      "sill_height_mm": {
+        "value": 900,
+        "source": "estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "W-16",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 4180000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "covered"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 2200,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "opening covered by sheet, frame edges partly visible",
+        "reference_used": "photos 3/4, veranda side glazing covered by white fabric"
+      },
+      "elevation": "left",
+      "height_mm": {
+        "value": 1900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "covered by sheet"
+      },
+      "position_mm": {
+        "x": 300,
+        "y": 2600
+      },
+      "perimeter_mm": {
+        "value": 8200,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "covered"
+      },
+      "parent_face_id": "WL-7",
+      "sill_height_mm": {
+        "value": 2600,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "covered"
+      }
+    },
+    {
+      "id": "W-17",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 360000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 600,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 5 glass-block window vs door D-3"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 600,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 5"
+      },
+      "position_mm": {
+        "x": 600,
+        "y": 1100
+      },
+      "perimeter_mm": {
+        "value": 2400,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-6",
+      "sill_height_mm": {
+        "value": 1100,
+        "source": "estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "D-3",
+      "note": "Reference only, not for ordering",
+      "type": "door",
+      "area_mm2": {
+        "value": 1773000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 900,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 5 vs assumed 1985 leaf"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1970,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "DE market-typical"
+      },
+      "position_mm": {
+        "x": 1600,
+        "y": 0
+      },
+      "perimeter_mm": {
+        "value": 5740,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-6",
+      "sill_height_mm": {
+        "value": 0,
+        "source": "estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "G-1",
+      "note": "Reference only, not for ordering",
+      "type": "garage_door",
+      "area_mm2": {
+        "value": 5874000,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 2670,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "EG front chain value 2,67 (garage opening)"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 2200,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 2 vs handle height 1050"
+      },
+      "position_mm": {
+        "x": 450,
+        "y": 0
+      },
+      "perimeter_mm": {
+        "value": 9740,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-5",
+      "sill_height_mm": {
+        "value": 0,
+        "source": "measured",
+        "confidence": "high"
+      }
+    },
+    {
+      "id": "W-18",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 1242300,
+        "source": "scaled",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1010,
+        "source": "scaled",
+        "confidence": "medium",
+        "reference_used": "NW elevation OG window via 1:100 scale"
+      },
+      "elevation": "right",
+      "height_mm": {
+        "value": 1230,
+        "source": "scaled",
+        "confidence": "medium",
+        "reference_used": "NW elevation drawing"
+      },
+      "position_mm": {
+        "x": 7200,
+        "y": 5300
+      },
+      "perimeter_mm": {
+        "value": 4480,
+        "source": "scaled",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-4",
+      "sill_height_mm": {
+        "value": 5300,
+        "source": "estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "W-19",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 1080000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 900,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 7 vs clinker coursing"
+      },
+      "elevation": "right",
+      "height_mm": {
+        "value": 1200,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 7"
+      },
+      "position_mm": {
+        "x": 5800,
+        "y": 2500
+      },
+      "perimeter_mm": {
+        "value": 4200,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-4",
+      "sill_height_mm": {
+        "value": 2500,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "ground line occluded by woodpile; assumed ground offset ~0.5 m"
+      }
+    },
+    {
+      "id": "W-20",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 240000,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "scaled"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 600,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "derived via stated scale, not independently verified",
+        "reference_used": "NW elevation small basement window"
+      },
+      "elevation": "right",
+      "height_mm": {
+        "value": 400,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "derived via stated scale, not independently verified"
+      },
+      "position_mm": {
+        "x": 1500,
+        "y": 300
+      },
+      "perimeter_mm": {
+        "value": 2000,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "scaled"
+      },
+      "parent_face_id": "WL-4",
+      "sill_height_mm": {
+        "value": 300,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "base occluded"
+      }
+    },
+    {
+      "id": "W-21",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 2280100,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1510,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8 vs veranda width 5,60 plan transfer"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1510,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8"
+      },
+      "position_mm": {
+        "x": 1300,
+        "y": 6330
+      },
+      "perimeter_mm": {
+        "value": 6040,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-2",
+      "sill_height_mm": {
+        "value": 6330,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "OG sill +5,16½ minus back grade -1,13"
+      }
+    },
+    {
+      "id": "W-22",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 2480000,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 2480,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "EG plan back chain 2,48½ (Kochen/Essen window)"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1000,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8, low window with wooden roller blind"
+      },
+      "position_mm": {
+        "x": 1300,
+        "y": 2870
+      },
+      "perimeter_mm": {
+        "value": 6960,
+        "source": "measured",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-2",
+      "sill_height_mm": {
+        "value": 2870,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "EG sill +1,74 minus back grade -1,13"
+      }
+    },
+    {
+      "id": "W-23",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 2625000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": "WG-2",
+      "width_mm": {
+        "value": 1250,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "veranda band 5,60 plan width / 4 sashes (photo 8)"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 2100,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8 proportion"
+      },
+      "position_mm": {
+        "x": 250,
+        "y": 1200
+      },
+      "perimeter_mm": {
+        "value": 6700,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-8",
+      "sill_height_mm": {
+        "value": 1200,
+        "source": "estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "W-24",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 2625000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": "WG-2",
+      "width_mm": {
+        "value": 1250,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "veranda band / 4"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 2100,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "position_mm": {
+        "x": 1600,
+        "y": 1200
+      },
+      "perimeter_mm": {
+        "value": 6700,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-8",
+      "sill_height_mm": {
+        "value": 1200,
+        "source": "estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "W-25",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 2625000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": "WG-2",
+      "width_mm": {
+        "value": 1250,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "veranda band / 4"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 2100,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "position_mm": {
+        "x": 2950,
+        "y": 1200
+      },
+      "perimeter_mm": {
+        "value": 6700,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-8",
+      "sill_height_mm": {
+        "value": 1200,
+        "source": "estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "W-26",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 2625000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": "WG-2",
+      "width_mm": {
+        "value": 1250,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "veranda band / 4"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 2100,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "position_mm": {
+        "x": 4300,
+        "y": 1200
+      },
+      "perimeter_mm": {
+        "value": 6700,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-8",
+      "sill_height_mm": {
+        "value": 1200,
+        "source": "estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "W-27",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 1316000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 940,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8, small OG window above veranda"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1400,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "position_mm": {
+        "x": 6100,
+        "y": 6330
+      },
+      "perimeter_mm": {
+        "value": 4680,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-2",
+      "sill_height_mm": {
+        "value": 6330,
+        "source": "measured",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "D-4",
+      "note": "Reference only, not for ordering",
+      "type": "patio_door",
+      "area_mm2": {
+        "value": 1890000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 900,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8 / OG plan terrace access from Zimmer 1.05"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 2100,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "position_mm": {
+        "x": 7300,
+        "y": 5390
+      },
+      "perimeter_mm": {
+        "value": 6000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-2",
+      "sill_height_mm": {
+        "value": 5390,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "terrace level +4,26½ minus back grade -1,13"
+      }
+    },
+    {
+      "id": "W-28",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 2380000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1700,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8, OG band right of terrace door"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1400,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "position_mm": {
+        "x": 8500,
+        "y": 6290
+      },
+      "perimeter_mm": {
+        "value": 6200,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "WL-2",
+      "sill_height_mm": {
+        "value": 6290,
+        "source": "estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "id": "W-29",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 760000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 800,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8, left dormer window"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 950,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "position_mm": {
+        "x": 2450,
+        "y": 1800
+      },
+      "perimeter_mm": {
+        "value": 3500,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "RF-2",
+      "sill_height_mm": null
+    },
+    {
+      "id": "W-30",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 3120000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "covered"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 2400,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "opening covered by fabric",
+        "reference_used": "photo 8, center dormer window covered by white sheet"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1300,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "covered by fabric"
+      },
+      "position_mm": {
+        "x": 5550,
+        "y": 1800
+      },
+      "perimeter_mm": {
+        "value": 7400,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "covered"
+      },
+      "parent_face_id": "RF-2",
+      "sill_height_mm": null
+    },
+    {
+      "id": "W-31",
+      "note": "Reference only, not for ordering",
+      "type": "window",
+      "area_mm2": {
+        "value": 760000,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 800,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8, right dormer window"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 950,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "position_mm": {
+        "x": 9650,
+        "y": 1800
+      },
+      "perimeter_mm": {
+        "value": 3500,
+        "source": "estimated",
+        "confidence": "medium"
+      },
+      "parent_face_id": "RF-2",
+      "sill_height_mm": null
+    },
+    {
+      "id": "SK-1",
+      "note": "Reference only, not for ordering",
+      "type": "skylight",
+      "area_mm2": {
+        "value": 1596000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "estimated"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1140,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "seen at distance, frame edges soft",
+        "reference_used": "Velux-type raster 1140x1400 (photo 8, left rooflight)"
+      },
+      "elevation": "roof",
+      "height_mm": {
+        "value": 1400,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "seen at distance"
+      },
+      "position_mm": {
+        "x": 3800,
+        "y": 4500
+      },
+      "perimeter_mm": {
+        "value": 5080,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "estimated"
+      },
+      "parent_face_id": "RF-2",
+      "sill_height_mm": null
+    },
+    {
+      "id": "SK-2",
+      "note": "Reference only, not for ordering",
+      "type": "skylight",
+      "area_mm2": {
+        "value": 1596000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "estimated"
+      },
+      "group_id": null,
+      "width_mm": {
+        "value": 1140,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "seen at distance",
+        "reference_used": "Velux-type raster (photo 8, right rooflight)"
+      },
+      "elevation": "roof",
+      "height_mm": {
+        "value": 1400,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "seen at distance"
+      },
+      "position_mm": {
+        "x": 8600,
+        "y": 4500
+      },
+      "perimeter_mm": {
+        "value": 5080,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "estimated"
+      },
+      "parent_face_id": "RF-2",
+      "sill_height_mm": null
+    }
+  ],
+  "downspouts": [
+    {
+      "id": "DS-1",
+      "elevation": "right",
+      "length_mm": {
+        "value": 7845,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "~eave height of right elevation (photo 7, galvanized drop mid-facade)"
+      },
+      "position_mm": {
+        "x": 5000
+      },
+      "connects_edge_id": "E-9"
+    },
+    {
+      "id": "DS-2",
+      "elevation": "back",
+      "length_mm": {
+        "value": 8475,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "~back eave height (photos 3/4/8, drop at SO-SW corner into rain barrel)"
+      },
+      "position_mm": {
+        "x": 12600
+      },
+      "connects_edge_id": "E-7"
+    },
+    {
+      "id": "DS-3",
+      "elevation": "back",
+      "length_mm": {
+        "value": 8475,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "lower run partly hidden behind IBC tote",
+        "reference_used": "~back eave height (photo 1, drop at NW-back corner near garage/IBC tote)"
+      },
+      "position_mm": {
+        "x": 500
+      },
+      "connects_edge_id": "E-7"
+    }
+  ],
+  "references": [
+    {
+      "plane": "in_front",
+      "object": "wheelie bin EN 840 240 L",
+      "scale_type": "own_reference",
+      "photo_index": 1,
+      "reliability": "high",
+      "bounding_box": [
+        10,
+        810,
+        115,
+        265
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 1075
+    },
+    {
+      "plane": "in_front",
+      "object": "IBC tote 1000 L incl. pallet (height)",
+      "scale_type": "own_reference",
+      "photo_index": 1,
+      "reliability": "high",
+      "bounding_box": [
+        625,
+        590,
+        185,
+        410
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 1160
+    },
+    {
+      "plane": "facade_plane",
+      "object": "clinker brick coursing, Reichsformat-like (~78 mm incl. joint, format not stated)",
+      "scale_type": "own_reference",
+      "photo_index": 2,
+      "reliability": "medium",
+      "bounding_box": [
+        0,
+        900,
+        700,
+        490
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 78
+    },
+    {
+      "plane": "facade_plane",
+      "object": "garage door handle height (DIN 18101 analog)",
+      "scale_type": "own_reference",
+      "photo_index": 2,
+      "reliability": "medium",
+      "bounding_box": [
+        878,
+        742,
+        32,
+        45
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 1050
+    },
+    {
+      "plane": "facade_plane",
+      "object": "basement door D-2 (assumed standard leaf height)",
+      "scale_type": "own_reference",
+      "photo_index": 3,
+      "reliability": "medium",
+      "bounding_box": [
+        430,
+        820,
+        235,
+        370
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 1970
+    },
+    {
+      "plane": "facade_plane",
+      "object": "basement door D-2",
+      "scale_type": "transferred",
+      "photo_index": 4,
+      "reliability": "medium",
+      "bounding_box": [
+        455,
+        895,
+        240,
+        400
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 1970,
+      "transferred_via": "door D-2 height from photo 3"
+    },
+    {
+      "plane": "facade_plane",
+      "object": "garage rear door D-3 (assumed 1985 mm standard)",
+      "scale_type": "own_reference",
+      "photo_index": 5,
+      "reliability": "medium",
+      "bounding_box": [
+        555,
+        515,
+        185,
+        375
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 1985
+    },
+    {
+      "plane": "in_front",
+      "object": "IBC tote 1000 L incl. pallet (height)",
+      "scale_type": "own_reference",
+      "photo_index": 5,
+      "reliability": "high",
+      "bounding_box": [
+        110,
+        435,
+        305,
+        520
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 1160
+    },
+    {
+      "plane": "facade_plane",
+      "object": "plan dimension of building width 12,94 m (NO elevation)",
+      "scale_type": "own_reference",
+      "photo_index": 6,
+      "reliability": "high",
+      "bounding_box": [
+        30,
+        230,
+        1330,
+        430
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 12940
+    },
+    {
+      "plane": "in_front",
+      "object": "vehicle length VW Tiguan Allspace (statistical, last resort)",
+      "scale_type": "own_reference",
+      "photo_index": 6,
+      "reliability": "low",
+      "bounding_box": [
+        0,
+        660,
+        1390,
+        390
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 4700
+    },
+    {
+      "plane": "facade_plane",
+      "object": "clinker brick coursing base (Reichsformat-like ~78 mm)",
+      "scale_type": "own_reference",
+      "photo_index": 7,
+      "reliability": "medium",
+      "bounding_box": [
+        560,
+        760,
+        840,
+        290
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 78
+    },
+    {
+      "plane": "facade_plane",
+      "object": "plan dimension of veranda width 5,60 m (SW elevation)",
+      "scale_type": "own_reference",
+      "photo_index": 8,
+      "reliability": "high",
+      "bounding_box": [
+        700,
+        410,
+        430,
+        230
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 5600
+    },
+    {
+      "plane": "in_front",
+      "object": "adult person (statistical)",
+      "scale_type": "own_reference",
+      "photo_index": 8,
+      "reliability": "low",
+      "bounding_box": [
+        560,
+        690,
+        60,
+        265
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 1750
+    },
+    {
+      "plane": "in_front",
+      "object": "EU license plate 520x110 mm (Opel, 'L KD 3455')",
+      "scale_type": "own_reference",
+      "photo_index": 9,
+      "reliability": "high",
+      "bounding_box": [
+        15,
+        940,
+        122,
+        48
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 520
+    },
+    {
+      "plane": "facade_plane",
+      "object": "plan dimension of entry door D-1 (1,01 m wide, EG chain)",
+      "scale_type": "own_reference",
+      "photo_index": 9,
+      "reliability": "high",
+      "bounding_box": [
+        640,
+        540,
+        92,
+        185
+      ],
+      "user_confirmed": false,
+      "assumed_size_mm": 1010
+    }
+  ],
+  "attachments": [
+    {
+      "id": "AT-1",
+      "type": "addition",
+      "dormer": null,
+      "attached": true,
+      "depth_mm": {
+        "value": 2875,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "SO elevation chain 2,87½"
+      },
+      "width_mm": {
+        "value": 5600,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "SW elevation chain 5,60"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 5395,
+        "source": "measured",
+        "confidence": "medium",
+        "reference_used": "terrace level +4,26½ / block top +5,43½ minus back grade -1,13; height to terrace railing top ~5.4 m"
+      },
+      "position_mm": {
+        "x": 5850,
+        "y": 0
+      },
+      "parent_face_id": "WL-2",
+      "include_in_footprint": true
+    },
+    {
+      "id": "AT-2",
+      "type": "addition",
+      "dormer": null,
+      "attached": true,
+      "depth_mm": {
+        "value": 6010,
+        "source": "scaled",
+        "confidence": "low",
+        "reference_used": "graphic via sheet scale from EG plan (garage room 22,36 m2 / 3,52 net width)"
+      },
+      "width_mm": {
+        "value": 3520,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "NO elevation chain 3,52 (garage)"
+      },
+      "elevation": "right",
+      "height_mm": {
+        "value": 2920,
+        "source": "measured",
+        "confidence": "high",
+        "reference_used": "plan level +2,92 (front), sloping to +2,54 rear"
+      },
+      "position_mm": {
+        "x": 0,
+        "y": 0
+      },
+      "parent_face_id": "WL-4",
+      "include_in_footprint": true
+    },
+    {
+      "id": "AT-3",
+      "type": "dormer",
+      "dormer": {
+        "style": "eyebrow",
+        "face_pitch_deg": 25
+      },
+      "attached": true,
+      "depth_mm": {
+        "value": 1200,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "depth not visible frontally",
+        "reference_used": "eyebrow geometry"
+      },
+      "width_mm": {
+        "value": 2500,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photos 6/9 vs facade width 12,94; 'Fledermausgaube' on DG plan"
+      },
+      "elevation": "front",
+      "height_mm": {
+        "value": 800,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 6 proportion"
+      },
+      "position_mm": {
+        "x": 5700,
+        "y": 1600
+      },
+      "parent_face_id": "RF-1",
+      "include_in_footprint": false
+    },
+    {
+      "id": "AT-4",
+      "type": "dormer",
+      "dormer": {
+        "style": "shed",
+        "face_pitch_deg": 10
+      },
+      "attached": true,
+      "depth_mm": {
+        "value": 1500,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "derived via stated scale, not independently verified",
+        "reference_used": "graphic via sheet scale from roof plan p4"
+      },
+      "width_mm": {
+        "value": 1100,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8 vs veranda width 5,60; roof plan p4 dormer rectangle"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1400,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8 proportion"
+      },
+      "position_mm": {
+        "x": 2300,
+        "y": 1400
+      },
+      "parent_face_id": "RF-2",
+      "include_in_footprint": false
+    },
+    {
+      "id": "AT-5",
+      "type": "dormer",
+      "dormer": {
+        "style": "shed",
+        "face_pitch_deg": 10
+      },
+      "attached": true,
+      "depth_mm": {
+        "value": 1700,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "derived via stated scale, not independently verified",
+        "reference_used": "graphic via sheet scale from roof plan p4"
+      },
+      "width_mm": {
+        "value": 2900,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8 vs veranda width 5,60; DG plan opening 3,22½ zone"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1700,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8 proportion"
+      },
+      "position_mm": {
+        "x": 5300,
+        "y": 1400
+      },
+      "parent_face_id": "RF-2",
+      "include_in_footprint": false
+    },
+    {
+      "id": "AT-6",
+      "type": "dormer",
+      "dormer": {
+        "style": "shed",
+        "face_pitch_deg": 10
+      },
+      "attached": true,
+      "depth_mm": {
+        "value": 1500,
+        "source": "scaled",
+        "confidence": "low",
+        "low_reason": "derived via stated scale, not independently verified",
+        "reference_used": "graphic via sheet scale from roof plan p4"
+      },
+      "width_mm": {
+        "value": 1100,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8 vs veranda width 5,60; roof plan p4 dormer rectangle"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 1400,
+        "source": "estimated",
+        "confidence": "medium",
+        "reference_used": "photo 8 proportion"
+      },
+      "position_mm": {
+        "x": 9500,
+        "y": 1400
+      },
+      "parent_face_id": "RF-2",
+      "include_in_footprint": false
+    },
+    {
+      "id": "AT-7",
+      "type": "chimney",
+      "dormer": null,
+      "attached": true,
+      "depth_mm": {
+        "value": 600,
+        "source": "scaled",
+        "confidence": "medium",
+        "reference_used": "roof plan p4"
+      },
+      "width_mm": {
+        "value": 600,
+        "source": "scaled",
+        "confidence": "medium",
+        "reference_used": "chimney squares on roof plan p4 via 1:100 scale"
+      },
+      "elevation": "roof",
+      "height_mm": {
+        "value": 1800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "top only visible against sky, base in roof",
+        "reference_used": "photo 6 proportion above ridge"
+      },
+      "position_mm": {
+        "x": 4300,
+        "y": 7600
+      },
+      "parent_face_id": "RF-1",
+      "include_in_footprint": false
+    },
+    {
+      "id": "AT-8",
+      "type": "chimney",
+      "dormer": null,
+      "attached": true,
+      "depth_mm": {
+        "value": 600,
+        "source": "scaled",
+        "confidence": "medium",
+        "reference_used": "roof plan p4"
+      },
+      "width_mm": {
+        "value": 600,
+        "source": "scaled",
+        "confidence": "medium",
+        "reference_used": "chimney squares on roof plan p4 via 1:100 scale"
+      },
+      "elevation": "roof",
+      "height_mm": {
+        "value": 1800,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "top only visible against sky, base in roof",
+        "reference_used": "photo 6 proportion above ridge"
+      },
+      "position_mm": {
+        "x": 9200,
+        "y": 7600
+      },
+      "parent_face_id": "RF-1",
+      "include_in_footprint": false
+    },
+    {
+      "id": "AT-9",
+      "type": "other",
+      "dormer": null,
+      "attached": true,
+      "depth_mm": {
+        "value": 2500,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "oblique only",
+        "reference_used": "photo 8 proportion"
+      },
+      "width_mm": {
+        "value": 900,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "partially occluded by people/vegetation",
+        "reference_used": "photo 8; exterior steel stair from garden to veranda level (drawn red/new on plans, built as-is)"
+      },
+      "elevation": "back",
+      "height_mm": {
+        "value": 2200,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "base occluded",
+        "reference_used": "terrain-to-EG level +0,94 vs back grade -1,13"
+      },
+      "position_mm": {
+        "x": 5000,
+        "y": 0
+      },
+      "parent_face_id": "WL-2",
+      "include_in_footprint": false
+    },
+    {
+      "id": "AT-10",
+      "type": "other",
+      "dormer": null,
+      "attached": true,
+      "depth_mm": {
+        "value": 700,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "oblique view",
+        "reference_used": "photo 7"
+      },
+      "width_mm": {
+        "value": 2000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "oblique view",
+        "reference_used": "photo 7 firewood lean-to vs brick coursing"
+      },
+      "elevation": "right",
+      "height_mm": {
+        "value": 1600,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "oblique view",
+        "reference_used": "photo 7 vs brick coursing"
+      },
+      "position_mm": {
+        "x": 6500,
+        "y": 0
+      },
+      "parent_face_id": "WL-4",
+      "include_in_footprint": false
+    }
+  ],
+  "condition_areas": [
+    {
+      "id": "CA-1",
+      "note": "Matches crack-mapping symbols drawn on plan elevations (2012 survey).",
+      "type": "crack",
+      "area_mm2": {
+        "value": 800000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "faint, oblique view",
+        "reference_used": "photo 7: hairline crack traces / repair lines in stucco near EG window"
+      },
+      "severity": "light",
+      "elevation": "right",
+      "photo_index": 7,
+      "position_mm": {
+        "x": 4500,
+        "y": 3000
+      },
+      "parent_face_id": "WL-4"
+    },
+    {
+      "id": "CA-2",
+      "note": "Corresponds to crack marks on NW/SW plan elevations.",
+      "type": "crack",
+      "area_mm2": {
+        "value": 600000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "faint, evening light",
+        "reference_used": "photo 1: faint crack lines on upper stucco near OG window"
+      },
+      "severity": "light",
+      "elevation": "back",
+      "photo_index": 1,
+      "position_mm": {
+        "x": 1500,
+        "y": 5500
+      },
+      "parent_face_id": "WL-2"
+    },
+    {
+      "id": "CA-3",
+      "note": "On garage door leaves (G-1), not the stucco.",
+      "type": "failing_paint",
+      "area_mm2": {
+        "value": 1500000,
+        "source": "estimated",
+        "confidence": "low",
+        "low_reason": "shadowed alley, color cast",
+        "reference_used": "photo 2: weathered/faded coating on wooden garage doors"
+      },
+      "severity": "light",
+      "elevation": "front",
+      "photo_index": 2,
+      "position_mm": {
+        "x": 450,
+        "y": 0
+      },
+      "parent_face_id": "WL-5"
+    }
+  ]
+}

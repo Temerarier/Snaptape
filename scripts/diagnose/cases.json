@@ -1,0 +1,205 @@
+[
+  {
+    "slug": "footprint-rectangle",
+    "title": "Rectangle footprint",
+    "expected": "Extrude every footprint segment; preserve the rectangle footprint outline rather than replacing it with its bounding rectangle.",
+    "measurementFile": "scripts/diagnose/fixtures/footprint-rectangle.json",
+    "limitations": "v1.7 supplies footprint points but does not map each wall face to a specific point pair; repeated cardinal elevations are the only available hint."
+  },
+  {
+    "slug": "footprint-l-shape",
+    "title": "L-shaped footprint",
+    "expected": "Extrude every footprint segment; preserve the l-shaped footprint outline rather than replacing it with its bounding rectangle.",
+    "measurementFile": "scripts/diagnose/fixtures/footprint-l-shape.json",
+    "limitations": "v1.7 supplies footprint points but does not map each wall face to a specific point pair; repeated cardinal elevations are the only available hint."
+  },
+  {
+    "slug": "footprint-t-shape",
+    "title": "T-shaped footprint",
+    "expected": "Extrude every footprint segment; preserve the t-shaped footprint outline rather than replacing it with its bounding rectangle.",
+    "measurementFile": "scripts/diagnose/fixtures/footprint-t-shape.json",
+    "limitations": "v1.7 supplies footprint points but does not map each wall face to a specific point pair; repeated cardinal elevations are the only available hint."
+  },
+  {
+    "slug": "footprint-u-shape",
+    "title": "U-shaped footprint",
+    "expected": "Extrude every footprint segment; preserve the u-shaped footprint outline rather than replacing it with its bounding rectangle.",
+    "measurementFile": "scripts/diagnose/fixtures/footprint-u-shape.json",
+    "limitations": "v1.7 supplies footprint points but does not map each wall face to a specific point pair; repeated cardinal elevations are the only available hint."
+  },
+  {
+    "slug": "footprint-connected-heights",
+    "title": "Two connected volumes of different heights",
+    "expected": "Show a 6 m-high main body joined to a distinct 3 m-high secondary volume with its own flat roof.",
+    "measurementFile": "scripts/diagnose/fixtures/footprint-connected-heights.json",
+    "limitations": "v1.7 has no attachment story count, attachment wall-face linkage, attachment footprint polygon, or attachment eave/ridge heights; only dimensions and parent links encode this case."
+  },
+  {
+    "slug": "roof-gable",
+    "title": "Gable roof",
+    "expected": "Two slopes meeting at one ridge; gable triangles only on left and right walls.",
+    "measurementFile": "scripts/diagnose/fixtures/roof-gable.json",
+    "limitations": "Face records have no boundary vertices or edge-to-face links."
+  },
+  {
+    "slug": "roof-hip",
+    "title": "Hip roof",
+    "expected": "Four sloped facets, a shortened ridge and four hips; no vertical gable triangles.",
+    "measurementFile": "scripts/diagnose/fixtures/roof-hip.json",
+    "limitations": "The schema identifies hip edge lengths but not their endpoints or incident faces."
+  },
+  {
+    "slug": "roof-half-hip",
+    "title": "Half-hip roof",
+    "expected": "Partial gables capped by small hip facets; visibly different from both full gable and full hip.",
+    "measurementFile": "scripts/diagnose/fixtures/roof-half-hip.json",
+    "limitations": "v1.7 calls half-hip jerkinhead and has no facet topology or explicit half-hip run."
+  },
+  {
+    "slug": "roof-flat",
+    "title": "Flat roof",
+    "expected": "One horizontal membrane facet at parapet height, with no ridge or gable.",
+    "measurementFile": "scripts/diagnose/fixtures/roof-flat.json",
+    "limitations": "Parapet plan geometry and drainage slope are not represented."
+  },
+  {
+    "slug": "roof-shed",
+    "title": "Shed mono-pitch roof",
+    "expected": "One continuous facet rising from the front eave to the higher back wall; no centered ridge.",
+    "measurementFile": "scripts/diagnose/fixtures/roof-shed.json",
+    "limitations": "Per-elevation height can state high/low sides but roof face boundaries are absent."
+  },
+  {
+    "slug": "roof-cross-gable",
+    "title": "Cross gable roof",
+    "expected": "Intersecting main and transverse gables with two valleys and two ridges.",
+    "measurementFile": "scripts/diagnose/fixtures/roof-cross-gable.json",
+    "limitations": "roof_type must be other; v1.7 cannot associate roof facets, valleys and ridges into topology."
+  },
+  {
+    "slug": "roof-lower-gable-wing",
+    "title": "Gable with a lower gable wing",
+    "expected": "A main gable plus a shorter attached wing with two roof facets and its own lower ridge.",
+    "measurementFile": "scripts/diagnose/fixtures/roof-lower-gable-wing.json",
+    "limitations": "The attachment has dimensions and parent roof faces, but v1.7 has no attachment ridge/eave height fields or explicit roof topology."
+  },
+  {
+    "slug": "attachment-garage-flat",
+    "title": "Attached garage with flat roof",
+    "expected": "Attached right-side garage at its measured 6.5 x 6.5 x 3 m size, capped by its RF-3 flat roof.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-garage-flat.json",
+    "limitations": "Garage is represented as generic addition because v1.7 has no garage attachment type or attachment wall linkage."
+  },
+  {
+    "slug": "attachment-garage-gable",
+    "title": "Attached garage with its own gable roof",
+    "expected": "Attached right-side garage with a separate lower gable roof RF-3/RF-4, not a copy of the main roof.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-garage-gable.json",
+    "limitations": "No attachment eave/ridge heights or facet topology are available."
+  },
+  {
+    "slug": "attachment-garage-detached",
+    "title": "Detached garage",
+    "expected": "A separate 6 x 6 x 3 m garage, not touching the house.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-garage-detached.json",
+    "limitations": "v1.7 position_mm is parent-face-relative and provides no site coordinate system for detached objects; exact detached placement is unknowable."
+  },
+  {
+    "slug": "attachment-annex-one-story",
+    "title": "One-story annex",
+    "expected": "A 3 m-high rear annex with a distinct flat roof.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-annex-one-story.json",
+    "limitations": "No attachment story count, wall-face ownership or roof elevation is declared by v1.7."
+  },
+  {
+    "slug": "attachment-annex-two-story",
+    "title": "Two-story annex",
+    "expected": "A 6 m-high rear annex, visibly taller than the one-story case, with a distinct flat roof.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-annex-two-story.json",
+    "limitations": "Story count and floor levels are not fields on attachments; height is the only discriminator."
+  },
+  {
+    "slug": "attachment-entrance-canopy",
+    "title": "Entrance canopy",
+    "expected": "A thin 250 mm canopy projecting 1.6 m from WL-1, not a room-sized box.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-entrance-canopy.json",
+    "limitations": "Canopy has no dedicated attachment type; type other plus dimensions is the only schema-valid representation."
+  },
+  {
+    "slug": "attachment-porch",
+    "title": "Porch",
+    "expected": "A 5 x 2.5 m one-story front porch with its own flat roof.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-porch.json",
+    "limitations": "Porch has no dedicated type or open/closed/support geometry in v1.7."
+  },
+  {
+    "slug": "attachment-bay-window",
+    "title": "Bay window",
+    "expected": "A shallow 0.9 m projection from WL-1, retaining the measured 2.4 m width.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-bay-window.json",
+    "limitations": "v1.7 does not describe bay side-wall angles or bay footprint."
+  },
+  {
+    "slug": "attachment-dormer-gable",
+    "title": "Gable dormer",
+    "expected": "A roof-mounted dormer with a peaked gable roof at RF-1 position.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-dormer-gable.json",
+    "limitations": "Dormer style and face pitch exist, but dimensions do not encode dormer roof ridge/eave or cheek topology."
+  },
+  {
+    "slug": "attachment-dormer-shed",
+    "title": "Shed dormer",
+    "expected": "A wider roof-mounted dormer with one 12-degree mono-pitch roof, distinct from the gable dormer.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-dormer-shed.json",
+    "limitations": "Dormer face_pitch_deg does not define roof direction or facet boundaries."
+  },
+  {
+    "slug": "attachment-balcony",
+    "title": "Balcony",
+    "expected": "A shallow elevated platform on WL-1 at y=3.3 m, not a ground-level solid addition.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-balcony.json",
+    "limitations": "Railings, slab thickness and supports have no declared fields."
+  },
+  {
+    "slug": "attachment-awning",
+    "title": "Awning",
+    "expected": "A 180 mm-thick wall-mounted awning projecting 1.2 m, with its own RF-3 covering plane.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-awning.json",
+    "limitations": "Slope/direction for non-dormer attachment roofs can only be inferred from the parent roof-face pitch record."
+  },
+  {
+    "slug": "attachment-wall-panel",
+    "title": "Flat panel on a wall",
+    "expected": "A 100 mm-deep 2.4 x 1.2 m panel mounted on WL-1 at y=3.3 m; do not inflate it into a box.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-wall-panel.json",
+    "limitations": "Panel has no dedicated type, orientation or surface-normal field; type other and parent wall are the available representation."
+  },
+  {
+    "slug": "attachment-chimney",
+    "title": "Chimney",
+    "expected": "A 0.9 x 0.7 m chimney rising 1.8 m above RF-1 at the stated roof-relative position.",
+    "measurementFile": "scripts/diagnose/fixtures/attachment-chimney.json",
+    "limitations": "Roof-relative x/y has no facet coordinate frame or surface equation in v1.7, so world placement cannot be exact."
+  },
+  {
+    "slug": "special-sloped-site",
+    "title": "Sloped site with per-side eave heights",
+    "expected": "Respect four grade offsets and side-specific eave heights; wall bottoms follow grade while roof eaves remain coherent.",
+    "measurementFile": "scripts/diagnose/fixtures/special-sloped-site.json",
+    "limitations": "v1.7 provides per-elevation values but no grade polyline or per-footprint-vertex elevations, so corners with differing offsets are underdetermined."
+  },
+  {
+    "slug": "special-no-footprint",
+    "title": "Measurement without footprint outline",
+    "expected": "Degrade to the declared 12 x 8 m width/depth rectangle and issue a visible approximation warning rather than crash.",
+    "measurementFile": "scripts/diagnose/fixtures/special-no-footprint.json",
+    "limitations": "The schema allows footprint.points to be absent; without it, only a rectangular width/depth fallback can be justified."
+  },
+  {
+    "slug": "special-missing-attachment-dimensions",
+    "title": "Attachment with missing dimensions",
+    "expected": "Keep the main house valid, omit or visibly placeholder the underdetermined addition, and identify AT-1 in a warning.",
+    "measurementFile": "scripts/diagnose/fixtures/special-missing-attachment-dimensions.json",
+    "limitations": "Attachment dimension fields are nullable; there is no schema-defined default size and inventing one would be misleading."
+  }
+]

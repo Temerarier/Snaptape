@@ -1,0 +1,24 @@
+{
+  "schemaValidSyntheticFixtures": 29,
+  "existingInputs": 9,
+  "confirmedWebGLScreenshots": 76,
+  "distinctOrbitViews": 38,
+  "unchangedSourceHashes": 9,
+  "browserExceptions": 0,
+  "reportSections": 9,
+  "warningChecks": {
+    "flatRoof": [
+      "approximation"
+    ],
+    "missingOutline": [],
+    "missingAttachment": [
+      "omission",
+      "missing-dimensions"
+    ]
+  },
+  "ratings": {
+    "correct": 3,
+    "broken": 23,
+    "partly wrong": 12
+  }
+}
