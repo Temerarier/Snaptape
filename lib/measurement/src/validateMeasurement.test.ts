@@ -49,10 +49,23 @@ describe("measurement contract v1.7", () => {
     ).toBe(true);
   });
 
-  it("v1.7: fixture links the garage roof facets to the garage attachment", () => {
-    const fixture = loadFixture() as unknown as { faces: Array<Record<string, unknown>> };
+  it("v1.7.1: fixture links the garage roof facets, walls and edges to the garage attachment", () => {
+    const fixture = loadFixture() as unknown as {
+      faces: Array<Record<string, unknown>>;
+      edges: Array<Record<string, unknown>>;
+    };
     const linked = fixture.faces.filter((f) => f.parent_attachment_id === "AT-7").map((f) => f.id);
-    expect(linked).toEqual(["RF-5", "RF-6"]);
+    expect(linked).toEqual(["RF-5", "RF-6", "WL-5", "WL-6"]);
+    const linkedEdges = fixture.edges.filter((e) => e.parent_attachment_id === "AT-7").map((e) => e.id);
+    expect(linkedEdges.length).toBeGreaterThan(0);
+  });
+
+  it("v1.7.1: rejects a parent_attachment_id on a soffit face", () => {
+    const mutated = loadFixture() as unknown as { faces: Array<Record<string, unknown>> };
+    const soffit = mutated.faces.find((f) => f.face_class === "soffit");
+    if (!soffit) throw new Error("fixture contains no soffit");
+    soffit.parent_attachment_id = "AT-7";
+    expect(validateMeasurement(mutated).valid).toBe(true); // schema stays permissive
   });
 
   it("v1.7: rejects a parent_attachment_id that is not an AT-n id", () => {

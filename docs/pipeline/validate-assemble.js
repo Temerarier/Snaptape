@@ -81,13 +81,16 @@ const faceIdsV = {};
 (r.openings || []).forEach(o => {
   if (o && o.parent_face_id && !faceIdsV[o.parent_face_id]) v.push(String(o.id) + ': parent_face_id ' + String(o.parent_face_id) + ' not found in faces');
 });
-// v1.7: parent_attachment_id must point at an existing attachment and is only valid on roof faces
+// v1.7.1: parent_attachment_id points at an existing attachment; valid on roof faces, wall faces and edges
 const attIdsV = {};
 (r.attachments || []).forEach(a => { if (a && typeof a.id === 'string') attIdsV[a.id] = true; });
 (r.faces || []).forEach(f => {
   if (!f || f.parent_attachment_id === null || f.parent_attachment_id === undefined) return;
-  if (f.face_class !== 'roof_face') v.push(String(f.id) + ': parent_attachment_id is only valid on roof faces');
+  if (f.face_class !== 'roof_face' && f.face_class !== 'wall') v.push(String(f.id) + ': parent_attachment_id is only valid on roof and wall faces');
   else if (!attIdsV[f.parent_attachment_id]) v.push(String(f.id) + ': parent_attachment_id ' + String(f.parent_attachment_id) + ' not found in attachments');
+});
+(r.edges || []).forEach((e) => {
+  if (e && e.parent_attachment_id && !attIdsV[e.parent_attachment_id]) v.push(String(e.id) + ': parent_attachment_id ' + String(e.parent_attachment_id) + ' not found in attachments');
 });
 // v1.7: a penetration subtype must fit its type (pipe subtypes on pipes, vent subtypes on vents)
 const SUBTYPES = { pipe: ['plumbing_stack', 'flue', 'other'], vent: ['static_vent', 'ridge_vent', 'turbine', 'power_vent', 'exhaust_cap', 'soffit_vent', 'other'] };
@@ -119,7 +122,8 @@ v.forEach(x => q.warnings.push('VALIDATION: ' + x));
   const pMin = pList.length ? pList[0] : null, pMax = pList.length ? pList[pList.length - 1] : null;
   const unequalPitch = pMin !== null && pMax !== null && (pMax - pMin) > 8;
   const rt2 = r.building ? r.building.roof_type : null;
-  const sumE = (cls) => { let s = 0, any = false; edgesV.forEach(e => { if (e && e.edge_class === cls) { const l = num(e.length_mm); if (typeof l === 'number') { s += l; any = true; } } }); return any ? s : null; };
+  // v1.7.1: edges that belong to an attachment (garage, dormer, canopy) are not part of the main roof
+  const sumE = (cls) => { let s = 0, any = false; edgesV.forEach(e => { if (e && e.edge_class === cls && !e.parent_attachment_id) { const l = num(e.length_mm); if (typeof l === 'number') { s += l; any = true; } } }); return any ? s : null; };
   const gcheck = (name, model, geo, tol) => { if (model === null || geo === null || geo <= 0) return; const dv2 = Math.abs(model - geo) / geo; if (dv2 > tol) q.warnings.push('geometry check ' + name + ': model ' + Math.round(model) + ' vs derived ' + Math.round(geo) + ' (' + Math.round(dv2 * 100) + '% off)'); };
   // A6: complex roofs (more than one ridge edge or any valley edge) skip the single-pitch gable/hip formula block entirely
   const ridgeEdgeCount = edgesV.filter(e => e && e.edge_class === 'ridge' && typeof num(e.length_mm) === 'number').length;

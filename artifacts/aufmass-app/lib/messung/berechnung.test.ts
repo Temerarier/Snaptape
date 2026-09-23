@@ -310,13 +310,35 @@ describe("v1.7: Geometrie-Checks auf Dachumriss inkl. Überstand, Anbau-Dächer 
     expect(w.some(x => x.startsWith("geometry check eave total"))).toBe(true);
   });
 
-  it("verwirft parent_attachment_id auf unbekanntes Attachment oder Nicht-Dachfläche", () => {
+  it("verwirft parent_attachment_id auf unbekanntes Attachment, erlaubt ihn aber an Wänden", () => {
     const input: any = leipzig(true);
     input.result.faces[4].parent_attachment_id = "AT-99";
-    input.result.faces[6].parent_attachment_id = "AT-2";
+    input.result.faces[6].parent_attachment_id = "AT-2"; // WL-1, v1.7.1: erlaubt
     const out = validiereUndAssembliere(input);
     expect(out.violations).toContain("RF-5: parent_attachment_id AT-99 not found in attachments");
-    expect(out.violations).toContain("WL-1: parent_attachment_id is only valid on roof faces");
+    expect(out.violations.some((x: string) => x.startsWith("WL-1:"))).toBe(false);
+  });
+
+  it("v1.7.1: meldet parent_attachment_id an Soffit-Flächen und an unbekannten Kanten", () => {
+    const input: any = leipzig(true);
+    input.result.faces[5].parent_attachment_id = "AT-2"; // SF-1
+    input.result.edges.push({ id: "E-9", edge_class: "eave", length_mm: mess(6_010), parent_attachment_id: "AT-77" });
+    const out = validiereUndAssembliere(input);
+    expect(out.violations).toContain("SF-1: parent_attachment_id is only valid on roof and wall faces");
+    expect(out.violations).toContain("E-9: parent_attachment_id AT-77 not found in attachments");
+  });
+
+  it("v1.7.1: Kanten eines Anbaus zählen nicht zur Traufsumme des Hauptdachs", () => {
+    const input: any = leipzig(true);
+    // Garagen-Traufe zusätzlich gemeldet - ohne Verknüpfung schlägt der Traufen-Check an
+    input.result.edges.push({ id: "E-10", edge_class: "eave", length_mm: mess(12_020), parent_attachment_id: "AT-2" });
+    const w = validiereUndAssembliere(input).result.quality.warnings as string[];
+    expect(w.some(x => x.startsWith("geometry check eave total"))).toBe(false);
+
+    const ohne: any = leipzig(true);
+    ohne.result.edges.push({ id: "E-10", edge_class: "eave", length_mm: mess(12_020) });
+    const w2 = validiereUndAssembliere(ohne).result.quality.warnings as string[];
+    expect(w2.some(x => x.startsWith("geometry check eave total"))).toBe(true);
   });
 });
 
