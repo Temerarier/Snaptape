@@ -294,6 +294,61 @@ export const enUS = {
   admin: {
     navLink: "Admin",
     zurueckZurApp: "Back to app",
+    billing: {
+      title: "Billing Reconciliation",
+      subtitle: "Honest auditable AI expenses per provider.",
+      linkFromMeasurements: "Billing",
+      filters: {
+        from: "From",
+        to: "To",
+        provider: "Provider",
+        model: "Model",
+        all: "All",
+      },
+      table: {
+        utcDay: "UTC Day",
+        provider: "Provider",
+        model: "Model / Scope",
+        estimates: "Estimated ($)",
+        actual: "Actual ($)",
+        diff: "Diff %",
+        status: "Status",
+        detail: "Detail",
+      },
+      flags: {
+        flagged: "Flagged",
+      },
+      actions: {
+        runManual: "Run daily billing now",
+        runManualRetryAuth: "Retry Anthropic Auth & Run",
+        runManualRunning: "Running...",
+        recordTopup: "Record Topup",
+        correctTopup: "Correct",
+        save: "Save",
+        cancel: "Cancel",
+      },
+      topupForm: {
+        topupId: "Top-up ID",
+        topupIdRevision: "Top-up ID / Rev",
+        amountUsd: "Amount (USD)",
+        effectiveAt: "Effective Date (UTC)",
+        note: "Audit Note",
+        accountScope: "Account Scope",
+      },
+      banners: {
+        provisional: "Provider costs remain provisional: reporting can be delayed and has no guaranteed finality time. Moonshot spend covers the displayed snapshot interval, not a model-specific UTC day.",
+        keyRejected: "Anthropic key rejected! Fix the key in settings, then retry auth.",
+        scheduleNotActivated: "The daily billing schedule is not activated. Enable it in Replit Deployments.",
+      },
+      status: {
+        reconciled: "Reconciled",
+        not_reconciled_key_rejected: "Key Rejected",
+        missing: "Missing",
+        partial: "Partial",
+        provisional: "Provisional",
+        no_data: "No Data",
+      }
+    },
     measurements: {
       title: "Measurement runs",
       subtitle: "All runs across all accounts, newest first.",

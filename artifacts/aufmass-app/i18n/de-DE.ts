@@ -305,6 +305,61 @@ export const deDE: Dictionary = {
   admin: {
     navLink: "Admin",
     zurueckZurApp: "Zurück zur App",
+    billing: {
+      title: "Rechnungskontrolle",
+      subtitle: "Ehrliche, überprüfbare KI-Kosten pro Anbieter.",
+      linkFromMeasurements: "Abrechnung",
+      filters: {
+        from: "Von",
+        to: "Bis",
+        provider: "Anbieter",
+        model: "Modell",
+        all: "Alle",
+      },
+      table: {
+        utcDay: "UTC Tag",
+        provider: "Anbieter",
+        model: "Modell / Scope",
+        estimates: "Geschätzt ($)",
+        actual: "Tatsächlich ($)",
+        diff: "Diff %",
+        status: "Status",
+        detail: "Detail",
+      },
+      flags: {
+        flagged: "Auffällig",
+      },
+      actions: {
+        runManual: "Rechnungskontrolle jetzt starten",
+        runManualRetryAuth: "Anthropic Auth wiederholen & starten",
+        runManualRunning: "Läuft...",
+        recordTopup: "Aufladung eintragen",
+        correctTopup: "Korrigieren",
+        save: "Speichern",
+        cancel: "Abbrechen",
+      },
+      topupForm: {
+        topupId: "Aufladungs-ID",
+        topupIdRevision: "Aufladungs-ID / Revision",
+        amountUsd: "Betrag (USD)",
+        effectiveAt: "Datum (UTC)",
+        note: "Audit-Notiz",
+        accountScope: "Account Scope",
+      },
+      banners: {
+        provisional: "Anbieterkosten bleiben vorläufig: Meldungen können verspätet sein; ein endgültiger Zeitpunkt ist nicht garantiert. Moonshot-Ausgaben gelten für das angezeigte Snapshot-Intervall, nicht für einen modellspezifischen UTC-Tag.",
+        keyRejected: "Anthropic Key abgelehnt! Korrigieren Sie den Key in den Settings, danach Auth wiederholen.",
+        scheduleNotActivated: "Tägliches Billing-Schedule ist nicht aktiviert. Aktivieren Sie es in Replit Deployments.",
+      },
+      status: {
+        reconciled: "Abgeglichen",
+        not_reconciled_key_rejected: "Key abgelehnt",
+        missing: "Fehlt",
+        partial: "Teilweise",
+        provisional: "Vorläufig",
+        no_data: "Keine Daten",
+      }
+    },
     measurements: {
       title: "Messläufe",
       subtitle: "Alle Läufe über alle Konten, neueste zuerst.",

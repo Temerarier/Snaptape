@@ -106,10 +106,20 @@ export default async function AdminMessungenSeite() {
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-8">
-      <h1 className="text-2xl font-bold tracking-tight text-schrift">
-        {t.title}
-      </h1>
-      <p className="mt-1 text-sm text-schrift-sekundaer">{t.subtitle}</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-schrift">
+            {t.title}
+          </h1>
+          <p className="mt-1 text-sm text-schrift-sekundaer">{t.subtitle}</p>
+        </div>
+        <Link
+          href="/admin/billing"
+          className="rounded-eingabe border border-linie bg-flaeche px-4 py-2 text-sm font-medium text-schrift hover:bg-hintergrund"
+        >
+          {dict.admin.billing.linkFromMeasurements}
+        </Link>
+      </div>
 
       {runs.length === 0 ? (
         <p className="mt-8 rounded-lg border border-linie bg-flaeche p-6 text-sm text-schrift-sekundaer">

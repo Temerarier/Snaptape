@@ -36,8 +36,8 @@ const PREISE_USD_PRO_MTOK: Record<
   Qualitaet,
   { input: number; output: number }
 > = {
-  standard: { input: 0.6, output: 2.5 },
-  premium: { input: 3, output: 15 },
+  standard: { input: 3, output: 15 },
+  premium: { input: 10, output: 50 },
 };
 
 export function schaetzeKostenUsd(

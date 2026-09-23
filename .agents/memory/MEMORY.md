@@ -6,3 +6,4 @@
 - [Artifact path routing traps](artifact-path-routing.md) — /api/* on the shared proxy belongs to the api-server artifact; Next routes under app/api/ are unreachable (Express 404), use another prefix.
 - [Viewport verification](viewport-verification.md) — counts alone miss geometry errors; test SVG axes, contact, permutation stability and snapping with the real camera.
 - [Viewer reference provenance](viewer-conformance-decisions.md) — design-route history was unproven; missing reference tokens need labelled proposals, not blocked work.
+- [Billing evidence boundaries](billing-evidence-boundaries.md) — rejected Admin credentials stop access; balance intervals are not model-level bills; pricing needs exact-model evidence.

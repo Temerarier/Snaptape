@@ -511,6 +511,7 @@
     },
     {
       "id": "WL-5",
+      "parent_attachment_id": "AT-7",
       "face_class": "wall",
       "elevation": "front",
       "material": "brick",
@@ -554,6 +555,7 @@
     },
     {
       "id": "WL-6",
+      "parent_attachment_id": "AT-7",
       "face_class": "wall",
       "elevation": "right",
       "material": "brick",
@@ -673,6 +675,7 @@
     },
     {
       "id": "E-3",
+      "parent_attachment_id": "AT-7",
       "edge_class": "ridge",
       "length_mm": {
         "value": 6705.6,
@@ -733,6 +736,7 @@
     },
     {
       "id": "E-9",
+      "parent_attachment_id": "AT-7",
       "edge_class": "eave",
       "length_mm": {
         "value": 6705.6,
@@ -813,6 +817,7 @@
     },
     {
       "id": "E-17",
+      "parent_attachment_id": "AT-7",
       "edge_class": "rake",
       "length_mm": {
         "value": 3749.0,
@@ -823,6 +828,7 @@
     },
     {
       "id": "E-18",
+      "parent_attachment_id": "AT-7",
       "edge_class": "rake",
       "length_mm": {
         "value": 3749.0,
