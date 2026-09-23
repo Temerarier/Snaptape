@@ -1,0 +1,151 @@
+GOAL
+Find out WHY our 3D viewer draws houses wrong - at the level of design, not
+individual symptoms. This is an analysis task only. The result is a written
+report. Do NOT change any product code.
+
+WHY THIS MATTERS
+Our customers' houses will vary: rectangles, L-shapes, T-shapes, cross gables,
+hip, half-hip, gable, flat and shed roofs, several connected volumes, garages,
+annexes, canopies, porches, bay windows, dormers, balconies, awnings, panels.
+We do NOT want a viewer that works for the two houses we happened to test. We
+want to know which assumptions in the code make it fail on shapes it has not
+seen, and what a general approach would look like.
+The bugs listed below are SYMPTOMS. Use them to find the underlying causes.
+Do not stop at "this line is wrong for Leipzig"; ask "what assumption made this
+line wrong, and where else does that assumption live?"
+
+HOW THE DATA FLOWS
+  1. MEASUREMENT - the stored JSON of a project (what the AI measured)
+  2. CALCULATION - code that derives areas, sums and warnings
+  3. MODEL BUILDER - code that turns the JSON into 3D geometry
+  4. RENDERING - camera, materials, transparency, labels, dimension lines
+For each finding, name the station. If a problem comes from the measurement
+itself (wrong or missing data), say exactly what is missing, because then it is
+a prompt or schema issue, not a viewer issue.
+
+SYMPTOMS WE HAVE SEEN (use these as entry points, not as the goal)
+- Gable triangles float beside the house instead of sitting on their own wall
+  (Braamheide: data puts the gables on WL-1 and WL-2, 6300 mm high).
+- Walls are missing; the app says "Some measured elements could not be placed
+  and were omitted" (Leipzig: 10 wall faces in the data, fewer in the model).
+- Attachments sit in the wrong place, float, or stick into the ground
+  (Braamheide: entrance annex AT-5, awning AT-9).
+- Attachments get the wrong size and roof (Leipzig garage: 2920 mm high with its
+  own 3.4 degree roof surface that names it, drawn as two storeys with a pitched
+  roof).
+- Thin attachments become thick boxes (100 mm solar panels drawn as cubes).
+- Attachment walls have no windows and no material (Leipzig annex).
+- Hip roofs get vertical gable triangles; sometimes a roof surface is missing.
+- Roof surfaces reach down to the ground instead of stopping at eave height.
+- Walls are see-through; surfaces flicker where they overlap.
+- Dimension lines not attached to corners; one eave label despite one height
+  per side in the data.
+
+PART 1 - ASSUMPTIONS INVENTORY
+Read the model builder end to end and list every built-in assumption about the
+house, for example (check each, add any others you find):
+- the footprint is a rectangle / has exactly four walls / walls map 1:1 to
+  front-back-left-right
+- there is exactly one main roof, of one known type
+- the ridge runs along the longer side
+- gables sit on the short sides
+- eave height is one number for the whole house
+- an attachment is a box; its size comes from a type or a story count rather
+  than its own dimensions; it has a minimum thickness
+- an attachment's roof copies the main roof's pitch
+- attachments are placed by elevation name, not by their parent wall and
+  position
+- anything that cannot be matched is dropped
+For each assumption: file and line, which symptoms it causes, and which OTHER
+house shapes it would break that we have not tested yet.
+
+PART 2 - WHICH DATA DOES THE VIEWER USE?
+Go through the measurement schema (shared/schema/measurement-v1.7.json) field by
+field for building, faces, edges, openings and attachments. For each field that
+describes geometry or placement, answer: does the builder read it? If yes,
+where and for what? If no, what does it use instead (a guess, a default, a
+constant)?
+Pay special attention to: building.footprint.points, footprint_overall,
+heights.per_elevation, faces[].width_mm/height_mm/gable_height_mm,
+faces[].parent_attachment_id, faces[].pitch, edges (ridge, hip, eave, rake and
+their lengths), openings[].parent_face_id and position_mm,
+attachments[].parent_face_id, position_mm, width/height/depth_mm, attached,
+type.
+Output a table: field | read by builder? | where | what is used instead if not.
+
+PART 3 - SHAPE COVERAGE MATRIX
+Write small, schema-valid synthetic measurements for the shapes below (put them
+in scripts/diagnose/fixtures/, they are for analysis only), run the current
+builder on each, take a screenshot, and rate the result: correct / partly wrong /
+broken / crash.
+  Footprints: rectangle, L-shape, T-shape, U-shape, two connected volumes of
+  different heights
+  Roofs: gable, hip, half-hip, flat, shed (mono-pitch), cross gable, gable with
+  a lower gable wing
+  Attachments: attached garage with flat roof, attached garage with its own gable
+  roof, detached garage, one-story annex, two-story annex, entrance canopy,
+  porch, bay window, dormer (gable and shed), balcony, awning, flat panel on a
+  wall, chimney
+  Special: sloped site with different eave heights per side, measurement
+  without footprint outline, measurement with missing attachment dimensions
+Also run the real projects: Leipzig 536235c3-131d-4279-92b0-007c9cea831b,
+Braamheide d165c333-6125-4294-bd79-fb1c9c185568, the older Leipzig projects
+a847416a-6f1c-478f-817c-371896023124 and 82a4d3a3-053e-47d6-9494-49c76509ea60,
+export-messungen/*.json and fixtures/garage-house.json.
+
+PART 4 - WHAT DROPS ELEMENTS
+Find every code path that skips, drops or silently simplifies an element. For
+each real project list the dropped ids and the reason.
+
+PART 5 - RECOMMENDATION FOR A GENERAL APPROACH
+Based on parts 1-4, describe how the model builder should work so it handles
+shapes and attachments it has never seen. Answer at least:
+- Should walls be built from the footprint outline, from the individual wall
+  faces, or both - and what happens when they disagree?
+- How should the roof be built from roof type, pitches, ridge/hip edges and gable
+  heights so that it always closes and never goes below the eave?
+- How should attachments be modelled: one general "volume on a parent wall at a
+  position, with its own size, own walls, own roof" - or something else?
+- How should the builder degrade when data is missing, so the model stays
+  plausible and the user sees a warning instead of a wrong shape?
+- Which missing information would have to come from the measurement (schema or
+  prompt), because the viewer cannot derive it reliably?
+Describe the approach in words and simple diagrams if useful. No code.
+
+THE REPORT
+Write docs/viewer-diagnose-2026-09-23.md, in English:
+  1. Summary (10 sentences max, readable without code knowledge): the main
+     underlying causes, which station they sit in, and how big the gap is
+     between what the data offers and what the viewer uses.
+  2. Assumptions inventory (Part 1) as a table: assumption | file:line |
+     symptoms it causes | shapes it would break.
+  3. Field usage table (Part 2).
+  4. Shape coverage matrix (Part 3) with screenshot file names.
+  5. Dropped elements per project (Part 4).
+  6. Symptom-to-cause map: each symptom above -> which assumption or unused
+     field causes it.
+  7. Recommended general approach (Part 5).
+  8. What the measurement must deliver that it does not today (for schema /
+     prompt changes).
+  9. Suggested order of work, with dependencies - what has to be rebuilt first so
+     that later fixes do not have to be redone.
+Save all screenshots under docs/diagnose/2026-09-23/ and reference them by file
+name in the report.
+
+DO NOT
+- Do not change any product code, schema, prompt or stored data.
+- Do not run a measurement and do not call any paid API.
+- Do not fix anything, even if the fix looks obvious - write it into the report.
+- Do not describe fixes that only work for Leipzig or Braamheide. Every
+  recommendation must be phrased as a general rule.
+- Analysis scripts and synthetic fixtures go into scripts/diagnose/ only.
+
+DONE WHEN
+- [ ] docs/viewer-diagnose-2026-09-23.md exists and covers sections 1-9
+- [ ] Every symptom is traced to an assumption, an unused field, or a data gap
+- [ ] The shape coverage matrix has a rating and a screenshot for every shape
+- [ ] The field usage table covers all geometry and placement fields of the
+      schema
+- [ ] The recommended approach contains no house-specific rules
+- [ ] git status shows no changes to product code (only the report,
+      screenshots and scripts/diagnose/)
