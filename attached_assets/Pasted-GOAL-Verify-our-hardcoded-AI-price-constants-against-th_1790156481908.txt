@@ -1,0 +1,68 @@
+GOAL
+Verify our hardcoded AI price constants against the providers' real pricing, fix them if
+wrong, and add a daily job that compares our cost estimates against actually billed cost.
+
+CONTEXT
+- Price constants live in lib/messung/modelle.ts, PREISE_USD_PRO_MTOK (USD per million
+  tokens): standard = kimi-k3 (Moonshot) $0.6 in / $2.5 out, premium = claude-fable-5
+  (Anthropic) $3 in / $15 out. They have never been checked against real pricing.
+- The cost formula itself (schaetzeKostenUsd) is correct - do not change its logic, only
+  the constants it reads.
+- Known open question: the Anthropic Console shows $10.15 billed for Claude Fable 5 on
+  Sep 22 (UTC). It is unclear whether our logged runs for that day add up to that.
+- The admin table renders timestamps in Europe/Berlin (UTC+2), the Console buckets in UTC.
+- Cost API key: Replit secret ANTHROPIC_ADMIN_KEY (organization-scoped). Not the
+  pipeline's ANTHROPIC_API_KEY - that one does not work on this endpoint.
+
+BUILD
+
+1. Verify the prices
+   Look up current official pricing for claude-fable-5 (Anthropic) and kimi-k3 (Moonshot).
+   Report both against our constants, with the source.
+
+2. Check our logged runs against real billing
+   Query all measure_runs rows for Sep 20, 21 and 22 using UTC day boundaries. Per day
+   report: run count, total tokens, total logged costUsd for claude-fable-5, and how many
+   of those runs are regression/test projects. Compare Sep 22 against the Console's $10.15
+   and state the difference.
+
+3. Fix what is wrong
+   - Prices wrong: correct them to the verified rates, then recompute stored costUsd for
+     every existing run of that model from its own token counts. Log run count, date range,
+     old vs new total.
+   - Prices correct: change nothing and say so.
+   - Difference still unexplained after both: report what remains and your best explanation.
+
+4. Daily reconciliation - Anthropic
+   Test the key once: GET https://api.anthropic.com/v1/organizations/cost_report with
+   headers "anthropic-version: 2023-06-01" and "x-api-key: <secret>", short past date
+   range. On 401/403 stop and report - do not work around it.
+   Then add a daily job on that endpoint (daily granularity, grouped by model; docs:
+   https://platform.claude.com/docs/en/manage-claude/usage-cost-api) storing real cost per
+   day per model. Backfill the last 7 days now.
+   If a later run is rejected, mark that day "not reconciled - key rejected" instead of
+   leaving it looking successful.
+
+5. Daily reconciliation - Moonshot
+   Moonshot has no cost history API, only GET /v1/users/me/balance (bearer auth,
+   MOONSHOT_API_KEY). Add a daily job storing the balance; real spend for a period is the
+   difference between two snapshots. Add a way to record manual top-ups so they aren't
+   read as negative spend. Mark periods before the first snapshot as "no data".
+
+6. Admin view
+   Per day and model: estimated cost, real cost, difference in percent, flagged above 10%.
+   Unreconciled days are marked as such, not blank.
+
+DO NOT
+- Do not change prices before steps 1 and 2 are reported.
+- Do not derive prices by back-calculating from spend - use published rates.
+- Do not let a missing key or failed provider call break the app or a measurement run.
+
+DONE WHEN
+- [ ] Both constants reported against official rates, with sources
+- [ ] Per-day run totals for Sep 20-22 (UTC) reported against the Console figures
+- [ ] Prices confirmed or corrected, old runs recomputed, change logged
+- [ ] Anthropic job runs, backfilled 7 days; rejected key shows as "not reconciled"
+- [ ] Moonshot snapshots recorded, "no data" boundary visible
+- [ ] Admin view shows estimate vs real vs difference, flagging >10%
+- [ ] pnpm test passes
