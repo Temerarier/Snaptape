@@ -1,0 +1,51 @@
+{
+  "checkedAt": "2026-10-25T20:27:17.275Z",
+  "projectId": "93e09fad-fef3-4e2b-af9f-adf4bd137831",
+  "projectStatus": "model_ready",
+  "quality": "standard",
+  "currentRunId": null,
+  "observedDurationMs": 1097171,
+  "measurementSchemaVersion": "1.7",
+  "projectErrors": null,
+  "route": "photo",
+  "runs": [
+    {
+      "id": "65ddcabe-ef99-4538-b797-11bb40963f25",
+      "outcome": "model_ready",
+      "schema_version": "1.7",
+      "model": "kimi-k3",
+      "route": "photo",
+      "duration_ms": 1093462,
+      "input_tokens": 30923,
+      "output_tokens": 67575,
+      "cost_usd": 1.106394,
+      "retry_used": false,
+      "repair_used": false,
+      "warnings": [
+        "total_width chains disagree by >8%: window-sum ~13200 mm vs vehicle-length-based ~8000 mm (vehicle chain weak: SUV stands in front of the facade plane and camera standoff distances are unknown); both kept per disagreement rule, width anchor confidence capped low.",
+        "total_width has only one robust horizontal chain (window group sum); brick stretcher coursing not countable across the facade at photo distance.",
+        "Ground line occluded on all front photos (fence, hedge, parked cars): eave/ridge heights assume the ground offset at the facade; height confidence capped medium-to-low per vertical anchor rule.",
+        "Photos 4 and 5 are steep upward wide-angle shots: verticals compressed, height chains from these photos capped low.",
+        "Clinker brick format ambiguous (DF 62.5 mm vs Reichsformat ~78 mm course); 75 mm assumed at medium reliability for all coursing chains.",
+        "Back ground floor partially occluded by party guests and vegetation in photo 6: back door D-4 is inferred from the external stair, openings on back GF may be undercounted.",
+        "Front-left corner of the facade is hidden by a tree in photos 1/3: a fourth downspout may exist there.",
+        "Shed dormer (AT-4) and left upper window (W-12) covered with renovation sheeting; dimensions estimated from the sheeted outlines.",
+        "Annex roof surfaces not visible: covering assumed membrane with estimated pitch per ATTACHMENT ROOF RULE.",
+        "Right annex (AT-8) seen in one oblique photo only; its orientation along the right wall and the placement of D-6 are uncertain.",
+        "Roof pitch estimated from oblique views only (~33 deg); no roof plan or frontal slope view available.",
+        "total_width: 2 outlier estimate(s) more than 10% from median removed in consolidation",
+        "geometry checks skipped: complex roof (4 ridge edge(s), 6 valley edge(s)), single-pitch gable/hip formulas not applicable"
+      ],
+      "errors": [],
+      "created_at": "2026-10-25T20:27:13.416Z"
+    }
+  ],
+  "modelMetrics": {
+    "preparation": "viewer",
+    "walls": 8,
+    "roofs": 6,
+    "openings": 32
+  },
+  "terminal": true,
+  "method": "Created/uploaded/started through actual authenticated UI; SELECT-only monitoring. Model metrics are source execution, not a WebGL screenshot."
+}

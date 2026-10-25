@@ -1,0 +1,65 @@
+{
+  "checkedAt": "2026-10-25T19:57:07.956Z",
+  "env": {
+    "DATABASE_URL": "SET",
+    "ANTHROPIC_API_KEY": "SET",
+    "KIMI_API_KEY": "SET",
+    "ANTHROPIC_ADMIN_KEY": "SET",
+    "DEFAULT_OBJECT_STORAGE_BUCKET_ID": "SET",
+    "PRIVATE_OBJECT_DIR": "SET",
+    "STAFF_EMAILS": "SET",
+    "SESSION_SECRET": "SET",
+    "EXTRAKTOR_STUB": "MISSING",
+    "EXTRAKTOR_STUB_KAPUTT": "MISSING",
+    "REPLIT_DEPLOYMENT": "MISSING"
+  },
+  "anthropic": {
+    "httpStatus": 200,
+    "modelIds": [
+      "claude-haiku-5-5",
+      "claude-sonnet-5-5",
+      "claude-opus-5-5",
+      "claude-fable-5-1",
+      "claude-opus-5",
+      "claude-sonnet-5",
+      "claude-fable-5",
+      "claude-opus-4-8",
+      "claude-opus-4-7",
+      "claude-sonnet-4-6",
+      "claude-opus-4-6",
+      "claude-opus-4-5-20251101",
+      "claude-haiku-4-5-20251001",
+      "claude-sonnet-4-5-20250929"
+    ],
+    "requested": {
+      "claude-fable-5": "LISTED",
+      "claude-opus-5-5": "LISTED",
+      "claude-sonnet-5-5": "LISTED",
+      "claude-haiku-5-5": "LISTED"
+    },
+    "balance": "No balance assertion possible from models listing alone; no paid Anthropic message sent."
+  },
+  "moonshot": {
+    "httpStatus": 200,
+    "usage": {
+      "prompt_tokens": 88,
+      "completion_tokens": 8,
+      "total_tokens": 96,
+      "completion_tokens_details": {
+        "reasoning_tokens": 5
+      },
+      "prompt_tokens_details": {
+        "cache_write_tokens": 0
+      }
+    },
+    "finishReasons": [
+      "length"
+    ],
+    "result": "HTTP success; five-token cap may be consumed by reasoning, not visible text."
+  },
+  "storage": {
+    "result": "PRIVATE_PREFIX_LIST_OK",
+    "sampledObjects": 5,
+    "objectNames": "Not recorded"
+  }
+}

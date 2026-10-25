@@ -1,0 +1,8 @@
+{
+  "checkedAt": "2026-10-25T20:31:55.005Z",
+  "existingReadyProjectsChecked": 32,
+  "existingMeasurementDifferences": [],
+  "outsideAllowedPaths": [],
+  "changedFiles": 78,
+  "scope": "Checks the 32 initial model_ready measurement values and Git-visible changed files; does not claim all rows or session state unchanged."
+}

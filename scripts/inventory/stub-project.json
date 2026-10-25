@@ -1,0 +1,1951 @@
+[
+  {
+    "id": "2a4ba0ce-7e33-455a-9f81-b449eb0c7ed0",
+    "measurement": {
+      "meta": {
+        "unit": "mm",
+        "notes": [
+          "Fixture house: two-story main body (40x28 ft, gable 8/12) with front cross-gable and attached 2-car garage (22x22 ft, gable 6/12, brick front).",
+          "Fixture for viewer/report development - values are internally consistent, not from a real capture."
+        ],
+        "photos": [
+          {
+            "index": 1,
+            "view_angle": "frontal",
+            "shows_elevation": "front",
+            "perspective_corrected": true
+          },
+          {
+            "index": 2,
+            "view_angle": "slightly_angled",
+            "shows_elevation": "front",
+            "perspective_corrected": true
+          },
+          {
+            "index": 3,
+            "view_angle": "slightly_angled",
+            "shows_elevation": "back",
+            "perspective_corrected": true
+          },
+          {
+            "index": 4,
+            "view_angle": "frontal",
+            "shows_elevation": "left",
+            "perspective_corrected": false
+          },
+          {
+            "index": 5,
+            "view_angle": "steeply_angled",
+            "shows_elevation": "right",
+            "perspective_corrected": false
+          }
+        ],
+        "country": "US",
+        "schema_version": "1.7"
+      },
+      "edges": [
+        {
+          "id": "E-1",
+          "length_mm": {
+            "value": 12192,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "ridge",
+          "belongs_to_elevation": "roof"
+        },
+        {
+          "id": "E-2",
+          "length_mm": {
+            "value": 2438.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "ridge",
+          "belongs_to_elevation": "roof"
+        },
+        {
+          "id": "E-3",
+          "length_mm": {
+            "value": 6705.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "ridge",
+          "belongs_to_elevation": "roof",
+          "parent_attachment_id": "AT-7"
+        },
+        {
+          "id": "E-4",
+          "length_mm": {
+            "value": 3099.8,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "edge_class": "valley",
+          "belongs_to_elevation": "roof"
+        },
+        {
+          "id": "E-5",
+          "length_mm": {
+            "value": 3099.8,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "edge_class": "valley",
+          "belongs_to_elevation": "roof"
+        },
+        {
+          "id": "E-6",
+          "length_mm": {
+            "value": 12192,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "eave",
+          "belongs_to_elevation": "front"
+        },
+        {
+          "id": "E-7",
+          "length_mm": {
+            "value": 12192,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "eave",
+          "belongs_to_elevation": "back"
+        },
+        {
+          "id": "E-8",
+          "length_mm": {
+            "value": 2438.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "eave",
+          "belongs_to_elevation": "front"
+        },
+        {
+          "id": "E-9",
+          "length_mm": {
+            "value": 6705.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "eave",
+          "belongs_to_elevation": "front",
+          "parent_attachment_id": "AT-7"
+        },
+        {
+          "id": "E-10",
+          "length_mm": {
+            "value": 2438.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "eave",
+          "belongs_to_elevation": "back"
+        },
+        {
+          "id": "E-11",
+          "length_mm": {
+            "value": 5129.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "rake",
+          "belongs_to_elevation": "left"
+        },
+        {
+          "id": "E-12",
+          "length_mm": {
+            "value": 5129.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "rake",
+          "belongs_to_elevation": "left"
+        },
+        {
+          "id": "E-13",
+          "length_mm": {
+            "value": 5129.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "rake",
+          "belongs_to_elevation": "right"
+        },
+        {
+          "id": "E-14",
+          "length_mm": {
+            "value": 5129.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "rake",
+          "belongs_to_elevation": "right"
+        },
+        {
+          "id": "E-15",
+          "length_mm": {
+            "value": 2712.7,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "rake",
+          "belongs_to_elevation": "front"
+        },
+        {
+          "id": "E-16",
+          "length_mm": {
+            "value": 2712.7,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "rake",
+          "belongs_to_elevation": "front"
+        },
+        {
+          "id": "E-17",
+          "length_mm": {
+            "value": 3749,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "rake",
+          "belongs_to_elevation": "right",
+          "parent_attachment_id": "AT-7"
+        },
+        {
+          "id": "E-18",
+          "length_mm": {
+            "value": 3749,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "edge_class": "rake",
+          "belongs_to_elevation": "right",
+          "parent_attachment_id": "AT-7"
+        },
+        {
+          "id": "E-19",
+          "length_mm": {
+            "value": 3810,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "edge_class": "flashing",
+          "belongs_to_elevation": "roof"
+        },
+        {
+          "id": "E-20",
+          "length_mm": {
+            "value": 3048,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "edge_class": "step_flashing",
+          "belongs_to_elevation": "roof"
+        },
+        {
+          "id": "E-21",
+          "length_mm": {
+            "value": 2490.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "edge_class": "step_flashing",
+          "belongs_to_elevation": "roof"
+        },
+        {
+          "id": "E-22",
+          "length_mm": {
+            "value": 5486.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "outside_corner",
+          "belongs_to_elevation": "front"
+        },
+        {
+          "id": "E-23",
+          "length_mm": {
+            "value": 5486.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "outside_corner",
+          "belongs_to_elevation": "front"
+        },
+        {
+          "id": "E-24",
+          "length_mm": {
+            "value": 5486.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "outside_corner",
+          "belongs_to_elevation": "back"
+        },
+        {
+          "id": "E-25",
+          "length_mm": {
+            "value": 5486.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "outside_corner",
+          "belongs_to_elevation": "back"
+        },
+        {
+          "id": "E-26",
+          "length_mm": {
+            "value": 2743.2,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "outside_corner",
+          "belongs_to_elevation": "front"
+        },
+        {
+          "id": "E-27",
+          "length_mm": {
+            "value": 2743.2,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "outside_corner",
+          "belongs_to_elevation": "right"
+        },
+        {
+          "id": "E-28",
+          "length_mm": {
+            "value": 5486.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "inside_corner",
+          "belongs_to_elevation": "front"
+        },
+        {
+          "id": "E-29",
+          "length_mm": {
+            "value": 5486.4,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "edge_class": "inside_corner",
+          "belongs_to_elevation": "front"
+        },
+        {
+          "id": "E-30",
+          "length_mm": {
+            "value": 12192,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "base",
+          "belongs_to_elevation": "front"
+        },
+        {
+          "id": "E-31",
+          "length_mm": {
+            "value": 12192,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "base",
+          "belongs_to_elevation": "back"
+        },
+        {
+          "id": "E-32",
+          "length_mm": {
+            "value": 8534.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "base",
+          "belongs_to_elevation": "left"
+        },
+        {
+          "id": "E-33",
+          "length_mm": {
+            "value": 8534.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "edge_class": "base",
+          "belongs_to_elevation": "right"
+        },
+        {
+          "id": "E-34",
+          "length_mm": {
+            "value": 3657.6,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "edge_class": "base",
+          "belongs_to_elevation": "front"
+        }
+      ],
+      "faces": [
+        {
+          "id": "RF-1",
+          "color": {
+            "hex": "#4A4E55",
+            "name": "charcoal",
+            "note": null,
+            "confidence": "medium",
+            "secondary_hex": null
+          },
+          "pitch": {
+            "degrees_rounded": 33.69,
+            "degrees_original": 34.089999999999996,
+            "rise_over_12_snapped": 8
+          },
+          "area_mm2": {
+            "value": 62523745.9,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "material": "shingle_asphalt",
+          "elevation": "front",
+          "face_class": "roof_face",
+          "net_area_mm2": null,
+          "orientation_deg": null,
+          "soffit_depth_mm": null,
+          "parent_attachment_id": null
+        },
+        {
+          "id": "RF-2",
+          "color": {
+            "hex": "#4A4E55",
+            "name": "charcoal",
+            "note": null,
+            "confidence": "medium",
+            "secondary_hex": null
+          },
+          "pitch": {
+            "degrees_rounded": 33.69,
+            "degrees_original": 34.089999999999996,
+            "rise_over_12_snapped": 8
+          },
+          "area_mm2": {
+            "value": 62523745.9,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "material": "shingle_asphalt",
+          "elevation": "back",
+          "face_class": "roof_face",
+          "net_area_mm2": null,
+          "orientation_deg": null,
+          "soffit_depth_mm": null,
+          "parent_attachment_id": null
+        },
+        {
+          "id": "RF-3",
+          "color": {
+            "hex": "#4A4E55",
+            "name": "charcoal",
+            "note": null,
+            "confidence": "medium",
+            "secondary_hex": null
+          },
+          "pitch": {
+            "degrees_rounded": 33.69,
+            "degrees_original": 34.089999999999996,
+            "rise_over_12_snapped": 8
+          },
+          "area_mm2": {
+            "value": 9754819.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "material": "shingle_asphalt",
+          "elevation": "front",
+          "face_class": "roof_face",
+          "net_area_mm2": null,
+          "orientation_deg": null,
+          "soffit_depth_mm": null,
+          "parent_attachment_id": null
+        },
+        {
+          "id": "RF-4",
+          "color": {
+            "hex": "#4A4E55",
+            "name": "charcoal",
+            "note": null,
+            "confidence": "medium",
+            "secondary_hex": null
+          },
+          "pitch": {
+            "degrees_rounded": 33.69,
+            "degrees_original": 34.089999999999996,
+            "rise_over_12_snapped": 8
+          },
+          "area_mm2": {
+            "value": 9754819.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "material": "shingle_asphalt",
+          "elevation": "front",
+          "face_class": "roof_face",
+          "net_area_mm2": null,
+          "orientation_deg": null,
+          "soffit_depth_mm": null,
+          "parent_attachment_id": null
+        },
+        {
+          "id": "RF-5",
+          "color": {
+            "hex": "#4A4E55",
+            "name": "charcoal",
+            "note": null,
+            "confidence": "medium",
+            "secondary_hex": null
+          },
+          "pitch": {
+            "degrees_rounded": 26.57,
+            "degrees_original": 26.97,
+            "rise_over_12_snapped": 6
+          },
+          "area_mm2": {
+            "value": 25176723.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "material": "shingle_asphalt",
+          "elevation": "front",
+          "face_class": "roof_face",
+          "net_area_mm2": null,
+          "orientation_deg": null,
+          "soffit_depth_mm": null,
+          "parent_attachment_id": "AT-7"
+        },
+        {
+          "id": "RF-6",
+          "color": {
+            "hex": "#4A4E55",
+            "name": "charcoal",
+            "note": null,
+            "confidence": "medium",
+            "secondary_hex": null
+          },
+          "pitch": {
+            "degrees_rounded": 26.57,
+            "degrees_original": 26.97,
+            "rise_over_12_snapped": 6
+          },
+          "area_mm2": {
+            "value": 25083820.8,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "material": "shingle_asphalt",
+          "elevation": "back",
+          "face_class": "roof_face",
+          "net_area_mm2": null,
+          "orientation_deg": null,
+          "soffit_depth_mm": null,
+          "parent_attachment_id": "AT-7"
+        },
+        {
+          "id": "WL-1",
+          "color": {
+            "hex": "#C9BFAF",
+            "name": "warm beige",
+            "note": null,
+            "confidence": "high",
+            "secondary_hex": null
+          },
+          "pitch": null,
+          "area_mm2": {
+            "value": 66890188.8,
+            "source": "scaled",
+            "confidence": "high",
+            "reference_used": "width x height + 0.5 x width x gable, reconciled with footprint and eave height (fixture v1.6)"
+          },
+          "material": "siding",
+          "width_mm": {
+            "value": 12192,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "footprint width x eave height; eave side of the main gable roof"
+          },
+          "elevation": "front",
+          "height_mm": {
+            "value": 5486.4,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "footprint width x eave height; eave side of the main gable roof"
+          },
+          "face_class": "wall",
+          "net_area_mm2": {
+            "value": 57382867.2,
+            "source": "scaled",
+            "confidence": "high",
+            "reference_used": "gross minus openings on this wall (by parent_face_id)"
+          },
+          "gable_height_mm": null,
+          "orientation_deg": null,
+          "soffit_depth_mm": null
+        },
+        {
+          "id": "WL-2",
+          "color": {
+            "hex": "#C9BFAF",
+            "name": "warm beige",
+            "note": null,
+            "confidence": "high",
+            "secondary_hex": null
+          },
+          "pitch": null,
+          "area_mm2": {
+            "value": 66890188.8,
+            "source": "scaled",
+            "confidence": "high",
+            "reference_used": "width x height + 0.5 x width x gable, reconciled with footprint and eave height (fixture v1.6)"
+          },
+          "material": "siding",
+          "width_mm": {
+            "value": 12192,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "footprint width x eave height; eave side of the main gable roof"
+          },
+          "elevation": "back",
+          "height_mm": {
+            "value": 5486.4,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "footprint width x eave height; eave side of the main gable roof"
+          },
+          "face_class": "wall",
+          "net_area_mm2": {
+            "value": 56608614.2,
+            "source": "scaled",
+            "confidence": "high",
+            "reference_used": "gross minus openings on this wall (by parent_face_id)"
+          },
+          "gable_height_mm": null,
+          "orientation_deg": null,
+          "soffit_depth_mm": null
+        },
+        {
+          "id": "WL-3",
+          "color": {
+            "hex": "#C9BFAF",
+            "name": "warm beige",
+            "note": null,
+            "confidence": "high",
+            "secondary_hex": null
+          },
+          "pitch": null,
+          "area_mm2": {
+            "value": 58958195.5,
+            "source": "scaled",
+            "confidence": "medium",
+            "reference_used": "width x height + 0.5 x width x gable, reconciled with footprint and eave height (fixture v1.6)"
+          },
+          "material": "siding",
+          "width_mm": {
+            "value": 8534.4,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave"
+          },
+          "elevation": "left",
+          "height_mm": {
+            "value": 5486.4,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave"
+          },
+          "face_class": "wall",
+          "net_area_mm2": {
+            "value": 55180016.6,
+            "source": "scaled",
+            "confidence": "medium",
+            "reference_used": "gross minus openings on this wall (by parent_face_id)"
+          },
+          "gable_height_mm": {
+            "value": 2843.8,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave"
+          },
+          "orientation_deg": null,
+          "soffit_depth_mm": null
+        },
+        {
+          "id": "WL-4",
+          "color": {
+            "hex": "#C9BFAF",
+            "name": "warm beige",
+            "note": null,
+            "confidence": "high",
+            "secondary_hex": null
+          },
+          "pitch": null,
+          "area_mm2": {
+            "value": 58958195.5,
+            "source": "scaled",
+            "confidence": "medium",
+            "reference_used": "width x height + 0.5 x width x gable, reconciled with footprint and eave height (fixture v1.6)"
+          },
+          "material": "siding",
+          "width_mm": {
+            "value": 8534.4,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave (garage attaches here)"
+          },
+          "elevation": "right",
+          "height_mm": {
+            "value": 5486.4,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave (garage attaches here)"
+          },
+          "face_class": "wall",
+          "net_area_mm2": {
+            "value": 56976020.1,
+            "source": "scaled",
+            "confidence": "medium",
+            "reference_used": "gross minus openings on this wall (by parent_face_id)"
+          },
+          "gable_height_mm": {
+            "value": 2843.8,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "footprint depth x eave height; gable end, rise = ridge - eave (garage attaches here)"
+          },
+          "orientation_deg": null,
+          "soffit_depth_mm": null
+        },
+        {
+          "id": "WL-5",
+          "color": {
+            "hex": "#9B5E42",
+            "name": "red brick",
+            "note": null,
+            "confidence": "high",
+            "secondary_hex": "#8A8378"
+          },
+          "pitch": null,
+          "area_mm2": {
+            "value": 18394801.9,
+            "source": "scaled",
+            "confidence": "high",
+            "reference_used": "width x height + 0.5 x width x gable, reconciled with footprint and eave height (fixture v1.6)"
+          },
+          "material": "brick",
+          "width_mm": {
+            "value": 6705.6,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "garage width x garage height (AT-7); eave side of the garage gable"
+          },
+          "elevation": "front",
+          "height_mm": {
+            "value": 2743.2,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "garage width x garage height (AT-7); eave side of the garage gable"
+          },
+          "face_class": "wall",
+          "net_area_mm2": {
+            "value": 7989661.4,
+            "source": "scaled",
+            "confidence": "high",
+            "reference_used": "gross minus openings on this wall (by parent_face_id)"
+          },
+          "gable_height_mm": null,
+          "orientation_deg": null,
+          "soffit_depth_mm": null,
+          "parent_attachment_id": "AT-7"
+        },
+        {
+          "id": "WL-6",
+          "color": {
+            "hex": "#9B5E42",
+            "name": "red brick",
+            "note": null,
+            "confidence": "high",
+            "secondary_hex": "#8A8378"
+          },
+          "pitch": null,
+          "area_mm2": {
+            "value": 24017447.5,
+            "source": "scaled",
+            "confidence": "medium",
+            "reference_used": "width x height + 0.5 x width x gable, reconciled with footprint and eave height (fixture v1.6)"
+          },
+          "material": "brick",
+          "width_mm": {
+            "value": 6705.6,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "garage depth x garage height (AT-7); gable end, rise from rake 3749 mm"
+          },
+          "elevation": "right",
+          "height_mm": {
+            "value": 2743.2,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "garage depth x garage height (AT-7); gable end, rise from rake 3749 mm"
+          },
+          "face_class": "wall",
+          "net_area_mm2": {
+            "value": 24017447.5,
+            "source": "scaled",
+            "confidence": "medium",
+            "reference_used": "gross minus openings on this wall (by parent_face_id)"
+          },
+          "gable_height_mm": {
+            "value": 1677,
+            "source": "scaled",
+            "confidence": "medium",
+            "low_reason": null,
+            "reference_used": "garage depth x garage height (AT-7); gable end, rise from rake 3749 mm"
+          },
+          "orientation_deg": null,
+          "soffit_depth_mm": null,
+          "parent_attachment_id": "AT-7"
+        },
+        {
+          "id": "SF-1",
+          "color": {
+            "hex": "#F4F2ED",
+            "name": "off-white",
+            "note": null,
+            "confidence": "high",
+            "secondary_hex": null
+          },
+          "pitch": null,
+          "area_mm2": {
+            "value": 14585777.3,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "material": "other",
+          "elevation": "front",
+          "face_class": "soffit",
+          "net_area_mm2": null,
+          "orientation_deg": null,
+          "soffit_depth_mm": {
+            "value": 406.4,
+            "source": "scaled",
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "FC-1",
+          "color": {
+            "hex": "#F4F2ED",
+            "name": "off-white",
+            "note": null,
+            "confidence": "high",
+            "secondary_hex": null
+          },
+          "pitch": null,
+          "area_mm2": {
+            "value": 9940625.3,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "material": "wood",
+          "elevation": "front",
+          "face_class": "fascia",
+          "net_area_mm2": null,
+          "orientation_deg": null,
+          "soffit_depth_mm": null
+        }
+      ],
+      "quality": {
+        "warnings": [
+          "Photo 5 (right elevation) steeply angled - right-side widths carry medium confidence.",
+          "Garage back roof facet partially occluded in photo 3."
+        ],
+        "spread_percent": 4.2,
+        "references_used": 2
+      },
+      "building": {
+        "heights": {
+          "datum_note": "Flat site; grade zero at front-left corner.",
+          "per_elevation": null,
+          "eave_height_mm": {
+            "value": 5486.4,
+            "source": "scaled",
+            "confidence": "high",
+            "reference_used": "entry door photo 1"
+          },
+          "ridge_height_mm": {
+            "value": 8330.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "parapet_height_mm": null
+        },
+        "stories": 2,
+        "footprint": {
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              12192,
+              0
+            ],
+            [
+              12192,
+              8534.4
+            ],
+            [
+              0,
+              8534.4
+            ]
+          ],
+          "area_mm2": {
+            "value": 104051404.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "depth_mm": {
+            "value": 8534.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "width_mm": {
+            "value": 12192,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "perimeter_mm": {
+            "value": 41452.8,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        "roof_type": "gable",
+        "shared_walls": [],
+        "building_type": "detached",
+        "footprint_overall": {
+          "note": "Includes attached 2-car garage (AT-7).",
+          "depth_mm": {
+            "value": 8534.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "width_mm": {
+            "value": 18897.6,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        }
+      },
+      "openings": [
+        {
+          "id": "W-1",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 1393545.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": "WG-1",
+          "width_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "front",
+          "height_mm": {
+            "value": 1524,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4876.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-1",
+          "sill_height_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "W-2",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 1393545.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": "WG-1",
+          "width_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "front",
+          "height_mm": {
+            "value": 1524,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4876.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-1",
+          "sill_height_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "W-3",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 1393545.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "front",
+          "height_mm": {
+            "value": 1524,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4876.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-1",
+          "sill_height_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "W-4",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 1393545.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "front",
+          "height_mm": {
+            "value": 1524,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4876.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-1",
+          "sill_height_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "W-5",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 1393545.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "back",
+          "height_mm": {
+            "value": 1524,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4876.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-2",
+          "sill_height_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "W-6",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 1393545.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "back",
+          "height_mm": {
+            "value": 1524,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4876.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-2",
+          "sill_height_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "W-7",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 1393545.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "back",
+          "height_mm": {
+            "value": 1524,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4876.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-2",
+          "sill_height_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "W-8",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 1393545.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "back",
+          "height_mm": {
+            "value": 1524,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4876.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-2",
+          "sill_height_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "W-9",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 1393545.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "left",
+          "height_mm": {
+            "value": 1524,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4876.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-3",
+          "sill_height_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "W-10",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 1393545.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "left",
+          "height_mm": {
+            "value": 1524,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4876.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-3",
+          "sill_height_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "W-11",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 991089.6,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 812.9,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "elevation": "front",
+          "height_mm": {
+            "value": 1219.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4064.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "parent_face_id": "WL-1",
+          "sill_height_mm": {
+            "value": 1066.8,
+            "source": "scaled",
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "W-12",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 991089.6,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 812.9,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "elevation": "front",
+          "height_mm": {
+            "value": 1219.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4064.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "parent_face_id": "WL-1",
+          "sill_height_mm": {
+            "value": 1066.8,
+            "source": "scaled",
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "W-13",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 991089.6,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 812.9,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "elevation": "left",
+          "height_mm": {
+            "value": 1219.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4064.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "parent_face_id": "WL-3",
+          "sill_height_mm": {
+            "value": 1066.8,
+            "source": "scaled",
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "W-14",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 991089.6,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 812.9,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "elevation": "right",
+          "height_mm": {
+            "value": 1219.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4064.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "parent_face_id": "WL-4",
+          "sill_height_mm": {
+            "value": 1066.8,
+            "source": "scaled",
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "W-15",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 991089.6,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 812.9,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "elevation": "right",
+          "height_mm": {
+            "value": 1219.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4064.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "parent_face_id": "WL-4",
+          "sill_height_mm": {
+            "value": 1066.8,
+            "source": "scaled",
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "W-16",
+          "note": "Reference only, not for ordering",
+          "type": "window",
+          "area_mm2": {
+            "value": 991089.6,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 812.9,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "elevation": "back",
+          "height_mm": {
+            "value": 1219.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 4064.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "parent_face_id": "WL-2",
+          "sill_height_mm": {
+            "value": 1066.8,
+            "source": "scaled",
+            "confidence": "medium"
+          }
+        },
+        {
+          "id": "D-1",
+          "note": "Reference only, not for ordering",
+          "type": "door",
+          "area_mm2": {
+            "value": 1950963.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 914.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "front",
+          "height_mm": {
+            "value": 2133.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 6096,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-1",
+          "sill_height_mm": {
+            "value": 0,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "D-2",
+          "note": "Reference only, not for ordering",
+          "type": "patio_door",
+          "area_mm2": {
+            "value": 3716307.4,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 1828.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "back",
+          "height_mm": {
+            "value": 2032.1,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 7721.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-2",
+          "sill_height_mm": {
+            "value": 0,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "G-1",
+          "note": "Reference only, not for ordering",
+          "type": "garage_door",
+          "area_mm2": {
+            "value": 10405140.5,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 4876.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "front",
+          "height_mm": {
+            "value": 2133.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 14020.8,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "parent_face_id": "WL-5",
+          "sill_height_mm": {
+            "value": 0,
+            "source": "scaled",
+            "confidence": "high"
+          }
+        },
+        {
+          "id": "SK-1",
+          "note": "Reference only, not for ordering",
+          "type": "skylight",
+          "area_mm2": {
+            "value": 743224.3,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "group_id": null,
+          "width_mm": {
+            "value": 609.6,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "elevation": "roof",
+          "height_mm": {
+            "value": 1219.2,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "position_mm": null,
+          "perimeter_mm": {
+            "value": 3657.6,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "parent_face_id": "RF-1",
+          "sill_height_mm": null
+        }
+      ],
+      "downspouts": [
+        {
+          "id": "DS-1",
+          "elevation": "front",
+          "length_mm": {
+            "value": 5486.4,
+            "source": "estimated",
+            "confidence": "medium",
+            "reference_used": "eave height of parent elevation (downspout run not measured directly)"
+          },
+          "position_mm": {
+            "x": 152.4
+          },
+          "connects_edge_id": "E-6"
+        },
+        {
+          "id": "DS-2",
+          "elevation": "front",
+          "length_mm": {
+            "value": 5486.4,
+            "source": "estimated",
+            "confidence": "medium",
+            "reference_used": "eave height of parent elevation (downspout run not measured directly)"
+          },
+          "position_mm": {
+            "x": 12039.6
+          },
+          "connects_edge_id": "E-6"
+        },
+        {
+          "id": "DS-3",
+          "elevation": "back",
+          "length_mm": {
+            "value": 5486.4,
+            "source": "estimated",
+            "confidence": "medium",
+            "reference_used": "eave height of parent elevation (downspout run not measured directly)"
+          },
+          "position_mm": {
+            "x": 152.4
+          },
+          "connects_edge_id": "E-7"
+        },
+        {
+          "id": "DS-4",
+          "elevation": "front",
+          "length_mm": {
+            "value": 2743.2,
+            "source": "estimated",
+            "confidence": "medium",
+            "reference_used": "eave height of parent elevation (downspout run not measured directly)"
+          },
+          "position_mm": {
+            "x": 6553.2
+          },
+          "connects_edge_id": "E-9"
+        }
+      ],
+      "references": [
+        {
+          "plane": "facade_plane",
+          "object": "entry door",
+          "scale_type": "own_reference",
+          "photo_index": 1,
+          "reliability": "high",
+          "bounding_box": null,
+          "user_confirmed": true,
+          "assumed_size_mm": 2032
+        },
+        {
+          "plane": null,
+          "object": null,
+          "scale_type": "transferred",
+          "photo_index": 2,
+          "reliability": "medium",
+          "assumed_size_mm": null,
+          "transferred_via": "window W-1 width from photo 1"
+        },
+        {
+          "plane": "facade_plane",
+          "object": "patio door",
+          "scale_type": "own_reference",
+          "photo_index": 3,
+          "reliability": "medium",
+          "user_confirmed": false,
+          "assumed_size_mm": 1828.8
+        },
+        {
+          "plane": null,
+          "object": null,
+          "scale_type": "transferred",
+          "photo_index": 4,
+          "reliability": "medium",
+          "assumed_size_mm": null,
+          "transferred_via": "eave height from photo 1"
+        },
+        {
+          "plane": null,
+          "object": null,
+          "scale_type": "none",
+          "photo_index": 5,
+          "reliability": null,
+          "assumed_size_mm": null
+        }
+      ],
+      "attachments": [
+        {
+          "id": "AT-1",
+          "type": "chimney",
+          "dormer": null,
+          "attached": true,
+          "depth_mm": {
+            "value": 609.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "width_mm": {
+            "value": 609.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "roof",
+          "height_mm": {
+            "value": 2286,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "position_mm": {
+            "x": 8839.2,
+            "y": 2743.2000000000003
+          },
+          "parent_face_id": "RF-2",
+          "include_in_footprint": false
+        },
+        {
+          "id": "AT-2",
+          "type": "pipe",
+          "dormer": null,
+          "subtype": "plumbing_stack",
+          "attached": true,
+          "depth_mm": null,
+          "width_mm": {
+            "value": 76,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "elevation": "roof",
+          "height_mm": null,
+          "position_mm": {
+            "x": 7010.400000000001,
+            "y": 2743.2000000000003
+          },
+          "parent_face_id": "RF-2",
+          "include_in_footprint": false
+        },
+        {
+          "id": "AT-3",
+          "type": "pipe",
+          "dormer": null,
+          "subtype": "plumbing_stack",
+          "attached": true,
+          "depth_mm": null,
+          "width_mm": {
+            "value": 76,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "elevation": "roof",
+          "height_mm": null,
+          "position_mm": {
+            "x": 4267.2,
+            "y": 3048
+          },
+          "parent_face_id": "RF-2",
+          "include_in_footprint": false
+        },
+        {
+          "id": "AT-4",
+          "type": "pipe",
+          "dormer": null,
+          "subtype": "plumbing_stack",
+          "attached": true,
+          "depth_mm": null,
+          "width_mm": {
+            "value": 76,
+            "source": "scaled",
+            "confidence": "low",
+            "low_reason": "small object, steep photo angle"
+          },
+          "elevation": "roof",
+          "height_mm": null,
+          "position_mm": {
+            "x": 2133.6,
+            "y": 2438.4
+          },
+          "parent_face_id": "RF-2",
+          "include_in_footprint": false
+        },
+        {
+          "id": "AT-5",
+          "type": "vent",
+          "dormer": null,
+          "subtype": "static_vent",
+          "attached": true,
+          "depth_mm": null,
+          "width_mm": {
+            "value": 356.6,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "elevation": "roof",
+          "height_mm": null,
+          "position_mm": {
+            "x": 10972.800000000001,
+            "y": 1828.8000000000002
+          },
+          "parent_face_id": "RF-1",
+          "include_in_footprint": false
+        },
+        {
+          "id": "AT-6",
+          "type": "vent",
+          "dormer": null,
+          "subtype": "static_vent",
+          "attached": true,
+          "depth_mm": null,
+          "width_mm": {
+            "value": 356.6,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "elevation": "roof",
+          "height_mm": null,
+          "position_mm": {
+            "x": 5486.400000000001,
+            "y": 2133.6
+          },
+          "parent_face_id": "RF-1",
+          "include_in_footprint": false
+        },
+        {
+          "id": "AT-7",
+          "type": "addition",
+          "dormer": null,
+          "attached": true,
+          "depth_mm": {
+            "value": 6705.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "width_mm": {
+            "value": 6705.6,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "elevation": "right",
+          "height_mm": {
+            "value": 2743.2,
+            "source": "scaled",
+            "confidence": "high"
+          },
+          "position_mm": null,
+          "parent_face_id": null,
+          "include_in_footprint": true
+        }
+      ],
+      "condition_areas": [
+        {
+          "id": "CA-1",
+          "note": "Peeling paint band below left gable.",
+          "type": "failing_paint",
+          "area_mm2": {
+            "value": 4180636.8,
+            "source": "scaled",
+            "confidence": "medium"
+          },
+          "severity": "moderate",
+          "elevation": "left",
+          "photo_index": 4,
+          "position_mm": {
+            "x": 1828.8000000000002,
+            "y": 1219.2
+          },
+          "parent_face_id": "WL-3"
+        },
+        {
+          "id": "CA-2",
+          "note": "Suspected rot at sill of W-9 - verify on site.",
+          "type": "rot",
+          "area_mm2": {
+            "value": 557418.2,
+            "source": "scaled",
+            "confidence": "low",
+            "low_reason": "shadow over sill area in photo 3"
+          },
+          "severity": "light",
+          "elevation": "back",
+          "photo_index": 3,
+          "position_mm": {
+            "x": 3352.8,
+            "y": 914.4000000000001
+          },
+          "parent_face_id": "WL-2"
+        }
+      ]
+    },
+    "captureLabel": "stub"
+  }
+]

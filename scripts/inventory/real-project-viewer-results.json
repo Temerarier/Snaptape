@@ -1,0 +1,102 @@
+{
+  "method": "Actual ProjectViewer, ViewerNextClient, preparation, builder, materials and compiled production CSS; isolated loopback component host with system font fallback, no authenticated route ownership bypass. Full inherited app layout and owner-specific locale not tested. Software WebGL SwiftShader, desktop1280x900; optional phone390x844.",
+  "cases": [
+    {
+      "id": "93e09fad-fef3-4e2b-af9f-adf4bd137831",
+      "version": "1.7",
+      "preparation": "viewer",
+      "modelError": null,
+      "input": {
+        "walls": 8,
+        "roofs": 6,
+        "openings": 32
+      },
+      "modeled": {
+        "walls": 8,
+        "roofs": 6,
+        "openings": 32
+      },
+      "notes": [
+        "AT-12: missing depth; represented with a measured-width footprint.",
+        "AT-13: missing depth; represented with a measured-width footprint.",
+        "AT-14: missing depth; represented with a measured-width footprint.",
+        "E-14: duplicate roof facets share the same ridge geometry; selected RF-3 deterministically.",
+        "E-15: no measured ridge geometry matches 1000 mm; omitted rather than placed falsely.",
+        "E-16: no measured ridge geometry matches 1000 mm; omitted rather than placed falsely.",
+        "E-17: no measured valley geometry matches 2200 mm on roof; omitted rather than placed falsely.",
+        "E-17: valley has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-18: no measured valley geometry matches 2200 mm on roof; omitted rather than placed falsely.",
+        "E-18: valley has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-19: no measured valley geometry matches 1400 mm on roof; omitted rather than placed falsely.",
+        "E-19: valley has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-1: no measured ridge geometry matches 2700 mm; omitted rather than placed falsely.",
+        "E-20: no measured valley geometry matches 1400 mm on roof; omitted rather than placed falsely.",
+        "E-20: valley has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-21: no measured valley geometry matches 1400 mm on roof; omitted rather than placed falsely.",
+        "E-21: valley has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-22: no measured valley geometry matches 1400 mm on roof; omitted rather than placed falsely.",
+        "E-22: valley has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-2: hip has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-2: no measured hip geometry matches 7630 mm on roof; omitted rather than placed falsely.",
+        "E-31: flashing has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-31: no measured flashing geometry matches 2400 mm on roof; omitted rather than placed falsely.",
+        "E-32: flashing has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-32: no measured flashing geometry matches 2400 mm on roof; omitted rather than placed falsely.",
+        "E-3: hip has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-3: no measured hip geometry matches 7630 mm on roof; omitted rather than placed falsely.",
+        "E-4: hip has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-4: no measured hip geometry matches 7630 mm on roof; omitted rather than placed falsely.",
+        "E-5: hip has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-5: no measured hip geometry matches 7630 mm on roof; omitted rather than placed falsely.",
+        "E-6: no measured eave geometry matches 13500 mm on front; omitted rather than placed falsely.",
+        "E-7: no measured eave geometry matches 13500 mm on back; omitted rather than placed falsely.",
+        "E-8: no measured eave geometry matches 10800 mm on left; omitted rather than placed falsely.",
+        "E-9: no measured eave geometry matches 10800 mm on right; omitted rather than placed falsely.",
+        "FC-1: unsupported face class \"fascia\" omitted from detailed geometry.",
+        "FC-2: unsupported face class \"fascia\" omitted from detailed geometry.",
+        "FC-3: unsupported face class \"fascia\" omitted from detailed geometry.",
+        "FC-4: unsupported face class \"fascia\" omitted from detailed geometry.",
+        "Overall envelope is 18100 mm; permanent width dimension remains the main footprint 12300 mm.",
+        "Roof type \"hip\" is not a supported topology; measured facets were retained as degraded planes.",
+        "SF-1: unsupported face class \"soffit\" omitted from detailed geometry.",
+        "SF-2: unsupported face class \"soffit\" omitted from detailed geometry.",
+        "SF-3: unsupported face class \"soffit\" omitted from detailed geometry.",
+        "SF-4: unsupported face class \"soffit\" omitted from detailed geometry.",
+        "W-12: vertical position clamped inside WL-3."
+      ],
+      "render": {
+        "drawCalls": 164,
+        "triangles": 430,
+        "glError": 0,
+        "contextLost": false,
+        "camera": [
+          37678,
+          -33476.99999999997,
+          25950.64178783249
+        ]
+      },
+      "pageState": "viewer",
+      "olderNotice": false,
+      "screenshot": "screenshots/inventory-2026-10-25/real-desktop.png",
+      "horizontalOverflow": false,
+      "phoneScreenshot": "screenshots/inventory-2026-10-25/real-phone.png",
+      "phone": {
+        "width": 390,
+        "render": {
+          "drawCalls": 164,
+          "triangles": 430,
+          "glError": 0,
+          "contextLost": false,
+          "camera": [
+            37678,
+            -33476.99999999997,
+            25950.64178783249
+          ]
+        },
+        "horizontalOverflow": false
+      },
+      "exceptions": [],
+      "console": []
+    }
+  ]
+}

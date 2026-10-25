@@ -1,0 +1,5 @@
+{
+  "checkedDate": "2026-10-25",
+  "method": "executeSql environment production, SELECT 1 AS reachable",
+  "error": "This project has no production database."
+}

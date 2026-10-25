@@ -1,0 +1,1322 @@
+{
+  "checkedAt": "2026-10-25T19:59:33.454Z",
+  "method": "BEGIN READ ONLY; information_schema columns and pg_enum compared with live Drizzle table/enum metadata; no push, no pull-generated workspace files.",
+  "expectedTables": [
+    {
+      "name": "attachments",
+      "columns": 8
+    },
+    {
+      "name": "billing_balance_snapshots",
+      "columns": 10
+    },
+    {
+      "name": "billing_provider_state",
+      "columns": 6
+    },
+    {
+      "name": "billing_reconciliations",
+      "columns": 11
+    },
+    {
+      "name": "billing_topup_revisions",
+      "columns": 10
+    },
+    {
+      "name": "buildings",
+      "columns": 10
+    },
+    {
+      "name": "edges",
+      "columns": 6
+    },
+    {
+      "name": "faces",
+      "columns": 10
+    },
+    {
+      "name": "measure_runs",
+      "columns": 20
+    },
+    {
+      "name": "openings",
+      "columns": 12
+    },
+    {
+      "name": "project_files",
+      "columns": 13
+    },
+    {
+      "name": "projects",
+      "columns": 16
+    },
+    {
+      "name": "sessions",
+      "columns": 5
+    },
+    {
+      "name": "users",
+      "columns": 5
+    }
+  ],
+  "actualColumns": [
+    {
+      "table_name": "attachments",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "attachments",
+      "column_name": "measure_run_id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "attachments",
+      "column_name": "component_id",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "attachments",
+      "column_name": "type",
+      "udt_name": "attachment_type",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "attachments",
+      "column_name": "elevation",
+      "udt_name": "elevation",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "attachments",
+      "column_name": "width_mm",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "attachments",
+      "column_name": "height_mm",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "attachments",
+      "column_name": "depth_mm",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_balance_snapshots",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "billing_balance_snapshots",
+      "column_name": "provider",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_balance_snapshots",
+      "column_name": "account_scope",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_balance_snapshots",
+      "column_name": "utc_day",
+      "udt_name": "date",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_balance_snapshots",
+      "column_name": "balance_usd",
+      "udt_name": "float8",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_balance_snapshots",
+      "column_name": "voucher_balance_usd",
+      "udt_name": "float8",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_balance_snapshots",
+      "column_name": "cash_balance_usd",
+      "udt_name": "float8",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_balance_snapshots",
+      "column_name": "currency",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_balance_snapshots",
+      "column_name": "captured_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_balance_snapshots",
+      "column_name": "provider_payload",
+      "udt_name": "jsonb",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_provider_state",
+      "column_name": "provider",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_provider_state",
+      "column_name": "auth_rejected_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_provider_state",
+      "column_name": "auth_rejected_detail",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_provider_state",
+      "column_name": "last_attempt_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_provider_state",
+      "column_name": "last_success_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_provider_state",
+      "column_name": "updated_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "billing_reconciliations",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "billing_reconciliations",
+      "column_name": "provider",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_reconciliations",
+      "column_name": "utc_day",
+      "udt_name": "date",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_reconciliations",
+      "column_name": "model",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_reconciliations",
+      "column_name": "account_scope",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_reconciliations",
+      "column_name": "actual_cost_usd",
+      "udt_name": "float8",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_reconciliations",
+      "column_name": "status",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_reconciliations",
+      "column_name": "detail",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_reconciliations",
+      "column_name": "provider_payload",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_reconciliations",
+      "column_name": "fetched_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_reconciliations",
+      "column_name": "updated_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "billing_topup_revisions",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "billing_topup_revisions",
+      "column_name": "topup_id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_topup_revisions",
+      "column_name": "revision",
+      "udt_name": "int4",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_topup_revisions",
+      "column_name": "provider",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_topup_revisions",
+      "column_name": "account_scope",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_topup_revisions",
+      "column_name": "amount_usd",
+      "udt_name": "float8",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_topup_revisions",
+      "column_name": "effective_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_topup_revisions",
+      "column_name": "note",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_topup_revisions",
+      "column_name": "staff_actor",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "billing_topup_revisions",
+      "column_name": "created_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "buildings",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "buildings",
+      "column_name": "measure_run_id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "buildings",
+      "column_name": "building_type",
+      "udt_name": "building_type",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "buildings",
+      "column_name": "stories",
+      "udt_name": "int4",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "buildings",
+      "column_name": "roof_type",
+      "udt_name": "roof_type",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "buildings",
+      "column_name": "footprint",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "buildings",
+      "column_name": "eave_height_mm",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "buildings",
+      "column_name": "ridge_height_mm",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "buildings",
+      "column_name": "parapet_height_mm",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "buildings",
+      "column_name": "shared_walls",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "edges",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "edges",
+      "column_name": "measure_run_id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "edges",
+      "column_name": "component_id",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "edges",
+      "column_name": "edge_class",
+      "udt_name": "edge_class",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "edges",
+      "column_name": "length_mm",
+      "udt_name": "jsonb",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "edges",
+      "column_name": "belongs_to_elevation",
+      "udt_name": "elevation",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "faces",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "faces",
+      "column_name": "measure_run_id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "faces",
+      "column_name": "component_id",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "faces",
+      "column_name": "face_class",
+      "udt_name": "face_class",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "faces",
+      "column_name": "elevation",
+      "udt_name": "elevation",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "faces",
+      "column_name": "material",
+      "udt_name": "material",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "faces",
+      "column_name": "area_mm2",
+      "udt_name": "jsonb",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "faces",
+      "column_name": "area_net_mm2",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "faces",
+      "column_name": "pitch",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "faces",
+      "column_name": "orientation_deg",
+      "udt_name": "float8",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "project_id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "schema_version",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": "'1.2'::text"
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "measure_json",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "created_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "quality",
+      "udt_name": "measure_quality",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "duration_ms",
+      "udt_name": "int4",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "outcome",
+      "udt_name": "measure_run_outcome",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "warnings",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "errors",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "model",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "route",
+      "udt_name": "measure_route",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "input_tokens",
+      "udt_name": "int4",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "output_tokens",
+      "udt_name": "int4",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "cost_usd",
+      "udt_name": "float8",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "retry_used",
+      "udt_name": "bool",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "repair_used",
+      "udt_name": "bool",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "roof_area_mm2",
+      "udt_name": "float8",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "net_wall_area_mm2",
+      "udt_name": "float8",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "measure_runs",
+      "column_name": "opening_count",
+      "udt_name": "int4",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "openings",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "openings",
+      "column_name": "measure_run_id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "openings",
+      "column_name": "component_id",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "openings",
+      "column_name": "type",
+      "udt_name": "opening_type",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "openings",
+      "column_name": "elevation",
+      "udt_name": "elevation",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "openings",
+      "column_name": "width_mm",
+      "udt_name": "jsonb",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "openings",
+      "column_name": "height_mm",
+      "udt_name": "jsonb",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "openings",
+      "column_name": "sill_height_mm",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "openings",
+      "column_name": "position_mm",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "openings",
+      "column_name": "area_mm2",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "openings",
+      "column_name": "perimeter_mm",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "openings",
+      "column_name": "note",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": "'Reference only, not for ordering'::text"
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "project_id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "kind",
+      "udt_name": "project_file_kind",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "original_name",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "mime_type",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "size_bytes",
+      "udt_name": "int4",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "storage_path",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "preview_path",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "page_count",
+      "udt_name": "int4",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "page_image_paths",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "sort_order",
+      "udt_name": "int4",
+      "is_nullable": "NO",
+      "column_default": "0"
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "created_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "project_files",
+      "column_name": "classification",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "projects",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "projects",
+      "column_name": "user_id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "projects",
+      "column_name": "name",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "projects",
+      "column_name": "adresse",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "projects",
+      "column_name": "status",
+      "udt_name": "project_status",
+      "is_nullable": "NO",
+      "column_default": "'draft'::project_status"
+    },
+    {
+      "table_name": "projects",
+      "column_name": "paid",
+      "udt_name": "bool",
+      "is_nullable": "NO",
+      "column_default": "false"
+    },
+    {
+      "table_name": "projects",
+      "column_name": "created_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "projects",
+      "column_name": "archived_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "projects",
+      "column_name": "quality",
+      "udt_name": "measure_quality",
+      "is_nullable": "NO",
+      "column_default": "'standard'::measure_quality"
+    },
+    {
+      "table_name": "projects",
+      "column_name": "reference_object",
+      "udt_name": "text",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "projects",
+      "column_name": "reference_value",
+      "udt_name": "float8",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "projects",
+      "column_name": "reference_unit",
+      "udt_name": "reference_unit",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "projects",
+      "column_name": "classification",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "projects",
+      "column_name": "measurement",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "projects",
+      "column_name": "measurement_errors",
+      "udt_name": "jsonb",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "projects",
+      "column_name": "current_run_id",
+      "udt_name": "uuid",
+      "is_nullable": "YES",
+      "column_default": null
+    },
+    {
+      "table_name": "sessions",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "sessions",
+      "column_name": "token_hash",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "sessions",
+      "column_name": "user_id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "sessions",
+      "column_name": "expires_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "sessions",
+      "column_name": "created_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "users",
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO",
+      "column_default": "gen_random_uuid()"
+    },
+    {
+      "table_name": "users",
+      "column_name": "email",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "users",
+      "column_name": "password_hash",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": null
+    },
+    {
+      "table_name": "users",
+      "column_name": "created_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO",
+      "column_default": "now()"
+    },
+    {
+      "table_name": "users",
+      "column_name": "locale",
+      "udt_name": "text",
+      "is_nullable": "NO",
+      "column_default": "'en-US'::text"
+    }
+  ],
+  "enumChecks": [
+    {
+      "name": "attachment_type",
+      "expected": [
+        "dormer",
+        "bay",
+        "balcony",
+        "awning",
+        "addition",
+        "chimney",
+        "other"
+      ],
+      "actual": [
+        "dormer",
+        "bay",
+        "balcony",
+        "awning",
+        "addition",
+        "chimney",
+        "other"
+      ]
+    },
+    {
+      "name": "building_type",
+      "expected": [
+        "detached",
+        "duplex",
+        "townhouse_middle",
+        "townhouse_end",
+        "unknown"
+      ],
+      "actual": [
+        "detached",
+        "duplex",
+        "townhouse_middle",
+        "townhouse_end",
+        "unknown"
+      ]
+    },
+    {
+      "name": "edge_class",
+      "expected": [
+        "ridge",
+        "hip",
+        "valley",
+        "eave",
+        "rake",
+        "flashing",
+        "step_flashing",
+        "outside_corner",
+        "inside_corner",
+        "base",
+        "head",
+        "sill",
+        "jamb",
+        "unclassified"
+      ],
+      "actual": [
+        "ridge",
+        "hip",
+        "valley",
+        "eave",
+        "rake",
+        "flashing",
+        "step_flashing",
+        "outside_corner",
+        "inside_corner",
+        "base",
+        "head",
+        "sill",
+        "jamb",
+        "unclassified"
+      ]
+    },
+    {
+      "name": "elevation",
+      "expected": [
+        "front",
+        "back",
+        "left",
+        "right",
+        "roof",
+        "unknown"
+      ],
+      "actual": [
+        "front",
+        "back",
+        "left",
+        "right",
+        "roof",
+        "unknown"
+      ]
+    },
+    {
+      "name": "face_class",
+      "expected": [
+        "roof_face",
+        "wall",
+        "soffit",
+        "fascia"
+      ],
+      "actual": [
+        "roof_face",
+        "wall",
+        "soffit",
+        "fascia"
+      ]
+    },
+    {
+      "name": "material",
+      "expected": [
+        "stucco",
+        "brick",
+        "siding",
+        "wood",
+        "concrete",
+        "eifs",
+        "other",
+        "unknown"
+      ],
+      "actual": [
+        "stucco",
+        "brick",
+        "siding",
+        "wood",
+        "concrete",
+        "eifs",
+        "other",
+        "unknown"
+      ]
+    },
+    {
+      "name": "measure_quality",
+      "expected": [
+        "standard",
+        "premium"
+      ],
+      "actual": [
+        "standard",
+        "premium"
+      ]
+    },
+    {
+      "name": "measure_route",
+      "expected": [
+        "photo",
+        "plan",
+        "mixed"
+      ],
+      "actual": [
+        "photo",
+        "plan",
+        "mixed"
+      ]
+    },
+    {
+      "name": "measure_run_outcome",
+      "expected": [
+        "model_ready",
+        "failed"
+      ],
+      "actual": [
+        "model_ready",
+        "failed"
+      ]
+    },
+    {
+      "name": "opening_type",
+      "expected": [
+        "window",
+        "door",
+        "patio_door",
+        "garage_door",
+        "skylight",
+        "other"
+      ],
+      "actual": [
+        "window",
+        "door",
+        "patio_door",
+        "garage_door",
+        "skylight",
+        "other"
+      ]
+    },
+    {
+      "name": "project_file_kind",
+      "expected": [
+        "photo",
+        "pdf"
+      ],
+      "actual": [
+        "photo",
+        "pdf"
+      ]
+    },
+    {
+      "name": "project_status",
+      "expected": [
+        "draft",
+        "reviewing",
+        "ready",
+        "failed",
+        "files_uploaded",
+        "processing",
+        "model_ready",
+        "classified"
+      ],
+      "actual": [
+        "draft",
+        "reviewing",
+        "ready",
+        "failed",
+        "files_uploaded",
+        "processing",
+        "model_ready",
+        "classified"
+      ]
+    },
+    {
+      "name": "reference_unit",
+      "expected": [
+        "mm",
+        "cm",
+        "m",
+        "inch",
+        "feet"
+      ],
+      "actual": [
+        "mm",
+        "cm",
+        "m",
+        "inch",
+        "feet"
+      ]
+    },
+    {
+      "name": "roof_type",
+      "expected": [
+        "gable",
+        "hip",
+        "flat",
+        "shed",
+        "mansard",
+        "gambrel",
+        "jerkinhead",
+        "other",
+        "unknown"
+      ],
+      "actual": [
+        "gable",
+        "hip",
+        "flat",
+        "shed",
+        "mansard",
+        "gambrel",
+        "jerkinhead",
+        "other",
+        "unknown"
+      ]
+    }
+  ],
+  "differences": [],
+  "scopeLimit": "Compares required tables/columns, native types, nullability and enum order/values. Does not certify index/default/check/FK expression semantic equivalence."
+}

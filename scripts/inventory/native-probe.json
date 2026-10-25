@@ -1,0 +1,43 @@
+{
+  "checkedAt": "2026-10-25T19:59:33.718Z",
+  "node": "v24.22.1",
+  "abi": "137",
+  "packageManager": "pnpm scratch workspace (not project dependencies)",
+  "install": {
+    "code": 0,
+    "error": null,
+    "first30Lines": [
+      "$ pnpm add isolated-vm (isolated scratch workspace)",
+      "Progress: resolved 1, reused 0, downloaded 0, added 0",
+      "",
+      "   ╭──────────────────────────────────────────╮",
+      "   │                                          │",
+      "   │   Update available! 10.26.1 → 12.15.0.   │",
+      "   │   Changelog: https://pnpm.io/v/12.15.0   │",
+      "   │     To update, run: pnpm add -g pnpm     │",
+      "   │                                          │",
+      "   ╰──────────────────────────────────────────╯",
+      "",
+      "Packages: +2",
+      "++",
+      "Progress: resolved 2, reused 0, downloaded 2, added 2, done",
+      ".../node_modules/isolated-vm install$ node-gyp-build 'node-gyp rebuild -j 4 --release -v' || node-gyp rebuild --release -j max",
+      ".../node_modules/isolated-vm install: Done",
+      "",
+      "dependencies:",
+      "+ isolated-vm 7.0.1",
+      "",
+      "Done in 1.5s using pnpm v10.26.1",
+      "",
+      ""
+    ]
+  },
+  "execution": {
+    "code": 0,
+    "stdout": "{\"version\":\"7.0.1\",\"memoryLimit\":128,\"value\":2}\n",
+    "stderr": "",
+    "error": null
+  },
+  "elapsedMs": 1632,
+  "cleaned": true
+}

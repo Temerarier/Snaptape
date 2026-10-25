@@ -210,3 +210,17 @@ mtime_ms = 1790160329391
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/44e44f83-1063-45b1-bbf6-c99fbfc1114c/6cbb02f2-9921-4886-8548-f606a1c5af1e"
 storage_version_token = "1790160353081856"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "zigWzaBA8FJpZ0UV4ubCe"
+uri = "file://docs/inventory-2026-10-25.md"
+type = "text"
+title = "SnapTape – Bestandsaufnahme 25.10.2026"
+description = "Abschnitte 1–7 mit Testprotokollen, echtem Standardlauf, Viewer-Nachweisen und ausdrücklich benannten Prüflücken."
+logical_id = "2bc88d20-87a0-4317-ad0b-3ff19df817d6"
+content_hash = "sha256:738fc64e28b558188a7a8f180d6398b68ca54c46f48015e05e9a81d1466dd30c"
+size = 48467
+mtime_ms = 1792960315743
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/2bc88d20-87a0-4317-ad0b-3ff19df817d6/c3dcbf67-0fec-4f08-a7b5-1c299068e93c"
+storage_version_token = "1792960346901772"
+content_type = "text/markdown"

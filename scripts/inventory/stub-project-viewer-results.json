@@ -1,0 +1,108 @@
+{
+  "method": "Actual ProjectViewer, ViewerNextClient, preparation, builder, materials and compiled production CSS; isolated loopback component host with system font fallback, no authenticated route ownership bypass. Full inherited app layout and owner-specific locale not tested. Software WebGL SwiftShader, desktop1280x900; optional phone390x844.",
+  "cases": [
+    {
+      "id": "2a4ba0ce-7e33-455a-9f81-b449eb0c7ed0",
+      "version": "1.7",
+      "preparation": "viewer",
+      "modelError": null,
+      "input": {
+        "walls": 6,
+        "roofs": 6,
+        "openings": 20
+      },
+      "modeled": {
+        "walls": 6,
+        "roofs": 6,
+        "openings": 20
+      },
+      "notes": [
+        "AT-2: missing depth; represented with a measured-width footprint.",
+        "AT-2: missing height; represented as a measured-width massing block.",
+        "AT-3: missing depth; represented with a measured-width footprint.",
+        "AT-3: missing height; represented as a measured-width massing block.",
+        "AT-4: missing depth; represented with a measured-width footprint.",
+        "AT-4: missing height; represented as a measured-width massing block.",
+        "AT-5: missing depth; represented with a measured-width footprint.",
+        "AT-5: missing height; represented as a measured-width massing block.",
+        "AT-6: missing depth; represented with a measured-width footprint.",
+        "AT-6: missing height; represented as a measured-width massing block.",
+        "AT-7: detailed wall and roof geometry already represents this addition; attachment proxy omitted.",
+        "D-1: position inferred from its parent face and ordered openings.",
+        "D-2: position inferred from its parent face and ordered openings.",
+        "E-10: no measured eave geometry matches 2438.4 mm on back; omitted rather than placed falsely.",
+        "E-15: no measured rake geometry matches 2712.7 mm on front; omitted rather than placed falsely.",
+        "E-16: no measured rake geometry matches 2712.7 mm on front; omitted rather than placed falsely.",
+        "E-19: flashing has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-19: no measured flashing geometry matches 3810 mm on roof; omitted rather than placed falsely.",
+        "E-1: duplicate roof facets share the same ridge geometry; selected RF-1 deterministically.",
+        "E-20: no measured step_flashing geometry matches 3048 mm on roof; omitted rather than placed falsely.",
+        "E-20: step_flashing has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-21: no measured step_flashing geometry matches 2490.2 mm on roof; omitted rather than placed falsely.",
+        "E-21: step_flashing has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-2: no measured ridge geometry matches 2438.4 mm; omitted rather than placed falsely.",
+        "E-34: no measured base geometry matches 3657.6 mm on front; omitted rather than placed falsely.",
+        "E-3: duplicate roof facets share the same ridge geometry; selected RF-5 deterministically.",
+        "E-4: no measured valley geometry matches 3099.8 mm on roof; omitted rather than placed falsely.",
+        "E-4: valley has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-5: no measured valley geometry matches 3099.8 mm on roof; omitted rather than placed falsely.",
+        "E-5: valley has no unambiguous measured placement; omitted rather than placed falsely.",
+        "E-8: no measured eave geometry matches 2438.4 mm on front; omitted rather than placed falsely.",
+        "FC-1: unsupported face class \"fascia\" omitted from detailed geometry.",
+        "G-1: position inferred from its parent face and ordered openings.",
+        "Overall envelope is 18897.6 mm; permanent width dimension remains the main footprint 12192 mm.",
+        "SF-1: unsupported face class \"soffit\" omitted from detailed geometry.",
+        "SK-1: roof position inferred at the centre of RF-1.",
+        "W-10: position inferred from its parent face and ordered openings.",
+        "W-11: position inferred from its parent face and ordered openings.",
+        "W-12: position inferred from its parent face and ordered openings.",
+        "W-13: position inferred from its parent face and ordered openings.",
+        "W-14: position inferred from its parent face and ordered openings.",
+        "W-15: position inferred from its parent face and ordered openings.",
+        "W-16: position inferred from its parent face and ordered openings.",
+        "W-1: position inferred from its parent face and ordered openings.",
+        "W-2: position inferred from its parent face and ordered openings.",
+        "W-3: position inferred from its parent face and ordered openings.",
+        "W-4: position inferred from its parent face and ordered openings.",
+        "W-5: position inferred from its parent face and ordered openings.",
+        "W-6: position inferred from its parent face and ordered openings.",
+        "W-7: position inferred from its parent face and ordered openings.",
+        "W-8: position inferred from its parent face and ordered openings.",
+        "W-9: position inferred from its parent face and ordered openings."
+      ],
+      "render": {
+        "drawCalls": 111,
+        "triangles": 231,
+        "glError": 0,
+        "contextLost": false,
+        "camera": [
+          33637.728,
+          -24457.151999999984,
+          20311.905072841742
+        ]
+      },
+      "pageState": "viewer",
+      "olderNotice": false,
+      "screenshot": "screenshots/inventory-2026-10-25/stub-desktop.png",
+      "horizontalOverflow": false,
+      "phoneScreenshot": "screenshots/inventory-2026-10-25/stub-phone.png",
+      "phone": {
+        "width": 390,
+        "render": {
+          "drawCalls": 111,
+          "triangles": 231,
+          "glError": 0,
+          "contextLost": false,
+          "camera": [
+            33637.728,
+            -24457.151999999984,
+            20311.905072841742
+          ]
+        },
+        "horizontalOverflow": false
+      },
+      "exceptions": [],
+      "console": []
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "slug": "install",
+    "command": "CI=true pnpm install --frozen-lockfile",
+    "code": 0,
+    "durationMs": 3775,
+    "path": "scripts/inventory/install.log"
+  },
+  {
+    "slug": "typecheck",
+    "command": "pnpm typecheck",
+    "code": 0,
+    "durationMs": 12306,
+    "path": "scripts/inventory/typecheck.log"
+  },
+  {
+    "slug": "test",
+    "command": "pnpm test",
+    "code": 0,
+    "durationMs": 5010,
+    "path": "scripts/inventory/test.log"
+  },
+  {
+    "slug": "build",
+    "command": "pnpm --filter @workspace/aufmass-app build",
+    "code": 0,
+    "durationMs": 36659,
+    "path": "scripts/inventory/build.log"
+  },
+  {
+    "slug": "drizzle-check",
+    "command": "pnpm --filter @workspace/db exec drizzle-kit check --config ./drizzle.config.ts",
+    "code": 1,
+    "durationMs": 636,
+    "path": "scripts/inventory/drizzle-check.log"
+  }
+]
