@@ -390,16 +390,56 @@ Ein Standard-Lauf ist autorisiert; eine Premium-Wiederholung erfordert vorherige
 
 ### Paket und Testhäuser
 
-`variante-a-paket/` fehlt, ebenso `shared/schema/measurement-v1.8.json` im aktiven Produkt. Keine passende Variante-A-ZIP wurde unter den vorliegenden Anhängen gefunden. Das im Vorspann als Voraussetzung genannte manuelle Einchecken ist also **nicht erfolgt**. Es wurde kein Ersatzpaket erfunden und kein Testhaus durch selbst geschriebene Geometrie ersetzt.
+**Nachtrag nach dem ZIP-Upload:** Das zunächst fehlende Originalpaket ist jetzt als verschachtelte ZIP im übergebenen Archiv vorhanden. Der ursprüngliche Befund im unveränderten [scripts/inventory/environment.log](../scripts/inventory/environment.log) dokumentiert den Zustand **vor** diesem Upload. Das aktive Produkt enthält weiterhin weder `variante-a-paket/` noch das aktive Schema 1.8: die Prüfung entpackt ausschließlich vorübergehend nach `/tmp`, verändert keine Produktionsdatei und entfernt den Probeordner danach. Es wurde kein Testhaus ersetzt oder nachgebessert.
 
-| Geforderte Prüfung | Ergebnis |
-|---|---|
-| Dateien, Größen, SHA-256 des gelieferten Pakets | BLOCKIERT: Paket fehlt |
-| core.js / measurementToMess / runBuild / pruefen für 5 Häuser | 0/5 ausführbar; Testdateien fehlen, nicht als fehlerhaft getestet |
-| 5 Messungen gegen Schema 1.8 mit Ajv2020 | 0/5 ausführbar; Schema und Messungen fehlen |
-| erwartete Stufe / ids_fehlen / Flächen-/Öffnungs-/Kantenzahlen vergleichen | BLOCKIERT: erwartet.json fehlt |
+**Herkunft:** [attached_assets/0_Übergabe-20261025T193857Z-1-001_1792977826688.zip](../attached_assets/0_Übergabe-20261025T193857Z-1-001_1792977826688.zip) (283870 Bytes), SHA-256 `c29d0092f20d63ebc6b298129846eaf40ebec276dd38e02afa12ad4d44054109`. Darin: `Übergabe/snaptape-variante-a-replit-paket.zip` (157529 Bytes), SHA-256 `56080c75a2465c3f0ef03f544472c9acaec05eb4cd44a60e101bccf80bd465f4`.
 
-Quellen: [scripts/inventory/environment.log](../scripts/inventory/environment.log); Dateisystemprüfung des im Auftrag genannten Verzeichnisses. R1–R4-Dokumente und Original-ZIP sind nicht Teil der verifizierten vorliegenden Paketdateien; ihre behauptete vollständige Kompatibilität wird hier nicht erneut bestätigt.
+**Vollständigkeit:** 19 reguläre Dateien, 876884 unkomprimierte Bytes; fehlende Pflichtdateien **0**, unerwartete Testhaus-Verzeichnisse **0**. Geprüft wurden Schema, Core, fünf Promptdateien, Referenzbeschreibung, `erwartet.json` und je Messung/Build-Funktion für fünf Häuser. Core-Version `A-2026-10-08`.
+
+**Reproduktion:** `node scripts/inventory/variante-a.mjs <hochgeladene ZIP>`. Der Hilfsextraktor prüft Archivpfade und Größen und verweigert Symlinks. Nur die ausdrücklich autorisierten **mitgelieferten Referenzfunktionen** werden durch den Original-Core mit plain Node ausgeführt; kein Code aus dem kostenpflichtigen Messlauf. Das Original-`runBuild` verwendet intern `new Function` (Core:197–206); dies ist der erlaubte Fixture-Test, **kein Sandbox- oder Sicherheitsnachweis**.
+
+**Ergebnis:** **5/5** Vergleiche vollständig identisch mit `erwartet.json`; **5/5** Ajv-2020-Validierungen bestanden. Ajv **8.20.0**, Dialekt `https://json-schema.org/draft/2020-12/schema`, `allErrors:true, strict:false`; keine Fehler ausgeblendet oder Messwerte verändert. `strict:false` betrifft Ajv-Schema-Striktheitsdiagnosen, nicht die Prüfung der Datenbedingungen. Temporäre Dateien gelöscht: **true**.
+
+Die Tabellenzellen zeigen jeweils **erwartet → tatsächlich**. `Stopp` ist die Zahl der `fail`-Prüfzeilen aus `pruefen().zahlen.fehler`; Flächen/Öffnungen/Kanten zählen die gleichnamigen Ergebnisarrays des Original-Cores.
+
+| Haus | Stufe | IDs fehlen | Stopp | Flächen | Öffnungen | Kanten | Warnungen | Vergleich | Schema 1.8 |
+|---|---|---:|---:|---:|---:|---:|---:|---|---|
+| farmhouse-140040rk | merken → merken | 0 → 0 | 0 → 0 | 47 → 47 | 12 → 12 | 41 → 41 | 4 | PASS | PASS |
+| farmhouse-test5-beispiel | merken → merken | 0 → 0 | 0 → 0 | 33 → 33 | 17 → 17 | 33 → 33 | 4 | PASS | PASS |
+| leipzig-villa | merken → merken | 0 → 0 | 0 → 0 | 51 → 51 | 29 → 29 | 54 → 54 | 28 | PASS | PASS |
+| triplex-40014db | merken → merken | 0 → 0 | 0 → 0 | 41 → 41 | 21 → 21 | 56 → 56 | 16 | PASS | PASS |
+| tudor-93233el | merken → merken | 0 → 0 | 0 → 0 | 49 → 49 | 29 → 29 | 66 → 66 | 10 | PASS | PASS |
+
+Alle fünf `merken`-Ergebnisse sind **erwartete Warnzustände**, nicht „alles ohne Warnung“. Das bestätigt die Paketkonsistenz, nicht die sachliche Maßgenauigkeit anhand von Fotos, eine produktionsreife Sandbox oder die Integration in die bestehende App. Ein vollständiger Abgleich aller R1–R4-Anweisungen gegen den Code wurde nicht zusätzlich beauftragt und wird nicht behauptet.
+
+Rohbelege: [scripts/inventory/variante-a-results.json](../scripts/inventory/variante-a-results.json), [scripts/inventory/variante-a.log](../scripts/inventory/variante-a.log), [scripts/inventory/variante-a-manifest.json](../scripts/inventory/variante-a-manifest.json); Skripte [scripts/inventory/variante-a.mjs](../scripts/inventory/variante-a.mjs) und [scripts/inventory/variante-a-extract.py](../scripts/inventory/variante-a-extract.py).
+
+#### Dateiliste mit Größen und SHA-256
+
+Pfad relativ zum enthaltenen Verzeichnis `variante-a-paket/`:
+
+| Datei | Bytes | SHA-256 |
+|---|---:|---|
+| REPLIT-PROMPTS-VARIANTE-A.md | 20502 | 25b87f1328fcf9b4a9ef93c87b0f11c4186608b465812b8b387bcd4a125db459 |
+| artifacts/aufmass-app/lib/modell3d/core.js | 31774 | fa762fb3942ff78fe166a341a0b1d81ff9a47ba7c57ee7ad57c33f28b041239c |
+| docs/pipeline/buildhouse-correction-prompt.md | 977 | 2d934fbf55c61a7f9d1eeeac0908eeb5ed16ec7dfc549d0a12549cd6671c4187 |
+| docs/pipeline/buildhouse-prompt.md | 13426 | 24ebc4c65e247e515c34901e52942e24c953b20efd72bb2afc334dccbdb28ebb |
+| docs/pipeline/extract-mixed-prompt.md | 34277 | e811247abed0bc14b55ff09a5f382480e777aa0b77cc78e4c3d0fbdfa7addff9 |
+| docs/pipeline/extract-photo-prompt.md | 31660 | 93ab21d67df6050abf9f80ad2befa7e3aec45c0da301ae8e2c76e535046d8142 |
+| docs/pipeline/extract-plan-prompt.md | 28809 | 11862c95a7ae8ca58587cb267bc3ebdaf2627ec3036927ed65aa4c4a491cfba7 |
+| shared/schema/measurement-v1.8.json | 42621 | a9340dbc15c02296fa8b93fb8b2751f3a9dbbaf98b780ce3a904ba55f6e294d1 |
+| test-fixtures/variante-a/erwartet.json | 675 | c4975f1e8a89f829688a1067be003e03640e42fa4551ed1977636b5fd8933a57 |
+| test-fixtures/variante-a/farmhouse-140040rk/buildhouse.js | 15973 | 94b2869f6c1c50e59b3b6b6bd4f1303df3be927007dc7b3d2f0c07abbce2f7eb |
+| test-fixtures/variante-a/farmhouse-140040rk/messung.json | 97939 | 805081fe6af8e9af945f3c376ab1ffc2c7e36c8764187a9db269835c9649223d |
+| test-fixtures/variante-a/farmhouse-test5-beispiel/buildhouse.js | 11787 | 840b9d3a3a9823e77dfb13ac3fbefdd1392f5063cdeab19cf0cb3856c3e3cc51 |
+| test-fixtures/variante-a/farmhouse-test5-beispiel/messung.json | 82574 | 52c6bd28fe9fc95d116ac43e04f39c2fd1406e82b8a3985fc86bf2a64c46654e |
+| test-fixtures/variante-a/leipzig-villa/buildhouse.js | 26266 | ce70f83cd5c50fa411b5fcffe65c909c442109d09d9af04d66c1445a0399f905 |
+| test-fixtures/variante-a/leipzig-villa/messung.json | 116708 | 69b5d53b31285a4f69bcd6cedcff279d28c1d4e3eadc1e42a64493afba667ba8 |
+| test-fixtures/variante-a/triplex-40014db/buildhouse.js | 15528 | 72e3d2a0c5d73a1ae2a3af98730adac1e9793cb4256a3de0eb306ec4b4ae6873 |
+| test-fixtures/variante-a/triplex-40014db/messung.json | 103787 | 38169f9a542ed12ff6fcc9d63859a58b6cef4edb7ae731afbbf637063bb70317 |
+| test-fixtures/variante-a/tudor-93233el/buildhouse.js | 17217 | fd9c5a44d015e642bf49fe76fc3ba0cad6ff3f7c7942d8c90c760cc56c798684 |
+| test-fixtures/variante-a/tudor-93233el/messung.json | 184384 | 7e57688f8bc2431a9450f1d0e372a64c57c14f9edc25953d089359bc0813668e |
+
 
 ### isolated-vm unter dem aktuellen Node
 
@@ -437,7 +477,7 @@ Nur Dokumentations- und Models-Listenaufrufe: **kein Opus-Messages-Aufruf**. In 
 | Registrierung + Login | done | Implementierung lib/auth/actions.ts; erfolgreiche Registrierung, Logout, Login und lesbare Passwort-/Duplikatfehler, Abschnitt 4 | E-Mail-Bestätigung/Reset ausdrücklich nicht MVP-Umfang; keine vollständige Auth-Sicherheitsprüfung beauftragt | no |
 | Upload + Klassifizierung + Schritt-1-Messung | done | lib/upload/actions.ts, lib/messung/pipeline.ts, Abschnitte 4–5 | Echte Messung technisch abgeschlossen; räumliche Qualität bleibt eigene Viewer-Anforderung | no |
 | 3D mit aktuellem buildModel | partial | 31 reale Messungen renderbar; 1 unlesbar; Diagnose 23.09. | Korrekte räumliche Geometrie statt Giebelschablone | yes |
-| 3D Variante A | missing | Paket, aktives Modell3d-Modul und 1.8 fehlen | Originalpaket, R1 → R2 → R3 einschließlich Sandbox/Adapter | yes |
+| 3D Variante A | missing | Originalpaket nach Upload geprüft: 5/5 Referenzvergleiche und 5/5 Schema-Validierungen PASS; aktives Modell3d-Modul und Schema 1.8 weiterhin nicht integriert | R1 → R2 → R3 einschließlich Sandbox/Adapter; Referenztest ist keine Implementierung | yes |
 | Deployment | missing | getDeploymentInfo und Produktions-DB-Probe | Veröffentlichung, Produktions-DB, Produktionskonfiguration und Domain für öffentlichen Betrieb | yes |
 | Secrets / Guthaben | partial | Alle erforderlichen Variablen SET; Providerproben und echter Standardlauf erfolgreich, Abschnitte 1 und 5 | Vollständiger Kontostand bzw. Reserve nicht nachgewiesen; kein insufficient-balance-Fehler in geprüften Requests | no |
 
@@ -446,7 +486,6 @@ Nur Dokumentations- und Models-Listenaufrufe: **kein Opus-Messages-Aufruf**. In 
 | Schwere | Befund und Beleg | Einzeiliger Korrekturvorschlag | Aufwand |
 |---|---|---|---|
 | Hoch | MODEL BUILDER: reale Geometrie bleibt inkorrekt trotz erhaltener IDs, Diagnose 23.09. und aktuelle Aufnahmen | Den entschiedenen Variante-A-Pfad mit gesichertem Vertrag, Sandbox, Prüfung und Viewer-Adapter implementieren; keine Häuser einzeln zurechtbiegen | L |
-| Hoch | Variante-A-Paket als Startvoraussetzung fehlt, Abschnitt 6 | Original-ZIP vollständig bereitstellen, Hashes und fünf Referenzhäuser prüfen, dann R1 beginnen | S |
 | Hoch | model_ready ohne lesbare Messung, UUID a8b999fc-9fbb-4576-bdcf-a3e86da715fc, Abschnitt 4 | Zustandsinvariante beim Schreiben/Lesen absichern und Bestandsfall separat entscheiden, keine stille Inventur-Migration | M |
 | Mittel | EXTRAKTOR_STUB umgeht nicht die kostenpflichtige Klassifizierung, Abschnitt 4 | Eigenen expliziten Klassifizierungs-Testmodus bzw. durchgehende kostenfreie Testumgebung ergänzen | M |
 | Mittel | `drizzle-kit check` scheitert trotz fehlender Live-Spaltendrift, Abschnitt 2 | Einen zum aktuellen CLI kompatiblen nicht-mutierenden Check definieren; nicht durch push ersetzen | S |
@@ -465,7 +504,7 @@ Weitere konkrete UI-/Messfehler werden in Abschnitt 4/5 mit Originalmeldungen ge
 - Neue Inventurdateien nur unter `docs/inventory-2026-10-25.md`, `scripts/inventory/`, `screenshots/inventory-2026-10-25/`; Install-/Buildausgaben in vorhandenen ignorierten Verzeichnissen und der ausdrücklich verlangte temporäre native Probeordner.
 - Prüflücken werden als nicht geprüft bzw. blockiert benannt. Insbesondere werden fehlende Paketdateien, ungetestete Eigentümerrouten oder ausstehende Messläufe nicht als bestanden gewertet.
 
-Abschließender Integritätsnachweis: **32** ursprüngliche model_ready-Messungswerte per kanonischem SHA-256-Vergleich erneut geprüft; Abweichungen **0**. Git-sichtbare Änderungen außerhalb erlaubter Pfade: **0**. Quelle: [scripts/inventory/integrity.json](../scripts/inventory/integrity.json).
+Abschließender Integritätsnachweis: **32** ursprüngliche model_ready-Messungswerte per kanonischem SHA-256-Vergleich erneut geprüft; Abweichungen **0**. Git-sichtbare Agent-Ausgaben außerhalb erlaubter Pfade: **0**. Die nachgereichte Benutzer-ZIP ist in `userSuppliedInputPaths` separat als Eingabe erfasst und nicht als Agent-Ausgabe gezählt. Quelle: [scripts/inventory/integrity.json](../scripts/inventory/integrity.json).
 
 ### Abgleich mit DONE WHEN des Auftrags
 
@@ -476,7 +515,7 @@ Abschließender Integritätsnachweis: **32** ursprüngliche model_ready-Messungs
 | Typecheck / Tests / Build einschließlich aller Fehler | PASS / 290 PASS / PASS; Drizzle-CLI-Fehler wortgetreu in Abschnitt 2 |
 | Screenshot-Archiv | **Teilweise**: lokale Register-/Login-, Stub-Desktop/390-, alle 32 Bestands- und neue Real-Komponentenaufnahmen vorhanden. Authentifizierte Upload-/Admin-/Fallback-Aufnahmen nur als Browser-Beobachtungs-IDs, nicht als exportierte Bilddateien verfügbar |
 | Echter Standardlauf mit Dauer, Tokens, Kosten, Version und Ergebnis | **Abgeschlossen**, technische Renderbarkeit per echter Komponente mit Software-WebGL belegt; abschließende authentifizierte Route nach Sessionverlust nicht geprüft |
-| Variante A: fünf Häuser und fünf Schema-1.8-Validierungen | **Blockiert**, Originalpaket fehlt; 0/5 ausführbar, keine erfundenen PASS-Ergebnisse |
+| Variante A: fünf Häuser und fünf Schema-1.8-Validierungen | **Abgeschlossen: 5/5 Vergleiche und 5/5 Validierungen PASS; Herkunft, Größen und SHA-256 dokumentiert**, keine Produktintegration vorgenommen |
 | Native isolated-vm-Probe | PASS für Version 7.0.1 unter Node 24.22.1, Installation/Laden/1+1; keine Behauptung für 6.2.0 oder vollständige Sandbox-Sicherheit |
 | Opus 5.5-Fakten mit Quellen und Datum | Erfasst, kein kostenpflichtiger Opus-Aufruf |
 | Lückenmatrix, priorisierte Defekte, erlaubte Dateipfade | Erfasst; keine Produktkorrekturen umgesetzt |

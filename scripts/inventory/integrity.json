@@ -1,8 +1,11 @@
 {
-  "checkedAt": "2026-10-25T20:31:55.005Z",
+  "checkedAt": "2026-10-26T01:28:14.449Z",
   "existingReadyProjectsChecked": 32,
   "existingMeasurementDifferences": [],
   "outsideAllowedPaths": [],
-  "changedFiles": 78,
-  "scope": "Checks the 32 initial model_ready measurement values and Git-visible changed files; does not claim all rows or session state unchanged."
+  "userSuppliedInputPaths": [
+    "attached_assets/0_Übergabe-20261025T193857Z-1-001_1792977826688.zip"
+  ],
+  "changedFiles": 6,
+  "scope": "Checks the 32 initial model_ready measurement values and Git-visible changed outputs; the exact manifest-identified uploaded ZIP is a separately listed user-provided input, not an agent output. Does not claim all rows or session state unchanged."
 }

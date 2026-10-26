@@ -20,6 +20,8 @@ const integrity=await json("integrity.json");
 const stubViews=await json("stub-project-viewer-results.json");
 const realViews=await json("real-project-viewer-results.json");
 const deployed=await json("deployment.json");
+const variante=await json("variante-a-results.json");
+const varianteManifest=await json("variante-a-manifest.json");
 let report=`# SnapTape – Bestandsaufnahme vom 25.10.2026
 
 **Auftrag:** ${link("attached_assets/Pasted-SnapTape-Bestandsaufnahme-und-Replit-Analyse-Prompt-Sta_1792958077561.txt")}, Abschnitt 5.
@@ -159,16 +161,32 @@ Ein Standard-Lauf ist autorisiert; eine Premium-Wiederholung erfordert vorherige
 
 ### Paket und Testhäuser
 
-\`variante-a-paket/\` fehlt, ebenso \`shared/schema/measurement-v1.8.json\` im aktiven Produkt. Keine passende Variante-A-ZIP wurde unter den vorliegenden Anhängen gefunden. Das im Vorspann als Voraussetzung genannte manuelle Einchecken ist also **nicht erfolgt**. Es wurde kein Ersatzpaket erfunden und kein Testhaus durch selbst geschriebene Geometrie ersetzt.
+${variante && varianteManifest?`**Nachtrag nach dem ZIP-Upload:** Das zunächst fehlende Originalpaket ist jetzt als verschachtelte ZIP im übergebenen Archiv vorhanden. Der ursprüngliche Befund im unveränderten ${link(dir+"environment.log")} dokumentiert den Zustand **vor** diesem Upload. Das aktive Produkt enthält weiterhin weder \`variante-a-paket/\` noch das aktive Schema 1.8: die Prüfung entpackt ausschließlich vorübergehend nach \`/tmp\`, verändert keine Produktionsdatei und entfernt den Probeordner danach. Es wurde kein Testhaus ersetzt oder nachgebessert.
 
-| Geforderte Prüfung | Ergebnis |
-|---|---|
-| Dateien, Größen, SHA-256 des gelieferten Pakets | BLOCKIERT: Paket fehlt |
-| core.js / measurementToMess / runBuild / pruefen für 5 Häuser | 0/5 ausführbar; Testdateien fehlen, nicht als fehlerhaft getestet |
-| 5 Messungen gegen Schema 1.8 mit Ajv2020 | 0/5 ausführbar; Schema und Messungen fehlen |
-| erwartete Stufe / ids_fehlen / Flächen-/Öffnungs-/Kantenzahlen vergleichen | BLOCKIERT: erwartet.json fehlt |
+**Herkunft:** ${link(varianteManifest.sourceArchive)} (${varianteManifest.sourceArchiveBytes} Bytes), SHA-256 \`${varianteManifest.sourceArchiveSha256}\`. Darin: \`${varianteManifest.nestedMember}\` (${varianteManifest.nestedArchiveBytes} Bytes), SHA-256 \`${varianteManifest.nestedArchiveSha256}\`.
 
-Quellen: ${link(dir+"environment.log")}; Dateisystemprüfung des im Auftrag genannten Verzeichnisses. R1–R4-Dokumente und Original-ZIP sind nicht Teil der verifizierten vorliegenden Paketdateien; ihre behauptete vollständige Kompatibilität wird hier nicht erneut bestätigt.
+**Vollständigkeit:** ${varianteManifest.fileCount} reguläre Dateien, ${varianteManifest.uncompressedFileBytes} unkomprimierte Bytes; fehlende Pflichtdateien **${variante.requiredFilesMissing.length}**, unerwartete Testhaus-Verzeichnisse **${variante.unexpectedHouses.length}**. Geprüft wurden Schema, Core, fünf Promptdateien, Referenzbeschreibung, \`erwartet.json\` und je Messung/Build-Funktion für fünf Häuser. Core-Version \`${variante.coreVersion}\`.
+
+**Reproduktion:** \`node scripts/inventory/variante-a.mjs <hochgeladene ZIP>\`. Der Hilfsextraktor prüft Archivpfade und Größen und verweigert Symlinks. Nur die ausdrücklich autorisierten **mitgelieferten Referenzfunktionen** werden durch den Original-Core mit plain Node ausgeführt; kein Code aus dem kostenpflichtigen Messlauf. Das Original-\`runBuild\` verwendet intern \`new Function\` (Core:197–206); dies ist der erlaubte Fixture-Test, **kein Sandbox- oder Sicherheitsnachweis**.
+
+**Ergebnis:** **${variante.comparisonPassed}/5** Vergleiche vollständig identisch mit \`erwartet.json\`; **${variante.schemaPassed}/5** Ajv-2020-Validierungen bestanden. Ajv **${variante.ajvVersion}**, Dialekt \`${variante.schemaDialect}\`, \`allErrors:true, strict:false\`; keine Fehler ausgeblendet oder Messwerte verändert. \`strict:false\` betrifft Ajv-Schema-Striktheitsdiagnosen, nicht die Prüfung der Datenbedingungen. Temporäre Dateien gelöscht: **${variante.cleaned}**.
+
+Die Tabellenzellen zeigen jeweils **erwartet → tatsächlich**. \`Stopp\` ist die Zahl der \`fail\`-Prüfzeilen aus \`pruefen().zahlen.fehler\`; Flächen/Öffnungen/Kanten zählen die gleichnamigen Ergebnisarrays des Original-Cores.
+
+| Haus | Stufe | IDs fehlen | Stopp | Flächen | Öffnungen | Kanten | Warnungen | Vergleich | Schema 1.8 |
+|---|---|---:|---:|---:|---:|---:|---:|---|---|
+${variante.cases.map(c=>row([c.house,...["stufe","ids_fehlen","stopp","flaechen","oeffnungen","kanten"].map(k=>`${c.expected[k]} → ${c.actual[k]}`),c.checkNumbers.warnungen,c.comparisonPass?"PASS":"FAIL",c.schemaValid?"PASS":"FAIL"])).join("")}
+Alle fünf \`merken\`-Ergebnisse sind **erwartete Warnzustände**, nicht „alles ohne Warnung“. Das bestätigt die Paketkonsistenz, nicht die sachliche Maßgenauigkeit anhand von Fotos, eine produktionsreife Sandbox oder die Integration in die bestehende App. Ein vollständiger Abgleich aller R1–R4-Anweisungen gegen den Code wurde nicht zusätzlich beauftragt und wird nicht behauptet.
+
+Rohbelege: ${link(dir+"variante-a-results.json")}, ${link(dir+"variante-a.log")}, ${link(dir+"variante-a-manifest.json")}; Skripte ${link(dir+"variante-a.mjs")} und ${link(dir+"variante-a-extract.py")}.
+
+#### Dateiliste mit Größen und SHA-256
+
+Pfad relativ zum enthaltenen Verzeichnis \`variante-a-paket/\`:
+
+| Datei | Bytes | SHA-256 |
+|---|---:|---|
+${varianteManifest.files.map(f=>row([f.path.slice("variante-a-paket/".length),f.bytes,f.sha256])).join("")}`:`\`variante-a-paket/\` und das aktive Schema 1.8 fehlen; Originalpaket noch nicht erfolgreich geprüft. Keine Referenztests als bestanden gewertet. Quellen: ${link(dir+"environment.log")}.`}
 
 ### isolated-vm unter dem aktuellen Node
 
@@ -206,7 +224,7 @@ Nur Dokumentations- und Models-Listenaufrufe: **kein Opus-Messages-Aufruf**. In 
 | Registrierung + Login | done | Implementierung lib/auth/actions.ts; erfolgreiche Registrierung, Logout, Login und lesbare Passwort-/Duplikatfehler, Abschnitt 4 | E-Mail-Bestätigung/Reset ausdrücklich nicht MVP-Umfang; keine vollständige Auth-Sicherheitsprüfung beauftragt | no |
 | Upload + Klassifizierung + Schritt-1-Messung | ${real?.projectStatus==="model_ready"?"done":"partial"} | lib/upload/actions.ts, lib/messung/pipeline.ts, Abschnitte 4–5 | ${real?.projectStatus==="model_ready"?"Echte Messung technisch abgeschlossen; räumliche Qualität bleibt eigene Viewer-Anforderung":"Realer End-to-End-Ausgang noch nicht erfolgreich belegt"} | ${real?.projectStatus==="model_ready"?"no":"yes bis Abschnitt 5 geklärt"} |
 | 3D mit aktuellem buildModel | partial | 31 reale Messungen renderbar; 1 unlesbar; Diagnose 23.09. | Korrekte räumliche Geometrie statt Giebelschablone | yes |
-| 3D Variante A | missing | Paket, aktives Modell3d-Modul und 1.8 fehlen | Originalpaket, R1 → R2 → R3 einschließlich Sandbox/Adapter | yes |
+| 3D Variante A | missing | Originalpaket nach Upload geprüft: 5/5 Referenzvergleiche und 5/5 Schema-Validierungen PASS; aktives Modell3d-Modul und Schema 1.8 weiterhin nicht integriert | R1 → R2 → R3 einschließlich Sandbox/Adapter; Referenztest ist keine Implementierung | yes |
 | Deployment | missing | getDeploymentInfo und Produktions-DB-Probe | Veröffentlichung, Produktions-DB, Produktionskonfiguration und Domain für öffentlichen Betrieb | yes |
 | Secrets / Guthaben | partial | Alle erforderlichen Variablen SET; Providerproben und echter Standardlauf erfolgreich, Abschnitte 1 und 5 | Vollständiger Kontostand bzw. Reserve nicht nachgewiesen; kein insufficient-balance-Fehler in geprüften Requests | no |
 
@@ -215,7 +233,6 @@ Nur Dokumentations- und Models-Listenaufrufe: **kein Opus-Messages-Aufruf**. In 
 | Schwere | Befund und Beleg | Einzeiliger Korrekturvorschlag | Aufwand |
 |---|---|---|---|
 | Hoch | MODEL BUILDER: reale Geometrie bleibt inkorrekt trotz erhaltener IDs, Diagnose 23.09. und aktuelle Aufnahmen | Den entschiedenen Variante-A-Pfad mit gesichertem Vertrag, Sandbox, Prüfung und Viewer-Adapter implementieren; keine Häuser einzeln zurechtbiegen | L |
-| Hoch | Variante-A-Paket als Startvoraussetzung fehlt, Abschnitt 6 | Original-ZIP vollständig bereitstellen, Hashes und fünf Referenzhäuser prüfen, dann R1 beginnen | S |
 | Hoch | model_ready ohne lesbare Messung, UUID a8b999fc-9fbb-4576-bdcf-a3e86da715fc, Abschnitt 4 | Zustandsinvariante beim Schreiben/Lesen absichern und Bestandsfall separat entscheiden, keine stille Inventur-Migration | M |
 | Mittel | EXTRAKTOR_STUB umgeht nicht die kostenpflichtige Klassifizierung, Abschnitt 4 | Eigenen expliziten Klassifizierungs-Testmodus bzw. durchgehende kostenfreie Testumgebung ergänzen | M |
 | Mittel | \`drizzle-kit check\` scheitert trotz fehlender Live-Spaltendrift, Abschnitt 2 | Einen zum aktuellen CLI kompatiblen nicht-mutierenden Check definieren; nicht durch push ersetzen | S |
@@ -234,7 +251,7 @@ Weitere konkrete UI-/Messfehler werden in Abschnitt 4/5 mit Originalmeldungen ge
 - Neue Inventurdateien nur unter \`docs/inventory-2026-10-25.md\`, \`scripts/inventory/\`, \`screenshots/inventory-2026-10-25/\`; Install-/Buildausgaben in vorhandenen ignorierten Verzeichnissen und der ausdrücklich verlangte temporäre native Probeordner.
 - Prüflücken werden als nicht geprüft bzw. blockiert benannt. Insbesondere werden fehlende Paketdateien, ungetestete Eigentümerrouten oder ausstehende Messläufe nicht als bestanden gewertet.
 
-${integrity?`Abschließender Integritätsnachweis: **${integrity.existingReadyProjectsChecked}** ursprüngliche model_ready-Messungswerte per kanonischem SHA-256-Vergleich erneut geprüft; Abweichungen **${integrity.existingMeasurementDifferences.length}**. Git-sichtbare Änderungen außerhalb erlaubter Pfade: **${integrity.outsideAllowedPaths.length}**. Quelle: ${link(dir+"integrity.json")}.`:"Abschließender Integritätsvergleich steht noch aus."}
+${integrity?`Abschließender Integritätsnachweis: **${integrity.existingReadyProjectsChecked}** ursprüngliche model_ready-Messungswerte per kanonischem SHA-256-Vergleich erneut geprüft; Abweichungen **${integrity.existingMeasurementDifferences.length}**. Git-sichtbare Agent-Ausgaben außerhalb erlaubter Pfade: **${integrity.outsideAllowedPaths.length}**. Die nachgereichte Benutzer-ZIP ist in \`userSuppliedInputPaths\` separat als Eingabe erfasst und nicht als Agent-Ausgabe gezählt. Quelle: ${link(dir+"integrity.json")}.`:"Abschließender Integritätsvergleich steht noch aus."}
 
 ### Abgleich mit DONE WHEN des Auftrags
 
@@ -245,7 +262,7 @@ ${integrity?`Abschließender Integritätsnachweis: **${integrity.existingReadyPr
 | Typecheck / Tests / Build einschließlich aller Fehler | PASS / 290 PASS / PASS; Drizzle-CLI-Fehler wortgetreu in Abschnitt 2 |
 | Screenshot-Archiv | **Teilweise**: lokale Register-/Login-, Stub-Desktop/390-, alle 32 Bestands- und neue Real-Komponentenaufnahmen vorhanden. Authentifizierte Upload-/Admin-/Fallback-Aufnahmen nur als Browser-Beobachtungs-IDs, nicht als exportierte Bilddateien verfügbar |
 | Echter Standardlauf mit Dauer, Tokens, Kosten, Version und Ergebnis | **Abgeschlossen**, technische Renderbarkeit per echter Komponente mit Software-WebGL belegt; abschließende authentifizierte Route nach Sessionverlust nicht geprüft |
-| Variante A: fünf Häuser und fünf Schema-1.8-Validierungen | **Blockiert**, Originalpaket fehlt; 0/5 ausführbar, keine erfundenen PASS-Ergebnisse |
+| Variante A: fünf Häuser und fünf Schema-1.8-Validierungen | **${variante?.allPass?"Abgeschlossen: 5/5 Vergleiche und 5/5 Validierungen PASS; Herkunft, Größen und SHA-256 dokumentiert":"Noch nicht erfolgreich abgeschlossen"}**, keine Produktintegration vorgenommen |
 | Native isolated-vm-Probe | PASS für Version 7.0.1 unter Node 24.22.1, Installation/Laden/1+1; keine Behauptung für 6.2.0 oder vollständige Sandbox-Sicherheit |
 | Opus 5.5-Fakten mit Quellen und Datum | Erfasst, kein kostenpflichtiger Opus-Aufruf |
 | Lückenmatrix, priorisierte Defekte, erlaubte Dateipfade | Erfasst; keine Produktkorrekturen umgesetzt |

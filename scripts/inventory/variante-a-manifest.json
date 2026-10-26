@@ -1,0 +1,108 @@
+{
+  "sourceArchive": "attached_assets/0_Übergabe-20261025T193857Z-1-001_1792977826688.zip",
+  "sourceArchiveBytes": 283870,
+  "sourceArchiveSha256": "c29d0092f20d63ebc6b298129846eaf40ebec276dd38e02afa12ad4d44054109",
+  "nestedMember": "Übergabe/snaptape-variante-a-replit-paket.zip",
+  "nestedArchiveBytes": 157529,
+  "nestedArchiveSha256": "56080c75a2465c3f0ef03f544472c9acaec05eb4cd44a60e101bccf80bd465f4",
+  "fileCount": 19,
+  "uncompressedFileBytes": 876884,
+  "files": [
+    {
+      "path": "variante-a-paket/REPLIT-PROMPTS-VARIANTE-A.md",
+      "bytes": 20502,
+      "sha256": "25b87f1328fcf9b4a9ef93c87b0f11c4186608b465812b8b387bcd4a125db459"
+    },
+    {
+      "path": "variante-a-paket/artifacts/aufmass-app/lib/modell3d/core.js",
+      "bytes": 31774,
+      "sha256": "fa762fb3942ff78fe166a341a0b1d81ff9a47ba7c57ee7ad57c33f28b041239c"
+    },
+    {
+      "path": "variante-a-paket/docs/pipeline/buildhouse-correction-prompt.md",
+      "bytes": 977,
+      "sha256": "2d934fbf55c61a7f9d1eeeac0908eeb5ed16ec7dfc549d0a12549cd6671c4187"
+    },
+    {
+      "path": "variante-a-paket/docs/pipeline/buildhouse-prompt.md",
+      "bytes": 13426,
+      "sha256": "24ebc4c65e247e515c34901e52942e24c953b20efd72bb2afc334dccbdb28ebb"
+    },
+    {
+      "path": "variante-a-paket/docs/pipeline/extract-mixed-prompt.md",
+      "bytes": 34277,
+      "sha256": "e811247abed0bc14b55ff09a5f382480e777aa0b77cc78e4c3d0fbdfa7addff9"
+    },
+    {
+      "path": "variante-a-paket/docs/pipeline/extract-photo-prompt.md",
+      "bytes": 31660,
+      "sha256": "93ab21d67df6050abf9f80ad2befa7e3aec45c0da301ae8e2c76e535046d8142"
+    },
+    {
+      "path": "variante-a-paket/docs/pipeline/extract-plan-prompt.md",
+      "bytes": 28809,
+      "sha256": "11862c95a7ae8ca58587cb267bc3ebdaf2627ec3036927ed65aa4c4a491cfba7"
+    },
+    {
+      "path": "variante-a-paket/shared/schema/measurement-v1.8.json",
+      "bytes": 42621,
+      "sha256": "a9340dbc15c02296fa8b93fb8b2751f3a9dbbaf98b780ce3a904ba55f6e294d1"
+    },
+    {
+      "path": "variante-a-paket/test-fixtures/variante-a/erwartet.json",
+      "bytes": 675,
+      "sha256": "c4975f1e8a89f829688a1067be003e03640e42fa4551ed1977636b5fd8933a57"
+    },
+    {
+      "path": "variante-a-paket/test-fixtures/variante-a/farmhouse-140040rk/buildhouse.js",
+      "bytes": 15973,
+      "sha256": "94b2869f6c1c50e59b3b6b6bd4f1303df3be927007dc7b3d2f0c07abbce2f7eb"
+    },
+    {
+      "path": "variante-a-paket/test-fixtures/variante-a/farmhouse-140040rk/messung.json",
+      "bytes": 97939,
+      "sha256": "805081fe6af8e9af945f3c376ab1ffc2c7e36c8764187a9db269835c9649223d"
+    },
+    {
+      "path": "variante-a-paket/test-fixtures/variante-a/farmhouse-test5-beispiel/buildhouse.js",
+      "bytes": 11787,
+      "sha256": "840b9d3a3a9823e77dfb13ac3fbefdd1392f5063cdeab19cf0cb3856c3e3cc51"
+    },
+    {
+      "path": "variante-a-paket/test-fixtures/variante-a/farmhouse-test5-beispiel/messung.json",
+      "bytes": 82574,
+      "sha256": "52c6bd28fe9fc95d116ac43e04f39c2fd1406e82b8a3985fc86bf2a64c46654e"
+    },
+    {
+      "path": "variante-a-paket/test-fixtures/variante-a/leipzig-villa/buildhouse.js",
+      "bytes": 26266,
+      "sha256": "ce70f83cd5c50fa411b5fcffe65c909c442109d09d9af04d66c1445a0399f905"
+    },
+    {
+      "path": "variante-a-paket/test-fixtures/variante-a/leipzig-villa/messung.json",
+      "bytes": 116708,
+      "sha256": "69b5d53b31285a4f69bcd6cedcff279d28c1d4e3eadc1e42a64493afba667ba8"
+    },
+    {
+      "path": "variante-a-paket/test-fixtures/variante-a/triplex-40014db/buildhouse.js",
+      "bytes": 15528,
+      "sha256": "72e3d2a0c5d73a1ae2a3af98730adac1e9793cb4256a3de0eb306ec4b4ae6873"
+    },
+    {
+      "path": "variante-a-paket/test-fixtures/variante-a/triplex-40014db/messung.json",
+      "bytes": 103787,
+      "sha256": "38169f9a542ed12ff6fcc9d63859a58b6cef4edb7ae731afbbf637063bb70317"
+    },
+    {
+      "path": "variante-a-paket/test-fixtures/variante-a/tudor-93233el/buildhouse.js",
+      "bytes": 17217,
+      "sha256": "fd9c5a44d015e642bf49fe76fc3ba0cad6ff3f7c7942d8c90c760cc56c798684"
+    },
+    {
+      "path": "variante-a-paket/test-fixtures/variante-a/tudor-93233el/messung.json",
+      "bytes": 184384,
+      "sha256": "7e57688f8bc2431a9450f1d0e372a64c57c14f9edc25953d089359bc0813668e"
+    }
+  ],
+  "method": "Original nested ZIP, regular files only, temporary extraction, no workspace package copied or installed."
+}

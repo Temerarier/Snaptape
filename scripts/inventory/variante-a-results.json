@@ -1,0 +1,1315 @@
+{
+  "checkedAt": "2026-10-26T01:25:44.329Z",
+  "node": "v24.22.1",
+  "command": "node scripts/inventory/variante-a.mjs <uploaded ZIP>",
+  "method": "Original core.js measurementToMess → runBuild with supplied buildhouse.js → pruefen; plain Node expressly allowed for authored reference fixtures. Standalone Ajv2020/allErrors/strict:false; no production validator changed.",
+  "ajvVersion": "8.20.0",
+  "schemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "requiredFilesMissing": [],
+  "unexpectedHouses": [],
+  "cases": [
+    {
+      "house": "farmhouse-140040rk",
+      "expected": {
+        "stufe": "merken",
+        "ids_fehlen": 0,
+        "stopp": 0,
+        "flaechen": 47,
+        "oeffnungen": 12,
+        "kanten": 41
+      },
+      "actual": {
+        "stufe": "merken",
+        "ids_fehlen": 0,
+        "stopp": 0,
+        "flaechen": 47,
+        "oeffnungen": 12,
+        "kanten": 41
+      },
+      "differences": [],
+      "comparisonPass": true,
+      "schemaVersion": "1.8",
+      "schemaValid": true,
+      "schemaErrors": [],
+      "go": true,
+      "buildErrors": [],
+      "buildWarnings": [],
+      "checkNumbers": {
+        "ids_gebaut": 50,
+        "ids_nicht_gebaut": 2,
+        "ids_fehlen": 0,
+        "waende_ok": "16/16",
+        "oeffnungen_ok": "12/12",
+        "neigung_ok": "7/7",
+        "kanten": "41/41 gebaut, 37 passend",
+        "fallrohre": "2/2",
+        "schaeden": "0/0",
+        "dachflaeche_modell_zu_messung": "-1.2 %",
+        "ergaenzt": 10,
+        "konflikte": 4,
+        "fehler": 0,
+        "warnungen": 4,
+        "laufzeit_ms": 4
+      },
+      "checkRows": [
+        {
+          "id": "AT-2",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als WL-10, WL-11, WL-12, WL-13, RF-4, RF-5"
+        },
+        {
+          "id": "AT-3",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als WL-14, WL-15, WL-16, RF-6, RF-7"
+        },
+        {
+          "id": "E-1",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "ridge: 9470 statt 9770 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-17",
+          "pruefung": "Kante",
+          "status": "warn",
+          "text": "Anfang oder Ende liegt an keiner Modellecke (falsch zugeordnet?)"
+        },
+        {
+          "id": "E-18",
+          "pruefung": "Kante",
+          "status": "warn",
+          "text": "Anfang oder Ende liegt an keiner Modellecke (falsch zugeordnet?)"
+        },
+        {
+          "id": "E-33",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "eave: Messung 1263 mm, Modell 1090 mm (−13.7 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-34",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "eave: Messung 1263 mm, Modell 1090 mm (−13.7 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "DS-2",
+          "pruefung": "Fallrohrlänge",
+          "status": "info",
+          "text": "Fallrohrlänge: Messung 3470 mm, Modell 3319.1 mm (4.3 %) – als Konflikt gemeldet"
+        }
+      ]
+    },
+    {
+      "house": "farmhouse-test5-beispiel",
+      "expected": {
+        "stufe": "merken",
+        "ids_fehlen": 0,
+        "stopp": 0,
+        "flaechen": 33,
+        "oeffnungen": 17,
+        "kanten": 33
+      },
+      "actual": {
+        "stufe": "merken",
+        "ids_fehlen": 0,
+        "stopp": 0,
+        "flaechen": 33,
+        "oeffnungen": 17,
+        "kanten": 33
+      },
+      "differences": [],
+      "comparisonPass": true,
+      "schemaVersion": "1.8",
+      "schemaValid": true,
+      "schemaErrors": [],
+      "go": true,
+      "buildErrors": [],
+      "buildWarnings": [],
+      "checkNumbers": {
+        "ids_gebaut": 43,
+        "ids_nicht_gebaut": 0,
+        "ids_fehlen": 0,
+        "waende_ok": "10/10",
+        "oeffnungen_ok": "17/17",
+        "neigung_ok": "11/11",
+        "kanten": "33/33 gebaut, 29 passend",
+        "fallrohre": "0/0",
+        "schaeden": "0/0",
+        "dachflaeche_modell_zu_messung": "-10.8 %",
+        "ergaenzt": 7,
+        "konflikte": 8,
+        "fehler": 0,
+        "warnungen": 4,
+        "laufzeit_ms": 3
+      },
+      "checkRows": [
+        {
+          "id": "RF-1",
+          "pruefung": "Dachfläche (nur Info)",
+          "status": "info",
+          "text": "Modellfläche weicht 42 % von der Messung ab – das Panel zeigt den Messwert"
+        },
+        {
+          "id": "RF-2",
+          "pruefung": "Dachfläche (nur Info)",
+          "status": "info",
+          "text": "Modellfläche weicht 28 % von der Messung ab – das Panel zeigt den Messwert"
+        },
+        {
+          "id": "RF-4",
+          "pruefung": "Dachfläche (nur Info)",
+          "status": "info",
+          "text": "Modellfläche weicht -74 % von der Messung ab – das Panel zeigt den Messwert"
+        },
+        {
+          "id": "RF-5",
+          "pruefung": "Dachfläche (nur Info)",
+          "status": "info",
+          "text": "Modellfläche weicht -74 % von der Messung ab – das Panel zeigt den Messwert"
+        },
+        {
+          "id": "E-9",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "hip: Messung 5447 mm, Modell 4526 mm (−16.9 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-10",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "hip: Messung 5447 mm, Modell 4526 mm (−16.9 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-13",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "rake: Messung 4324 mm, Modell 3593 mm (−16.9 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-14",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "rake: Messung 4324 mm, Modell 3593 mm (−16.9 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-22",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 17760 statt 18320 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-23",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 17760 statt 18320 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-24",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 6065 statt 6625 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-25",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 6065 statt 6625 mm, innerhalb 3 %"
+        }
+      ]
+    },
+    {
+      "house": "leipzig-villa",
+      "expected": {
+        "stufe": "merken",
+        "ids_fehlen": 0,
+        "stopp": 0,
+        "flaechen": 51,
+        "oeffnungen": 29,
+        "kanten": 54
+      },
+      "actual": {
+        "stufe": "merken",
+        "ids_fehlen": 0,
+        "stopp": 0,
+        "flaechen": 51,
+        "oeffnungen": 29,
+        "kanten": 54
+      },
+      "differences": [],
+      "comparisonPass": true,
+      "schemaVersion": "1.8",
+      "schemaValid": true,
+      "schemaErrors": [],
+      "go": true,
+      "buildErrors": [],
+      "buildWarnings": [],
+      "checkNumbers": {
+        "ids_gebaut": 60,
+        "ids_nicht_gebaut": 6,
+        "ids_fehlen": 0,
+        "waende_ok": "13/14",
+        "oeffnungen_ok": "29/29",
+        "neigung_ok": "9/10",
+        "kanten": "54/54 gebaut, 35 passend",
+        "fallrohre": "6/6",
+        "schaeden": "3/3",
+        "dachflaeche_modell_zu_messung": "-3.6 %",
+        "ergaenzt": 6,
+        "konflikte": 40,
+        "fehler": 0,
+        "warnungen": 28,
+        "laufzeit_ms": 6
+      },
+      "checkRows": [
+        {
+          "id": "AT-1",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als WL-2, WL-4, WL-5, RF-9"
+        },
+        {
+          "id": "AT-2",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als WL-7, WL-8, WL-9, RF-10"
+        },
+        {
+          "id": "AT-4",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als WL-11, RF-5"
+        },
+        {
+          "id": "AT-5",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als WL-12, RF-6"
+        },
+        {
+          "id": "AT-6",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als WL-13, RF-7"
+        },
+        {
+          "id": "AT-7",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als WL-14, RF-8"
+        },
+        {
+          "id": "WL-3",
+          "pruefung": "Wandhöhe am Hang",
+          "status": "info",
+          "text": "Wandfuß fällt um 1300 mm; gemessene Höhe passt zum örtlichen Gelände"
+        },
+        {
+          "id": "WL-4",
+          "pruefung": "Wandhöhe am Hang",
+          "status": "info",
+          "text": "Wandfuß fällt um 750 mm; gemessene Höhe passt zum örtlichen Gelände"
+        },
+        {
+          "id": "WL-5",
+          "pruefung": "Wandhöhe inkl. Giebel",
+          "status": "warn",
+          "text": "Wandhöhe inkl. Giebel: Messung 2600 mm, Modell 3140.5 mm (+20.8 %) – über 10 %, als Konflikt gemeldet"
+        },
+        {
+          "id": "WL-10",
+          "pruefung": "Wandhöhe am Hang",
+          "status": "info",
+          "text": "Wandfuß fällt um 1300 mm; gemessene Höhe passt zum örtlichen Gelände"
+        },
+        {
+          "id": "W-9",
+          "pruefung": "Öffnungshöhe",
+          "status": "info",
+          "text": "Öffnungshöhe: Messung 650 mm, Modell 616.5 mm (5.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "D-2",
+          "pruefung": "Unterkante am Hang",
+          "status": "info",
+          "text": "Lage über dem örtlichen Gelände (-250 mm) statt über dem Seitenmittel (0 mm)"
+        },
+        {
+          "id": "W-11",
+          "pruefung": "Unterkante am Hang",
+          "status": "info",
+          "text": "Lage über dem örtlichen Gelände (-1190 mm) statt über dem Seitenmittel (-650 mm)"
+        },
+        {
+          "id": "W-12",
+          "pruefung": "Unterkante am Hang",
+          "status": "info",
+          "text": "Lage über dem örtlichen Gelände (-1000 mm) statt über dem Seitenmittel (-1300 mm)"
+        },
+        {
+          "id": "D-3",
+          "pruefung": "Unterkante am Hang",
+          "status": "info",
+          "text": "Lage über dem örtlichen Gelände (-1000 mm) statt über dem Seitenmittel (-1300 mm)"
+        },
+        {
+          "id": "D-5",
+          "pruefung": "Unterkante am Hang",
+          "status": "info",
+          "text": "Lage über dem örtlichen Gelände (-1300 mm) statt über dem Seitenmittel (-650 mm)"
+        },
+        {
+          "id": "W-20",
+          "pruefung": "Unterkante am Hang",
+          "status": "info",
+          "text": "Lage über dem örtlichen Gelände (-1300 mm) statt über dem Seitenmittel (-650 mm)"
+        },
+        {
+          "id": "W-21",
+          "pruefung": "Unterkante am Hang",
+          "status": "info",
+          "text": "Lage über dem örtlichen Gelände (-1300 mm) statt über dem Seitenmittel (-650 mm)"
+        },
+        {
+          "id": "RF-5",
+          "pruefung": "Dachneigung",
+          "status": "warn",
+          "text": "Neigung: Messung 30°, Modell 25.5° – über 10 %, ohne Konflikt-Eintrag"
+        },
+        {
+          "id": "RF-5",
+          "pruefung": "Dachfläche (nur Info)",
+          "status": "info",
+          "text": "Modellfläche weicht -58 % von der Messung ab – das Panel zeigt den Messwert"
+        },
+        {
+          "id": "E-2",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "hip: 9489 statt 9770 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-3",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "hip: 9489 statt 9770 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-4",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "hip: 9489 statt 9770 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-5",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "hip: 9489 statt 9770 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-7",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 15048 statt 15600 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-9",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 15048 statt 15600 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-19",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "outside_corner: Messung 2600 mm, Modell 3140 mm (+20.8 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-21",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "inside_corner: Messung 2600 mm, Modell 3140 mm (+20.8 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-30",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 1760 statt 1900 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-31",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "flashing: Messung 2600 mm, Modell 1295 mm (−50.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-32",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "hip: Messung 1050 mm, Modell 1325 mm (+26.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-33",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "hip: Messung 1050 mm, Modell 1325 mm (+26.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-34",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "valley: Messung 1900 mm, Modell 1289 mm (−32.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-35",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "valley: Messung 1900 mm, Modell 1289 mm (−32.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-36",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "eave: Messung 1370 mm, Modell 1530 mm (+11.7 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-37",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "flashing: 1230 statt 1170 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-38",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "step_flashing: Messung 1400 mm, Modell 1560 mm (+11.4 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-38",
+          "pruefung": "Kante",
+          "status": "warn",
+          "text": "Anfang oder Ende liegt an keiner Modellecke (falsch zugeordnet?)"
+        },
+        {
+          "id": "E-39",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "step_flashing: Messung 1400 mm, Modell 1560 mm (+11.4 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-39",
+          "pruefung": "Kante",
+          "status": "warn",
+          "text": "Anfang oder Ende liegt an keiner Modellecke (falsch zugeordnet?)"
+        },
+        {
+          "id": "E-40",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 4130 statt 3950 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-41",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 2219 statt 2270 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-42",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 2219 statt 2270 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-43",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "flashing: 4130 statt 3950 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-44",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "flashing: 3730 statt 3550 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-45",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "step_flashing: Messung 1800 mm, Modell 2876 mm (+59.8 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-45",
+          "pruefung": "Kante",
+          "status": "warn",
+          "text": "Anfang oder Ende liegt an keiner Modellecke (falsch zugeordnet?)"
+        },
+        {
+          "id": "E-46",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "step_flashing: Messung 1800 mm, Modell 2876 mm (+59.8 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-46",
+          "pruefung": "Kante",
+          "status": "warn",
+          "text": "Anfang oder Ende liegt an keiner Modellecke (falsch zugeordnet?)"
+        },
+        {
+          "id": "E-47",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "hip: Messung 1050 mm, Modell 1325 mm (+26.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-48",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "hip: Messung 1050 mm, Modell 1325 mm (+26.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-49",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "valley: Messung 1900 mm, Modell 1289 mm (−32.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-50",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "valley: Messung 1900 mm, Modell 1289 mm (−32.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-51",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "eave: Messung 1370 mm, Modell 1530 mm (+11.7 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-52",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "flashing: 1230 statt 1170 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-53",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "step_flashing: Messung 1400 mm, Modell 1560 mm (+11.4 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-53",
+          "pruefung": "Kante",
+          "status": "warn",
+          "text": "Anfang oder Ende liegt an keiner Modellecke (falsch zugeordnet?)"
+        },
+        {
+          "id": "E-54",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "step_flashing: Messung 1400 mm, Modell 1560 mm (+11.4 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-54",
+          "pruefung": "Kante",
+          "status": "warn",
+          "text": "Anfang oder Ende liegt an keiner Modellecke (falsch zugeordnet?)"
+        },
+        {
+          "id": "DS-5",
+          "pruefung": "Fallrohrlänge",
+          "status": "info",
+          "text": "Fallrohrlänge: Messung 8900 mm, Modell 9177.6 mm (+3.1 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "DS-6",
+          "pruefung": "Fallrohrlänge",
+          "status": "warn",
+          "text": "Fallrohrlänge: Messung 2600 mm, Modell 3140.5 mm (+20.8 %) – über 10 %, als Konflikt gemeldet"
+        }
+      ]
+    },
+    {
+      "house": "triplex-40014db",
+      "expected": {
+        "stufe": "merken",
+        "ids_fehlen": 0,
+        "stopp": 0,
+        "flaechen": 41,
+        "oeffnungen": 21,
+        "kanten": 56
+      },
+      "actual": {
+        "stufe": "merken",
+        "ids_fehlen": 0,
+        "stopp": 0,
+        "flaechen": 41,
+        "oeffnungen": 21,
+        "kanten": 56
+      },
+      "differences": [],
+      "comparisonPass": true,
+      "schemaVersion": "1.8",
+      "schemaValid": true,
+      "schemaErrors": [],
+      "go": true,
+      "buildErrors": [],
+      "buildWarnings": [],
+      "checkNumbers": {
+        "ids_gebaut": 51,
+        "ids_nicht_gebaut": 3,
+        "ids_fehlen": 0,
+        "waende_ok": "7/7",
+        "oeffnungen_ok": "21/21",
+        "neigung_ok": "15/17",
+        "kanten": "56/58 gebaut, 43 passend",
+        "fallrohre": "0/0",
+        "schaeden": "0/0",
+        "dachflaeche_modell_zu_messung": "1.7 %",
+        "ergaenzt": 9,
+        "konflikte": 29,
+        "fehler": 0,
+        "warnungen": 16,
+        "laufzeit_ms": 10
+      },
+      "checkRows": [
+        {
+          "id": "AT-1",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als WL-5, RF-5, RF-6"
+        },
+        {
+          "id": "AT-2",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als WL-6, RF-7, RF-8"
+        },
+        {
+          "id": "AT-3",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als WL-7, RF-9, RF-10"
+        },
+        {
+          "id": "RF-1",
+          "pruefung": "Dachfläche (nur Info)",
+          "status": "info",
+          "text": "Modellfläche weicht 68 % von der Messung ab – das Panel zeigt den Messwert"
+        },
+        {
+          "id": "RF-2",
+          "pruefung": "Dachneigung",
+          "status": "warn",
+          "text": "Neigung: Messung 20.24°, Modell 44.9° – als Konflikt gemeldet"
+        },
+        {
+          "id": "RF-2",
+          "pruefung": "Dachfläche (nur Info)",
+          "status": "info",
+          "text": "Modellfläche weicht -76 % von der Messung ab – das Panel zeigt den Messwert"
+        },
+        {
+          "id": "RF-3",
+          "pruefung": "Dachneigung",
+          "status": "warn",
+          "text": "Neigung: Messung 20.24°, Modell 32.5° – als Konflikt gemeldet"
+        },
+        {
+          "id": "RF-3",
+          "pruefung": "Dachfläche (nur Info)",
+          "status": "info",
+          "text": "Modellfläche weicht -36 % von der Messung ab – das Panel zeigt den Messwert"
+        },
+        {
+          "id": "RF-4",
+          "pruefung": "Dachfläche (nur Info)",
+          "status": "info",
+          "text": "Modellfläche weicht 26 % von der Messung ab – das Panel zeigt den Messwert"
+        },
+        {
+          "id": "RF-5",
+          "pruefung": "Dachfläche (nur Info)",
+          "status": "info",
+          "text": "Modellfläche weicht 101 % von der Messung ab – das Panel zeigt den Messwert"
+        },
+        {
+          "id": "E-1",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "ridge: Messung 4877 mm, Modell 10972 mm (+125 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-2",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "hip: Messung 8910 mm, Modell 6877 mm (−22.8 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-4",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "hip: Messung 8910 mm, Modell 7391 mm (−17 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-5",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "hip: Messung 8910 mm, Modell 7391 mm (−17 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-7",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 1270 statt 1206 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-8",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "eave: Messung 1206 mm, Modell 981 mm (−18.7 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-9",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "eave: Messung 1511 mm, Modell 981 mm (−35.1 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-11",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 16748 statt 17069 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-17",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "valley: 6877 statt 6533 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-19",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 3182 statt 3454 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-20",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 3182 statt 3454 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-22",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "valley: 6876 statt 6533 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-23",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "valley: 6876 statt 6533 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-24",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 3182 statt 3454 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-25",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 3182 statt 3454 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-27",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "valley: 6877 statt 6533 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-28",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "valley: 6877 statt 6533 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-29",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 3182 statt 3454 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-30",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 3182 statt 3454 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-45",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "rake: Messung 3138 mm, Modell 2756 mm (−12.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-46",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "rake: Messung 3138 mm, Modell 2756 mm (−12.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-47",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "rake: Messung 3138 mm, Modell 2756 mm (−12.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-48",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "rake: Messung 3138 mm, Modell 2756 mm (−12.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-49",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "rake: Messung 3138 mm, Modell 2756 mm (−12.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-50",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "rake: Messung 3138 mm, Modell 2756 mm (−12.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-52",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "flashing: Messung 10531 mm, Modell 16459 mm (+56.3 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-52",
+          "pruefung": "Kante",
+          "status": "warn",
+          "text": "Anfang oder Ende liegt an keiner Modellecke (falsch zugeordnet?)"
+        }
+      ]
+    },
+    {
+      "house": "tudor-93233el",
+      "expected": {
+        "stufe": "merken",
+        "ids_fehlen": 0,
+        "stopp": 0,
+        "flaechen": 49,
+        "oeffnungen": 29,
+        "kanten": 66
+      },
+      "actual": {
+        "stufe": "merken",
+        "ids_fehlen": 0,
+        "stopp": 0,
+        "flaechen": 49,
+        "oeffnungen": 29,
+        "kanten": 66
+      },
+      "differences": [],
+      "comparisonPass": true,
+      "schemaVersion": "1.8",
+      "schemaValid": true,
+      "schemaErrors": [],
+      "go": true,
+      "buildErrors": [],
+      "buildWarnings": [],
+      "checkNumbers": {
+        "ids_gebaut": 79,
+        "ids_nicht_gebaut": 5,
+        "ids_fehlen": 0,
+        "waende_ok": "18/18",
+        "oeffnungen_ok": "29/29",
+        "neigung_ok": "18/19",
+        "kanten": "66/66 gebaut, 58 passend",
+        "fallrohre": "7/7",
+        "schaeden": "0/0",
+        "dachflaeche_modell_zu_messung": "-0.4 %",
+        "ergaenzt": 6,
+        "konflikte": 39,
+        "fehler": 0,
+        "warnungen": 10,
+        "laufzeit_ms": 4
+      },
+      "checkRows": [
+        {
+          "id": "SF-5",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: RF-7 hinten ohne Überstand gebaut (Anschluss an Quergiebel RF-12)"
+        },
+        {
+          "id": "FC-5",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: RF-7 hinten ohne Überstand gebaut (Anschluss an Quergiebel RF-12)"
+        },
+        {
+          "id": "AT-1",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als WL-16, WL-17, WL-18, RF-13, RF-14"
+        },
+        {
+          "id": "AT-2",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als RF-15 (gerade Ebene statt Glockenform)"
+        },
+        {
+          "id": "AT-3",
+          "pruefung": "Abdeckung",
+          "status": "info",
+          "text": "nicht gebaut: gebaut als RF-16 (gerade Ebene statt Glockenform)"
+        },
+        {
+          "id": "WL-3",
+          "pruefung": "Wandhöhe inkl. Giebel",
+          "status": "info",
+          "text": "Wandhöhe inkl. Giebel: Messung 9435 mm, Modell 9329.2 mm (1.1 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "WL-4",
+          "pruefung": "Wandhöhe inkl. Giebel",
+          "status": "info",
+          "text": "Wandhöhe inkl. Giebel: Messung 6449 mm, Modell 6493 mm (+0.7 %)"
+        },
+        {
+          "id": "WL-7",
+          "pruefung": "Wandhöhe inkl. Giebel",
+          "status": "info",
+          "text": "Wandhöhe inkl. Giebel: Messung 3607 mm, Modell 3640 mm (+0.9 %)"
+        },
+        {
+          "id": "WL-8",
+          "pruefung": "Wandhöhe inkl. Giebel",
+          "status": "info",
+          "text": "Wandhöhe inkl. Giebel: Messung 9728 mm, Modell 9792.7 mm (+0.7 %)"
+        },
+        {
+          "id": "WL-10",
+          "pruefung": "Wandhöhe inkl. Giebel",
+          "status": "info",
+          "text": "Wandhöhe inkl. Giebel: Messung 9728 mm, Modell 9914.5 mm (+1.9 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "WL-15",
+          "pruefung": "Wandbreite",
+          "status": "info",
+          "text": "Wandbreite: Messung 2610 mm, Modell 2454 mm (6 %)"
+        },
+        {
+          "id": "RF-3",
+          "pruefung": "Dachfläche (nur Info)",
+          "status": "info",
+          "text": "Modellfläche weicht 30 % von der Messung ab – das Panel zeigt den Messwert"
+        },
+        {
+          "id": "RF-9",
+          "pruefung": "Dachneigung",
+          "status": "info",
+          "text": "Neigung: Messung 57.7°, Modell 56.0° – als Konflikt gemeldet"
+        },
+        {
+          "id": "RF-11",
+          "pruefung": "Dachfläche (nur Info)",
+          "status": "info",
+          "text": "Modellfläche weicht -47 % von der Messung ab – das Panel zeigt den Messwert"
+        },
+        {
+          "id": "E-1",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "ridge: 2680 statt 2811 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-2",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "ridge: 8877 statt 8652 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-3",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "ridge: 5778 statt 5730 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-4",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "ridge: 8576 statt 8652 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-5",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "hip: 1477 statt 1394 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-6",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "hip: Messung 1651 mm, Modell 1322 mm (−19.9 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-7",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "hip: Messung 1388 mm, Modell 1565 mm (+12.8 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-9",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "valley: 4632 statt 4420 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-10",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "valley: 9898 statt 9308 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-11",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "valley: 9562 statt 9280 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-13",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 3175 statt 2985 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-14",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "eave: Messung 1749 mm, Modell 1570 mm (−10.2 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-15",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 2754 statt 2910 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-16",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 4244 statt 4057 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-17",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 4877 statt 4599 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-18",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 3778 statt 4016 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-19",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 4379 statt 4597 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-20",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 4230 statt 4505 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-21",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "rake: Messung 4503 mm, Modell 3980 mm (−11.6 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-22",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "outside_corner: 6581 statt 6493 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-23",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "outside_corner: 6581 statt 6449 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-24",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "ridge: 2737 statt 2697 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-25",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "valley: 4387 statt 4668 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-26",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 2615 statt 2697 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-27",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "eave: 5813 statt 5874 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-28",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 3738 statt 3900 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-29",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "rake: Messung 4462 mm, Modell 3762 mm (−15.7 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-31",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "step_flashing: 3763 statt 4002 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-32",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "unclassified: Messung 6900 mm, Modell 8110 mm (+17.5 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-33",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "inside_corner: 6493 statt 6449 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-36",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "ridge: 3145 statt 3327 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-37",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "valley: 4545 statt 4415 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-39",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 3707 statt 3993 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-40",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "rake: 3958 statt 3851 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-44",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "ridge: 2525 statt 2575 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-45",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "valley: 2309 statt 2118 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-46",
+          "pruefung": "Kantenlänge",
+          "status": "info",
+          "text": "valley: 2309 statt 2118 mm, innerhalb 3 %"
+        },
+        {
+          "id": "E-47",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "eave: Messung 1476 mm, Modell 1276 mm (−13.5 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "E-48",
+          "pruefung": "Kantenlänge",
+          "status": "warn",
+          "text": "eave: Messung 1476 mm, Modell 1276 mm (−13.5 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "DS-1",
+          "pruefung": "Fallrohrlänge",
+          "status": "info",
+          "text": "Fallrohrlänge: Messung 6559 mm, Modell 6195.5 mm (5.5 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "DS-2",
+          "pruefung": "Fallrohrlänge",
+          "status": "info",
+          "text": "Fallrohrlänge: Messung 6559 mm, Modell 6195.5 mm (5.5 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "DS-3",
+          "pruefung": "Fallrohrlänge",
+          "status": "info",
+          "text": "Fallrohrlänge: Messung 6493 mm, Modell 6048.2 mm (6.8 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "DS-4",
+          "pruefung": "Fallrohrlänge",
+          "status": "warn",
+          "text": "Fallrohrlänge: Messung 6581 mm, Modell 5870.9 mm (10.8 %) – über 10 %, als Konflikt gemeldet"
+        },
+        {
+          "id": "DS-5",
+          "pruefung": "Fallrohrlänge",
+          "status": "warn",
+          "text": "Fallrohrlänge: Messung 6581 mm, Modell 5870.9 mm (10.8 %) – über 10 %, als Konflikt gemeldet"
+        },
+        {
+          "id": "DS-6",
+          "pruefung": "Fallrohrlänge",
+          "status": "info",
+          "text": "Fallrohrlänge: Messung 4053 mm, Modell 3822.6 mm (5.7 %) – als Konflikt gemeldet"
+        },
+        {
+          "id": "DS-7",
+          "pruefung": "Fallrohrlänge",
+          "status": "info",
+          "text": "Fallrohrlänge: Messung 6449 mm, Modell 6493 mm (+0.7 %) – als Konflikt gemeldet"
+        }
+      ]
+    }
+  ],
+  "cleaned": true,
+  "coreVersion": "A-2026-10-08",
+  "comparisonPassed": 5,
+  "schemaPassed": 5,
+  "allPass": true
+}
