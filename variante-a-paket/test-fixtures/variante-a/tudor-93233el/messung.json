@@ -1,0 +1,5409 @@
+{
+ "meta": {
+  "country": "US",
+  "unit": "mm",
+  "schema_version": "1.8",
+  "photos": [
+   {
+    "index": 1,
+    "shows_elevation": "front",
+    "view_angle": "slightly_angled",
+    "perspective_corrected": false
+   },
+   {
+    "index": 2,
+    "shows_elevation": "front",
+    "view_angle": "frontal",
+    "perspective_corrected": false
+   },
+   {
+    "index": 3,
+    "shows_elevation": "left",
+    "view_angle": "frontal",
+    "perspective_corrected": false
+   },
+   {
+    "index": 4,
+    "shows_elevation": "back",
+    "view_angle": "frontal",
+    "perspective_corrected": false
+   },
+   {
+    "index": 5,
+    "shows_elevation": "right",
+    "view_angle": "frontal",
+    "perspective_corrected": false
+   },
+   {
+    "index": 6,
+    "shows_elevation": "unknown",
+    "view_angle": "frontal",
+    "perspective_corrected": false
+   }
+  ],
+  "notes": [
+   "Country: United States, certainty high (imperial room labels 26'-4\" etc., 9 ft x 8 ft garage doors, US plan-catalog sheet style 93233EL). Calc profile US, [US] + [INVARIANT] reference sections.",
+   "Inputs: photo 1 = exterior rendering of the front (slightly angled from the right, approx. 10% of the facade base hidden by shrubs - below the 30% occlusion threshold); photos 2-5 = front/left/rear/right elevation drawings (orthographic, frontal); photo 6 = main floor plan. No sheet is rotated, no duplicate sheets.",
+   "depth_basis: oblique_only for photos (no side photo); side elevation drawings 3 and 5 used for depth and side openings.",
+   "Scale: plan sheet 6 scale 22.88 mm/px from room labels (median of chain scales); elevation sheets share one scale, transferred via the building width: 21.79 mm/px (front/left/right), 21.86 mm/px (rear). Drawn garage doors (9 ft x 8 ft) and the rendering serve as cross-checks.",
+   "Grade: all drawings show a level ground line; grade zero = drawn ground line at the front.",
+   "Front corners in the rendering are not in the outer 10% of the frame; no wide-angle compression assumed.",
+   "Roof: composite - central hip with ridge parallel to the front (10416 mm), two front and two rear cross gables (ridges front-to-back), left side one continuous plane, right side continues as a catslide over the one-storey strip MB-2 with a bell-cast flare above the entry."
+  ]
+ },
+ "building": {
+  "building_type": "detached",
+  "stories": 2,
+  "roof_type": "other",
+  "footprint": {
+   "points": [
+    [
+     0,
+     0
+    ],
+    [
+     7276,
+     0
+    ],
+    [
+     7276,
+     -516
+    ],
+    [
+     10982,
+     -516
+    ],
+    [
+     10982,
+     2108
+    ],
+    [
+     13379,
+     2108
+    ],
+    [
+     13379,
+     12984
+    ],
+    [
+     0,
+     12984
+    ]
+   ],
+   "width_mm": {
+    "value": 13379,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 9 reference estimate(s)",
+    "low_reason": "spread 5.7% (medium by spread); capped low: all values plan-scale derived (no overall dimension chain), rendering slightly angled"
+   },
+   "depth_mm": {
+    "value": 12984,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 8 reference estimate(s)",
+    "low_reason": "spread 7.5% (medium by spread); capped low: all values plan-scale derived (no overall dimension chain), rendering slightly angled"
+   },
+   "perimeter_mm": {
+    "value": 53758.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from footprint.points",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "area_mm2": {
+    "value": 170572356.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from footprint.points",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   }
+  },
+  "heights": {
+   "eave_height_mm": {
+    "value": 6559,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 6 reference estimate(s)",
+    "low_reason": "spread 7.3% (medium by spread); capped low: all values plan-scale derived (no overall dimension chain), rendering slightly angled"
+   },
+   "ridge_height_mm": {
+    "value": 10416,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 5 reference estimate(s)",
+    "low_reason": "spread 6.5% (medium by spread); capped low: all values plan-scale derived (no overall dimension chain), rendering slightly angled"
+   },
+   "parapet_height_mm": null,
+   "datum_note": "Level site; grade zero = drawn ground line (all four elevation sheets level). Building eave = main two-storey eave; the one-storey strip MB-2 has lower eaves (see per_elevation).",
+   "per_elevation": [
+    {
+     "elevation": "front",
+     "eave_height_mm": {
+      "value": 6559,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+      "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+     },
+     "ridge_height_mm": {
+      "value": 10416,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+      "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+     },
+     "grade_offset_mm": {
+      "value": 0,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "level ground line",
+      "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+     }
+    },
+    {
+     "elevation": "left",
+     "eave_height_mm": {
+      "value": 6581,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+      "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+     },
+     "ridge_height_mm": {
+      "value": 10437,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+      "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+     },
+     "grade_offset_mm": {
+      "value": 0,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "level ground line",
+      "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+     }
+    },
+    {
+     "elevation": "back",
+     "eave_height_mm": {
+      "value": 6449,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+      "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+     },
+     "ridge_height_mm": {
+      "value": 10449,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+      "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+     },
+     "grade_offset_mm": {
+      "value": 0,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "level ground line",
+      "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+     }
+    },
+    {
+     "elevation": "right",
+     "eave_height_mm": {
+      "value": 4053,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px); one-storey catslide eave of MB-2 (MB-1 eave behind it 6493)",
+      "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+     },
+     "ridge_height_mm": {
+      "value": 10416,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+      "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+     },
+     "grade_offset_mm": {
+      "value": 0,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "level ground line",
+      "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+     }
+    }
+   ]
+  },
+  "shared_walls": [],
+  "footprint_overall": {
+   "width_mm": {
+    "value": 13379,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 9 reference estimate(s)",
+    "low_reason": "spread 5.7% (medium by spread); capped low: all values plan-scale derived (no overall dimension chain), rendering slightly angled"
+   },
+   "depth_mm": {
+    "value": 13500,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan scale 22.88 mm/px from room labels (sheet 6)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Main body incl. wings MB-2 (one-storey strip) and MB-3 (front bump-out, +516 mm); equals footprint except depth incl. bump-out. Open rear porch AT-4, awnings and dormer not included."
+  }
+ },
+ "references": [
+  {
+   "photo_index": 1,
+   "scale_type": "own_reference",
+   "object": "garage door G-2, 9 ft x 8 ft (rendering)",
+   "bounding_box": [
+    437,
+    566,
+    605,
+    722
+   ],
+   "assumed_size_mm": 2743,
+   "reliability": "low",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 2,
+   "scale_type": "transferred",
+   "object": "building width from plan sheet 6",
+   "bounding_box": [
+    276,
+    150,
+    890,
+    633
+   ],
+   "assumed_size_mm": 13379,
+   "reliability": "medium",
+   "plane": "facade_plane",
+   "transferred_via": "footprint width 13379 mm from sheet 6 (plan room-label scale)",
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 2,
+   "scale_type": "own_reference",
+   "object": "drawn garage door G-1, 9 ft x 8 ft (statistical, no-chain fallback cross-check)",
+   "bounding_box": [
+    297,
+    517,
+    427,
+    633
+   ],
+   "assumed_size_mm": 2743,
+   "reliability": "low",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 3,
+   "scale_type": "transferred",
+   "object": "sheet scale 21.79 mm/px",
+   "bounding_box": [
+    407,
+    150,
+    1020,
+    632
+   ],
+   "assumed_size_mm": null,
+   "reliability": "medium",
+   "plane": "facade_plane",
+   "transferred_via": "sheet scale from sheet 2 (same plan set, eave/ridge pixel heights match)",
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 4,
+   "scale_type": "transferred",
+   "object": "building width from plan sheet 6",
+   "bounding_box": [
+    233,
+    150,
+    845,
+    630
+   ],
+   "assumed_size_mm": 13379,
+   "reliability": "medium",
+   "plane": "facade_plane",
+   "transferred_via": "footprint width 13379 mm from sheet 6",
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 5,
+   "scale_type": "transferred",
+   "object": "sheet scale 21.79 mm/px",
+   "bounding_box": [
+    248,
+    155,
+    1070,
+    633
+   ],
+   "assumed_size_mm": null,
+   "reliability": "medium",
+   "plane": "facade_plane",
+   "transferred_via": "sheet scale from sheet 2",
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 6,
+   "scale_type": "own_reference",
+   "object": "room label LIVING/DINING 26'-4\" x 17'-0\"",
+   "bounding_box": [
+    237,
+    195,
+    590,
+    430
+   ],
+   "assumed_size_mm": 8027,
+   "reliability": "medium",
+   "plane": null,
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 6,
+   "scale_type": "own_reference",
+   "object": "room label TWO CAR GARAGE 23'-8\" x 24'-0\"/20'-0\"",
+   "bounding_box": [
+    5,
+    430,
+    325,
+    765
+   ],
+   "assumed_size_mm": 7214,
+   "reliability": "medium",
+   "plane": null,
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 6,
+   "scale_type": "own_reference",
+   "object": "room label FLEX ROOM 11'-8\" x 12'-0\"",
+   "bounding_box": [
+    323,
+    580,
+    485,
+    785
+   ],
+   "assumed_size_mm": 3556,
+   "reliability": "low",
+   "plane": null,
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 6,
+   "scale_type": "own_reference",
+   "object": "room label OUTDOOR LIVING 20'-8\" x 13'-8\"",
+   "bounding_box": [
+    270,
+    15,
+    545,
+    195
+   ],
+   "assumed_size_mm": 6299,
+   "reliability": "medium",
+   "plane": null,
+   "transferred_via": null,
+   "user_confirmed": false
+  }
+ ],
+ "attachments": [
+  {
+   "id": "AT-1",
+   "type": "dormer",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 2197,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "height_mm": {
+    "value": 2789,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "depth_mm": {
+    "value": 2375,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "position_mm": {
+    "x": 398,
+    "y": 550
+   },
+   "parent_face_id": "RF-3",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": {
+    "style": "gable",
+    "face_pitch_deg": 50
+   }
+  },
+  {
+   "id": "AT-2",
+   "type": "awning",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 3922,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "projection not dimensioned (approx. 700 mm from rendering)"
+   },
+   "height_mm": {
+    "value": 741,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "projection not dimensioned (approx. 700 mm from rendering)"
+   },
+   "depth_mm": {
+    "value": 700,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "projection not dimensioned (approx. 700 mm from rendering)"
+   },
+   "position_mm": {
+    "x": -87,
+    "y": 3072
+   },
+   "parent_face_id": "WL-1",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": null
+  },
+  {
+   "id": "AT-3",
+   "type": "awning",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 3770,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "projection not dimensioned (approx. 700 mm from rendering)"
+   },
+   "height_mm": {
+    "value": 741,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "projection not dimensioned (approx. 700 mm from rendering)"
+   },
+   "depth_mm": {
+    "value": 700,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "projection not dimensioned (approx. 700 mm from rendering)"
+   },
+   "position_mm": {
+    "x": 7321,
+    "y": 3072
+   },
+   "parent_face_id": "WL-3",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": null
+  },
+  {
+   "id": "AT-4",
+   "type": "other",
+   "subtype": null,
+   "elevation": "back",
+   "width_mm": {
+    "value": 6480,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan label OUTDOOR LIVING 20'-8\" x 13'-8\" (clear) + posts; heights from rear/left sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 4495,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan label OUTDOOR LIVING 20'-8\" x 13'-8\" (clear) + posts; heights from rear/left sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "depth_mm": {
+    "value": 4350,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "plan label OUTDOOR LIVING 20'-8\" x 13'-8\" (clear) + posts; heights from rear/left sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "position_mm": {
+    "x": 955,
+    "y": 0
+   },
+   "parent_face_id": "WL-8",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": null
+  }
+ ],
+ "faces": [
+  {
+   "id": "WL-1",
+   "face_class": "wall",
+   "elevation": "front",
+   "material": "siding",
+   "area_mm2": {
+    "value": 29665900.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 20312259.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 3725,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 6493,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": {
+    "value": 2942,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering (photo 1); rendering colours, not an as-built photo"
+   },
+   "start_mm": 0
+  },
+  {
+   "id": "WL-2",
+   "face_class": "wall",
+   "elevation": "front",
+   "material": "brick",
+   "area_mm2": {
+    "value": 23291009,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 11977376.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 3551,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 6559,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#E6E4DF",
+    "name": "white painted brick",
+    "confidence": "medium",
+    "secondary_hex": "#3C3D40",
+    "note": "from rendering; secondary = charcoal siding above the brick"
+   },
+   "start_mm": 3725
+  },
+  {
+   "id": "WL-3",
+   "face_class": "wall",
+   "elevation": "front",
+   "material": "siding",
+   "area_mm2": {
+    "value": 29514584.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 22435254.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 3706,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 6493,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": {
+    "value": 2942,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering (photo 1); rendering colours, not an as-built photo"
+   },
+   "start_mm": 7276
+  },
+  {
+   "id": "WL-4",
+   "face_class": "wall",
+   "elevation": "front",
+   "material": "brick",
+   "area_mm2": {
+    "value": 12586647.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 10117665.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 2397,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 4053,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": {
+    "value": 2396,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#E6E4DF",
+    "name": "white painted brick",
+    "confidence": "medium",
+    "secondary_hex": "#CFCBC4",
+    "note": "from rendering; secondary = mortar"
+   },
+   "start_mm": 10982
+  },
+  {
+   "id": "WL-5",
+   "face_class": "wall",
+   "elevation": "left",
+   "material": "siding",
+   "area_mm2": {
+    "value": 85447704,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 75889897.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 12984,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 6581,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front siding (drawings show board-and-batten)"
+   },
+   "start_mm": 0
+  },
+  {
+   "id": "WL-6",
+   "face_class": "wall",
+   "elevation": "left",
+   "material": "siding",
+   "area_mm2": {
+    "value": 3350388,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 3350388,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 516,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan scale 22.88 mm/px from room labels (sheet 6)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 6493,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan scale 22.88 mm/px from room labels (sheet 6)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front siding (drawings show board-and-batten)"
+   },
+   "start_mm": 12984
+  },
+  {
+   "id": "WL-7",
+   "face_class": "wall",
+   "elevation": "back",
+   "material": "siding",
+   "area_mm2": {
+    "value": 8645979,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 8645979,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 2397,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 3607,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front siding (drawings show board-and-batten)"
+   },
+   "start_mm": 0
+  },
+  {
+   "id": "WL-8",
+   "face_class": "wall",
+   "elevation": "back",
+   "material": "siding",
+   "area_mm2": {
+    "value": 36940179.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 20281993.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 4567,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 6449,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": {
+    "value": 3279,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front siding (drawings show board-and-batten)"
+   },
+   "start_mm": 2397
+  },
+  {
+   "id": "WL-9",
+   "face_class": "wall",
+   "elevation": "back",
+   "material": "siding",
+   "area_mm2": {
+    "value": 11221260,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 10334352.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 1740,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 6449,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front siding (drawings show board-and-batten)"
+   },
+   "start_mm": 6964
+  },
+  {
+   "id": "WL-10",
+   "face_class": "wall",
+   "elevation": "back",
+   "material": "siding",
+   "area_mm2": {
+    "value": 37813737.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 27429848.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 4675,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 6449,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": {
+    "value": 3279,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front siding (drawings show board-and-batten)"
+   },
+   "start_mm": 8704
+  },
+  {
+   "id": "WL-11",
+   "face_class": "wall",
+   "elevation": "right",
+   "material": "siding",
+   "area_mm2": {
+    "value": 3350388,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 3350388,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 516,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan scale 22.88 mm/px from room labels (sheet 6)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 6493,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan scale 22.88 mm/px from room labels (sheet 6)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front siding (drawings show board-and-batten)"
+   },
+   "start_mm": 0
+  },
+  {
+   "id": "WL-12",
+   "face_class": "wall",
+   "elevation": "right",
+   "material": "siding",
+   "area_mm2": {
+    "value": 13687244,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 13687244,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 2108,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 6493,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front siding (drawings show board-and-batten)"
+   },
+   "start_mm": 516
+  },
+  {
+   "id": "WL-13",
+   "face_class": "wall",
+   "elevation": "right",
+   "material": "siding",
+   "area_mm2": {
+    "value": 22923768,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 20804242.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 5656,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 4053,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front siding (drawings show board-and-batten)"
+   },
+   "start_mm": 2624
+  },
+  {
+   "id": "WL-14",
+   "face_class": "wall",
+   "elevation": "right",
+   "material": "siding",
+   "area_mm2": {
+    "value": 26929980.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": {
+    "value": 25839829.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "width_mm": {
+    "value": 5220,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 3640,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "gable_height_mm": {
+    "value": 3038,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front siding (drawings show board-and-batten)"
+   },
+   "start_mm": 8280
+  },
+  {
+   "id": "WL-15",
+   "face_class": "wall",
+   "elevation": "right",
+   "material": "siding",
+   "area_mm2": {
+    "value": 3723165.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "triangular wall part of MB-1 above the MB-2 cross-gable roof; height = max at rear end, from roof surface to eave"
+   },
+   "net_area_mm2": {
+    "value": 3723165.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "triangular wall part of MB-1 above the MB-2 cross-gable roof; height = max at rear end, from roof surface to eave"
+   },
+   "width_mm": {
+    "value": 2610,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "triangular wall part of MB-1 above the MB-2 cross-gable roof; height = max at rear end, from roof surface to eave"
+   },
+   "height_mm": {
+    "value": 2853,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "triangular wall part of MB-1 above the MB-2 cross-gable roof; height = max at rear end, from roof surface to eave"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front siding (drawings show board-and-batten)"
+   },
+   "start_mm": 10890
+  },
+  {
+   "id": "WL-16",
+   "face_class": "wall",
+   "elevation": "front",
+   "material": "siding",
+   "area_mm2": {
+    "value": 4780672.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "net_area_mm2": {
+    "value": 3305672.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "width_mm": {
+    "value": 2197,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "height_mm": {
+    "value": 1521,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "gable_height_mm": {
+    "value": 1310,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering (photo 1); rendering colours, not an as-built photo"
+   },
+   "start_mm": 4407
+  },
+  {
+   "id": "WL-17",
+   "face_class": "wall",
+   "elevation": "left",
+   "material": "siding",
+   "area_mm2": {
+    "value": 970398.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch; triangular cheek wall"
+   },
+   "net_area_mm2": {
+    "value": 970398.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch; triangular cheek wall"
+   },
+   "width_mm": {
+    "value": 1276,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch; triangular cheek wall"
+   },
+   "height_mm": {
+    "value": 1521,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch; triangular cheek wall"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering (photo 1); rendering colours, not an as-built photo"
+   },
+   "start_mm": 11354
+  },
+  {
+   "id": "WL-18",
+   "face_class": "wall",
+   "elevation": "right",
+   "material": "siding",
+   "area_mm2": {
+    "value": 970398.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch; triangular cheek wall"
+   },
+   "net_area_mm2": {
+    "value": 970398.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch; triangular cheek wall"
+   },
+   "width_mm": {
+    "value": 1276,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch; triangular cheek wall"
+   },
+   "height_mm": {
+    "value": 1521,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch; triangular cheek wall"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#3C3D40",
+    "name": "charcoal board-and-batten siding",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering (photo 1); rendering colours, not an as-built photo"
+   },
+   "start_mm": 870
+  },
+  {
+   "id": "RF-1",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 66684322.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 56.0,
+    "degrees_rounded": 56,
+    "rise_over_12_snapped": 18
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering"
+   }
+  },
+  {
+   "id": "RF-2",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 5644595.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 57.7,
+    "degrees_rounded": 58,
+    "rise_over_12_snapped": 19
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering"
+   }
+  },
+  {
+   "id": "RF-3",
+   "face_class": "roof_face",
+   "elevation": "front",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 23254866.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 50.0,
+    "degrees_rounded": 50,
+    "rise_over_12_snapped": 14
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering"
+   }
+  },
+  {
+   "id": "RF-4",
+   "face_class": "roof_face",
+   "elevation": "back",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 47660450.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 22.0,
+    "degrees_rounded": 22,
+    "rise_over_12_snapped": 5
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front roof"
+   }
+  },
+  {
+   "id": "RF-5",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 19888651.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 55.0,
+    "degrees_rounded": 55,
+    "rise_over_12_snapped": 17
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front roof"
+   }
+  },
+  {
+   "id": "RF-6",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 19488917.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 55.0,
+    "degrees_rounded": 55,
+    "rise_over_12_snapped": 17
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front roof"
+   }
+  },
+  {
+   "id": "RF-7",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 46257740.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 56.0,
+    "degrees_rounded": 56,
+    "rise_over_12_snapped": 18
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front roof"
+   }
+  },
+  {
+   "id": "RF-8",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 6643386.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 57.7,
+    "degrees_rounded": 58,
+    "rise_over_12_snapped": 19
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering"
+   }
+  },
+  {
+   "id": "RF-9",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 12813642.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 57.7,
+    "degrees_rounded": 58,
+    "rise_over_12_snapped": 19
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering"
+   }
+  },
+  {
+   "id": "RF-10",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 21954144.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 45.6,
+    "degrees_rounded": 46,
+    "rise_over_12_snapped": 12
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering"
+   }
+  },
+  {
+   "id": "RF-11",
+   "face_class": "roof_face",
+   "elevation": "front",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 9967820.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 49.3,
+    "degrees_rounded": 49,
+    "rise_over_12_snapped": 14
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front roof"
+   }
+  },
+  {
+   "id": "RF-12",
+   "face_class": "roof_face",
+   "elevation": "back",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 12035407.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 49.3,
+    "degrees_rounded": 49,
+    "rise_over_12_snapped": 14
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "face not visible in photo 1; assumed same as front roof"
+   }
+  },
+  {
+   "id": "RF-13",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 3600000,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "dormer width/depth from rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 50.0,
+    "degrees_rounded": 50,
+    "rise_over_12_snapped": 14
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering"
+   }
+  },
+  {
+   "id": "RF-14",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 3600000,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "dormer width/depth from rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 50.0,
+    "degrees_rounded": 50,
+    "rise_over_12_snapped": 14
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": null,
+   "color": {
+    "hex": "#4B4946",
+    "name": "dark weathered gray shingles",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering"
+   }
+  },
+  {
+   "id": "RF-15",
+   "face_class": "roof_face",
+   "elevation": "front",
+   "material": "metal",
+   "area_mm2": {
+    "value": 3996518,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "awning width x curved slope length (projection approx. 700 mm assumed)",
+    "low_reason": "bell-cast curved awning; projection not dimensioned, average pitch"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 46.6,
+    "degrees_rounded": 47,
+    "rise_over_12_snapped": 13
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": "AT-2",
+   "color": {
+    "hex": "#3A3C3F",
+    "name": "charcoal standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering"
+   }
+  },
+  {
+   "id": "RF-16",
+   "face_class": "roof_face",
+   "elevation": "front",
+   "material": "metal",
+   "area_mm2": {
+    "value": 3841630,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "awning width x curved slope length (projection approx. 700 mm assumed)",
+    "low_reason": "bell-cast curved awning; projection not dimensioned, average pitch"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 46.6,
+    "degrees_rounded": 47,
+    "rise_over_12_snapped": 13
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": "AT-3",
+   "color": {
+    "hex": "#3A3C3F",
+    "name": "charcoal standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from rendering"
+   }
+  },
+  {
+   "id": "RF-17",
+   "face_class": "roof_face",
+   "elevation": "back",
+   "material": "metal",
+   "area_mm2": {
+    "value": 16730613.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 10.3,
+    "degrees_rounded": 10,
+    "rise_over_12_snapped": 2
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": "AT-4",
+   "color": {
+    "hex": "#3A3C3F",
+    "name": "charcoal standing-seam metal",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "porch roof not visible in photo 1; drawings show standing seams, colour assumed as front awnings"
+   }
+  },
+  {
+   "id": "RF-18",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "metal",
+   "area_mm2": {
+    "value": 8460838.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 13.4,
+    "degrees_rounded": 13,
+    "rise_over_12_snapped": 3
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": "AT-4",
+   "color": {
+    "hex": "#3A3C3F",
+    "name": "charcoal standing-seam metal",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "porch roof not visible in photo 1; drawings show standing seams, colour assumed as front awnings"
+   }
+  },
+  {
+   "id": "RF-19",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "metal",
+   "area_mm2": {
+    "value": 8460838.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan footprint x 1/cos(pitch), pitch from elevation sheets",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "pitch": {
+    "degrees_original": 13.4,
+    "degrees_rounded": 13,
+    "rise_over_12_snapped": 3
+   },
+   "orientation_deg": null,
+   "parent_attachment_id": "AT-4",
+   "color": {
+    "hex": "#3A3C3F",
+    "name": "charcoal standing-seam metal",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "porch roof not visible in photo 1; drawings show standing seams, colour assumed as front awnings"
+   }
+  },
+  {
+   "id": "SF-1",
+   "face_class": "soffit",
+   "elevation": "left",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 6511526,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 13594 mm x depth",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": {
+    "value": 479,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "SF-2",
+   "face_class": "soffit",
+   "elevation": "front",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 910425,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 2985 mm x depth",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": {
+    "value": 305,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "SF-3",
+   "face_class": "soffit",
+   "elevation": "back",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 524700,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 1749 mm x depth",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": {
+    "value": 300,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "SF-4",
+   "face_class": "soffit",
+   "elevation": "right",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 1280532,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 5874 mm x depth",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": {
+    "value": 218,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "SF-5",
+   "face_class": "soffit",
+   "elevation": "right",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 873000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 2910 mm x depth",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": null,
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "SF-6",
+   "face_class": "soffit",
+   "elevation": "back",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 809100,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 2697 mm x depth",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": null,
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "SF-7",
+   "face_class": "soffit",
+   "elevation": "right",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 878700,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 2929 mm x depth",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": null,
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "FC-1",
+   "face_class": "fascia",
+   "elevation": "left",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 2501296,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 13594 mm x fascia height (184 mm, 1x8 assumed)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": null,
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "FC-2",
+   "face_class": "fascia",
+   "elevation": "front",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 549240,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 2985 mm x fascia height (184 mm, 1x8 assumed)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": null,
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "FC-3",
+   "face_class": "fascia",
+   "elevation": "back",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 321816,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 1749 mm x fascia height (184 mm, 1x8 assumed)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": null,
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "FC-4",
+   "face_class": "fascia",
+   "elevation": "right",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 1080816,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 5874 mm x fascia height (184 mm, 1x8 assumed)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": null,
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "FC-5",
+   "face_class": "fascia",
+   "elevation": "right",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 535440,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 2910 mm x fascia height (184 mm, 1x8 assumed)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": null,
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "FC-6",
+   "face_class": "fascia",
+   "elevation": "back",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 496248,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 2697 mm x fascia height (184 mm, 1x8 assumed)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": null,
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  },
+  {
+   "id": "FC-7",
+   "face_class": "fascia",
+   "elevation": "right",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 538936,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "run 2929 mm x fascia height (184 mm, 1x8 assumed)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "net_area_mm2": null,
+   "soffit_depth_mm": null,
+   "color": {
+    "hex": "#2E2F32",
+    "name": "charcoal trim",
+    "confidence": "low",
+    "secondary_hex": null,
+    "note": "soffit/fascia mostly in shadow in rendering"
+   }
+  }
+ ],
+ "edges": [
+  {
+   "id": "E-1",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 2811,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-2",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 8652,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-3",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 5730,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-4",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 8652,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-5",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 1394,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "left",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-6",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 1651,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "left",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-7",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 1388,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-8",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 1658,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-9",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 4420,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-10",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 9308,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-11",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 9280,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-12",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 13594,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "left",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-13",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 2985,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-14",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 1749,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-15",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 2910,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-16",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 4057,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-17",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 4599,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-18",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 4016,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-19",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 4597,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-20",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 4505,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-21",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 4503,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-22",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 6493,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-23",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 6449,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "left",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-24",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 2697,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-25",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 4668,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-26",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 2697,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-27",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 5874,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-28",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3900,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "curved bell-cast rake over WL-4; length estimated along the curve"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-29",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 4462,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-30",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 4462,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-31",
+   "edge_class": "step_flashing",
+   "length_mm": {
+    "value": 4002,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-32",
+   "edge_class": "unclassified",
+   "length_mm": {
+    "value": 6900,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "pitch break between RF-7 (56 deg) and catslide RF-10 (45.6 deg) along the MB-1/MB-2 wall line; length estimated"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-33",
+   "edge_class": "inside_corner",
+   "length_mm": {
+    "value": 6449,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-34",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 4053,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-35",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 3640,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-36",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 3327,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-37",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 4415,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-38",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 2929,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-39",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3993,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-40",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3851,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-41",
+   "edge_class": "inside_corner",
+   "length_mm": {
+    "value": 6493,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-42",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 6493,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-43",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 6493,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-44",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 2575,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-45",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 2118,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-46",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 2118,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-47",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 1476,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-48",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 1476,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-49",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 1943,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-50",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 1943,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-51",
+   "edge_class": "flashing",
+   "length_mm": {
+    "value": 2197,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-52",
+   "edge_class": "step_flashing",
+   "length_mm": {
+    "value": 1985,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-53",
+   "edge_class": "step_flashing",
+   "length_mm": {
+    "value": 1985,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-54",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 1521,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-55",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 1521,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "rendering",
+    "low_reason": "dormer visible only in rendering (photo 1); perspective not corrected, depth estimated from main-roof pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-56",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 3922,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-2"
+  },
+  {
+   "id": "E-57",
+   "edge_class": "flashing",
+   "length_mm": {
+    "value": 3922,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-2"
+  },
+  {
+   "id": "E-58",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 3770,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-3"
+  },
+  {
+   "id": "E-59",
+   "edge_class": "flashing",
+   "length_mm": {
+    "value": 3770,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-3"
+  },
+  {
+   "id": "E-60",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 5905,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-61",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 5905,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-62",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 4650,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "left",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-63",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 7080,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-64",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 4650,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-65",
+   "edge_class": "step_flashing",
+   "length_mm": {
+    "value": 3639,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-66",
+   "edge_class": "step_flashing",
+   "length_mm": {
+    "value": 3639,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan geometry + elevation heights",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": "AT-4"
+  }
+ ],
+ "openings": [
+  {
+   "id": "W-1",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 915.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 2396.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 4684.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 1394.6,
+    "y": 4684.8
+   },
+   "area_mm2": {
+    "value": 2193594.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 6624.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 4,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-2",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-2",
+   "width_mm": {
+    "value": 871.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1525.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 4750.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": "WG-1",
+   "position_mm": {
+    "x": 3900.4,
+    "y": 4750.2
+   },
+   "area_mm2": {
+    "value": 1329451.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 4793.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-3",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-2",
+   "width_mm": {
+    "value": 871.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1525.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 4750.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": "WG-1",
+   "position_mm": {
+    "x": 5055.3,
+    "y": 4750.2
+   },
+   "area_mm2": {
+    "value": 1329451.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 4793.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-4",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-2",
+   "width_mm": {
+    "value": 871.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1525.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 4750.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": "WG-1",
+   "position_mm": {
+    "x": 6231.9,
+    "y": 4750.2
+   },
+   "area_mm2": {
+    "value": 1329451.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 4793.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-5",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-3",
+   "width_mm": {
+    "value": 980.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 2396.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 4684.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 8650.6,
+    "y": 4684.8
+   },
+   "area_mm2": {
+    "value": 2350280.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 6754.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 4,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-6",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-3",
+   "width_mm": {
+    "value": 871.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1808.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 980.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": "WG-2",
+   "position_mm": {
+    "x": 7757.2,
+    "y": 980.5
+   },
+   "area_mm2": {
+    "value": 1576349.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 5360.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-7",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-3",
+   "width_mm": {
+    "value": 871.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1808.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 980.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": "WG-2",
+   "position_mm": {
+    "x": 8694.2,
+    "y": 980.5
+   },
+   "area_mm2": {
+    "value": 1576349.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 5360.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-8",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-3",
+   "width_mm": {
+    "value": 871.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1808.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 980.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": "WG-2",
+   "position_mm": {
+    "x": 9631.2,
+    "y": 980.5
+   },
+   "area_mm2": {
+    "value": 1576349.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 5360.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-9",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-16",
+   "width_mm": {
+    "value": 1250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "rendering only (dormer not on front elevation drawing); perspective and roof recession not corrected"
+   },
+   "height_mm": {
+    "value": 1180,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "rendering only (dormer not on front elevation drawing); perspective and roof recession not corrected"
+   },
+   "sill_height_mm": {
+    "value": 7100,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rendering (photo 1), garage door G-2 9 ft as scale, mapped onto front sheet",
+    "low_reason": "rendering only (dormer not on front elevation drawing); perspective and roof recession not corrected"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 4762,
+    "y": 7100
+   },
+   "area_mm2": {
+    "value": 1475000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "rendering only (dormer not on front elevation drawing); perspective and roof recession not corrected"
+   },
+   "perimeter_mm": {
+    "value": 4860,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "rendering only (dormer not on front elevation drawing); perspective and roof recession not corrected"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 1,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "D-1",
+   "type": "door",
+   "elevation": "front",
+   "parent_face_id": "WL-4",
+   "width_mm": {
+    "value": 1089.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 2266.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 457.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 11592.3,
+    "y": 457.6
+   },
+   "area_mm2": {
+    "value": 2468981.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 6711.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering. Arched opening in WL-4 (covered entry); per plan the entry door itself sits approx. 1.8 m behind this opening",
+   "head": {
+    "shape": "round",
+    "rise_mm": 544.8
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 3,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "G-1",
+   "type": "garage_door",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 2832.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 2527.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 0.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 457.6,
+    "y": 0.0
+   },
+   "area_mm2": {
+    "value": 7160045.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 10720.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "G-2",
+   "type": "garage_door",
+   "elevation": "front",
+   "parent_face_id": "WL-2",
+   "width_mm": {
+    "value": 2898.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 2527.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 0.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 4118.3,
+    "y": 0.0
+   },
+   "area_mm2": {
+    "value": 7325277.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 10851.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering. Flat-topped door under a brick arch with board-and-batten infill (arch apex approx. 3.1 m)",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-10",
+   "type": "window",
+   "elevation": "left",
+   "parent_face_id": "WL-5",
+   "width_mm": {
+    "value": 1045.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1786.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 1198.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 719.1,
+    "y": 1198.5
+   },
+   "area_mm2": {
+    "value": 1868828.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 5665.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-11",
+   "type": "window",
+   "elevation": "left",
+   "parent_face_id": "WL-5",
+   "width_mm": {
+    "value": 1024.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1786.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 1198.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 3617.1,
+    "y": 1198.5
+   },
+   "area_mm2": {
+    "value": 1829895.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 5621.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-12",
+   "type": "window",
+   "elevation": "left",
+   "parent_face_id": "WL-5",
+   "width_mm": {
+    "value": 762.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1263.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 4837.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 5447.5,
+    "y": 4837.4
+   },
+   "area_mm2": {
+    "value": 963852.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 4052.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-13",
+   "type": "window",
+   "elevation": "left",
+   "parent_face_id": "WL-5",
+   "width_mm": {
+    "value": 1024.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1263.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 4837.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 6776.7,
+    "y": 4837.4
+   },
+   "area_mm2": {
+    "value": 1294316.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 4575.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 2,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-14",
+   "type": "window",
+   "elevation": "left",
+   "parent_face_id": "WL-5",
+   "width_mm": {
+    "value": 740.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1263.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 4837.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 8389.1,
+    "y": 4837.4
+   },
+   "area_mm2": {
+    "value": 936313.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 4009.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "D-2",
+   "type": "door",
+   "elevation": "left",
+   "parent_face_id": "WL-5",
+   "width_mm": {
+    "value": 1002.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 2658.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 43.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 9086.4,
+    "y": 43.6
+   },
+   "area_mm2": {
+    "value": 2664600.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 7321.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering. Garage side door",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-15",
+   "type": "window",
+   "elevation": "back",
+   "parent_face_id": "WL-8",
+   "width_mm": {
+    "value": 1967.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 2404.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 4699.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 3606.9,
+    "y": 4699.9
+   },
+   "area_mm2": {
+    "value": 4730810.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 8744.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 3,
+    "horizontal_bars": 3,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-16",
+   "type": "window",
+   "elevation": "back",
+   "parent_face_id": "WL-9",
+   "width_mm": {
+    "value": 699.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1267.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 4809.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 7541.7,
+    "y": 4809.2
+   },
+   "area_mm2": {
+    "value": 886907.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 3934.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-17",
+   "type": "window",
+   "elevation": "back",
+   "parent_face_id": "WL-10",
+   "width_mm": {
+    "value": 1967.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 2404.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 4699.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 10164.9,
+    "y": 4699.9
+   },
+   "area_mm2": {
+    "value": 4730810.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 8744.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 3,
+    "horizontal_bars": 3,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-18",
+   "type": "window",
+   "elevation": "back",
+   "parent_face_id": "WL-10",
+   "width_mm": {
+    "value": 1967.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1989.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 918.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 8853.3,
+    "y": 918.1
+   },
+   "area_mm2": {
+    "value": 3913670.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 7913.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 3,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-19",
+   "type": "window",
+   "elevation": "back",
+   "parent_face_id": "WL-10",
+   "width_mm": {
+    "value": 874.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 1989.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 918.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 11629.5,
+    "y": 918.1
+   },
+   "area_mm2": {
+    "value": 1739408.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 5727.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 2,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "D-3",
+   "type": "patio_door",
+   "elevation": "back",
+   "parent_face_id": "WL-8",
+   "width_mm": {
+    "value": 1049.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 2623.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 327.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 1945.5,
+    "y": 327.9
+   },
+   "area_mm2": {
+    "value": 2752471.3,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 7345.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering. Under rear porch AT-4; straddles WL-7/WL-8 boundary",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 3,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "D-4",
+   "type": "patio_door",
+   "elevation": "back",
+   "parent_face_id": "WL-8",
+   "width_mm": {
+    "value": 1748.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 2623.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 327.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 3257.1,
+    "y": 327.9
+   },
+   "area_mm2": {
+    "value": 4587452.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 8744.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering. Under rear porch AT-4",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 3,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "D-5",
+   "type": "patio_door",
+   "elevation": "back",
+   "parent_face_id": "WL-8",
+   "width_mm": {
+    "value": 1748.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 2623.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 327.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "rear sheet scale 21.86 mm/px (plan width 13379 mm / 612 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 5333.8,
+    "y": 327.9
+   },
+   "area_mm2": {
+    "value": 4587452.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 8744.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering. Under rear porch AT-4; straddles WL-8/WL-9 boundary",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 3,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-20",
+   "type": "window",
+   "elevation": "right",
+   "parent_face_id": "WL-13",
+   "width_mm": {
+    "value": 1045.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 2026.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 937.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 5861.5,
+    "y": 937.0
+   },
+   "area_mm2": {
+    "value": 2119525.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 6144.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 4,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-21",
+   "type": "window",
+   "elevation": "right",
+   "parent_face_id": "WL-14",
+   "width_mm": {
+    "value": 871.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 610.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 2287.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 8432.7,
+    "y": 2287.9
+   },
+   "area_mm2": {
+    "value": 531780.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 2963.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 2,
+    "horizontal_bars": 0,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-22",
+   "type": "window",
+   "elevation": "right",
+   "parent_face_id": "WL-14",
+   "width_mm": {
+    "value": 915.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "height_mm": {
+    "value": 610.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "sill_height_mm": {
+    "value": 2287.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "elevation sheet scale 21.79 mm/px (plan width 13379 mm / 614 px)",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 12093.4,
+    "y": 2287.9
+   },
+   "area_mm2": {
+    "value": 558369.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "perimeter_mm": {
+    "value": 3050.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from listed dimensions",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 2,
+    "horizontal_bars": 0,
+    "transom_height_mm": null
+   }
+  }
+ ],
+ "massing": {
+  "bodies": [
+   {
+    "id": "MB-1",
+    "role": "main",
+    "attachment_id": null,
+    "wall_ids": [
+     "WL-1",
+     "WL-2",
+     "WL-5",
+     "WL-8",
+     "WL-9",
+     "WL-10",
+     "WL-12",
+     "WL-15"
+    ],
+    "roof_face_ids": [
+     "RF-1",
+     "RF-2",
+     "RF-3",
+     "RF-4",
+     "RF-5",
+     "RF-6",
+     "RF-7"
+    ],
+    "footprint_mm": {
+     "width_mm": 10982,
+     "depth_mm": 12984
+    },
+    "attach": null,
+    "roof": {
+     "form": "hip",
+     "ridge_axis": "x",
+     "low_side": null,
+     "runs_into": [],
+     "overhang_mm": null
+    },
+    "dormer_front_height_mm": null,
+    "grade_mm": null,
+    "missing": [
+     "Roof is composite: central hip ridge E-3 parallel to the front at approx. 3.1 m behind the front wall, X approx. 2637-8367 mm.",
+     "Front-left cross gable (WL-1, ridge E-1 along y at X approx. 1863, ridge approx. 9435 mm) ends approx. 2.5 m back in the hip; its right face RF-2 drains into valley E-9.",
+     "Two rear cross gables (WL-8, WL-10; ridges E-2/E-4 along y at X approx. 2338 and 8699, ridge approx. 9810 mm) run approx. 8.4 m forward into the shallow rear center face RF-4 (22 deg).",
+     "Left side: front-left gable, hip end and rear-left gable left faces form one continuous plane RF-1 (56 deg) with a single eave E-12.",
+     "Right side: RF-7 (56 deg) continues over MB-2 as the catslide RF-10 (45.6 deg) for Y approx. 2108-10374; behind that RF-7 has its own eave E-15 at approx. 6.5 m."
+    ]
+   },
+   {
+    "id": "MB-2",
+    "role": "wing",
+    "attachment_id": null,
+    "wall_ids": [
+     "WL-4",
+     "WL-7",
+     "WL-13",
+     "WL-14"
+    ],
+    "roof_face_ids": [
+     "RF-10",
+     "RF-11",
+     "RF-12"
+    ],
+    "footprint_mm": {
+     "width_mm": 2397,
+     "depth_mm": 10876
+    },
+    "attach": {
+     "to": "MB-1",
+     "side": "right",
+     "flush": [
+      "back"
+     ],
+     "offset_mm": 2108,
+     "offset_from": "front",
+     "gap_mm": null
+    },
+    "roof": {
+     "form": "shed",
+     "ridge_axis": null,
+     "low_side": "right",
+     "runs_into": [
+      {
+       "side": "left",
+       "body": "MB-1"
+      }
+     ],
+     "overhang_mm": null
+    },
+    "dormer_front_height_mm": null,
+    "grade_mm": null,
+    "missing": [
+     "back end: the rear approx. 5.2 m (WL-14) carry a cross gable facing right (ridge E-24 along x, approx. 6678 mm; faces RF-11 front, RF-12 back) instead of the shed.",
+     "Front end: the shed is the catslide continuation of MB-1 roof plane RF-7, with a curved bell-cast flare over WL-4 (curvature not modelled).",
+     "Front wall WL-4 has an arched opening into a recessed covered entry (approx. 2.4 x 1.8 m, floor plan)."
+    ]
+   },
+   {
+    "id": "MB-3",
+    "role": "wing",
+    "attachment_id": null,
+    "wall_ids": [
+     "WL-3",
+     "WL-6",
+     "WL-11"
+    ],
+    "roof_face_ids": [
+     "RF-8",
+     "RF-9"
+    ],
+    "footprint_mm": {
+     "width_mm": 3706,
+     "depth_mm": 516
+    },
+    "attach": {
+     "to": "MB-1",
+     "side": "front",
+     "flush": [
+      "right"
+     ],
+     "offset_mm": 7276,
+     "offset_from": "left",
+     "gap_mm": null
+    },
+    "roof": {
+     "form": "gable",
+     "ridge_axis": "y",
+     "low_side": null,
+     "runs_into": [
+      {
+       "side": "back",
+       "body": "MB-1"
+      }
+     ],
+     "overhang_mm": null
+    },
+    "dormer_front_height_mm": null,
+    "grade_mm": null,
+    "missing": [
+     "Gable roof (ridge E-36 approx. 9435 mm) extends approx. 2.5 m back over MB-1 before meeting the hip; its right face RF-9 lies in the same plane as RF-7."
+    ]
+   },
+   {
+    "id": "MB-4",
+    "role": "dormer",
+    "attachment_id": "AT-1",
+    "wall_ids": [
+     "WL-16",
+     "WL-17",
+     "WL-18"
+    ],
+    "roof_face_ids": [
+     "RF-13",
+     "RF-14"
+    ],
+    "footprint_mm": null,
+    "attach": {
+     "to": "MB-1",
+     "side": "front",
+     "flush": [],
+     "offset_mm": null,
+     "offset_from": null,
+     "gap_mm": null
+    },
+    "roof": {
+     "form": "gable",
+     "ridge_axis": "y",
+     "low_side": null,
+     "runs_into": [
+      {
+       "side": "back",
+       "body": "MB-1"
+      }
+     ],
+     "overhang_mm": 150
+    },
+    "dormer_front_height_mm": 1521,
+    "grade_mm": null,
+    "missing": [
+     "Dormer appears only in the rendering (photo 1), not on the front elevation drawing; size and depth estimated, overhang assumed."
+    ]
+   }
+  ],
+  "missing": [
+   "Rear covered porch AT-4 has no walls (posts + outdoor fireplace) and is therefore no body; roof RF-17/18/19 = three-sided hip against WL-8/WL-9, apex at the wall approx. 4495 mm, eave approx. 3650 mm, posts at the four outer corners and mid-span.",
+   "Awnings AT-2/AT-3 are bell-cast metal canopies on brackets; no body.",
+   "Projecting window surrounds with corbels on W-1 and W-5, gable eave returns, brackets and lanterns are not modelled.",
+   "Brick plinths: corner pier at WL-1 left, knee wall under W-6..W-8, brick base on WL-11/WL-12; exact heights not dimensioned."
+  ]
+ },
+ "downspouts": [
+  {
+   "id": "DS-1",
+   "elevation": "front",
+   "length_mm": {
+    "value": 6559,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "eave height",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "position_mm": {
+    "x": 3683
+   },
+   "connects_edge_id": "E-13"
+  },
+  {
+   "id": "DS-2",
+   "elevation": "front",
+   "length_mm": {
+    "value": 6559,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "eave height",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "position_mm": {
+    "x": 7234
+   },
+   "connects_edge_id": "E-13"
+  },
+  {
+   "id": "DS-3",
+   "elevation": "front",
+   "length_mm": {
+    "value": 6493,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "eave height",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "position_mm": {
+    "x": 10982
+   },
+   "connects_edge_id": "E-38"
+  },
+  {
+   "id": "DS-4",
+   "elevation": "left",
+   "length_mm": {
+    "value": 6581,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "eave height",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "position_mm": {
+    "x": 65
+   },
+   "connects_edge_id": "E-12"
+  },
+  {
+   "id": "DS-5",
+   "elevation": "left",
+   "length_mm": {
+    "value": 6581,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "eave height",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "position_mm": {
+    "x": 12950
+   },
+   "connects_edge_id": "E-12"
+  },
+  {
+   "id": "DS-6",
+   "elevation": "right",
+   "length_mm": {
+    "value": 4053,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "eave height",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "position_mm": {
+    "x": 2700
+   },
+   "connects_edge_id": "E-27"
+  },
+  {
+   "id": "DS-7",
+   "elevation": "right",
+   "length_mm": {
+    "value": 6449,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "eave height",
+    "low_reason": "derived via plan scale from room-label dimensions (sheet 6), transferred to elevation sheets via building width; no overall dimension chain"
+   },
+   "position_mm": {
+    "x": 13379
+   },
+   "connects_edge_id": "E-15"
+  }
+ ],
+ "condition_areas": [],
+ "quality": {
+  "references_used": 10,
+  "spread_percent": 5.7,
+  "warnings": [
+   "No dimension chain spans a full facade on any sheet; footprint.width_mm/depth_mm come from the plan scale (room labels, interior dimensions) and are therefore source 'scaled', confidence low.",
+   "Plan vs. photo: photo 1 (a design rendering, not an as-built photo) shows a gable dormer AT-1 with window W-9 on front roof face RF-3; the front elevation drawing has none. Rendering wins on existence; dormer dimensions are estimated from the rendering only.",
+   "Plan vs. photo: rendering proportions differ from the drawings (right front gable peak appears higher than the center ridge, entry block wider). Dimensions taken from the drawings; rendering width estimate 14860 mm dropped as >10% outlier.",
+   "Front gable pitch: rake line reads approx. 54 deg on the front sheet, geometry from apex height (9435 mm) and half wall width (1853-1863 mm) gives 57.7 deg; 57.7 deg reported for RF-2/RF-8/RF-9.",
+   "WALL DIMENSION RULE check fails by design for triangular faces: WL-15 (2610 x 2853 = 7446330 vs area 3723165), WL-17 and WL-18 (1276 x 1521 = 1940796 vs area 970398). Values kept as measured.",
+   "Opening D-3 (x 1946-2995) straddles the WL-7/WL-8 boundary at 2397 and D-5 (x 5334-7082) the WL-8/WL-9 boundary at 6964; both assigned to WL-8 (rear wall is one plane).",
+   "No pipes or vents visible on any input (rendering shows no roof penetrations, drawings do not draw them, rear roof not visible in any photo); penetration count 0 is likely an undercount.",
+   "Interior fireplace (living room, right wall) and outdoor fireplace (rear porch) show no chimney on any elevation; no chimney attachment emitted (assumed direct-vent / not drawn).",
+   "Depth basis: no photo shows the left or right side (depth_basis oblique_only); depth comes only from plan and side elevation drawings, confidence low.",
+   "Left elevation drawn length at the common sheet scale is 13357 mm vs plan depth 12984 mm (2.9%); plan value kept.",
+   "Rear downspouts: none drawn or visible on the rear sheet; the rear center eave E-14 and porch eaves have no visible drop.",
+   "D-1 is the arched opening of the covered entry in WL-4; per the floor plan the entry door itself sits approx. 1.8 m behind it."
+  ],
+  "raw_estimates": [
+   {
+    "target": "total_width",
+    "photo_index": 6,
+    "reference_object": "plan room label LIVING/DINING 26'-4\" (horizontal)",
+    "assumed_size_mm": 8027,
+    "estimate_mm": 13379,
+    "reliability": "medium",
+    "via_transfer": false
+   },
+   {
+    "target": "total_width",
+    "photo_index": 6,
+    "reference_object": "plan room label TWO CAR GARAGE 23'-8\" (horizontal)",
+    "assumed_size_mm": 7214,
+    "estimate_mm": 13397,
+    "reliability": "medium",
+    "via_transfer": false
+   },
+   {
+    "target": "total_width",
+    "photo_index": 6,
+    "reference_object": "plan room label FLEX ROOM 11'-8\" (horizontal)",
+    "assumed_size_mm": 3556,
+    "estimate_mm": 13081,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "total_width",
+    "photo_index": 6,
+    "reference_object": "plan room label OUTDOOR LIVING 20'-8\" (horizontal)",
+    "assumed_size_mm": 6299,
+    "estimate_mm": 13402,
+    "reliability": "medium",
+    "via_transfer": false
+   },
+   {
+    "target": "total_width",
+    "photo_index": 6,
+    "reference_object": "plan room label LIVING/DINING 17'-0\" (y-axis label, isotropic plan scale)",
+    "assumed_size_mm": 5182,
+    "estimate_mm": 13122,
+    "reliability": "medium",
+    "via_transfer": true
+   },
+   {
+    "target": "total_width",
+    "photo_index": 6,
+    "reference_object": "plan room label GARAGE 24'-0\" (y-axis label, isotropic plan scale)",
+    "assumed_size_mm": 7315,
+    "estimate_mm": 12776,
+    "reliability": "low",
+    "via_transfer": true
+   },
+   {
+    "target": "total_width",
+    "photo_index": 6,
+    "reference_object": "plan room label OUTDOOR LIVING 13'-8\" (y-axis label, isotropic plan scale)",
+    "assumed_size_mm": 4166,
+    "estimate_mm": 13537,
+    "reliability": "medium",
+    "via_transfer": true
+   },
+   {
+    "target": "total_width",
+    "photo_index": 2,
+    "reference_object": "drawn garage door G-1 width 9 ft (horizontal)",
+    "assumed_size_mm": 2743,
+    "estimate_mm": 12857,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "total_width",
+    "photo_index": 2,
+    "reference_object": "drawn garage door G-1 height 8 ft (vertical)",
+    "assumed_size_mm": 2438,
+    "estimate_mm": 12906,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "total_width",
+    "photo_index": 1,
+    "reference_object": "garage door G-2 width 9 ft, rendering (horizontal)",
+    "assumed_size_mm": 2743,
+    "estimate_mm": 14860,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "total_depth",
+    "photo_index": 6,
+    "reference_object": "plan room label LIVING/DINING 17'-0\" (horizontal)",
+    "assumed_size_mm": 5182,
+    "estimate_mm": 12718,
+    "reliability": "medium",
+    "via_transfer": false
+   },
+   {
+    "target": "total_depth",
+    "photo_index": 6,
+    "reference_object": "plan room label GARAGE 24'-0\" (horizontal)",
+    "assumed_size_mm": 7315,
+    "estimate_mm": 12383,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "total_depth",
+    "photo_index": 6,
+    "reference_object": "plan room label OUTDOOR LIVING 13'-8\" (horizontal)",
+    "assumed_size_mm": 4166,
+    "estimate_mm": 13121,
+    "reliability": "medium",
+    "via_transfer": false
+   },
+   {
+    "target": "total_depth",
+    "photo_index": 6,
+    "reference_object": "plan room label LIVING/DINING 26'-4\" (x-axis label, isotropic plan scale)",
+    "assumed_size_mm": 8027,
+    "estimate_mm": 12967,
+    "reliability": "medium",
+    "via_transfer": true
+   },
+   {
+    "target": "total_depth",
+    "photo_index": 6,
+    "reference_object": "plan room label TWO CAR GARAGE 23'-8\" (x-axis label, isotropic plan scale)",
+    "assumed_size_mm": 7214,
+    "estimate_mm": 12984,
+    "reliability": "medium",
+    "via_transfer": true
+   },
+   {
+    "target": "total_depth",
+    "photo_index": 6,
+    "reference_object": "plan room label FLEX ROOM 11'-8\" (x-axis label, isotropic plan scale)",
+    "assumed_size_mm": 3556,
+    "estimate_mm": 12678,
+    "reliability": "low",
+    "via_transfer": true
+   },
+   {
+    "target": "total_depth",
+    "photo_index": 6,
+    "reference_object": "plan room label OUTDOOR LIVING 20'-8\" (x-axis label, isotropic plan scale)",
+    "assumed_size_mm": 6299,
+    "estimate_mm": 12987,
+    "reliability": "medium",
+    "via_transfer": true
+   },
+   {
+    "target": "total_depth",
+    "photo_index": 3,
+    "reference_object": "left elevation sheet, scale from front sheet (horizontal)",
+    "assumed_size_mm": 13379,
+    "estimate_mm": 13357,
+    "reliability": "medium",
+    "via_transfer": true
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 2,
+    "reference_object": "front sheet scale from plan width, front center eave",
+    "assumed_size_mm": 13379,
+    "estimate_mm": 6559,
+    "reliability": "medium",
+    "via_transfer": true
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 2,
+    "reference_object": "drawn garage door G-1 height 8 ft (vertical)",
+    "assumed_size_mm": 2438,
+    "estimate_mm": 6327,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 3,
+    "reference_object": "left sheet, scale from front sheet, left eave",
+    "assumed_size_mm": 13379,
+    "estimate_mm": 6581,
+    "reliability": "medium",
+    "via_transfer": true
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 4,
+    "reference_object": "rear sheet scale from plan width, rear eave",
+    "assumed_size_mm": 13379,
+    "estimate_mm": 6449,
+    "reliability": "medium",
+    "via_transfer": true
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 1,
+    "reference_object": "garage door G-2 height 8 ft, rendering (vertical)",
+    "assumed_size_mm": 2438,
+    "estimate_mm": 6565,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 2,
+    "reference_object": "storey height 2 x 2900 + plinth 300 (vertical)",
+    "assumed_size_mm": 2900,
+    "estimate_mm": 6100,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 2,
+    "reference_object": "front sheet scale from plan width",
+    "assumed_size_mm": 13379,
+    "estimate_mm": 10416,
+    "reliability": "medium",
+    "via_transfer": true
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 2,
+    "reference_object": "drawn garage door G-1 height 8 ft (vertical)",
+    "assumed_size_mm": 2438,
+    "estimate_mm": 10048,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 3,
+    "reference_object": "left sheet, scale from front sheet",
+    "assumed_size_mm": 13379,
+    "estimate_mm": 10437,
+    "reliability": "medium",
+    "via_transfer": true
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 4,
+    "reference_object": "rear sheet scale from plan width",
+    "assumed_size_mm": 13379,
+    "estimate_mm": 10449,
+    "reliability": "medium",
+    "via_transfer": true
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 1,
+    "reference_object": "garage door G-2 height 8 ft, rendering (vertical)",
+    "assumed_size_mm": 2438,
+    "estimate_mm": 9769,
+    "reliability": "low",
+    "via_transfer": false
+   }
+  ],
+  "dimension_chains": [
+   {
+    "page": 6,
+    "label": "LIVING/DINING ROOM 26'-4\" (room label, interior) - assigned_to: plan scale -> footprint.width_mm",
+    "values_mm": [
+     8027
+    ],
+    "stated_total_mm": 8027,
+    "computed_sum_mm": 8027,
+    "deviation_percent": 0.0
+   },
+   {
+    "page": 6,
+    "label": "LIVING/DINING ROOM 17'-0\" (room label, interior) - assigned_to: plan scale -> footprint.depth_mm",
+    "values_mm": [
+     5182
+    ],
+    "stated_total_mm": 5182,
+    "computed_sum_mm": 5182,
+    "deviation_percent": 0.0
+   },
+   {
+    "page": 6,
+    "label": "TWO CAR GARAGE 23'-8\" (room label) - assigned_to: plan scale -> footprint.width_mm",
+    "values_mm": [
+     7214
+    ],
+    "stated_total_mm": 7214,
+    "computed_sum_mm": 7214,
+    "deviation_percent": 0.0
+   },
+   {
+    "page": 6,
+    "label": "TWO CAR GARAGE 24'-0\" / 20'-0\" (room label, two depths) - assigned_to: plan scale -> footprint.depth_mm",
+    "values_mm": [
+     7315
+    ],
+    "stated_total_mm": 7315,
+    "computed_sum_mm": 7315,
+    "deviation_percent": 0.0
+   },
+   {
+    "page": 6,
+    "label": "TWO CAR GARAGE 20'-0\" (shorter depth beside closet) - assigned_to: none (cross-check only)",
+    "values_mm": [
+     6096
+    ],
+    "stated_total_mm": 6096,
+    "computed_sum_mm": 6096,
+    "deviation_percent": 0.0
+   },
+   {
+    "page": 6,
+    "label": "FLEX ROOM 11'-8\" x 12'-0\" (room label) - assigned_to: plan scale (width axis); 12'-0\" not used (drawn depth inconsistent)",
+    "values_mm": [
+     3556
+    ],
+    "stated_total_mm": 3556,
+    "computed_sum_mm": 3556,
+    "deviation_percent": 0.0
+   },
+   {
+    "page": 6,
+    "label": "OUTDOOR LIVING 20'-8\" (room label, clear) - assigned_to: attachments AT-4.width_mm + plan scale",
+    "values_mm": [
+     6299
+    ],
+    "stated_total_mm": 6299,
+    "computed_sum_mm": 6299,
+    "deviation_percent": 0.0
+   },
+   {
+    "page": 6,
+    "label": "OUTDOOR LIVING 13'-8\" (room label, clear) - assigned_to: attachments AT-4.depth_mm + plan scale",
+    "values_mm": [
+     4166
+    ],
+    "stated_total_mm": 4166,
+    "computed_sum_mm": 4166,
+    "deviation_percent": 0.0
+   },
+   {
+    "page": 6,
+    "label": "KITCHEN 10'-0\" x 19'-0\" (room label) - assigned_to: none (19'-0\" does not match drawn depth, not used)",
+    "values_mm": [
+     3048,
+     5791
+    ],
+    "stated_total_mm": 8839,
+    "computed_sum_mm": 8839,
+    "deviation_percent": 0.0
+   }
+  ]
+ }
+}
