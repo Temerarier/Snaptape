@@ -39,6 +39,7 @@ minimumReleaseAgeExclude:
 onlyBuiltDependencies:
   - '@swc/core'
   - esbuild
+  - isolated-vm
   - msw
   - unrs-resolver
 

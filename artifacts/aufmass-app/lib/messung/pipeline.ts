@@ -19,6 +19,7 @@ import { standardExtraktor, type ExtraktionsErgebnis } from "./extraktor";
 import type { NutzerReferenz } from "./prompts";
 import { erstatteMessung } from "@/lib/credits/service";
 import { MESS_MODELL } from "./modelle";
+import { fuehreModellLaufAus, pendingReport, modellGuard, stoppReport } from "@/lib/modell3d/schritt2";
 
 // Ajv-Fehler in lesbare Sätze übersetzen (für Anzeige + Protokoll).
 function lesbareFehler(
@@ -160,7 +161,7 @@ export async function fuehreMessLaufAus(args: {
     eq(projectsTable.currentRunId, args.runId),
     eq(projectsTable.status, "processing"),
   );
-  await db.transaction(async (tx) => {
+  const appliedMeasureRunId = await db.transaction(async (tx) => {
   const [owner] = await tx.select({ userId: projectsTable.userId }).from(projectsTable).where(eq(projectsTable.id, args.projektId));
   if (owner) await tx.select({ id: usersTable.id }).from(usersTable).where(eq(usersTable.id, owner.userId)).for("update");
   const angewendet = await tx
@@ -214,6 +215,7 @@ export async function fuehreMessLaufAus(args: {
     costUsd: ergebnis?.costUsd ?? fehlerMeta?.costUsd ?? null,
     retryUsed: ergebnis?.retryUsed ?? fehlerMeta?.retryUsed ?? null,
     repairUsed: ergebnis?.repairUsed ?? fehlerMeta?.repairUsed ?? null,
+    modelDiagnostics: ergebnis?.modelDiagnostics ?? fehlerMeta?.modelDiagnostics ?? null,
     roofAreaMm2: zahlen.roofAreaMm2,
     netWallAreaMm2: zahlen.netWallAreaMm2,
     openingCount: zahlen.openingCount,
@@ -223,5 +225,25 @@ export async function fuehreMessLaufAus(args: {
   if (ausgang === "failed" && angewendet.length > 0 && args.creditLedgerId) {
     await erstatteMessung(tx, args.creditLedgerId, run!.id, "measurement failed");
   }
+  if (ausgang === "model_ready" && angewendet.length > 0) {
+    await tx.update(projectsTable).set({
+      model3d: null, model3dStatus: "pending", model3dReport: pendingReport(run!.id),
+    }).where(eq(projectsTable.id, args.projektId));
+    return run!.id;
+  }
+  return null;
   });
+  // Commit step 1 before starting the optional 3D extra. Its failure must never
+  // enter the step-1 failure/refund branch.
+  if (appliedMeasureRunId) {
+    try {
+      await fuehreModellLaufAus({ projektId: args.projektId, measureRunId: appliedMeasureRunId, dateien: args.dateien });
+    } catch (error) {
+      const message = (error instanceof Error ? error.message : String(error)).slice(0, 4000);
+      await db.update(projectsTable).set({
+        model3d: null, model3dStatus: "unavailable",
+        model3dReport: { ...pendingReport(appliedMeasureRunId), ...stoppReport(message), error: message },
+      }).where(modellGuard(args.projektId, appliedMeasureRunId));
+    }
+  }
 }

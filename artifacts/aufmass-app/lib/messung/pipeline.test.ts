@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   updateReturning: vi.fn(),
   insertValues: vi.fn(),
   erstatte: vi.fn(),
+  step2: vi.fn(),
 }));
 
 vi.mock("drizzle-orm", () => ({
@@ -43,6 +44,12 @@ vi.mock("@workspace/db", () => ({
   },
 }));
 vi.mock("@/lib/credits/service", () => ({ erstatteMessung: mocks.erstatte }));
+vi.mock("@/lib/modell3d/schritt2", () => ({
+  fuehreModellLaufAus: mocks.step2,
+  pendingReport: (id: string) => ({ measure_run_id: id }),
+  modellGuard: () => "model3d-guard",
+  stoppReport: (error: string) => ({ stufe: "stopp", zeilen: [{ text: error }], zahlen: {} }),
+}));
 
 vi.mock("@workspace/measurement", () => ({
   validateMeasurement: mocks.validateMeasurement,
@@ -56,6 +63,8 @@ import {
   fuehreMessLaufAus,
   schemaVersionFuerProtokoll,
 } from "./pipeline";
+import { ExtraktionsFehler } from "./echterExtraktor";
+import type { ModelDiagnostics } from "@workspace/db";
 
 const laufArgs = {
   projektId: "00000000-0000-0000-0000-000000000001",
@@ -74,6 +83,7 @@ beforeEach(() => {
     .mockResolvedValue([{ id: laufArgs.projektId }]);
   mocks.insertValues.mockReset().mockResolvedValue(undefined);
   mocks.erstatte.mockReset().mockResolvedValue(undefined);
+  mocks.step2.mockReset().mockResolvedValue(undefined);
 });
 
 afterEach(() => {
@@ -111,6 +121,57 @@ describe("schemaVersionFuerProtokoll", () => {
 });
 
 describe("Messlauf-Protokoll", () => {
+  it("starts step 2 only for an applied successful measurement", async () => {
+    mocks.standardExtraktor.mockResolvedValue({ roh: { meta: { schema_version: "1.8" } } });
+    mocks.validateMeasurement.mockReturnValue({ valid: true });
+    await fuehreMessLaufAus({ ...laufArgs, creditLedgerId: "debit" });
+    expect(mocks.step2).toHaveBeenCalledWith({ projektId: laufArgs.projektId, measureRunId: "run", dateien: [] });
+    expect(mocks.erstatte).not.toHaveBeenCalled();
+  });
+  it("does not start step 2 for a superseded measurement", async () => {
+    mocks.standardExtraktor.mockResolvedValue({ roh: {} });
+    mocks.validateMeasurement.mockReturnValue({ valid: true });
+    mocks.updateReturning.mockResolvedValue([]);
+    await fuehreMessLaufAus(laufArgs);
+    expect(mocks.step2).not.toHaveBeenCalled();
+  });
+  it("does not refund or reject a successful measurement when step 2 throws", async () => {
+    mocks.standardExtraktor.mockResolvedValue({ roh: { meta: { schema_version: "1.8" } } });
+    mocks.validateMeasurement.mockReturnValue({ valid: true });
+    mocks.step2.mockRejectedValue(new Error("3D failed"));
+    await expect(fuehreMessLaufAus({ ...laufArgs, creditLedgerId: "debit" })).resolves.toBeUndefined();
+    expect(mocks.insertValues).toHaveBeenCalledWith(expect.objectContaining({ outcome: "model_ready" }));
+    expect(mocks.erstatte).not.toHaveBeenCalled();
+  });
+  it.each([true, false])("persists diagnostic metadata on failure (usage complete: %s) and still refunds", async (complete) => {
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const modelDiagnostics: ModelDiagnostics = {
+      effort: "medium", usageComplete: complete,
+      responses: [{
+        phase: "extract", responseId: "msg_failed", model: "claude-opus-5-5",
+        stopReason: "max_tokens", contentTypes: ["thinking"], inputTokens: 100,
+        outputTokens: 64000, cacheReadInputTokens: null, cacheCreationInputTokens: null,
+      }],
+    };
+    mocks.standardExtraktor.mockRejectedValue(new ExtraktionsFehler("No usable text", {
+      model: "claude-opus-5-5", route: "photo", inputTokens: complete ? 100 : null,
+      outputTokens: complete ? 64000 : null, costUsd: complete ? 1.2804 : null,
+      retryUsed: false, repairUsed: false, modelDiagnostics,
+    }));
+    await fuehreMessLaufAus({ ...laufArgs, creditLedgerId: "charge" });
+    expect(mocks.insertValues).toHaveBeenCalledWith(expect.objectContaining({
+      outcome: "failed", modelDiagnostics, inputTokens: complete ? 100 : null,
+      outputTokens: complete ? 64000 : null, costUsd: complete ? 1.2804 : null,
+    }));
+    expect(mocks.erstatte).toHaveBeenCalledTimes(1);
+  });
+  it("also persists response diagnostics for a successful measurement", async () => {
+    const modelDiagnostics = { effort: "medium", usageComplete: true, responses: [] };
+    mocks.standardExtraktor.mockResolvedValue({ roh: { meta: { schema_version: "1.8" } }, modelDiagnostics });
+    mocks.validateMeasurement.mockReturnValue({ valid: true });
+    await fuehreMessLaufAus(laufArgs);
+    expect(mocks.insertValues).toHaveBeenCalledWith(expect.objectContaining({ outcome: "model_ready", modelDiagnostics }));
+  });
   it("refunds only the still-current failed run", async () => {
     vi.spyOn(console, "error").mockImplementation(() => undefined);
     mocks.standardExtraktor.mockRejectedValue(new Error("forced failure"));

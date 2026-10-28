@@ -435,6 +435,9 @@ export const deDE: Dictionary = {
       warnungBadgeViele: "Warnungen",
       fehlerBadgeEiner: "1 Fehler",
       fehlerBadgeViele: "Fehler",
+      antwortDiagnose: "Diagnose der Modellantworten",
+      usageVollstaendig: "Tokenverbrauch für alle Extraktionsschritte vorhanden.",
+      usageUnvollstaendig: "Unvollständiger Verbrauch: Gesamttokens und Kosten sind unbekannt. Empfangene Antworten stehen unten.",
       retryKuerzel: "Retry",
       repairKuerzel: "Repair",
       squaresKuerzel: "Sq",
@@ -450,6 +453,8 @@ export const deDE: Dictionary = {
     },
   },
   viewerNext: {
+    model3dPending: "3D-Modell wird erstellt. Deine Messung ist bereits verfügbar.",
+    model3dUnavailable: "Das zusätzliche 3D-Modell ist nicht verfügbar. Deine Messung bleibt verfügbar.",
     measurements: "Maße",
     overlayConstraintMessage: "Begrenzter Platz für Maße in dieser Ansicht",
     demoProject: "Demoprojekt",

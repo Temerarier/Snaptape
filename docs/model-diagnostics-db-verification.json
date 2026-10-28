@@ -1,0 +1,5 @@
+{
+  "postgresRoundtripsPassed": 3,
+  "syntheticRowsRolledBack": true,
+  "realModelCalls": 0
+}

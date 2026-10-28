@@ -86,7 +86,10 @@ export default async function ProjectListPage({
   }
 
   const projects = await db
-    .select()
+    .select({
+      id: projectsTable.id, name: projectsTable.name, adresse: projectsTable.adresse,
+      status: projectsTable.status, archivedAt: projectsTable.archivedAt, createdAt: projectsTable.createdAt,
+    })
     .from(projectsTable)
     .where(and(...conditions))
     .orderBy(

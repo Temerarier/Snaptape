@@ -1,0 +1,42 @@
+{
+ "farmhouse-140040rk": {
+  "stufe": "merken",
+  "ids_fehlen": 0,
+  "stopp": 0,
+  "flaechen": 47,
+  "oeffnungen": 12,
+  "kanten": 41
+ },
+ "farmhouse-test5-beispiel": {
+  "stufe": "merken",
+  "ids_fehlen": 0,
+  "stopp": 0,
+  "flaechen": 33,
+  "oeffnungen": 17,
+  "kanten": 33
+ },
+ "leipzig-villa": {
+  "stufe": "merken",
+  "ids_fehlen": 0,
+  "stopp": 0,
+  "flaechen": 51,
+  "oeffnungen": 29,
+  "kanten": 54
+ },
+ "triplex-40014db": {
+  "stufe": "merken",
+  "ids_fehlen": 0,
+  "stopp": 0,
+  "flaechen": 41,
+  "oeffnungen": 21,
+  "kanten": 56
+ },
+ "tudor-93233el": {
+  "stufe": "merken",
+  "ids_fehlen": 0,
+  "stopp": 0,
+  "flaechen": 49,
+  "oeffnungen": 29,
+  "kanten": 66
+ }
+}

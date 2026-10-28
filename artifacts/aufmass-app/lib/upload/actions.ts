@@ -614,6 +614,9 @@ export async function starteMessungAction(
       currentCreditLedgerId: ledgerId,
       processingSince: new Date(),
       measurement: null,
+      model3d: null,
+      model3dStatus: null,
+      model3dReport: null,
       measurementErrors: null,
     })
     .where(

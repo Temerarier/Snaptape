@@ -17,3 +17,15 @@ than inventing zero cost or overwriting it with a retry. A fresh paid run beyond
 the authorized count needs explicit user permission. Treat preflight
 classification as asynchronous: a few seconds in files_uploaded does not prove
 that Start is stuck.
+
+Do not infer an empty model response's cause from elapsed time or the absence of
+text alone, and do not tune effort/token limits without response evidence.
+
+**Why:** A completed request produced no usable text, but its discarded metadata
+made the actual stop reason unknowable. This did not establish zero provider cost,
+token exhaustion or a prompt/schema defect.
+
+**How to apply:** Distinguish complete response usage from unknown totals after
+transport interruption. Keep earlier known response usage as partial evidence,
+not as a complete bill. Simulated failure tests establish observability, not that
+a real measurement now succeeds.

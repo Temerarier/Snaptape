@@ -9,3 +9,4 @@
 - [Billing evidence boundaries](billing-evidence-boundaries.md) — rejected Admin credentials stop access; balance intervals are not model-level bills; pricing needs exact-model evidence.
 - [Clerk verification boundaries](clerk-verification.md) — fresh bundles avoid false provider errors; successful login does not prove CAPTCHA-blocked self-service signup.
 - [Live measurement verification](live-measurement-verification.md) — finish builds before paid runs; retain interrupted-run evidence and respect the authorized run count.
+- [Measurement vs. 3D extra](measurement-and-model-boundaries.md) — panel numbers/credits belong to measurement; untrusted buildHouse stays isolated and code/reports stay server-only.

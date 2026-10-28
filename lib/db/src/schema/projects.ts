@@ -11,6 +11,7 @@ import {
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 import { usersTable } from "./users";
+import type { Model3dData, Model3dReport } from "../model3d";
 
 // Status-Maschine ab Etappe 1: draft → files_uploaded → processing →
 // model_ready → failed. Die alten Werte reviewing/ready bleiben erhalten
@@ -87,6 +88,9 @@ export const projectsTable = pgTable("projects", {
   // gegen veraltete Läufe und Vermischung paralleler Projekte).
   measurement: jsonb("measurement"),
   measurementErrors: jsonb("measurement_errors").$type<string[] | null>(),
+  model3d: jsonb("model3d").$type<Model3dData | null>(),
+  model3dStatus: text("model3d_status").$type<"pending" | "ready" | "unavailable" | null>(),
+  model3dReport: jsonb("model3d_report").$type<Model3dReport | null>(),
   currentRunId: uuid("current_run_id"),
   processingSince: timestamp("processing_since", { withTimezone: true }),
   currentCreditLedgerId: uuid("current_credit_ledger_id"),

@@ -47,6 +47,7 @@ export default async function AdminMessungenSeite() {
       costUsd: measureRunsTable.costUsd,
       retryUsed: measureRunsTable.retryUsed,
       repairUsed: measureRunsTable.repairUsed,
+      modelDiagnostics: measureRunsTable.modelDiagnostics,
       roofAreaMm2: measureRunsTable.roofAreaMm2,
       netWallAreaMm2: measureRunsTable.netWallAreaMm2,
       openingCount: measureRunsTable.openingCount,
@@ -258,6 +259,19 @@ export default async function AdminMessungenSeite() {
                       viele={t.fehlerBadgeViele}
                       farbe="red"
                     />
+                    {run.modelDiagnostics && (
+                      <details className="mt-2 max-w-lg whitespace-normal">
+                        <summary className="cursor-pointer text-akzent">
+                          {t.antwortDiagnose}
+                        </summary>
+                        <p className="my-2 text-schrift-sekundaer">
+                          {run.modelDiagnostics.usageComplete ? t.usageVollstaendig : t.usageUnvollstaendig}
+                        </p>
+                        <pre className="max-h-80 overflow-auto rounded-eingabe border border-linie bg-hintergrund p-3 font-mono text-xs">
+                          {JSON.stringify(run.modelDiagnostics, null, 2)}
+                        </pre>
+                      </details>
+                    )}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3">
                     {run.hatMeasurement !== null &&

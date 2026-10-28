@@ -24,7 +24,7 @@ export function ProjectCard({
   locale,
   t,
 }: {
-  project: Project;
+  project: Pick<Project, "id" | "name" | "adresse" | "status" | "archivedAt" | "createdAt">;
   locale: Locale;
   t: Dictionary["projects"];
 }) {

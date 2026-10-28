@@ -1,0 +1,39 @@
+{
+  "cases": [
+    {
+      "scenario": "ready",
+      "status": "ready",
+      "stufe": "merken",
+      "correction": false,
+      "modelRows": 1,
+      "unchangedMeasurement": true,
+      "debitRows": 1,
+      "refunds": 0,
+      "staleJobIgnored": true
+    },
+    {
+      "scenario": "correction",
+      "status": "ready",
+      "stufe": "merken",
+      "correction": true,
+      "modelRows": 2,
+      "unchangedMeasurement": true,
+      "debitRows": 1,
+      "refunds": 0,
+      "staleJobIgnored": true
+    },
+    {
+      "scenario": "exception",
+      "status": "unavailable",
+      "stufe": "stopp",
+      "correction": false,
+      "modelRows": 1,
+      "unchangedMeasurement": true,
+      "debitRows": 1,
+      "refunds": 0,
+      "staleJobIgnored": true
+    }
+  ],
+  "realModelCalls": 0,
+  "syntheticDataRemoved": true
+}

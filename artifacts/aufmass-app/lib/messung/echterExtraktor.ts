@@ -8,6 +8,8 @@ import type {
   FileClassificationEntry,
   ProjectClassification,
   ProjectFile,
+  ModelDiagnostics,
+  ModelResponseDiagnostic,
 } from "@workspace/db";
 import { ladeObjekt } from "@/lib/storage/objectStorage";
 import { verkleinereFuerKI } from "@/lib/upload/verarbeitung";
@@ -17,9 +19,12 @@ import {
 } from "./berechnung";
 import {
   MESS_MODELL,
+  MESS_EFFORT,
+  ModellAntwortFehler,
   rufeMessModell,
   schaetzeKostenUsd,
   type BildTeil,
+  type ModellAufruf,
 } from "./modelle";
 import {
   baueRepairSystemText,
@@ -40,6 +45,7 @@ export interface ExtraktionsErgebnis {
   costUsd: number;
   retryUsed: boolean;
   repairUsed: boolean;
+  modelDiagnostics?: ModelDiagnostics;
   // Warnungen aus validate-assemble (violations sind bereits in
   // quality.warnings gespiegelt; valid=false heißt trotzdem weiter zur
   // Ajv-Validierung – die entscheidet über model_ready/failed).
@@ -50,10 +56,14 @@ export interface ExtraktionsErgebnis {
 // (Modell, Route, Tokens, Kosten, Retry/Repair) mitführt – damit auch
 // gescheiterte (und gerade die teuren) Läufe vollständig protokolliert
 // werden.
+export type ExtraktionsFehlerMeta = Omit<
+  ExtraktionsErgebnis, "roh" | "zusammenfassung" | "inputTokens" | "outputTokens" | "costUsd"
+> & { inputTokens: number | null; outputTokens: number | null; costUsd: number | null };
+
 export class ExtraktionsFehler extends Error {
   constructor(
     message: string,
-    public readonly meta: Omit<ExtraktionsErgebnis, "roh" | "zusammenfassung">,
+    public readonly meta: ExtraktionsFehlerMeta,
   ) {
     super(message);
     this.name = "ExtraktionsFehler";
@@ -72,7 +82,7 @@ export function bestimmeRoute(
 // Bildeinheiten: NUR nutzbare, für die Messung ausgewählte Fotos/Seiten
 // (Klassifizierungs-Filter, max. 15 Planseiten bereits dort erzwungen).
 // PDF-Seiten IMMER als vorgerenderte PNGs, nie das rohe PDF.
-async function baueBildTeile(dateien: ProjectFile[]): Promise<BildTeil[]> {
+export async function baueBildTeile(dateien: ProjectFile[]): Promise<BildTeil[]> {
   const geordnet = [...dateien].sort((a, b) => a.sortOrder - b.sortOrder);
   const teile: { marker: string; objectPath: string; endung: string }[] = [];
   let fotoNr = 0;
@@ -206,18 +216,50 @@ export async function extrahiereEcht(
   let outputTokens = 0;
   let retryUsed = false;
   let repairUsed = false;
+  const responses: ModelResponseDiagnostic[] = [];
+  let usageComplete = true;
+  const modelDiagnostics = (): ModelDiagnostics => ({
+    effort: MESS_EFFORT, usageComplete, responses: [...responses],
+  });
+  const wirfMitMeta = (nachricht: string): never => {
+    throw new ExtraktionsFehler(nachricht, {
+      model, route,
+      inputTokens: usageComplete ? inputTokens : null,
+      outputTokens: usageComplete ? outputTokens : null,
+      costUsd: usageComplete ? schaetzeKostenUsd(inputTokens, outputTokens) : null,
+      retryUsed, repairUsed, modelDiagnostics: modelDiagnostics(),
+    });
+  };
 
-  const rufeAb = async () => {
-    const antwort = await rufeMessModell({
+  const rufeMitMeta = async (
+    aufruf: ModellAufruf, phase: ModelResponseDiagnostic["phase"],
+  ): Promise<string> => {
+    try {
+      const antwort = await rufeMessModell(aufruf);
+      inputTokens += antwort.inputTokens;
+      outputTokens += antwort.outputTokens;
+      responses.push({ ...antwort.diagnostic, phase });
+      return antwort.text;
+    } catch (fehler) {
+      if (fehler instanceof ModellAntwortFehler) {
+        inputTokens += fehler.diagnostic.inputTokens;
+        outputTokens += fehler.diagnostic.outputTokens;
+        responses.push({ ...fehler.diagnostic, phase });
+      } else {
+        // A transport failure without a final response has unknown usage.
+        // Previously received responses remain available individually.
+        usageComplete = false;
+      }
+      return wirfMitMeta(fehler instanceof Error ? fehler.message : String(fehler));
+    }
+  };
+  const rufeAb = () => rufeMitMeta({
       system,
       userText: triage,
       bilder,
-    });
-    inputTokens += antwort.inputTokens;
-    outputTokens += antwort.outputTokens;
-    return antwort.text;
-  };
+    }, retryUsed ? "retry" : "extract");
 
+  try {
   // 1. Extraktion; degenerierte Ausgabe → EIN Retry mit frischem Sampling.
   let text = await rufeAb();
   let roh: unknown | null = null;
@@ -239,20 +281,6 @@ export async function extrahiereEcht(
     }
   }
 
-  // Fehler immer mit den bis hierher angefallenen Metadaten werfen,
-  // damit die Pipeline auch gescheiterte Läufe voll protokolliert.
-  const wirfMitMeta = (nachricht: string): never => {
-    throw new ExtraktionsFehler(nachricht, {
-      model,
-      route,
-      inputTokens,
-      outputTokens,
-      costUsd: schaetzeKostenUsd(inputTokens, outputTokens),
-      retryUsed,
-      repairUsed,
-    });
-  };
-
   // 2. Parse-Fehler → EIN Repair-Aufruf (gleiches Modell, ohne Bilder).
   if (roh === null) {
     repairUsed = true;
@@ -260,15 +288,13 @@ export async function extrahiereEcht(
     const repairText =
       `${REPAIR_VORTEXT}${parseFehler}\n\n${REPAIR_AUSGABE_MARKER}\n` +
       text.slice(0, REPAIR_MAX_ZEICHEN);
-    const antwort = await rufeMessModell({
+    const reparierterText = await rufeMitMeta({
       system: repairSystem,
       userText: repairText,
       bilder: [],
-    });
-    inputTokens += antwort.inputTokens;
-    outputTokens += antwort.outputTokens;
+    }, "repair");
     try {
-      roh = parseTolerant(antwort.text);
+      roh = parseTolerant(reparierterText);
     } catch (fehler) {
       // Auch der Repair-Versuch unbrauchbar → Lauf failed.
       wirfMitMeta(fehler instanceof Error ? fehler.message : String(fehler));
@@ -297,6 +323,11 @@ export async function extrahiereEcht(
     costUsd: schaetzeKostenUsd(inputTokens, outputTokens),
     retryUsed,
     repairUsed,
+    modelDiagnostics: modelDiagnostics(),
     zusammenfassung: geprueft.summary,
   };
+  } catch (fehler) {
+    if (fehler instanceof ExtraktionsFehler) throw fehler;
+    return wirfMitMeta(fehler instanceof Error ? fehler.message : String(fehler));
+  }
 }

@@ -7,6 +7,10 @@ const replitDomains = (process.env.REPLIT_DOMAINS ?? "")
   .filter((domain) => domain.length > 0);
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["isolated-vm"],
+  outputFileTracingIncludes: {
+    "/**": ["./lib/modell3d/core.js", "./lib/modell3d/sandbox-worker.cjs", "../../docs/pipeline/buildhouse*-prompt.md"],
+  },
   transpilePackages: ["@workspace/db"],
   allowedDevOrigins: [
     ...replitDomains,

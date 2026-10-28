@@ -424,6 +424,9 @@ export const enUS = {
       warnungBadgeViele: "warnings",
       fehlerBadgeEiner: "1 error",
       fehlerBadgeViele: "errors",
+      antwortDiagnose: "Model response diagnostics",
+      usageVollstaendig: "Usage available for all extraction steps.",
+      usageUnvollstaendig: "Incomplete usage: total tokens and cost are unknown. Received responses are listed below.",
       retryKuerzel: "retry",
       repairKuerzel: "repair",
       squaresKuerzel: "sq",
@@ -439,6 +442,8 @@ export const enUS = {
     },
   },
   viewerNext: {
+    model3dPending: "Creating 3D model. Your measurement is already available.",
+    model3dUnavailable: "The additional 3D model is unavailable. Your measurement remains available.",
     measurements: "Measurements",
     overlayConstraintMessage: "Limited label space at this view",
     demoProject: "Demo project",

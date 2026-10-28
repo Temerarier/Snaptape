@@ -252,3 +252,31 @@ mtime_ms = 1793205469820
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/fbdcdddd-a75f-43ed-af77-f233f084264f/736646d3-6bb1-426d-8270-219fed104510"
 storage_version_token = "1793205556987891"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "7Kpud7WbPAzEIxOq5W27V"
+uri = "file://docs/model-response-diagnostics.md"
+type = "text"
+title = "Modell-Diagnose – Umsetzung und Tests"
+description = "Gespeicherte Metadaten, Umgang mit unbekanntem Verbrauch, 352 Tests und PostgreSQL-Prüfung ohne bezahlte Aufrufe."
+logical_id = "bd6cc389-2031-446c-8293-9072b3473587"
+content_hash = "sha256:d8b48e63300bf13116ea9849859ed9aeca36a36b8ce0f251d63c40b2fa81055b"
+size = 3466
+mtime_ms = 1793207685756
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/bd6cc389-2031-446c-8293-9072b3473587/66dd6817-60b9-4bf8-92b5-7dfda5911c83"
+storage_version_token = "1793207807024219"
+content_type = "text/markdown"
+
+[[outputs]]
+id = "55cxt1vTZgXp_QQQqd_8Y"
+uri = "file://docs/step2-abnahme.md"
+type = "text"
+title = "Schritt 2 – Umsetzung und Abnahme"
+description = "Fixture- und Sandboxtabellen, Datenbank-/Credit-Prüfung, Browser-Datenschutztest und noch offener echter Abnahmelauf."
+logical_id = "f891b49e-3a25-4fa5-8789-a777162970c0"
+content_hash = "sha256:332a85852d57b8e74b7d722449defeb800c59ca6af4dd0155ea85607d51f4717"
+size = 5493
+mtime_ms = 1793209287031
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/f891b49e-3a25-4fa5-8789-a777162970c0/51a07294-2168-4122-b2c7-b58fdfe7b313"
+storage_version_token = "1793209513244515"
+content_type = "text/markdown"

@@ -123,6 +123,26 @@ export interface MesswertJson {
   low_reason?: string | null;
 }
 
+// Whitelisted response metadata only: never prompts, images, output text or
+// thinking content. Phase preserves the existing extract/retry/repair sequence.
+export interface ModelResponseDiagnostic {
+  phase: "extract" | "retry" | "repair";
+  responseId: string;
+  model: string;
+  stopReason: string | null;
+  contentTypes: string[];
+  inputTokens: number;
+  outputTokens: number;
+  cacheReadInputTokens: number | null;
+  cacheCreationInputTokens: number | null;
+}
+
+export interface ModelDiagnostics {
+  effort: string;
+  usageComplete: boolean;
+  responses: ModelResponseDiagnostic[];
+}
+
 export const measureRunsTable = pgTable("measure_runs", {
   id: uuid("id").primaryKey().defaultRandom(),
   projectId: uuid("project_id")
@@ -149,6 +169,7 @@ export const measureRunsTable = pgTable("measure_runs", {
   costUsd: doublePrecision("cost_usd"),
   retryUsed: boolean("retry_used"),
   repairUsed: boolean("repair_used"),
+  modelDiagnostics: jsonb("model_diagnostics").$type<ModelDiagnostics | null>(),
   roofAreaMm2: doublePrecision("roof_area_mm2"),
   netWallAreaMm2: doublePrecision("net_wall_area_mm2"),
   openingCount: integer("opening_count"),
