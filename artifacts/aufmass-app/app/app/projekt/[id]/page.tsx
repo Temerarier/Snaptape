@@ -54,9 +54,6 @@ export default async function ProjectDetailPage({
   ) {
     redirect(`/app/projekt/${id}/upload`);
   }
-  if (project.status === "model_ready") {
-    redirect(`/app/projekt/${id}/viewer`);
-  }
 
   const [dateiZeile] = await db
     .select({ anzahl: count() })
@@ -69,6 +66,32 @@ export default async function ProjectDetailPage({
   const measurementState = projectMeasurementState(project.status);
   const failed = measurementState === "failed";
   const processing = measurementState === "processing";
+  if (project.status === "model_ready") {
+    return (
+      <main className="mx-auto w-full max-w-5xl px-6 py-10">
+        <Link href="/app" className="text-sm underline underline-offset-4">← {dict.common.back}</Link>
+        <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0">
+            <h1 className="break-words text-2xl font-semibold">{project.name}</h1>
+            {project.adresse ? <p className="mt-1 break-words text-schrift-sekundaer">{project.adresse}</p> : null}
+          </div>
+          <StatusBadge status={project.status} labels={dict.projects.status} />
+        </div>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href={`/app/projekt/${id}/viewer`} className="rounded-lg bg-akzent px-4 py-3 text-sm font-semibold text-white">
+            {t.cards.modell3d.oeffnen}
+          </Link>
+          <a href={`/app/projekt/${id}/print`} target="_blank" rel="noopener noreferrer"
+            className="rounded-lg border border-linie bg-flaeche px-4 py-3 text-sm font-semibold">
+            {dict.viewerNext.printAction}
+          </a>
+          <Link href={`/app/projekt/${id}/upload`} className="rounded-lg border border-linie bg-flaeche px-4 py-3 text-sm font-semibold">
+            {dict.viewerNext.labels.addPhoto}
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">

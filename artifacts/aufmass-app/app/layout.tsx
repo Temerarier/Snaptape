@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
-import { getDictionary, htmlLang, toLocale } from "@/i18n";
+import { DEFAULT_LOCALE, getDictionary, htmlLang, toLocale } from "@/i18n";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
 import { getCurrentUser } from "@/lib/auth/session";
+import { SiteFooter } from "@/components/public/SiteFooter";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { enUS, deDE } from "@clerk/localizations";
@@ -26,11 +28,33 @@ export const metadata: Metadata = {
   description: "Photos and plans in → measurements and a 3D model out",
 };
 
+// Public routes (landing, legal) render without ClerkProvider/LocaleProvider
+// so no third-party scripts load there. Pathname comes from middleware.
+function isPublicPath(returnTo: string | null): boolean {
+  if (!returnTo) return false;
+  const pathname = returnTo.split("?")[0];
+  return pathname === "/" || pathname.startsWith("/legal/");
+}
+
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const bodyClass = `${plexSans.variable} ${plexMono.variable} flex min-h-[100dvh] flex-col bg-hintergrund font-sans text-schrift antialiased`;
+  const publicRoute = isPublicPath((await headers()).get("x-snaptape-return-to"));
+
+  if (publicRoute) {
+    return (
+      <html lang={htmlLang(DEFAULT_LOCALE)}>
+        <body className={bodyClass}>
+          <div className="flex-1">{children}</div>
+          <SiteFooter />
+        </body>
+      </html>
+    );
+  }
+
   // Sprache des angemeldeten Nutzers (users.locale); vor dem Login
   // gilt der Default US-Englisch (replit.md Regel 8).
   const user = await getCurrentUser();
@@ -39,9 +63,7 @@ export default async function RootLayout({
 
   return (
     <html lang={htmlLang(locale)}>
-      <body
-        className={`${plexSans.variable} ${plexMono.variable} min-h-screen bg-hintergrund font-sans text-schrift antialiased`}
-      >
+      <body className={bodyClass}>
         <ClerkProvider publishableKey={process.env.CLERK_PUBLISHABLE_KEY}
           proxyUrl={process.env.CLERK_PROXY_URL}
           signInUrl="/sign-in" signUpUrl="/sign-up"
@@ -53,9 +75,10 @@ export default async function RootLayout({
             elements: { cardBox: "w-[360px] max-w-full bg-flaeche shadow-none", card: "border border-linie rounded-karte" },
           }}>
         <LocaleProvider locale={locale} dict={dict}>
-          {children}
+          <div className="flex-1">{children}</div>
         </LocaleProvider>
         </ClerkProvider>
+        <SiteFooter />
       </body>
     </html>
   );

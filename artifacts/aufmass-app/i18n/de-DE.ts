@@ -2,6 +2,8 @@
 // siehe replit.md Regel 8). Muss exakt dieselben Schlüssel liefern wie
 // en-US.ts – der Typ Dictionary erzwingt das.
 // Einheiten bleiben auch auf Deutsch imperial (ft-in, ft², Pitch x/12).
+import { publicPages } from "./public";
+import { MEASUREMENT_DISCLAIMER } from "../lib/config/haftung";
 import { HINWEIS_RICHTMASS_DE } from "@/lib/config/hinweis";
 import type { Dictionary } from "./en-US";
 
@@ -596,8 +598,17 @@ export const deDE: Dictionary = {
       breakdownUnavailable:
         "Fassadenaufschlüsselung nicht verfügbar · vor Ort prüfen",
     },
-    disclaimer:
-      "KI-generierte Schätzwerte aus Fotografien, ausschließlich für Kalkulationszwecke. Die Genauigkeit hängt von Abdeckung und Qualität der Fotos ab. Der Nutzer bleibt für die Prüfung aller Maße vor Ort verantwortlich.",
+    printTitle: "Messblatt",
+    printAction: "Drucken / Als PDF speichern",
+    printAddress: "Adresse",
+    printDate: "Datum",
+    printFiles: "Dateien",
+    printLabel: "Bezeichnung",
+    printValue: "Wert",
+    printUnit: "Einheit",
+    printPage: "Seite",
+    termsAcceptance: "Mit dem Start einer Messung akzeptieren Sie die Nutzungsbedingungen",
+    disclaimer: MEASUREMENT_DISCLAIMER,
     warnings: "Warnungen",
     references: "Referenzen",
     referenceObject: "Referenzobjekt",
@@ -605,4 +616,5 @@ export const deDE: Dictionary = {
     noScale: "Kein Maßstab",
     photo: "Foto",
   },
+  publicPages,
 };

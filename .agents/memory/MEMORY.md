@@ -10,3 +10,4 @@
 - [Clerk verification boundaries](clerk-verification.md) — fresh bundles avoid false provider errors; successful login does not prove CAPTCHA-blocked self-service signup.
 - [Live measurement verification](live-measurement-verification.md) — finish builds before paid runs; retain interrupted-run evidence and respect the authorized run count.
 - [Measurement vs. 3D extra](measurement-and-model-boundaries.md) — panel numbers/credits belong to measurement; untrusted buildHouse stays isolated and code/reports stay server-only.
+- [Public pages and reports](public-pages-and-reports.md) — reload across provider boundaries; printable HTML must exclude app/RSC billing context and reuse existing panel values.

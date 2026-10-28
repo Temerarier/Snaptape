@@ -9,6 +9,7 @@ export function ProjectViewer({
   measurement,
   projectName,
   projectAddress,
+  projectId,
   dict,
   webglMessage,
   model3d,
@@ -17,6 +18,7 @@ export function ProjectViewer({
   measurement: unknown;
   projectName: string;
   projectAddress: string | null;
+  projectId?: string;
   dict: Dictionary["viewerNext"];
   webglMessage: string;
   model3d?: Model3dData | null;
@@ -52,6 +54,8 @@ export function ProjectViewer({
       webglMessage={webglMessage}
       projectName={projectName}
       projectAddress={projectAddress}
+      uploadHref={projectId ? `/app/projekt/${projectId}/upload` : undefined}
+      printHref={projectId ? `/app/projekt/${projectId}/print` : undefined}
       model3d={model3d}
       model3dStatus={model3dStatus}
     />

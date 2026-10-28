@@ -1,0 +1,113 @@
+// Public pages (landing, legal, shared footer) are English-only for the
+// US market. Both dictionaries reference this same object.
+export const publicPages = {
+  nav: {
+    home: "SnapTape home",
+    primary: "Primary",
+    howItWorks: "How it works",
+    pricing: "Pricing",
+    faq: "FAQ",
+    signIn: "Sign in",
+    requestTrial: "Request trial access",
+  },
+  hero: {
+    eyebrow: "For roofing · siding · exterior painting",
+    title: "Full exterior measurements from your customer's photos.",
+    text: "No site visit. No ladder, no drone. Upload the photos your customer already sent you and get every exterior dimension — roof, walls, openings, trim — plus a 3D model you can rotate and click.",
+    primary: "Request trial access",
+    secondary: "See what you get",
+    small: "5–12 photos · results in minutes · imperial units, quote-ready",
+    card: {
+      label: "Example measurement card",
+      title: "Measurements",
+      roof: "Roof",
+      roofValue: "21.0 SQ",
+      facets: "Roof facets",
+      facetsValue: "6",
+      walls: "Walls, net",
+      wallsValue: "2,779 sq ft",
+      windows: "Windows",
+      windowsValue: "16",
+      eaves: "Eaves",
+      eavesValue: "118' 0\"",
+      ridge: "Ridge",
+      ridgeValue: "70' 0\"",
+    },
+  },
+  how: {
+    title: "How it works",
+    steps: [
+      { n: "01", title: "Upload the photos your customer sent you", text: "Phone photos are fine. Five to twelve shots covering every side of the house. We check them before a credit is used." },
+      { n: "02", title: "SnapTape measures everything", text: "Roof facets and pitch, edge lengths, wall areas net and gross, every opening, penetrations, trim runs. Then it builds a 3D model you can rotate and click." },
+      { n: "03", title: "Quote with confidence", text: "Copy the numbers into your quote template or print the measurement sheet for the customer." },
+    ],
+  },
+  get: {
+    title: "What you get",
+    items: [
+      { title: "Roof", text: "facets, squares, pitch, ridge/hip/valley/eave/rake lengths" },
+      { title: "Walls", text: "gross and net per elevation" },
+      { title: "Openings", text: "windows, doors, garage doors, skylights with sizes" },
+      { title: "Trim", text: "soffit, fascia" },
+      { title: "Downspouts", text: "" },
+      { title: "Condition areas", text: "visible damage, flagged" },
+      { title: "3D model", text: "rotate, click any part, measure between edges" },
+    ],
+    modelNote: "If the photos don't allow a reliable model, you still get every measurement — the model is a view, not the source of the numbers.",
+  },
+  tips: {
+    title: "How to get the best measurements",
+    items: [
+      { title: "Shoot straight on, not at a steep angle", text: "" },
+      { title: "Give us one reference", text: "a door height, a garage door width" },
+      { title: "Cover every side of the house", text: "a side without photos comes back as \"not captured\" — we never invent numbers for it" },
+      { title: "Keep the view clear", text: "trees, parked cars and ladders block faces; occluded areas are flagged" },
+    ],
+  },
+  accuracy: {
+    eyebrow: "How accurate is it?",
+    title: "We tell you where we're unsure.",
+    text: "Every measurement comes with a confidence level. Faces that are occluded, poorly lit or only partly photographed are flagged with the reason, and a side that isn't in the photos is reported as \"not captured\", never guessed.",
+  },
+  pricing: {
+    title: "Simple credits. One credit = one measured house.",
+    intro: "Example pricing — final pricing at launch. Trial accounts get their first credits free.",
+    perMonth: "/mo",
+    plans: [
+      { name: "Starter", price: "$49", credits: "5 credits", badge: "" },
+      { name: "Pro", price: "$149", credits: "20 credits", badge: "Most crews" },
+      { name: "Crew", price: "$299", credits: "50 credits", badge: "" },
+    ],
+    extra: "Extra credits available any time. Unused extra credits never expire.",
+    button: "Request trial access",
+  },
+  faq: {
+    title: "FAQ",
+    items: [
+      { q: "What photos do I need?", a: "5–12 phone photos, every side of the house, straight on, in daylight. Plans or elevation drawings (PDF) work too and improve the result." },
+      { q: "How long does it take?", a: "Usually 5–15 minutes after you start the measurement. You get an email-free status on the project page; the page updates itself." },
+      { q: "What does a credit cost?", a: "See example pricing above; final pricing at launch. Trial credits are free." },
+      { q: "What if the measurement fails?", a: "If we can't measure your photos, the credit is returned automatically. We check the photos before a credit is used." },
+      { q: "Can I order materials from these numbers?", a: "Treat them as estimates for quoting. Verify critical dimensions on site before ordering — see \"How accurate is it?\"." },
+      { q: "Where are my photos stored?", a: "On US servers. They are used only to measure your project and are deleted when you delete the project. See the Privacy Policy." },
+      { q: "Who is behind SnapTape?", a: "Cantum UG (haftungsbeschränkt), a German company, built by people from the construction trade. See the Legal Notice." },
+    ],
+  },
+  closing: {
+    title: "Measure your next job from the photos you already have.",
+    button: "Request trial access",
+    questions: "Questions?",
+  },
+  footer: {
+    tagline: "SnapTape — exterior measurements from your customer's photos. Built for US exterior trades.",
+    legalNav: "Legal",
+    notice: "Legal Notice",
+    privacy: "Privacy Policy",
+    terms: "Terms of Service",
+    copyright: "© 2026 Cantum UG (haftungsbeschränkt), Wentorf, Germany",
+  },
+  legal: {
+    backHome: "SnapTape",
+    titles: { notice: "Legal Notice", privacy: "Privacy Policy", terms: "Terms of Service" },
+  },
+};

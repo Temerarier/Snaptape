@@ -51,6 +51,7 @@ export default async function ProjektViewerSeite({
   }
   return (
     <ProjectViewer
+      projectId={project.id}
       model3d={project.model3d}
       model3dStatus={project.model3dStatus}
       measurement={project.measurement}

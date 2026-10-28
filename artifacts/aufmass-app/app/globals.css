@@ -104,6 +104,7 @@
    knows about Three.js; these labels are deliberately pointer-free and are
    positioned from the model's projected anchors. */
 .viewer-next-viewport {
+  min-width: 0;
   background-color: var(--viewer-viewport-background-end);
   background-image:
     linear-gradient(rgb(from var(--viewer-grid-line) r g b / var(--viewer-grid-opacity)) 1px, transparent 1px),
@@ -197,6 +198,8 @@
 
 /* Viewer-next layout: portrait has two fixed states; landscape is side-by-side. */
 .viewer-next-shell {
+  min-width: 0;
+  max-width: 100%;
   --color-hintergrund: var(--viewer-page-background);
   --color-flaeche: var(--viewer-surface);
   --color-schrift: var(--viewer-text-primary);
@@ -352,6 +355,18 @@
 }
 
 @media (max-width: 767px) {
+  .app-header > div { flex-wrap: wrap; padding-inline: 12px; gap: 8px; }
+  .app-header > div > .min-w-0 { order: 3; flex-basis: 100%; }
+  .app-header > div > div.shrink-0 { margin-left: auto; gap: 8px; }
+  .viewer-next-header { min-width: 0; }
+  .viewer-next-print-link { max-width: 108px; padding: 6px 8px; line-height: 1.25; overflow-wrap: anywhere; }
+  .viewer-next-viewport p { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+  /* Leave the right-hand floating control column clear, even without WebGL.
+     Keep this in CSS: no renderer, camera or measurement behavior changes. */
+  .viewer-next-viewport:is([data-webgl-state="unavailable"], [data-webgl-state="notready"]) > div.flex.items-center.justify-center {
+    padding-inline: 20px 84px;
+    overflow-wrap: anywhere;
+  }
   .viewer-next-shell {
     padding-bottom: var(--viewer-calc-height, 0px);
   }

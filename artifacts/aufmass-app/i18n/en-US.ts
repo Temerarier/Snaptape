@@ -3,6 +3,8 @@
 // Component-Code. Diese Datei definiert die Struktur (Dictionary);
 // de-DE.ts muss exakt dieselben Schlüssel liefern.
 // Einheiten bleiben in beiden Sprachen imperial (ft-in, ft², Pitch x/12).
+import { publicPages } from "./public";
+import { MEASUREMENT_DISCLAIMER } from "../lib/config/haftung";
 import { HINWEIS_RICHTMASS_EN } from "@/lib/config/hinweis";
 
 export const enUS = {
@@ -583,8 +585,17 @@ export const enUS = {
       noReferences: "No scale references recorded.",
       breakdownUnavailable: "Wall breakdown unavailable · verify on site",
     },
-    disclaimer:
-      "AI-generated estimates from photographs, for estimating purposes only. Accuracy depends on photo coverage and quality. The user remains responsible for verifying all numbers on site.",
+    printTitle: "Measurement sheet",
+    printAction: "Print / Save as PDF",
+    printAddress: "Address",
+    printDate: "Date",
+    printFiles: "Files",
+    printLabel: "Label",
+    printValue: "Value",
+    printUnit: "Unit",
+    printPage: "Page",
+    termsAcceptance: "By starting a measurement you accept the Terms of Service",
+    disclaimer: MEASUREMENT_DISCLAIMER,
     warnings: "Warnings",
     references: "References",
     referenceObject: "Reference object",
@@ -592,6 +603,7 @@ export const enUS = {
     noScale: "No scale",
     photo: "Photo",
   },
+  publicPages,
 };
 
 export type Dictionary = typeof enUS;

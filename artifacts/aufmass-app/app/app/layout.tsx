@@ -17,8 +17,8 @@ export default async function AppLayout({
   const dict = getDictionary(toLocale(user.locale));
 
   return (
-    <div className="min-h-screen bg-hintergrund">
-      <header className="border-b border-linie bg-flaeche">
+    <div className="app-shell min-h-screen bg-hintergrund">
+      <header className="app-header border-b border-linie bg-flaeche">
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-6 py-3">
           <Link href="/app" className="flex shrink-0 items-center gap-2.5">
             <span

@@ -16,6 +16,8 @@ import type {
 import { toggleTallyItem, type TallyItem } from "@/lib/viewer-next/calc";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { MEASUREMENT_DISCLAIMER } from "@/lib/config/haftung";
+import { referenceText } from "@/lib/viewer-next/qualityText";
 import { cn } from "@/components/ui/hilfen";
 import type { Dictionary } from "@/i18n/en-US";
 import {
@@ -192,6 +194,8 @@ export function ViewerNextClient({
   webglMessage,
   projectName,
   projectAddress,
+  uploadHref,
+  printHref,
   model3d,
   model3dStatus = null,
 }: {
@@ -202,6 +206,8 @@ export function ViewerNextClient({
   webglMessage?: string;
   projectName?: string;
   projectAddress?: string | null;
+  uploadHref?: string;
+  printHref?: string;
   model3d?: Model3dData | null;
   model3dStatus?: Model3dStatus;
 }) {
@@ -336,7 +342,7 @@ export function ViewerNextClient({
 
   const handleRowSelect = (row: CardRow) => {
     if (row.cta) {
-      setCopyNotice(projectName === undefined ? dict.labels.photoCaptureUnavailable : dict.labels.projectPhotoCaptureUnavailable);
+      if (uploadHref) window.location.assign(uploadHref);
       return;
     }
     if (!findSelectableElement(model, row.id)) return;
@@ -419,10 +425,16 @@ export function ViewerNextClient({
               {headerSubtitle}
             </div>
           </div>
-          <Button className="viewer-next-add-photo whitespace-nowrap" variante="sekundaer" groesse="klein" onClick={() => setCopyNotice(projectName === undefined ? dict.labels.photoCaptureUnavailable : dict.labels.projectPhotoCaptureUnavailable)}>
+          <Button className="viewer-next-add-photo whitespace-nowrap" variante="sekundaer" groesse="klein" disabled={!uploadHref} onClick={() => { if (uploadHref) window.location.assign(uploadHref); }}>
             {"+ "}
             {dict.labels.addPhoto}
           </Button>
+          {printHref ? (
+            <a href={printHref} target="_blank" rel="noopener noreferrer"
+              className="viewer-next-print-link inline-flex min-h-11 items-center rounded-lg border border-linie px-3 py-2 text-xs font-semibold">
+              {dict.printAction}
+            </a>
+          ) : null}
           <Button
             variante="sekundaer"
             groesse="klein"
@@ -781,17 +793,12 @@ export function ViewerNextClient({
               </div>
               {references.map((r, i) => (
                 <div key={i}>
-                  {r.photo_index ? `${dict.photo} ${r.photo_index}: ` : ""}
-                  {r.scale_type === "own_reference"
-                    ? `${dict.referenceObject} (${r.object})`
-                    : r.scale_type === "transferred"
-                      ? `${dict.transferredVia} ${r.transferred_via}`
-                      : dict.noScale}
+                  {referenceText(r, dict)}
                 </div>
               ))}
             </div>
             <div className="text-xs leading-relaxed text-schrift-tertiaer">
-              {dict.disclaimer}
+              {MEASUREMENT_DISCLAIMER}
             </div>
           </div>
         </div>

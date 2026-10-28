@@ -7,6 +7,7 @@
 // durch Server-Action-Bodies), 3) Server-Action registriert die Datei
 // und verarbeitet sie (PDF → Seitenbilder, Foto → Vorschau).
 import { useRouter } from "next/navigation";
+import { useDictionary } from "@/i18n/LocaleProvider";
 import { useRef, useState } from "react";
 import type { Dictionary } from "@/i18n";
 import { Button } from "@/components/ui/Button";
@@ -89,6 +90,7 @@ export function UploadBereich({
   t,
 }: UploadBereichProps) {
   const router = useRouter();
+  const termsAcceptance = useDictionary().viewerNext.termsAcceptance;
   const eingabeRef = useRef<HTMLInputElement>(null);
 
   const [dateien, setDateien] = useState<DateiInfo[]>(initialeDateien);
@@ -496,6 +498,9 @@ export function UploadBereich({
           >
             {startLaeuft ? t.pruefungLaeuft : t.startButton}
           </Button>
+          <p className="mt-3 text-xs text-schrift-sekundaer">
+            <a href="/legal/terms" className="underline underline-offset-4">{termsAcceptance}</a>
+          </p>
         </div>
         <AblehnungsModal
           ablehnung={ablehnung}
