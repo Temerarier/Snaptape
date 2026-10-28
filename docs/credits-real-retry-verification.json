@@ -1,0 +1,81 @@
+{
+  "project": {
+    "id": "dbc4aede-680e-4747-992e-0d69a19e1cfa",
+    "status": "failed",
+    "processing_since": null,
+    "has_measurement": false,
+    "measurement_errors": [
+      "Anthropic API returned no text content."
+    ]
+  },
+  "runs": [
+    {
+      "id": "3bdcffbf-6fa8-40a0-ac8e-f950348cb52b",
+      "model": "claude-opus-5-5",
+      "outcome": "failed",
+      "duration_ms": 700305,
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost_usd": null,
+      "quality": "premium",
+      "retry_used": null,
+      "repair_used": null,
+      "errors": [
+        "Anthropic API returned no text content."
+      ]
+    },
+    {
+      "id": "e078187b-3060-40c6-a945-2463cdacf903",
+      "model": "claude-opus-5-5",
+      "outcome": "failed",
+      "duration_ms": 394094,
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost_usd": null,
+      "quality": "premium",
+      "retry_used": null,
+      "repair_used": null,
+      "errors": [
+        "Measurement interrupted by workspace restart during verification"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "delta": 2,
+      "reason": "staff_grant",
+      "note": "trial",
+      "project_id": null,
+      "measure_run_id": null
+    },
+    {
+      "delta": -1,
+      "reason": "measurement",
+      "note": null,
+      "project_id": "dbc4aede-680e-4747-992e-0d69a19e1cfa",
+      "measure_run_id": null
+    },
+    {
+      "delta": 1,
+      "reason": "refund",
+      "note": "measurement failed",
+      "project_id": "dbc4aede-680e-4747-992e-0d69a19e1cfa",
+      "measure_run_id": "e078187b-3060-40c6-a945-2463cdacf903"
+    },
+    {
+      "delta": -1,
+      "reason": "measurement",
+      "note": null,
+      "project_id": "dbc4aede-680e-4747-992e-0d69a19e1cfa",
+      "measure_run_id": null
+    },
+    {
+      "delta": 1,
+      "reason": "refund",
+      "note": "measurement failed",
+      "project_id": "dbc4aede-680e-4747-992e-0d69a19e1cfa",
+      "measure_run_id": "3bdcffbf-6fa8-40a0-ac8e-f950348cb52b"
+    }
+  ],
+  "checkedAt": "2026-10-28T16:32:36.959Z"
+}

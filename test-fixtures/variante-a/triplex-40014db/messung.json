@@ -1,0 +1,3598 @@
+{
+ "meta": {
+  "country": "US",
+  "unit": "mm",
+  "schema_version": "1.8",
+  "photos": [
+   {
+    "index": 1,
+    "shows_elevation": "unknown",
+    "view_angle": "frontal",
+    "perspective_corrected": false
+   },
+   {
+    "index": 2,
+    "shows_elevation": "unknown",
+    "view_angle": "frontal",
+    "perspective_corrected": false
+   },
+   {
+    "index": 3,
+    "shows_elevation": "front",
+    "view_angle": "slightly_angled",
+    "perspective_corrected": false
+   },
+   {
+    "index": 4,
+    "shows_elevation": "front",
+    "view_angle": "slightly_angled",
+    "perspective_corrected": false
+   },
+   {
+    "index": 5,
+    "shows_elevation": "front",
+    "view_angle": "slightly_angled",
+    "perspective_corrected": false
+   }
+  ],
+  "notes": [
+   "Input set: image 1 = main-floor plan (3 units, imperial, chains 3 x 18'-0\" and 38'-0\" + 8'-0\" = 46'-0\"); image 2 = garage/basement plan of the same set (no chains, scale transferred from sheet 1 unit width); image 3 = as-built front photo; image 4 = colour rendering; image 5 = identical copy of image 4 (SHEET SET RULE: not counted). Indices in references/raw_estimates use these numbers.",
+   "Country: United States, high certainty - imperial plan dimensions, US sectional garage doors, vinyl lap siding, architectural asphalt shingles, wood deck stairs. Calc profile US; only [US] + [INVARIANT] used.",
+   "Photo assessment (chat run, no triage): photo 3 front, slightly_angled (yaw ~10 deg, camera slightly low), occluded ~25 % (stairs, deck rails cover the garage storey); photo 4 front, slightly_angled rendering (artistic proportions, low reliability), occluded ~20 % (stairs, trees at both ends). No usable side view -> depth_basis oblique_only.",
+   "Scope: the whole 3-unit building (triplex of rowhouses) is measured as one building; building_type unknown because the enum describes single units. Each unit is 18'-0\" wide; units are identical.",
+   "Building: 3 storeys at the front (garage storey at grade with garage + basement behind, main floor on the raised covered porch level, upper floor); main roof hip with ridge parallel to the front; three front cross gables flush with the front wall (one per unit, at the unit's left part); continuous covered porch roof with three porch gables over raised wood decks on posts, one exterior stair per unit descending toward the street.",
+   "Consolidation in chat: eave = weighted median 8327 mm (5 estimates, spread 12.5 %), ridge = 10462 mm (5 estimates, 11969 dropped as >10 % outlier, spread 8.7 %), total width photo median 15940 mm vs plan 16459 mm (plan kept).",
+   "Wide-angle: in photo 3 the right building corner lies ~11 % from the right frame edge; no compression correction applied."
+  ]
+ },
+ "building": {
+  "building_type": "unknown",
+  "stories": 3,
+  "roof_type": "hip",
+  "footprint": {
+   "points": [
+    [
+     0,
+     0
+    ],
+    [
+     16459.2,
+     0
+    ],
+    [
+     16459.2,
+     11582.4
+    ],
+    [
+     0,
+     11582.4
+    ]
+   ],
+   "width_mm": {
+    "value": 16459.2,
+    "confidence": "high",
+    "source": "measured",
+    "reference_used": "plan dimension chain 3 x 18'-0\" (sheet 1)",
+    "low_reason": null
+   },
+   "depth_mm": {
+    "value": 11582.4,
+    "confidence": "high",
+    "source": "measured",
+    "reference_used": "plan dimension chain 38'-0\" (sheet 1)",
+    "low_reason": null
+   },
+   "perimeter_mm": {
+    "value": 56083.2,
+    "confidence": "high",
+    "source": "measured",
+    "reference_used": "from footprint.points",
+    "low_reason": null
+   },
+   "area_mm2": {
+    "value": 190637038.1,
+    "confidence": "high",
+    "source": "measured",
+    "reference_used": "from footprint.points",
+    "low_reason": null
+   }
+  },
+  "heights": {
+   "eave_height_mm": {
+    "value": 8327.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 5 reference estimate(s)",
+    "low_reason": "spread 12.5 % > 8 %; rendering chains disagree with photo chains"
+   },
+   "ridge_height_mm": {
+    "value": 10462.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 4 reference estimate(s)",
+    "low_reason": "spread 8.7 %; measured at the cross-gable peaks in the front plane, main ridge assumed level"
+   },
+   "parapet_height_mm": null,
+   "datum_note": "Grade zero = driveway level at the garage doors (front). Rear grade possibly higher (basement at back of garage storey), not measurable.",
+   "per_elevation": null
+  },
+  "shared_walls": [],
+  "footprint_overall": {
+   "width_mm": {
+    "value": 16459.2,
+    "confidence": "high",
+    "source": "measured",
+    "reference_used": "plan chain 3 x 18'-0\"",
+    "low_reason": null
+   },
+   "depth_mm": {
+    "value": 14020.8,
+    "confidence": "high",
+    "source": "measured",
+    "reference_used": "plan chain 46'-0\" (sheet 1)",
+    "low_reason": null
+   },
+   "note": "includes the covered porch AT-4 (8'-0\" in front of the main body); stairs excluded"
+  }
+ },
+ "references": [
+  {
+   "photo_index": 1,
+   "scale_type": "own_reference",
+   "object": "plan dimension chain 18'-0\" unit width",
+   "bounding_box": [
+    77,
+    470,
+    245,
+    500
+   ],
+   "assumed_size_mm": 5486.4,
+   "reliability": "high",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 2,
+   "scale_type": "transferred",
+   "object": "plan scale from sheet 1",
+   "bounding_box": [
+    78,
+    0,
+    240,
+    372
+   ],
+   "assumed_size_mm": 5486.4,
+   "reliability": "medium",
+   "plane": "facade_plane",
+   "transferred_via": "unit width 18'-0\" from sheet 1 (same set, same paper format)",
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 3,
+   "scale_type": "own_reference",
+   "object": "garage door height 7 ft",
+   "bounding_box": [
+    45,
+    225,
+    110,
+    275
+   ],
+   "assumed_size_mm": 2133.6,
+   "reliability": "high",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 3,
+   "scale_type": "own_reference",
+   "object": "garage door width 9 ft",
+   "bounding_box": [
+    45,
+    225,
+    110,
+    275
+   ],
+   "assumed_size_mm": 2743.2,
+   "reliability": "high",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 3,
+   "scale_type": "own_reference",
+   "object": "porch guard rail 36 in",
+   "bounding_box": [
+    35,
+    183,
+    140,
+    205
+   ],
+   "assumed_size_mm": 914.4,
+   "reliability": "low",
+   "plane": "in_front",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 3,
+   "scale_type": "own_reference",
+   "object": "entry door 6 ft 8 in",
+   "bounding_box": [
+    140,
+    160,
+    156,
+    205
+   ],
+   "assumed_size_mm": 2032,
+   "reliability": "low",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 4,
+   "scale_type": "own_reference",
+   "object": "entry door 6 ft 8 in (rendering)",
+   "bounding_box": [
+    410,
+    400,
+    460,
+    495
+   ],
+   "assumed_size_mm": 2032,
+   "reliability": "low",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 4,
+   "scale_type": "own_reference",
+   "object": "garage door 9 x 7 ft (rendering)",
+   "bounding_box": [
+    228,
+    535,
+    360,
+    625
+   ],
+   "assumed_size_mm": 2133.6,
+   "reliability": "low",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 5,
+   "scale_type": "none",
+   "object": "duplicate of photo 4 - not used",
+   "bounding_box": null,
+   "assumed_size_mm": null,
+   "reliability": null,
+   "plane": null,
+   "transferred_via": null,
+   "user_confirmed": false
+  }
+ ],
+ "attachments": [
+  {
+   "id": "AT-1",
+   "type": "dormer",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 4280.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 3 garage-door scale + rendering photo 4",
+    "low_reason": "perspective in photo 3"
+   },
+   "height_mm": {
+    "value": 2135.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "cross-gable peak minus eave",
+    "low_reason": "ridge height spread 8.7 %"
+   },
+   "depth_mm": {
+    "value": 5791.2,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "ridge assumed to meet main ridge",
+    "low_reason": "not visible"
+   },
+   "position_mm": {
+    "x": 305.0,
+    "y": 0.0
+   },
+   "parent_face_id": "RF-1",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": {
+    "style": "gable",
+    "face_pitch_deg": 44.93
+   }
+  },
+  {
+   "id": "AT-2",
+   "type": "dormer",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 4280.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 3 garage-door scale + rendering photo 4",
+    "low_reason": "perspective in photo 3"
+   },
+   "height_mm": {
+    "value": 2135.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "cross-gable peak minus eave",
+    "low_reason": "ridge height spread 8.7 %"
+   },
+   "depth_mm": {
+    "value": 5791.2,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "ridge assumed to meet main ridge",
+    "low_reason": "not visible"
+   },
+   "position_mm": {
+    "x": 5791.4,
+    "y": 0.0
+   },
+   "parent_face_id": "RF-1",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": {
+    "style": "gable",
+    "face_pitch_deg": 44.93
+   }
+  },
+  {
+   "id": "AT-3",
+   "type": "dormer",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 4280.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 3 garage-door scale + rendering photo 4",
+    "low_reason": "perspective in photo 3"
+   },
+   "height_mm": {
+    "value": 2135.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "cross-gable peak minus eave",
+    "low_reason": "ridge height spread 8.7 %"
+   },
+   "depth_mm": {
+    "value": 5791.2,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "ridge assumed to meet main ridge",
+    "low_reason": "not visible"
+   },
+   "position_mm": {
+    "x": 11277.8,
+    "y": 0.0
+   },
+   "parent_face_id": "RF-1",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": {
+    "style": "gable",
+    "face_pitch_deg": 44.93
+   }
+  },
+  {
+   "id": "AT-4",
+   "type": "other",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 16459.2,
+    "confidence": "high",
+    "source": "measured",
+    "reference_used": "plan sheet 1, 3 x 18'-0\"",
+    "low_reason": null
+   },
+   "height_mm": {
+    "value": 6972.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "porch-gable peak above grade, guard-rail chain photo 3",
+    "low_reason": "pending deterministic consolidation"
+   },
+   "depth_mm": {
+    "value": 2438.4,
+    "confidence": "high",
+    "source": "measured",
+    "reference_used": "plan sheet 1, covered porch 8'-0\"",
+    "low_reason": null
+   },
+   "position_mm": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "parent_face_id": "WL-1",
+   "attached": true,
+   "include_in_footprint": true,
+   "dormer": null
+  },
+  {
+   "id": "AT-5",
+   "type": "other",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 1200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 3 + plan sheet 1 notch",
+    "low_reason": "stair stringers included"
+   },
+   "height_mm": {
+    "value": 3113.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "porch deck level, guard-rail chain photo 3",
+    "low_reason": "pending deterministic consolidation"
+   },
+   "depth_mm": {
+    "value": 4064,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "approx. 17 risers x 254 mm run (US riser 178-190 mm)",
+    "low_reason": "risers not countable at photo resolution"
+   },
+   "position_mm": {
+    "x": 3700.0,
+    "y": 0.0
+   },
+   "parent_face_id": "WL-1",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": null
+  },
+  {
+   "id": "AT-6",
+   "type": "other",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 1200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 3 + plan sheet 1 notch",
+    "low_reason": "stair stringers included"
+   },
+   "height_mm": {
+    "value": 3113.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "porch deck level, guard-rail chain photo 3",
+    "low_reason": "pending deterministic consolidation"
+   },
+   "depth_mm": {
+    "value": 4064,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "approx. 17 risers x 254 mm run (US riser 178-190 mm)",
+    "low_reason": "risers not countable at photo resolution"
+   },
+   "position_mm": {
+    "x": 9186.4,
+    "y": 0.0
+   },
+   "parent_face_id": "WL-1",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": null
+  },
+  {
+   "id": "AT-7",
+   "type": "other",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 1200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 3 + plan sheet 1 notch",
+    "low_reason": "stair stringers included"
+   },
+   "height_mm": {
+    "value": 3113.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "porch deck level, guard-rail chain photo 3",
+    "low_reason": "pending deterministic consolidation"
+   },
+   "depth_mm": {
+    "value": 4064,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "approx. 17 risers x 254 mm run (US riser 178-190 mm)",
+    "low_reason": "risers not countable at photo resolution"
+   },
+   "position_mm": {
+    "x": 14672.8,
+    "y": 0.0
+   },
+   "parent_face_id": "WL-1",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": null
+  }
+ ],
+ "faces": [
+  {
+   "id": "WL-1",
+   "face_class": "wall",
+   "elevation": "front",
+   "material": "siding",
+   "area_mm2": {
+    "value": 137055758.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan width + weighted median eave height",
+    "low_reason": "eave height spread 12.5 %; brick garage storey and siding above reported as one wall"
+   },
+   "net_area_mm2": {
+    "value": 95119019.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "eave height spread 12.5 %; brick garage storey and siding above reported as one wall"
+   },
+   "width_mm": {
+    "value": 16459.2,
+    "confidence": "high",
+    "source": "measured",
+    "reference_used": "plan dimension chain",
+    "low_reason": null
+   },
+   "height_mm": {
+    "value": 8327.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median eave height",
+    "low_reason": "eave height spread 12.5 %; brick garage storey and siding above reported as one wall"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "start_mm": 0,
+   "color": {
+    "hex": "#BBAD97",
+    "name": "beige-grey vinyl siding",
+    "confidence": "medium",
+    "secondary_hex": "#8C4A38",
+    "note": "lower garage storey is red-brown brick (secondary_hex); colour from photo 3, rendering ignored"
+   }
+  },
+  {
+   "id": "WL-2",
+   "face_class": "wall",
+   "elevation": "left",
+   "material": "siding",
+   "area_mm2": {
+    "value": 96446644.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan depth + weighted median eave height",
+    "low_reason": "no frontal photo of this side; openings not assessable"
+   },
+   "net_area_mm2": {
+    "value": 96446644.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "no frontal photo of this side; openings not assessable"
+   },
+   "width_mm": {
+    "value": 11582.4,
+    "confidence": "high",
+    "source": "measured",
+    "reference_used": "plan dimension chain",
+    "low_reason": null
+   },
+   "height_mm": {
+    "value": 8327.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median eave height",
+    "low_reason": "no frontal photo of this side; openings not assessable"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "start_mm": 0,
+   "color": {
+    "hex": "#BBAD97",
+    "name": "beige-grey vinyl siding",
+    "confidence": "medium",
+    "secondary_hex": "#8C4A38",
+    "note": "lower garage storey is red-brown brick (secondary_hex); colour from photo 3, rendering ignored"
+   }
+  },
+  {
+   "id": "WL-3",
+   "face_class": "wall",
+   "elevation": "right",
+   "material": "siding",
+   "area_mm2": {
+    "value": 96446644.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan depth + weighted median eave height",
+    "low_reason": "only a sliver visible in photo 3; openings not assessable"
+   },
+   "net_area_mm2": {
+    "value": 96446644.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "only a sliver visible in photo 3; openings not assessable"
+   },
+   "width_mm": {
+    "value": 11582.4,
+    "confidence": "high",
+    "source": "measured",
+    "reference_used": "plan dimension chain",
+    "low_reason": null
+   },
+   "height_mm": {
+    "value": 8327.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median eave height",
+    "low_reason": "only a sliver visible in photo 3; openings not assessable"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "start_mm": 0,
+   "color": {
+    "hex": "#BBAD97",
+    "name": "beige-grey vinyl siding",
+    "confidence": "medium",
+    "secondary_hex": "#8C4A38",
+    "note": "lower garage storey is red-brown brick (secondary_hex); colour from photo 3, rendering ignored"
+   }
+  },
+  {
+   "id": "WL-4",
+   "face_class": "wall",
+   "elevation": "back",
+   "material": "siding",
+   "area_mm2": {
+    "value": 137055758.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "plan width + weighted median eave height",
+    "low_reason": "back not visible in any input; rear grade possibly higher (basement, grass bank at left)"
+   },
+   "net_area_mm2": {
+    "value": 137055758.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "back not visible in any input; rear grade possibly higher (basement, grass bank at left)"
+   },
+   "width_mm": {
+    "value": 16459.2,
+    "confidence": "high",
+    "source": "measured",
+    "reference_used": "plan dimension chain",
+    "low_reason": null
+   },
+   "height_mm": {
+    "value": 8327.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median eave height",
+    "low_reason": "back not visible in any input; rear grade possibly higher (basement, grass bank at left)"
+   },
+   "gable_height_mm": null,
+   "parent_attachment_id": null,
+   "start_mm": 0,
+   "color": {
+    "hex": "#BBAD97",
+    "name": "beige-grey vinyl siding",
+    "confidence": "medium",
+    "secondary_hex": "#8C4A38",
+    "note": "lower garage storey is red-brown brick (secondary_hex); colour from photo 3, rendering ignored"
+   }
+  },
+  {
+   "id": "WL-5",
+   "face_class": "wall",
+   "elevation": "front",
+   "material": "siding",
+   "area_mm2": {
+    "value": 4568900.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "cross-gable width scaled from photo 3 + rendering",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "net_area_mm2": {
+    "value": 4568900.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "width_mm": {
+    "value": 4280.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "cross-gable width scaled from photo 3 + rendering",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "height_mm": {
+    "value": 0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "wall starts at main eave line",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "gable_height_mm": {
+    "value": 2135.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "cross-gable peak minus eave",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "parent_attachment_id": null,
+   "start_mm": 0.0,
+   "color": {
+    "hex": "#BBAD97",
+    "name": "beige-grey vinyl siding",
+    "confidence": "medium",
+    "secondary_hex": "#8C4A38",
+    "note": "lower garage storey is red-brown brick (secondary_hex); colour from photo 3, rendering ignored"
+   }
+  },
+  {
+   "id": "WL-6",
+   "face_class": "wall",
+   "elevation": "front",
+   "material": "siding",
+   "area_mm2": {
+    "value": 4568900.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "cross-gable width scaled from photo 3 + rendering",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "net_area_mm2": {
+    "value": 4568900.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "width_mm": {
+    "value": 4280.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "cross-gable width scaled from photo 3 + rendering",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "height_mm": {
+    "value": 0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "wall starts at main eave line",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "gable_height_mm": {
+    "value": 2135.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "cross-gable peak minus eave",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "parent_attachment_id": null,
+   "start_mm": 5486.400000000001,
+   "color": {
+    "hex": "#BBAD97",
+    "name": "beige-grey vinyl siding",
+    "confidence": "medium",
+    "secondary_hex": "#8C4A38",
+    "note": "lower garage storey is red-brown brick (secondary_hex); colour from photo 3, rendering ignored"
+   }
+  },
+  {
+   "id": "WL-7",
+   "face_class": "wall",
+   "elevation": "front",
+   "material": "siding",
+   "area_mm2": {
+    "value": 4568900.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "cross-gable width scaled from photo 3 + rendering",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "net_area_mm2": {
+    "value": 4568900.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "width_mm": {
+    "value": 4280.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "cross-gable width scaled from photo 3 + rendering",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "height_mm": {
+    "value": 0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "wall starts at main eave line",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "gable_height_mm": {
+    "value": 2135.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "cross-gable peak minus eave",
+    "low_reason": "wall dormer / cross gable: triangle only, sits on the main eave line, height_mm 0 by definition"
+   },
+   "parent_attachment_id": null,
+   "start_mm": 10972.800000000001,
+   "color": {
+    "hex": "#BBAD97",
+    "name": "beige-grey vinyl siding",
+    "confidence": "medium",
+    "secondary_hex": "#8C4A38",
+    "note": "lower garage storey is red-brown brick (secondary_hex); colour from photo 3, rendering ignored"
+   }
+  },
+  {
+   "id": "RF-1",
+   "face_class": "roof_face",
+   "elevation": "front",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 27495190.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "front main slope minus the three cross-gable areas; pitch from eave/ridge heights"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 20.24,
+    "degrees_rounded": 20,
+    "rise_over_12_snapped": 4.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-2",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 39608719.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "hip end assumed from right end (photo 3 + rendering); left end hidden behind the left cross gable"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 20.24,
+    "degrees_rounded": 20,
+    "rise_over_12_snapped": 4.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-3",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 39608719.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "pitch from photo heights; area from footprint + overhang geometry"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 20.24,
+    "degrees_rounded": 20,
+    "rise_over_12_snapped": 4.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-4",
+   "face_class": "roof_face",
+   "elevation": "back",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 71294656.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "back slope not visible; mirrored from front geometry"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 20.24,
+    "degrees_rounded": 20,
+    "rise_over_12_snapped": 4.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-5",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 9675041.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "cross-gable pitch from photo 3 gable proportion; ridge assumed level with main ridge"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 44.93,
+    "degrees_rounded": 45,
+    "rise_over_12_snapped": 12.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-6",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 9675041.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "cross-gable pitch from photo 3 gable proportion; ridge assumed level with main ridge"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 44.93,
+    "degrees_rounded": 45,
+    "rise_over_12_snapped": 12.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-7",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 9675041.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "cross-gable pitch from photo 3 gable proportion; ridge assumed level with main ridge"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 44.93,
+    "degrees_rounded": 45,
+    "rise_over_12_snapped": 12.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-8",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 9675041.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "cross-gable pitch from photo 3 gable proportion; ridge assumed level with main ridge"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 44.93,
+    "degrees_rounded": 45,
+    "rise_over_12_snapped": 12.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-9",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 9675041.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "cross-gable pitch from photo 3 gable proportion; ridge assumed level with main ridge"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 44.93,
+    "degrees_rounded": 45,
+    "rise_over_12_snapped": 12.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-10",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 9675041.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "cross-gable pitch from photo 3 gable proportion; ridge assumed level with main ridge"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 44.93,
+    "degrees_rounded": 45,
+    "rise_over_12_snapped": 12.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-11",
+   "face_class": "roof_face",
+   "elevation": "front",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 19939034.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch shed pitch estimated 4/12 (shallow in photo 3); area minus porch-gable areas"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": "AT-4",
+   "pitch": {
+    "degrees_original": 18.43,
+    "degrees_rounded": 18,
+    "rise_over_12_snapped": 4.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-12",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 5478270.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch-gable pitch from photo 3"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": "AT-4",
+   "pitch": {
+    "degrees_original": 37.04,
+    "degrees_rounded": 37,
+    "rise_over_12_snapped": 9.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-13",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 5478270.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch-gable pitch from photo 3"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": "AT-4",
+   "pitch": {
+    "degrees_original": 37.04,
+    "degrees_rounded": 37,
+    "rise_over_12_snapped": 9.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-14",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 5478270.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch-gable pitch from photo 3"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": "AT-4",
+   "pitch": {
+    "degrees_original": 37.04,
+    "degrees_rounded": 37,
+    "rise_over_12_snapped": 9.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-15",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 5478270.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch-gable pitch from photo 3"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": "AT-4",
+   "pitch": {
+    "degrees_original": 37.04,
+    "degrees_rounded": 37,
+    "rise_over_12_snapped": 9.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-16",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 5478270.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch-gable pitch from photo 3"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": "AT-4",
+   "pitch": {
+    "degrees_original": 37.04,
+    "degrees_rounded": 37,
+    "rise_over_12_snapped": 9.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "RF-17",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "shingle_asphalt",
+   "area_mm2": {
+    "value": 5478270.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch-gable pitch from photo 3"
+   },
+   "net_area_mm2": null,
+   "parent_attachment_id": "AT-4",
+   "pitch": {
+    "degrees_original": 37.04,
+    "degrees_rounded": 37,
+    "rise_over_12_snapped": 9.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#6B6763",
+    "name": "weathered grey-brown asphalt shingle",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "from photo 3, partly in shadow behind gables"
+   }
+  },
+  {
+   "id": "SF-1",
+   "face_class": "soffit",
+   "elevation": "unknown",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 17477476.0,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "main eave overhang all around",
+    "low_reason": "overhang depth estimated from photo 3"
+   },
+   "soffit_depth_mm": {
+    "value": 305.0,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "photo 3, overhang approx. 1 ft at eaves and rakes",
+    "low_reason": "small overhang, few pixels in photo 3"
+   },
+   "color": {
+    "hex": "#F1F0EC",
+    "name": "white trim",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": null
+   }
+  },
+  {
+   "id": "FC-1",
+   "face_class": "fascia",
+   "elevation": "unknown",
+   "material": "unknown",
+   "area_mm2": {
+    "value": 11704640.0,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "outer eave perimeter x 200 mm fascia height",
+    "low_reason": "fascia height assumed"
+   },
+   "soffit_depth_mm": {
+    "value": 305.0,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "same as SF-1",
+    "low_reason": "see SF-1"
+   },
+   "color": {
+    "hex": "#F1F0EC",
+    "name": "white trim",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": null
+   }
+  }
+ ],
+ "edges": [
+  {
+   "id": "E-1",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 4876.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "hip ridge = width - depth (equal pitches)"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-2",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 8909.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "left",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-3",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 8909.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "left",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-4",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 8909.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-5",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 8909.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-6",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 12192.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "left",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-7",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 1206.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "main eave between cross gable 1 and 2"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-8",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 1206.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "main eave between cross gable 2 and 3"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-9",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 1511.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "main eave right of cross gable 3 incl. overhang"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-10",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 12192.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-11",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 17069.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "back not visible"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-12",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 8327.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-13",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 8327.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-14",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 8327.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-15",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 8327.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-16",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 6096.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "cross-gable ridge runs back to the main ridge"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-17",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 6532.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-18",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 6532.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-19",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3453.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-20",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3453.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-1"
+  },
+  {
+   "id": "E-21",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 6096.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "cross-gable ridge runs back to the main ridge"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": "AT-2"
+  },
+  {
+   "id": "E-22",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 6532.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": "AT-2"
+  },
+  {
+   "id": "E-23",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 6532.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": "AT-2"
+  },
+  {
+   "id": "E-24",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3453.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-2"
+  },
+  {
+   "id": "E-25",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3453.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-2"
+  },
+  {
+   "id": "E-26",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 6096.2,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "cross-gable ridge runs back to the main ridge"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": "AT-3"
+  },
+  {
+   "id": "E-27",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 6532.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": "AT-3"
+  },
+  {
+   "id": "E-28",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 6532.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": "AT-3"
+  },
+  {
+   "id": "E-29",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3453.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-3"
+  },
+  {
+   "id": "E-30",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3453.7,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-3"
+  },
+  {
+   "id": "E-31",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 2743.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-32",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 2743.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-33",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 2743.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-34",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 3135.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-35",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 3135.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-36",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 3135.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-37",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 3135.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-38",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 3135.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-39",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 3135.5,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-40",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 505.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-41",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 1086.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-42",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 1086.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-43",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 1191.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-44",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 2891.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch roof end assumed shed rake; rendering suggests a hip"
+   },
+   "belongs_to_elevation": "left",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-45",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3138.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-46",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3138.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-47",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3138.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-48",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3138.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-49",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3138.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-50",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 3138.1,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "geometry from footprint, heights and pitch"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-51",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 2891.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch roof end assumed shed rake; rendering suggests a hip"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-52",
+   "edge_class": "flashing",
+   "length_mm": {
+    "value": 10530.9,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch shed roof to main front wall"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-53",
+   "edge_class": "step_flashing",
+   "length_mm": {
+    "value": 1237.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch gable faces against main front wall"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-54",
+   "edge_class": "step_flashing",
+   "length_mm": {
+    "value": 1237.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch gable faces against main front wall"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-55",
+   "edge_class": "step_flashing",
+   "length_mm": {
+    "value": 1237.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch gable faces against main front wall"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-56",
+   "edge_class": "step_flashing",
+   "length_mm": {
+    "value": 1237.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch gable faces against main front wall"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-57",
+   "edge_class": "step_flashing",
+   "length_mm": {
+    "value": 1237.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch gable faces against main front wall"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  },
+  {
+   "id": "E-58",
+   "edge_class": "step_flashing",
+   "length_mm": {
+    "value": 1237.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "footprint + pitch geometry",
+    "low_reason": "porch gable faces against main front wall"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-4"
+  }
+ ],
+ "openings": [
+  {
+   "id": "G-1",
+   "type": "garage_door",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 2743.2,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "US single garage door 9 ft x 7 ft [standardized], width confirmed on photo 3 (~9.4 ft)",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "height_mm": {
+    "value": 2133.6,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "US single garage door 9 ft x 7 ft [standardized], width confirmed on photo 3 (~9.4 ft)",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "sill_height_mm": {
+    "value": 0,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 700.0,
+    "y": 0
+   },
+   "area_mm2": {
+    "value": 5852891.5,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "perimeter_mm": {
+    "value": 9753.6,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 0,
+    "horizontal_bars": 3,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "G-2",
+   "type": "garage_door",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 2743.2,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "US single garage door 9 ft x 7 ft [standardized], width confirmed on photo 3 (~9.4 ft)",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "height_mm": {
+    "value": 2133.6,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "US single garage door 9 ft x 7 ft [standardized], width confirmed on photo 3 (~9.4 ft)",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "sill_height_mm": {
+    "value": 0,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 6186.4,
+    "y": 0
+   },
+   "area_mm2": {
+    "value": 5852891.5,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "perimeter_mm": {
+    "value": 9753.6,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 0,
+    "horizontal_bars": 3,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "G-3",
+   "type": "garage_door",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 2743.2,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "US single garage door 9 ft x 7 ft [standardized], width confirmed on photo 3 (~9.4 ft)",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "height_mm": {
+    "value": 2133.6,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "US single garage door 9 ft x 7 ft [standardized], width confirmed on photo 3 (~9.4 ft)",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "sill_height_mm": {
+    "value": 0,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 11672.8,
+    "y": 0
+   },
+   "area_mm2": {
+    "value": 5852891.5,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "perimeter_mm": {
+    "value": 9753.6,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "catalog size; plan sheet 2 draws the overhead door ~12 ft wide (scaled), photo wins"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 0,
+    "horizontal_bars": 3,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "D-1",
+   "type": "door",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 914.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "US entry door 36 in x 6 ft 8 in [standardized]; existence from plan sheet 2 and rendering",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "height_mm": {
+    "value": 2032,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "US entry door 36 in x 6 ft 8 in [standardized]; existence from plan sheet 2 and rendering",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "sill_height_mm": {
+    "value": 0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 4300.0,
+    "y": 0
+   },
+   "area_mm2": {
+    "value": 1858060.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "perimeter_mm": {
+    "value": 5892.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "D-2",
+   "type": "door",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 914.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "US entry door 36 in x 6 ft 8 in [standardized]; existence from plan sheet 2 and rendering",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "height_mm": {
+    "value": 2032,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "US entry door 36 in x 6 ft 8 in [standardized]; existence from plan sheet 2 and rendering",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "sill_height_mm": {
+    "value": 0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 9786.4,
+    "y": 0
+   },
+   "area_mm2": {
+    "value": 1858060.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "perimeter_mm": {
+    "value": 5892.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "D-3",
+   "type": "door",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 914.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "US entry door 36 in x 6 ft 8 in [standardized]; existence from plan sheet 2 and rendering",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "height_mm": {
+    "value": 2032,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "US entry door 36 in x 6 ft 8 in [standardized]; existence from plan sheet 2 and rendering",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "sill_height_mm": {
+    "value": 0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 15272.8,
+    "y": 0
+   },
+   "area_mm2": {
+    "value": 1858060.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "perimeter_mm": {
+    "value": 5892.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "garage service door hidden behind exterior stair in photo 3; size assumed from catalog, position scaled from plan sheet 2"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "D-4",
+   "type": "door",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 914.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "US entry door 36 in x 6 ft 8 in [standardized], position from plan sheet 1",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "height_mm": {
+    "value": 2032,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "US entry door 36 in x 6 ft 8 in [standardized], position from plan sheet 1",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "sill_height_mm": {
+    "value": 3113.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 4300.0,
+    "y": 3113.0
+   },
+   "area_mm2": {
+    "value": 1858060.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "perimeter_mm": {
+    "value": 5892.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "D-5",
+   "type": "door",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 914.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "US entry door 36 in x 6 ft 8 in [standardized], position from plan sheet 1",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "height_mm": {
+    "value": 2032,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "US entry door 36 in x 6 ft 8 in [standardized], position from plan sheet 1",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "sill_height_mm": {
+    "value": 3113.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 9786.4,
+    "y": 3113.0
+   },
+   "area_mm2": {
+    "value": 1858060.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "perimeter_mm": {
+    "value": 5892.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "D-6",
+   "type": "door",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 914.4,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "US entry door 36 in x 6 ft 8 in [standardized], position from plan sheet 1",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "height_mm": {
+    "value": 2032,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "US entry door 36 in x 6 ft 8 in [standardized], position from plan sheet 1",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "sill_height_mm": {
+    "value": 3113.0,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 15272.8,
+    "y": 3113.0
+   },
+   "area_mm2": {
+    "value": 1858060.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "perimeter_mm": {
+    "value": 5892.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "lower part hidden behind porch guard rail in photo 3; pending deterministic consolidation"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-1",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 1490,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "height_mm": {
+    "value": 1190,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "sill_height_mm": {
+    "value": 4057,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 1375.0,
+    "y": 4057
+   },
+   "area_mm2": {
+    "value": 1773100,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "perimeter_mm": {
+    "value": 5360,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-2",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 1490,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "height_mm": {
+    "value": 1190,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "sill_height_mm": {
+    "value": 4057,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 6861.4,
+    "y": 4057
+   },
+   "area_mm2": {
+    "value": 1773100,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "perimeter_mm": {
+    "value": 5360,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-3",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 1490,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "height_mm": {
+    "value": 1190,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "sill_height_mm": {
+    "value": 4057,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 12347.8,
+    "y": 4057
+   },
+   "area_mm2": {
+    "value": 1773100,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "perimeter_mm": {
+    "value": 5360,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "photo 3 is 450 px wide, frame edges +/-1 px = +/-45 mm"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-4",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 760,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "height_mm": {
+    "value": 1340,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "sill_height_mm": {
+    "value": 6900,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 650.0,
+    "y": 6900
+   },
+   "area_mm2": {
+    "value": 1018400,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "perimeter_mm": {
+    "value": 4200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-5",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 760,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "height_mm": {
+    "value": 1340,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "sill_height_mm": {
+    "value": 6900,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 3090.0,
+    "y": 6900
+   },
+   "area_mm2": {
+    "value": 1018400,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "perimeter_mm": {
+    "value": 4200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-6",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 600,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "recess window right of the cross gable"
+   },
+   "height_mm": {
+    "value": 1000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "recess window right of the cross gable"
+   },
+   "sill_height_mm": {
+    "value": 7050,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "recess window right of the cross gable"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 4600.0,
+    "y": 7050
+   },
+   "area_mm2": {
+    "value": 600000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "recess window right of the cross gable"
+   },
+   "perimeter_mm": {
+    "value": 3200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "recess window right of the cross gable"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-7",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 760,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "height_mm": {
+    "value": 1340,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "sill_height_mm": {
+    "value": 6900,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 6136.4,
+    "y": 6900
+   },
+   "area_mm2": {
+    "value": 1018400,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "perimeter_mm": {
+    "value": 4200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-8",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 760,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "height_mm": {
+    "value": 1340,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "sill_height_mm": {
+    "value": 6900,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 8576.4,
+    "y": 6900
+   },
+   "area_mm2": {
+    "value": 1018400,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "perimeter_mm": {
+    "value": 4200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-9",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 600,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "not clearly visible in photo 3 (middle unit); emitted from unit repetition and rendering photo 4 - verify"
+   },
+   "height_mm": {
+    "value": 1000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "not clearly visible in photo 3 (middle unit); emitted from unit repetition and rendering photo 4 - verify"
+   },
+   "sill_height_mm": {
+    "value": 7050,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "not clearly visible in photo 3 (middle unit); emitted from unit repetition and rendering photo 4 - verify"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 10086.4,
+    "y": 7050
+   },
+   "area_mm2": {
+    "value": 600000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "not clearly visible in photo 3 (middle unit); emitted from unit repetition and rendering photo 4 - verify"
+   },
+   "perimeter_mm": {
+    "value": 3200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "not clearly visible in photo 3 (middle unit); emitted from unit repetition and rendering photo 4 - verify"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-10",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 760,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "height_mm": {
+    "value": 1340,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "sill_height_mm": {
+    "value": 6900,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 11622.8,
+    "y": 6900
+   },
+   "area_mm2": {
+    "value": 1018400,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "perimeter_mm": {
+    "value": 4200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-11",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 760,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "height_mm": {
+    "value": 1340,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "sill_height_mm": {
+    "value": 6900,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 14062.8,
+    "y": 6900
+   },
+   "area_mm2": {
+    "value": 1018400,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "perimeter_mm": {
+    "value": 4200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "upper windows under the cross gable; photo resolution coarse"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-12",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 600,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "recess window right of the cross gable"
+   },
+   "height_mm": {
+    "value": 1000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "scaled from garage-door chain photo 3 and rendering photo 4",
+    "low_reason": "recess window right of the cross gable"
+   },
+   "sill_height_mm": {
+    "value": 7050,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "grade at front elevation, garage-door vertical chain photo 3",
+    "low_reason": "recess window right of the cross gable"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 15572.8,
+    "y": 7050
+   },
+   "area_mm2": {
+    "value": 600000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height",
+    "low_reason": "recess window right of the cross gable"
+   },
+   "perimeter_mm": {
+    "value": 3200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "2 x (width + height)",
+    "low_reason": "recess window right of the cross gable"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  }
+ ],
+ "massing": {
+  "bodies": [
+   {
+    "id": "MB-1",
+    "role": "main",
+    "attachment_id": null,
+    "wall_ids": [
+     "WL-1",
+     "WL-2",
+     "WL-3",
+     "WL-4"
+    ],
+    "roof_face_ids": [
+     "RF-1",
+     "RF-2",
+     "RF-3",
+     "RF-4"
+    ],
+    "footprint_mm": null,
+    "attach": null,
+    "roof": {
+     "form": "hip",
+     "ridge_axis": "x",
+     "low_side": null,
+     "runs_into": [],
+     "overhang_mm": null
+    },
+    "dormer_front_height_mm": null,
+    "grade_mm": null,
+    "missing": [
+     "left end: hip assumed like the right end, hidden behind the left cross gable",
+     "3 storeys at the front: garage storey (brick, 0 to approx. 3100 mm), main floor at approx. 3113 mm, upper floor; brick/siding change at approx. 3100 mm on WL-1",
+     "party walls at x = 5486 and 10973 mm divide the 3 units (interior only)"
+    ]
+   },
+   {
+    "id": "MB-2",
+    "role": "dormer",
+    "attachment_id": "AT-1",
+    "wall_ids": [
+     "WL-5"
+    ],
+    "roof_face_ids": [
+     "RF-5",
+     "RF-6"
+    ],
+    "footprint_mm": null,
+    "attach": {
+     "to": "MB-1",
+     "side": "front",
+     "flush": [
+      "front"
+     ],
+     "offset_mm": null,
+     "offset_from": null,
+     "gap_mm": null
+    },
+    "roof": {
+     "form": "gable",
+     "ridge_axis": "y",
+     "low_side": null,
+     "runs_into": [
+      {
+       "side": "back",
+       "body": "MB-1"
+      }
+     ],
+     "overhang_mm": {
+      "front": 305.0,
+      "back": 0,
+      "left": 0,
+      "right": 0
+     }
+    },
+    "dormer_front_height_mm": 0,
+    "grade_mm": null,
+    "missing": [
+     "cross gable / wall dormer: its front wall is the upper part of WL-1, only the gable triangle (WL-5) sits above the main eave line; the gable roof starts directly at the main eave",
+     "ridge assumed level with the main ridge and running back to it",
+     "left rake starts at the left building corner and meets the left hip RF-2 - intersection not visible"
+    ]
+   },
+   {
+    "id": "MB-3",
+    "role": "dormer",
+    "attachment_id": "AT-2",
+    "wall_ids": [
+     "WL-6"
+    ],
+    "roof_face_ids": [
+     "RF-7",
+     "RF-8"
+    ],
+    "footprint_mm": null,
+    "attach": {
+     "to": "MB-1",
+     "side": "front",
+     "flush": [
+      "front"
+     ],
+     "offset_mm": null,
+     "offset_from": null,
+     "gap_mm": null
+    },
+    "roof": {
+     "form": "gable",
+     "ridge_axis": "y",
+     "low_side": null,
+     "runs_into": [
+      {
+       "side": "back",
+       "body": "MB-1"
+      }
+     ],
+     "overhang_mm": {
+      "front": 305.0,
+      "back": 0,
+      "left": 0,
+      "right": 0
+     }
+    },
+    "dormer_front_height_mm": 0,
+    "grade_mm": null,
+    "missing": [
+     "cross gable / wall dormer: its front wall is the upper part of WL-1, only the gable triangle (WL-6) sits above the main eave line; the gable roof starts directly at the main eave",
+     "ridge assumed level with the main ridge and running back to it"
+    ]
+   },
+   {
+    "id": "MB-4",
+    "role": "dormer",
+    "attachment_id": "AT-3",
+    "wall_ids": [
+     "WL-7"
+    ],
+    "roof_face_ids": [
+     "RF-9",
+     "RF-10"
+    ],
+    "footprint_mm": null,
+    "attach": {
+     "to": "MB-1",
+     "side": "front",
+     "flush": [
+      "front"
+     ],
+     "offset_mm": null,
+     "offset_from": null,
+     "gap_mm": null
+    },
+    "roof": {
+     "form": "gable",
+     "ridge_axis": "y",
+     "low_side": null,
+     "runs_into": [
+      {
+       "side": "back",
+       "body": "MB-1"
+      }
+     ],
+     "overhang_mm": {
+      "front": 305.0,
+      "back": 0,
+      "left": 0,
+      "right": 0
+     }
+    },
+    "dormer_front_height_mm": 0,
+    "grade_mm": null,
+    "missing": [
+     "cross gable / wall dormer: its front wall is the upper part of WL-1, only the gable triangle (WL-7) sits above the main eave line; the gable roof starts directly at the main eave",
+     "ridge assumed level with the main ridge and running back to it"
+    ]
+   }
+  ],
+  "missing": [
+   "AT-4 covered porch (no walls, so no body): raised wood deck on posts across the full front, 8'-0\" deep, deck floor approx. 3113 mm above grade, guard rail 914 mm, posts at the front corners of each unit's deck; separated decks per unit (plan sheet 1), one continuous roof",
+   "AT-4 roof: shed roof RF-11 (low side front, eave approx. 5312 mm, overhang approx. 305 mm at the front) dying into WL-1, with three front-facing gables RF-12..RF-17 (ridge axis y, peak approx. 6972 mm) at x approx. 200, 5686, 11172 mm, each 4400 mm wide, ridges running into WL-1; ends of the porch roof possibly hipped (rendering) - modelled as shed rakes",
+   "AT-5..AT-7 exterior stairs: one per unit at x = unit start + 3700 mm, 1200 mm wide, running from the porch front edge straight down toward the street, run approx. 4064 mm",
+   "garage driveway under the porch: garage doors sit in WL-1, 8'-0\" behind the porch front edge",
+   "back elevation and side walls not visible - openings and possible rear grade change unknown"
+  ]
+ },
+ "downspouts": [],
+ "condition_areas": [],
+ "quality": {
+  "references_used": 8,
+  "spread_percent": 12.5,
+  "warnings": [
+   "Plan vs. photo: rendering (photo 4) shows fish-scale shingles, a small attic window and a fan vent in every cross gable plus a second, taller gable behind each one; the as-built photo 3 shows plain siding gables and one cross gable per unit. Photo used; attic windows and fan vents not emitted.",
+   "Plan vs. photo: plan sheet 2 draws each overhead garage door ~12 ft wide (scaled); photo 3 and rendering show ~9 ft. Catalog 9 ft x 7 ft (2743 x 2134 mm) used.",
+   "Plan vs. photo: total width from photo chains (weighted median 15940 mm) differs 3.2 % from plan chain 3 x 18'-0\" = 16459 mm; plan value kept.",
+   "Plan vs. photo: rendering stairs and railings are decorative balusters; as-built photo 3 shows wood decks with plain pickets. Existence identical, no change to counts.",
+   "Reference disagreement >8 %: eave raw estimates span 8093-9131 mm (photo 3 garage door 8327 vs rendering garage door 9131); both kept, eave confidence low.",
+   "Ridge: photos only show the cross-gable peaks in the front wall plane; main ridge assumed level with them (10462 mm). Main roof pitch 20.2 deg follows from that assumption - verify on a side view.",
+   "depth_basis oblique_only: no photo shows the left or right elevation frontally. Footprint depth taken from the written plan chain 38'-0\" (high); photo depth not assessable.",
+   "openings likely undercounted on back: no view of the back elevation (plan sheet 1 suggests a kitchen window at each unit's back wall, not legible enough to emit).",
+   "openings likely undercounted on left and right: end walls not visible.",
+   "Occlusion: garage service doors D-1..D-3 are hidden behind the exterior stairs in photo 3; taken from plan sheet 2 (door swing at the front wall) and rendering, size from catalog.",
+   "Window W-9 (middle unit, recess right of cross gable) is not clearly visible in photo 3; emitted from unit repetition and rendering - verify.",
+   "WL-1 combines the brick garage storey (approx. 0-3100 mm) and the siding above; material set to siding. Brick area approx. 16459 x 3100 mm minus garage openings.",
+   "Roof geometry: the left cross gable starts at the left building corner and therefore cuts into the left hip; RF-1 area uses the simplified subtraction of three equal cross-gable footprints.",
+   "Possible rear slope: the garage storey contains a 'Bsmt.' at the back and a grass bank rises at the left side in photo 3; back grade could be up to one storey higher. Not measurable - all heights from front grade.",
+   "Downspouts: none identifiable at photo resolution; downspouts array left empty.",
+   "Roof penetrations (pipes, vents): not resolvable in photo 3 (450 px); none emitted - verify on site or with a higher-resolution photo.",
+   "Wall check WL-5..WL-7: width x 0 + 0.5 x width x gable_height = area, passes; all other walls pass (no gables)."
+  ],
+  "raw_estimates": [
+   {
+    "target": "total_width",
+    "photo_index": 3,
+    "reference_object": "garage door width 9 ft (horizontal), yaw-corrected ~10 deg",
+    "assumed_size_mm": 2743.2,
+    "estimate_mm": 15940,
+    "reliability": "medium",
+    "via_transfer": false
+   },
+   {
+    "target": "total_width",
+    "photo_index": 4,
+    "reference_object": "garage door width 9 ft (horizontal), rendering",
+    "assumed_size_mm": 2743.2,
+    "estimate_mm": 16640,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 3,
+    "reference_object": "garage door height 7 ft",
+    "assumed_size_mm": 2133.6,
+    "estimate_mm": 8327,
+    "reliability": "high",
+    "via_transfer": false
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 3,
+    "reference_object": "porch guard rail 36 in (in_front plane)",
+    "assumed_size_mm": 914.4,
+    "estimate_mm": 8093,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 3,
+    "reference_object": "entry door 6 ft 8 in (bottom behind rail)",
+    "assumed_size_mm": 2032,
+    "estimate_mm": 8814,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 4,
+    "reference_object": "entry door 6 ft 8 in, rendering",
+    "assumed_size_mm": 2032,
+    "estimate_mm": 8239,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 4,
+    "reference_object": "garage door height 7 ft, rendering",
+    "assumed_size_mm": 2133.6,
+    "estimate_mm": 9131,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 3,
+    "reference_object": "garage door height 7 ft",
+    "assumed_size_mm": 2133.6,
+    "estimate_mm": 10462,
+    "reliability": "high",
+    "via_transfer": false
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 3,
+    "reference_object": "porch guard rail 36 in (in_front plane)",
+    "assumed_size_mm": 914.4,
+    "estimate_mm": 10168,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 3,
+    "reference_object": "entry door 6 ft 8 in (bottom behind rail)",
+    "assumed_size_mm": 2032,
+    "estimate_mm": 11074,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 4,
+    "reference_object": "entry door 6 ft 8 in, rendering",
+    "assumed_size_mm": 2032,
+    "estimate_mm": 10807,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 4,
+    "reference_object": "garage door height 7 ft, rendering",
+    "assumed_size_mm": 2133.6,
+    "estimate_mm": 11969,
+    "reliability": "low",
+    "via_transfer": false
+   }
+  ],
+  "dimension_chains": [
+   {
+    "page": 1,
+    "label": "front width 18'-0\" + 18'-0\" + 18'-0\" (assigned_to: footprint.width_mm, footprint_overall.width_mm)",
+    "values_mm": [
+     5486.400000000001,
+     5486.400000000001,
+     5486.400000000001
+    ],
+    "stated_total_mm": null,
+    "computed_sum_mm": 16459.2,
+    "deviation_percent": null
+   },
+   {
+    "page": 1,
+    "label": "left side 38'-0\" + 8'-0\" = 46'-0\" (assigned_to: footprint.depth_mm = 38'-0\", footprint_overall.depth_mm = 46'-0\", porch depth AT-4)",
+    "values_mm": [
+     11582.4,
+     2438.4
+    ],
+    "stated_total_mm": 14020.800000000001,
+    "computed_sum_mm": 14020.8,
+    "deviation_percent": 0
+   }
+  ]
+ }
+}

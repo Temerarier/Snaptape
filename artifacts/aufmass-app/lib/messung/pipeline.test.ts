@@ -155,6 +155,26 @@ describe("Messlauf-Protokoll", () => {
     );
   });
 
+  it("retains massing in the stored measurement and schema 1.8 run record", async () => {
+    const roh = {
+      meta: { schema_version: "1.8" },
+      massing: { bodies: [{ id: "B-1" }] },
+      quality: { warnings: [] },
+    };
+    mocks.standardExtraktor.mockResolvedValue({ roh });
+    mocks.validateMeasurement.mockReturnValue({ valid: true });
+
+    await fuehreMessLaufAus(laufArgs);
+
+    expect(mocks.insertValues).toHaveBeenCalledWith(
+      expect.objectContaining({
+        schemaVersion: "1.8",
+        outcome: "model_ready",
+        measureJson: expect.objectContaining({ massing: roh.massing }),
+      }),
+    );
+  });
+
   it("protokolliert nach einem Extraktionsfehler keine erfundene Version", async () => {
     vi.spyOn(console, "error").mockImplementation(() => undefined);
     mocks.standardExtraktor.mockRejectedValue(new Error("extraction failed"));

@@ -238,3 +238,17 @@ mtime_ms = 1793200985906
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/0851cebc-7887-4244-a82e-7b1677b0ec9b/58885c85-6714-4830-9811-a20557b245a0"
 storage_version_token = "1793201104770532"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "WL8wMgdDJXHU7vDQLaFue"
+uri = "file://docs/schema18-abnahme.md"
+type = "text"
+title = "Schema 1.8 – Abnahmebericht"
+description = "Leere Quelldatei-Diffs, Prompt-Auszüge, fünf Fixture-Prüfungen, 336 erfolgreiche Tests und Ergebnis des vorherigen Opus-Laufs."
+logical_id = "fbdcdddd-a75f-43ed-af77-f233f084264f"
+content_hash = "sha256:b41ad27f87a726c9e33ae43f21ad88373c683b87eab8a14d6b5b473c228b4261"
+size = 5236
+mtime_ms = 1793205469820
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/fbdcdddd-a75f-43ed-af77-f233f084264f/736646d3-6bb1-426d-8270-219fed104510"
+storage_version_token = "1793205556987891"
+content_type = "text/markdown"

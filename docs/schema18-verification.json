@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.8",
+  "routes": [
+    {
+      "route": "photo",
+      "endsWithExactSchema": true
+    },
+    {
+      "route": "plan",
+      "endsWithExactSchema": true
+    },
+    {
+      "route": "mixed",
+      "endsWithExactSchema": true
+    }
+  ],
+  "photo": {
+    "first200": "COMPLETENESS CONTRACT: your JSON must enumerate EVERY individually visible face, edge, opening, attachment and downspout across ALL photos - a partial, sampled or summarized list is a WRONG answer. Co",
+    "last200": "  ]\n        }\n      }\n    },\n    \"measurement_or_null\": {\n      \"oneOf\": [\n        {\n          \"$ref\": \"#/$defs/measurement\"\n        },\n        {\n          \"type\": \"null\"\n        }\n      ]\n    }\n  }\n}"
+  },
+  "repairIncludesExactSchema": true,
+  "reference": null
+}

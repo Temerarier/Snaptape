@@ -1,6 +1,6 @@
 // Prompt-Baukasten für die echte Extraktion: liest die Prompt-Texte
 // VERBATIM aus docs/pipeline (keine Kopien, keine Umformulierungen),
-// injiziert Referenzkatalog + Schema v1.5 und hängt (falls vorhanden)
+// injiziert Referenzkatalog + Schema v1.8 und hängt (falls vorhanden)
 // das Nutzer-Referenzmaß an. Prompt-Texte werden hier NIE editiert.
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -46,7 +46,7 @@ export function referenzInMm(referenz: NutzerReferenz): number {
   return referenz.wert * MM_PRO_EINHEIT[referenz.einheit];
 }
 
-// System-Text: Prompt (verbatim) + Referenzkatalog + Schema v1.5 +
+// System-Text: Prompt (verbatim) + Referenzkatalog + Schema v1.8 +
 // optionales Nutzer-Referenzmaß. Der Katalog ersetzt den Platzhalter
 // __REFERENCE_CATALOG__ wo vorhanden, sonst wird er angehängt (der
 // Plan-Prompt trägt keinen Platzhalter, braucht den Katalog aber als
@@ -57,7 +57,7 @@ export function baueSystemText(
 ): string {
   const prompt = ladeRepoDatei(PROMPT_DATEI[route]);
   const katalog = ladeRepoDatei("docs/pipeline/reference-catalog.md");
-  const schema = ladeRepoDatei("shared/schema/measurement-v1.7.json");
+  const schema = ladeRepoDatei("shared/schema/measurement-v1.8.json");
 
   let system = prompt.includes("__REFERENCE_CATALOG__")
     ? prompt.replace("__REFERENCE_CATALOG__", katalog)
@@ -76,15 +76,15 @@ export function baueSystemText(
   return system;
 }
 
-// Repair-Prompt: __SCHEMA_V1_7__ wird laut Laufzeit-Hinweis in der
+// Repair-Prompt: __SCHEMA__ wird laut Laufzeit-Hinweis in der
 // Datei durch das Schema ersetzt; der Hinweis-Absatz selbst ist nicht
 // Teil des Prompts und wird entfernt.
 export function baueRepairSystemText(): string {
   const prompt = ladeRepoDatei("docs/pipeline/repair-prompt.md");
-  const schema = ladeRepoDatei("shared/schema/measurement-v1.7.json");
+  const schema = ladeRepoDatei("shared/schema/measurement-v1.8.json");
   return prompt
     .replace(/\n\(Runtime note[\s\S]*$/, "\n")
-    .replace("__SCHEMA_V1_7__", schema);
+    .replace("__SCHEMA__", schema);
 }
 
 export const REPAIR_VORTEXT = "Your previous response could not be used. Problem: ";

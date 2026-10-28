@@ -1,0 +1,2985 @@
+{
+ "meta": {
+  "country": "US",
+  "unit": "mm",
+  "schema_version": "1.8",
+  "photos": [
+   {
+    "index": 1,
+    "shows_elevation": "front",
+    "view_angle": "frontal",
+    "perspective_corrected": false
+   },
+   {
+    "index": 2,
+    "shows_elevation": "multiple",
+    "view_angle": "steeply_angled",
+    "perspective_corrected": true
+   },
+   {
+    "index": 3,
+    "shows_elevation": "front",
+    "view_angle": "slightly_angled",
+    "perspective_corrected": true
+   },
+   {
+    "index": 4,
+    "shows_elevation": "multiple",
+    "view_angle": "steeply_angled",
+    "perspective_corrected": true
+   }
+  ],
+  "notes": [
+   "Country: United States, certainty medium-high - modern farmhouse style (board-and-batten siding, standing-seam metal roof, timber knee braces, brick-veneer foundation skirt, side-load garage), 6'8\" door proportions. No license plates, mailbox or signage visible. Calc profile US, [US] + [INVARIANT] catalog sections only.",
+   "Images are architectural renderings (CGI), not photographs; sizes are therefore as-designed, lighting and colors idealized.",
+   "Photo assessment: 1 = front, frontal, occluded ~5% (shrubs); 2 = front + left elevation from front-left corner, front yaw ~35 deg, left yaw ~65 deg, left occluded ~10%; 3 = front from front-right, yaw ~30 deg, right elevation only a sliver; 4 = right elevation (yaw ~60 deg) + back elevation (yaw ~25 deg) from rear-right corner, occluded ~5% (patio furniture).",
+   "depth_basis: oblique_only - no photo shows the left or right elevation frontally or slightly angled.",
+   "Perspective: widths from photos 2/3/4 divided by cos(yaw) with yaws above. Photo 1: bays stand ~2.4 m in front of the porch wall; door-based scale (porch plane) corrected to bay plane.",
+   "Wide-angle: in photo 2 the far left end (garage doors) lies in the outer 10% of the frame - depth chain from photo 2 possibly compressed; photo 4 preferred as second chain.",
+   "Penetrations: no pipes, vents or chimneys visible on any roof face (clean standing-seam render) - 0 entries. No gutters or downspouts visible - downspouts empty. No visible damage - condition_areas empty.",
+   "Rear patio (photo 4) is an open slab at grade with furniture - not a volume, not reported as attachment.",
+   "Openings counted across all photos: front 5 (W-1..W-4, D-1), left 5 (G-1, G-2, W-5..W-7), right 3 (W-8..W-10), back 4 (W-11, W-12, D-2, D-3) = 17."
+  ]
+ },
+ "building": {
+  "building_type": "detached",
+  "stories": 1,
+  "roof_type": "hip",
+  "shared_walls": [],
+  "footprint": {
+   "points": [
+    [
+     0,
+     0
+    ],
+    [
+     5505,
+     0
+    ],
+    [
+     5505,
+     2440
+    ],
+    [
+     15255,
+     2440
+    ],
+    [
+     15255,
+     0
+    ],
+    [
+     20760,
+     0
+    ],
+    [
+     20760,
+     17200
+    ],
+    [
+     0,
+     17200
+    ]
+   ],
+   "width_mm": {
+    "value": 20760,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 5 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4); spread 8.5%"
+   },
+   "depth_mm": {
+    "value": 17200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 3 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4); spread 8.1%"
+   },
+   "perimeter_mm": {
+    "value": 80800,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from points",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "area_mm2": {
+    "value": 333282000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed from points",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   }
+  },
+  "heights": {
+   "eave_height_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 4 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4); spread 5.5%"
+   },
+   "ridge_height_mm": {
+    "value": 6300,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 3 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4); spread 6.3%"
+   },
+   "parapet_height_mm": null,
+   "datum_note": "Grade zero = lawn line at the front elevation (photo 1). Site appears level; porch floor ~712 mm above grade (4 risers).",
+   "per_elevation": [
+    {
+     "elevation": "front",
+     "eave_height_mm": {
+      "value": 3250,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "weighted median of 4 reference estimate(s)",
+      "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+     },
+     "ridge_height_mm": {
+      "value": 6300,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "weighted median of 3 reference estimate(s)",
+      "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+     },
+     "grade_offset_mm": {
+      "value": 0,
+      "confidence": "medium",
+      "source": "estimated",
+      "reference_used": "datum",
+      "low_reason": null
+     }
+    },
+    {
+     "elevation": "left",
+     "eave_height_mm": {
+      "value": 3250,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "transferred from front eave line, continuous in photo 2",
+      "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+     },
+     "ridge_height_mm": {
+      "value": 5559.6,
+      "confidence": "low",
+      "source": "estimated",
+      "reference_used": "wing ridge: eave + half wing width x tan 40",
+      "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+     },
+     "grade_offset_mm": {
+      "value": 0,
+      "confidence": "low",
+      "source": "estimated",
+      "reference_used": "level site assumed",
+      "low_reason": null
+     }
+    },
+    {
+     "elevation": "right",
+     "eave_height_mm": {
+      "value": 3250,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "transferred via photo 4 eave line",
+      "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+     },
+     "ridge_height_mm": {
+      "value": 5559.6,
+      "confidence": "low",
+      "source": "estimated",
+      "reference_used": "wing ridge",
+      "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+     },
+     "grade_offset_mm": {
+      "value": 0,
+      "confidence": "low",
+      "source": "estimated",
+      "reference_used": "level site assumed",
+      "low_reason": null
+     }
+    },
+    {
+     "elevation": "back",
+     "eave_height_mm": {
+      "value": 3250,
+      "confidence": "low",
+      "source": "scaled",
+      "reference_used": "photo 4 rear door 2032",
+      "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+     },
+     "ridge_height_mm": {
+      "value": 6300,
+      "confidence": "low",
+      "source": "estimated",
+      "reference_used": "main ridge",
+      "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+     },
+     "grade_offset_mm": {
+      "value": 0,
+      "confidence": "low",
+      "source": "estimated",
+      "reference_used": "level site assumed; rear floor ~200 above patio",
+      "low_reason": null
+     }
+    }
+   ]
+  },
+  "footprint_overall": {
+   "width_mm": {
+    "value": 20760,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 5 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4); spread 8.5%"
+   },
+   "depth_mm": {
+    "value": 17200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 3 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4); spread 8.1%"
+   },
+   "note": "Equal to footprint: no enclosed attached volumes identified; open front porch (AT-3) and awnings excluded. Garage is inside the left wing."
+  }
+ },
+ "references": [
+  {
+   "photo_index": 1,
+   "scale_type": "own_reference",
+   "object": "entry door (double glazed, US 6'8\")",
+   "bounding_box": [
+    0.464,
+    0.588,
+    0.536,
+    0.713
+   ],
+   "assumed_size_mm": 2032,
+   "reliability": "high",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 1,
+   "scale_type": "own_reference",
+   "object": "bay window W-1 height (market 1524)",
+   "bounding_box": [
+    0.1,
+    0.588,
+    0.229,
+    0.69
+   ],
+   "assumed_size_mm": 1524,
+   "reliability": "medium",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 1,
+   "scale_type": "own_reference",
+   "object": "porch stair riser (4 risers)",
+   "bounding_box": [
+    0.46,
+    0.72,
+    0.54,
+    0.765
+   ],
+   "assumed_size_mm": 178,
+   "reliability": "medium",
+   "plane": "in_front",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 2,
+   "scale_type": "own_reference",
+   "object": "entry door",
+   "bounding_box": [
+    0.59,
+    0.51,
+    0.635,
+    0.625
+   ],
+   "assumed_size_mm": 2032,
+   "reliability": "high",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 2,
+   "scale_type": "own_reference",
+   "object": "garage door height (single, 7 ft)",
+   "bounding_box": [
+    0.087,
+    0.48,
+    0.117,
+    0.59
+   ],
+   "assumed_size_mm": 2134,
+   "reliability": "high",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 3,
+   "scale_type": "own_reference",
+   "object": "entry door",
+   "bounding_box": [
+    0.35,
+    0.49,
+    0.39,
+    0.6
+   ],
+   "assumed_size_mm": 2032,
+   "reliability": "high",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  },
+  {
+   "photo_index": 4,
+   "scale_type": "own_reference",
+   "object": "rear exterior door D-3",
+   "bounding_box": [
+    0.7,
+    0.51,
+    0.73,
+    0.63
+   ],
+   "assumed_size_mm": 2032,
+   "reliability": "medium",
+   "plane": "facade_plane",
+   "transferred_via": null,
+   "user_confirmed": false
+  }
+ ],
+ "attachments": [
+  {
+   "id": "AT-1",
+   "type": "awning",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 4482.3,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 scale from consolidated total_width (bay plane)",
+    "low_reason": null
+   },
+   "height_mm": {
+    "value": 450,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "standing-seam shed awning thickness/rise",
+    "low_reason": null
+   },
+   "depth_mm": {
+    "value": 700,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "projection judged from photos 2/3",
+    "low_reason": null
+   },
+   "position_mm": {
+    "x": 256,
+    "y": 3100
+   },
+   "parent_face_id": "WL-1",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": null
+  },
+  {
+   "id": "AT-2",
+   "type": "awning",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 4482.3,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 scale from consolidated total_width (bay plane)",
+    "low_reason": null
+   },
+   "height_mm": {
+    "value": 450,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "standing-seam shed awning",
+    "low_reason": null
+   },
+   "depth_mm": {
+    "value": 700,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "projection judged from photos 2/3",
+    "low_reason": null
+   },
+   "position_mm": {
+    "x": 16022,
+    "y": 3100
+   },
+   "parent_face_id": "WL-3",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": null
+  },
+  {
+   "id": "AT-3",
+   "type": "other",
+   "subtype": null,
+   "elevation": "front",
+   "width_mm": {
+    "value": 9750,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 5 reference estimate(s) minus wings",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "height_mm": {
+    "value": 712,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "4 risers x 178",
+    "low_reason": "covered front porch: brick platform, 4 timber posts, steps; roof = RF-11"
+   },
+   "depth_mm": {
+    "value": 2440,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "photos 2/3 porch depth",
+    "low_reason": "oblique only"
+   },
+   "position_mm": {
+    "x": 5505,
+    "y": 0
+   },
+   "parent_face_id": "WL-2",
+   "attached": true,
+   "include_in_footprint": false,
+   "dormer": null
+  }
+ ],
+ "faces": [
+  {
+   "id": "WL-1",
+   "face_class": "wall",
+   "elevation": "front",
+   "material": "siding",
+   "area_mm2": {
+    "value": 24248483.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height + 0.5 x width x gable",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "net_area_mm2": {
+    "value": 19336324.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "width_mm": {
+    "value": 5505,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 5 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "height_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 4 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "gable_height_mm": {
+    "value": 2309.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 1 rake angle ~40 deg over half wing width",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": null,
+   "orientation_deg": null,
+   "color": {
+    "hex": "#EEEDE7",
+    "name": "warm white board-and-batten",
+    "confidence": "medium",
+    "secondary_hex": "#9A5A43",
+    "note": "brick plinth (secondary) on front and side bases; rendered images, lighting idealized"
+   },
+   "start_mm": 0
+  },
+  {
+   "id": "WL-2",
+   "face_class": "wall",
+   "elevation": "front",
+   "material": "siding",
+   "area_mm2": {
+    "value": 31687500,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height + 0.5 x width x gable",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "net_area_mm2": {
+    "value": 23023764,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "width_mm": {
+    "value": 9750,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 5 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "height_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 4 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": null,
+   "orientation_deg": null,
+   "color": {
+    "hex": "#EEEDE7",
+    "name": "warm white board-and-batten",
+    "confidence": "medium",
+    "secondary_hex": "#9A5A43",
+    "note": "brick plinth (secondary) on front and side bases; rendered images, lighting idealized"
+   },
+   "start_mm": 5505
+  },
+  {
+   "id": "WL-3",
+   "face_class": "wall",
+   "elevation": "front",
+   "material": "siding",
+   "area_mm2": {
+    "value": 24248483.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height + 0.5 x width x gable",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "net_area_mm2": {
+    "value": 19336324.8,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "width_mm": {
+    "value": 5505,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 5 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "height_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 4 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "gable_height_mm": {
+    "value": 2309.6,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 1 rake angle ~40 deg over half wing width",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": null,
+   "orientation_deg": null,
+   "color": {
+    "hex": "#EEEDE7",
+    "name": "warm white board-and-batten",
+    "confidence": "medium",
+    "secondary_hex": "#9A5A43",
+    "note": "brick plinth (secondary) on front and side bases; rendered images, lighting idealized"
+   },
+   "start_mm": 15255
+  },
+  {
+   "id": "WL-4",
+   "face_class": "wall",
+   "elevation": "right",
+   "material": "siding",
+   "area_mm2": {
+    "value": 7930000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height + 0.5 x width x gable",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "net_area_mm2": {
+    "value": 7930000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "width_mm": {
+    "value": 2440,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "consolidated depth / estimated",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "height_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 4 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": null,
+   "orientation_deg": null,
+   "color": {
+    "hex": "#EEEDE7",
+    "name": "warm white board-and-batten",
+    "confidence": "medium",
+    "secondary_hex": "#9A5A43",
+    "note": "brick plinth (secondary) on front and side bases; rendered images, lighting idealized"
+   },
+   "start_mm": 0
+  },
+  {
+   "id": "WL-5",
+   "face_class": "wall",
+   "elevation": "left",
+   "material": "siding",
+   "area_mm2": {
+    "value": 7930000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height + 0.5 x width x gable",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "net_area_mm2": {
+    "value": 7930000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "width_mm": {
+    "value": 2440,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "consolidated depth / estimated",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "height_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 4 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": null,
+   "orientation_deg": null,
+   "color": {
+    "hex": "#EEEDE7",
+    "name": "warm white board-and-batten",
+    "confidence": "medium",
+    "secondary_hex": "#9A5A43",
+    "note": "brick plinth (secondary) on front and side bases; rendered images, lighting idealized"
+   },
+   "start_mm": 14760
+  },
+  {
+   "id": "WL-6",
+   "face_class": "wall",
+   "elevation": "left",
+   "material": "siding",
+   "area_mm2": {
+    "value": 55900000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height + 0.5 x width x gable",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "net_area_mm2": {
+    "value": 40709012,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "width_mm": {
+    "value": 17200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "consolidated depth / estimated",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "height_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 4 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": null,
+   "orientation_deg": null,
+   "color": {
+    "hex": "#EEEDE7",
+    "name": "warm white board-and-batten",
+    "confidence": "medium",
+    "secondary_hex": "#9A5A43",
+    "note": "brick plinth (secondary) on front and side bases; rendered images, lighting idealized"
+   },
+   "start_mm": 0
+  },
+  {
+   "id": "WL-7",
+   "face_class": "wall",
+   "elevation": "right",
+   "material": "siding",
+   "area_mm2": {
+    "value": 55900000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height + 0.5 x width x gable",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "net_area_mm2": {
+    "value": 52463258,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "width_mm": {
+    "value": 17200,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "consolidated depth / estimated",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "height_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 4 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": null,
+   "orientation_deg": null,
+   "color": {
+    "hex": "#EEEDE7",
+    "name": "warm white board-and-batten",
+    "confidence": "medium",
+    "secondary_hex": "#9A5A43",
+    "note": "brick plinth (secondary) on front and side bases; rendered images, lighting idealized"
+   },
+   "start_mm": 0
+  },
+  {
+   "id": "WL-8",
+   "face_class": "wall",
+   "elevation": "back",
+   "material": "siding",
+   "area_mm2": {
+    "value": 17891250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height + 0.5 x width x gable",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "net_area_mm2": {
+    "value": 14982432,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "width_mm": {
+    "value": 5505,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 5 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "height_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 4 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": null,
+   "orientation_deg": null,
+   "color": {
+    "hex": "#EEEDE7",
+    "name": "warm white board-and-batten",
+    "confidence": "medium",
+    "secondary_hex": "#9A5A43",
+    "note": "brick plinth (secondary) on front and side bases; rendered images, lighting idealized"
+   },
+   "start_mm": 0
+  },
+  {
+   "id": "WL-9",
+   "face_class": "wall",
+   "elevation": "back",
+   "material": "siding",
+   "area_mm2": {
+    "value": 31687500,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height + 0.5 x width x gable",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "net_area_mm2": {
+    "value": 30035484,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "width_mm": {
+    "value": 9750,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 5 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "height_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 4 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": null,
+   "orientation_deg": null,
+   "color": {
+    "hex": "#EEEDE7",
+    "name": "warm white board-and-batten",
+    "confidence": "medium",
+    "secondary_hex": "#9A5A43",
+    "note": "brick plinth (secondary) on front and side bases; rendered images, lighting idealized"
+   },
+   "start_mm": 5505
+  },
+  {
+   "id": "WL-10",
+   "face_class": "wall",
+   "elevation": "back",
+   "material": "siding",
+   "area_mm2": {
+    "value": 17891250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "width x height + 0.5 x width x gable",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "net_area_mm2": {
+    "value": 17891250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "gross minus openings on this wall",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "width_mm": {
+    "value": 5505,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 5 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "height_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "weighted median of 4 reference estimate(s)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": null,
+   "orientation_deg": null,
+   "color": {
+    "hex": "#EEEDE7",
+    "name": "warm white board-and-batten",
+    "confidence": "medium",
+    "secondary_hex": "#9A5A43",
+    "note": "brick plinth (secondary) on front and side bases; rendered images, lighting idealized"
+   },
+   "start_mm": 15255
+  },
+  {
+   "id": "RF-1",
+   "face_class": "roof_face",
+   "elevation": "front",
+   "material": "metal",
+   "area_mm2": {
+    "value": 63725257.6,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "plan area / cos(pitch) from consolidated footprint and heights",
+    "low_reason": "main roof front plane from porch wall line to ridge; overlap with wing roofs approximated"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 19.53,
+    "degrees_rounded": 20,
+    "rise_over_12_snapped": 4.5
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#8E959C",
+    "name": "grey standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "rear wing roof appears blue-grey in photo 2 due to sky reflection"
+   }
+  },
+  {
+   "id": "RF-11",
+   "face_class": "roof_face",
+   "elevation": "front",
+   "material": "metal",
+   "area_mm2": {
+    "value": 25241822.8,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "plan area / cos(pitch) from consolidated footprint and heights",
+    "low_reason": "porch part of the same plane as RF-1, split per ATTACHMENT ROOF RULE"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": "AT-3",
+   "pitch": {
+    "degrees_original": 19.53,
+    "degrees_rounded": 20,
+    "rise_over_12_snapped": 4.5
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#8E959C",
+    "name": "grey standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "rear wing roof appears blue-grey in photo 2 due to sky reflection"
+   }
+  },
+  {
+   "id": "RF-2",
+   "face_class": "roof_face",
+   "elevation": "back",
+   "material": "metal",
+   "area_mm2": {
+    "value": 94760285.7,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "plan area / cos(pitch) from consolidated footprint and heights",
+    "low_reason": "back plane; overlap with wing roofs approximated"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 19.53,
+    "degrees_rounded": 20,
+    "rise_over_12_snapped": 4.5
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#8E959C",
+    "name": "grey standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "rear wing roof appears blue-grey in photo 2 due to sky reflection"
+   }
+  },
+  {
+   "id": "RF-7",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "metal",
+   "area_mm2": {
+    "value": 4624138.3,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "plan area / cos(pitch) from consolidated footprint and heights",
+    "low_reason": "small hip end of main roof resting on left wing ridge; geometry inferred"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 19.53,
+    "degrees_rounded": 20,
+    "rise_over_12_snapped": 4.5
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#8E959C",
+    "name": "grey standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "rear wing roof appears blue-grey in photo 2 due to sky reflection"
+   }
+  },
+  {
+   "id": "RF-8",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "metal",
+   "area_mm2": {
+    "value": 4624138.3,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "plan area / cos(pitch) from consolidated footprint and heights",
+    "low_reason": "small hip end of main roof resting on right wing ridge; geometry inferred"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 19.53,
+    "degrees_rounded": 20,
+    "rise_over_12_snapped": 4.5
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#8E959C",
+    "name": "grey standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "rear wing roof appears blue-grey in photo 2 due to sky reflection"
+   }
+  },
+  {
+   "id": "RF-3",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "metal",
+   "area_mm2": {
+    "value": 70845983.4,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "plan area / cos(pitch) from consolidated footprint and heights",
+    "low_reason": "left wing outer plane; pitch from front gable rake angle"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 40,
+    "degrees_rounded": 40,
+    "rise_over_12_snapped": 10.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#8E959C",
+    "name": "grey standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "rear wing roof appears blue-grey in photo 2 due to sky reflection"
+   }
+  },
+  {
+   "id": "RF-4",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "metal",
+   "area_mm2": {
+    "value": 70845983.4,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "plan area / cos(pitch) from consolidated footprint and heights",
+    "low_reason": "left wing inner plane, partly covered by main roof valleys"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 40,
+    "degrees_rounded": 40,
+    "rise_over_12_snapped": 10.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#8E959C",
+    "name": "grey standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "rear wing roof appears blue-grey in photo 2 due to sky reflection"
+   }
+  },
+  {
+   "id": "RF-9",
+   "face_class": "roof_face",
+   "elevation": "back",
+   "material": "metal",
+   "area_mm2": {
+    "value": 14323785.5,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "plan area / cos(pitch) from consolidated footprint and heights",
+    "low_reason": "left wing back hip end (photo 4)"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 40,
+    "degrees_rounded": 40,
+    "rise_over_12_snapped": 10.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#8E959C",
+    "name": "grey standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "rear wing roof appears blue-grey in photo 2 due to sky reflection"
+   }
+  },
+  {
+   "id": "RF-5",
+   "face_class": "roof_face",
+   "elevation": "left",
+   "material": "metal",
+   "area_mm2": {
+    "value": 70845983.4,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "plan area / cos(pitch) from consolidated footprint and heights",
+    "low_reason": "right wing inner plane, partly covered by main roof valleys"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 40,
+    "degrees_rounded": 40,
+    "rise_over_12_snapped": 10.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#8E959C",
+    "name": "grey standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "rear wing roof appears blue-grey in photo 2 due to sky reflection"
+   }
+  },
+  {
+   "id": "RF-6",
+   "face_class": "roof_face",
+   "elevation": "right",
+   "material": "metal",
+   "area_mm2": {
+    "value": 70845983.4,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "plan area / cos(pitch) from consolidated footprint and heights",
+    "low_reason": "right wing outer plane"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 40,
+    "degrees_rounded": 40,
+    "rise_over_12_snapped": 10.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#8E959C",
+    "name": "grey standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "rear wing roof appears blue-grey in photo 2 due to sky reflection"
+   }
+  },
+  {
+   "id": "RF-10",
+   "face_class": "roof_face",
+   "elevation": "back",
+   "material": "metal",
+   "area_mm2": {
+    "value": 14323785.5,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "plan area / cos(pitch) from consolidated footprint and heights",
+    "low_reason": "right wing back hip end (photo 4)"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": null,
+   "parent_attachment_id": null,
+   "pitch": {
+    "degrees_original": 40,
+    "degrees_rounded": 40,
+    "rise_over_12_snapped": 10.0
+   },
+   "orientation_deg": null,
+   "color": {
+    "hex": "#8E959C",
+    "name": "grey standing-seam metal",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": "rear wing roof appears blue-grey in photo 2 due to sky reflection"
+   }
+  },
+  {
+   "id": "SF-1",
+   "face_class": "soffit",
+   "elevation": "unknown",
+   "material": "other",
+   "area_mm2": {
+    "value": 43084522.1,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "eave + rake run x soffit depth (porch excluded)",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": {
+    "value": 560,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 rake overhang 30 px at bay plane",
+    "low_reason": "all sides assumed equal"
+   },
+   "parent_attachment_id": null,
+   "pitch": null,
+   "orientation_deg": null,
+   "color": {
+    "hex": "#F2F1EC",
+    "name": "white",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": null
+   }
+  },
+  {
+   "id": "FC-1",
+   "face_class": "fascia",
+   "elevation": "unknown",
+   "material": "other",
+   "area_mm2": {
+    "value": 17337329.3,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "fascia run x assumed height 200",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "net_area_mm2": null,
+   "width_mm": null,
+   "height_mm": null,
+   "gable_height_mm": null,
+   "soffit_depth_mm": {
+    "value": 560,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 rake overhang",
+    "low_reason": null
+   },
+   "parent_attachment_id": null,
+   "pitch": null,
+   "orientation_deg": null,
+   "color": {
+    "hex": "#F4F3EF",
+    "name": "white trim",
+    "confidence": "medium",
+    "secondary_hex": null,
+    "note": null
+   }
+  }
+ ],
+ "edges": [
+  {
+   "id": "E-1",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 11079.8,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-2",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 14447.5,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-3",
+   "edge_class": "ridge",
+   "length_mm": {
+    "value": 14447.5,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-4",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 3043.8,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-5",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 3043.8,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-6",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 3043.8,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-7",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 3043.8,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "roof",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-8",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 5447.1,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-9",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 5447.1,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-10",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 5447.1,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-11",
+   "edge_class": "hip",
+   "length_mm": {
+    "value": 5447.1,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-12",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 4324.2,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-13",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 4324.2,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-14",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 4324.2,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-15",
+   "edge_class": "rake",
+   "length_mm": {
+    "value": 4324.2,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-16",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 7437.9,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-17",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 7437.9,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-18",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 7437.9,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-19",
+   "edge_class": "valley",
+   "length_mm": {
+    "value": 7437.9,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-20",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 9750,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": "AT-3"
+  },
+  {
+   "id": "E-21",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 9750,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-22",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 18320,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "left",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-23",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 18320,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "right",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-24",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 6625,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-25",
+   "edge_class": "eave",
+   "length_mm": {
+    "value": 6625,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-26",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-27",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-28",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-29",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "back",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-30",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-31",
+   "edge_class": "outside_corner",
+   "length_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-32",
+   "edge_class": "inside_corner",
+   "length_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  },
+  {
+   "id": "E-33",
+   "edge_class": "inside_corner",
+   "length_mm": {
+    "value": 3250,
+    "confidence": "low",
+    "source": "estimated",
+    "reference_used": "geometry from consolidated footprint, heights and pitches",
+    "low_reason": "capped low: photo set contains steeply_angled photos (2, 4)"
+   },
+   "belongs_to_elevation": "front",
+   "parent_attachment_id": null
+  }
+ ],
+ "openings": [
+  {
+   "id": "W-1",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-1",
+   "width_mm": {
+    "value": 3047.2,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 scale from consolidated total_width (bay plane)",
+    "low_reason": null
+   },
+   "height_mm": {
+    "value": 1612.0,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 scale from consolidated total_width (bay plane)",
+    "low_reason": null
+   },
+   "sill_height_mm": {
+    "value": 1140.2,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 scale from consolidated total_width (bay plane)",
+    "low_reason": null
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 944,
+    "y": 1140
+   },
+   "area_mm2": {
+    "value": 4912159.0,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": null
+   },
+   "perimeter_mm": {
+    "value": 9318.4,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": null
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 3,
+    "horizontal_bars": 0,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-2",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-3",
+   "width_mm": {
+    "value": 3047.2,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 scale from consolidated total_width (bay plane)",
+    "low_reason": null
+   },
+   "height_mm": {
+    "value": 1612.0,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 scale from consolidated total_width (bay plane)",
+    "low_reason": null
+   },
+   "sill_height_mm": {
+    "value": 1140.2,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 scale from consolidated total_width (bay plane)",
+    "low_reason": null
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 16769,
+    "y": 1140
+   },
+   "area_mm2": {
+    "value": 4912159.0,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": null
+   },
+   "perimeter_mm": {
+    "value": 9318.4,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": null
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 3,
+    "horizontal_bars": 0,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-3",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-2",
+   "width_mm": {
+    "value": 1482,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 entry door 2032 (porch wall plane)",
+    "low_reason": null
+   },
+   "height_mm": {
+    "value": 1726,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 entry door 2032 (porch wall plane)",
+    "low_reason": null
+   },
+   "sill_height_mm": {
+    "value": 1017,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 entry door 2032 (porch wall plane)",
+    "low_reason": null
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 6581,
+    "y": 1017
+   },
+   "area_mm2": {
+    "value": 2557932,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": null
+   },
+   "perimeter_mm": {
+    "value": 6416,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": null
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 0,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "D-1",
+   "type": "door",
+   "elevation": "front",
+   "parent_face_id": "WL-2",
+   "width_mm": {
+    "value": 1746,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 entry door 2032 (porch wall plane)",
+    "low_reason": null
+   },
+   "height_mm": {
+    "value": 2032,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 entry door 2032 (porch wall plane)",
+    "low_reason": null
+   },
+   "sill_height_mm": null,
+   "group_id": null,
+   "position_mm": {
+    "x": 9507,
+    "y": 712
+   },
+   "area_mm2": {
+    "value": 3547872,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": null
+   },
+   "perimeter_mm": {
+    "value": 7556,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": null
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 0,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-4",
+   "type": "window",
+   "elevation": "front",
+   "parent_face_id": "WL-2",
+   "width_mm": {
+    "value": 1482,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 entry door 2032 (porch wall plane)",
+    "low_reason": null
+   },
+   "height_mm": {
+    "value": 1726,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 entry door 2032 (porch wall plane)",
+    "low_reason": null
+   },
+   "sill_height_mm": {
+    "value": 1017,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "photo 1 entry door 2032 (porch wall plane)",
+    "low_reason": null
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 12697,
+    "y": 1017
+   },
+   "area_mm2": {
+    "value": 2557932,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": null
+   },
+   "perimeter_mm": {
+    "value": 6416,
+    "confidence": "medium",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": null
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 0,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "G-1",
+   "type": "garage_door",
+   "elevation": "left",
+   "parent_face_id": "WL-6",
+   "width_mm": {
+    "value": 2743,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 US single garage door 2743 x 2134 (catalog)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "height_mm": {
+    "value": 2134,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 US single garage door 2743 x 2134 (catalog)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "sill_height_mm": null,
+   "group_id": null,
+   "position_mm": {
+    "x": 700,
+    "y": 0
+   },
+   "area_mm2": {
+    "value": 5853562,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "perimeter_mm": {
+    "value": 9754,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "G-2",
+   "type": "garage_door",
+   "elevation": "left",
+   "parent_face_id": "WL-6",
+   "width_mm": {
+    "value": 2743,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 US single garage door 2743 x 2134 (catalog)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "height_mm": {
+    "value": 2134,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 US single garage door 2743 x 2134 (catalog)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "sill_height_mm": null,
+   "group_id": null,
+   "position_mm": {
+    "x": 4100,
+    "y": 0
+   },
+   "area_mm2": {
+    "value": 5853562,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "perimeter_mm": {
+    "value": 9754,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-5",
+   "type": "window",
+   "elevation": "left",
+   "parent_face_id": "WL-6",
+   "width_mm": {
+    "value": 762,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 entry door transfer, market window 762 x 1524",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "height_mm": {
+    "value": 1524,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 entry door transfer, market window 762 x 1524",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "sill_height_mm": {
+    "value": 1000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 entry door transfer, market window 762 x 1524",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 9200,
+    "y": 1000
+   },
+   "area_mm2": {
+    "value": 1161288,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "perimeter_mm": {
+    "value": 4572,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-6",
+   "type": "window",
+   "elevation": "left",
+   "parent_face_id": "WL-6",
+   "width_mm": {
+    "value": 762,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 entry door transfer, market window 762 x 1524",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "height_mm": {
+    "value": 1524,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 entry door transfer, market window 762 x 1524",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "sill_height_mm": {
+    "value": 1000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 entry door transfer, market window 762 x 1524",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 11600,
+    "y": 1000
+   },
+   "area_mm2": {
+    "value": 1161288,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "perimeter_mm": {
+    "value": 4572,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-7",
+   "type": "window",
+   "elevation": "left",
+   "parent_face_id": "WL-6",
+   "width_mm": {
+    "value": 762,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 entry door transfer, market window 762 x 1524",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "height_mm": {
+    "value": 1524,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 entry door transfer, market window 762 x 1524",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "sill_height_mm": {
+    "value": 1000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 2 entry door transfer, market window 762 x 1524",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 13300,
+    "y": 1000
+   },
+   "area_mm2": {
+    "value": 1161288,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "perimeter_mm": {
+    "value": 4572,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-8",
+   "type": "window",
+   "elevation": "right",
+   "parent_face_id": "WL-7",
+   "width_mm": {
+    "value": 762,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "height_mm": {
+    "value": 1524,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "sill_height_mm": {
+    "value": 1000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 900,
+    "y": 1000
+   },
+   "area_mm2": {
+    "value": 1161288,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "perimeter_mm": {
+    "value": 4572,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-9",
+   "type": "window",
+   "elevation": "right",
+   "parent_face_id": "WL-7",
+   "width_mm": {
+    "value": 762,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "height_mm": {
+    "value": 1524,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "sill_height_mm": {
+    "value": 1000,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 4300,
+    "y": 1000
+   },
+   "area_mm2": {
+    "value": 1161288,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "perimeter_mm": {
+    "value": 4572,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-10",
+   "type": "window",
+   "elevation": "right",
+   "parent_face_id": "WL-7",
+   "width_mm": {
+    "value": 914,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "height_mm": {
+    "value": 1219,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "sill_height_mm": {
+    "value": 1150,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 10200,
+    "y": 1150
+   },
+   "area_mm2": {
+    "value": 1114166,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "perimeter_mm": {
+    "value": 4266,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": {
+    "vertical_bars": 1,
+    "horizontal_bars": 1,
+    "transom_height_mm": null
+   }
+  },
+  {
+   "id": "W-11",
+   "type": "window",
+   "elevation": "back",
+   "parent_face_id": "WL-8",
+   "width_mm": {
+    "value": 762,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "height_mm": {
+    "value": 1219,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "sill_height_mm": {
+    "value": 1050,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 900,
+    "y": 1050
+   },
+   "area_mm2": {
+    "value": 928878,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "perimeter_mm": {
+    "value": 3962,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "W-12",
+   "type": "window",
+   "elevation": "back",
+   "parent_face_id": "WL-8",
+   "width_mm": {
+    "value": 610,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "height_mm": {
+    "value": 914,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "sill_height_mm": {
+    "value": 1500,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "group_id": null,
+   "position_mm": {
+    "x": 2700,
+    "y": 1500
+   },
+   "area_mm2": {
+    "value": 557540,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "perimeter_mm": {
+    "value": 3048,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "D-2",
+   "type": "door",
+   "elevation": "back",
+   "parent_face_id": "WL-8",
+   "width_mm": {
+    "value": 700,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated; narrow glazed door, wall assignment uncertain"
+   },
+   "height_mm": {
+    "value": 2032,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 rear door D-3 2032",
+    "low_reason": "oblique photo, yaw-corrected; position estimated; narrow glazed door, wall assignment uncertain"
+   },
+   "sill_height_mm": null,
+   "group_id": null,
+   "position_mm": {
+    "x": 3900,
+    "y": 200
+   },
+   "area_mm2": {
+    "value": 1422400,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": "oblique photo, yaw-corrected; position estimated; narrow glazed door, wall assignment uncertain"
+   },
+   "perimeter_mm": {
+    "value": 5464,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated; narrow glazed door, wall assignment uncertain"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  },
+  {
+   "id": "D-3",
+   "type": "door",
+   "elevation": "back",
+   "parent_face_id": "WL-9",
+   "width_mm": {
+    "value": 813,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 exterior door height 2032 (catalog)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "height_mm": {
+    "value": 2032,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "photo 4 exterior door height 2032 (catalog)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "sill_height_mm": null,
+   "group_id": null,
+   "position_mm": {
+    "x": 8600,
+    "y": 200
+   },
+   "area_mm2": {
+    "value": 1652016,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed width x height",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "perimeter_mm": {
+    "value": 5690,
+    "confidence": "low",
+    "source": "scaled",
+    "reference_used": "computed 2 x (width + height)",
+    "low_reason": "oblique photo, yaw-corrected; position estimated"
+   },
+   "note": "Reference only, not for ordering",
+   "head": {
+    "shape": "flat",
+    "rise_mm": null
+   },
+   "divisions": null
+  }
+ ],
+ "massing": {
+  "bodies": [
+   {
+    "id": "MB-1",
+    "role": "main",
+    "attachment_id": null,
+    "wall_ids": [
+     "WL-2",
+     "WL-9"
+    ],
+    "roof_face_ids": [
+     "RF-1",
+     "RF-11",
+     "RF-2",
+     "RF-7",
+     "RF-8"
+    ],
+    "footprint_mm": {
+     "width_mm": 9750,
+     "depth_mm": 14760
+    },
+    "attach": null,
+    "roof": {
+     "form": "hip",
+     "ridge_axis": "x",
+     "low_side": null,
+     "runs_into": [
+      {
+       "side": "left",
+       "body": "MB-2"
+      },
+      {
+       "side": "right",
+       "body": "MB-3"
+      }
+     ],
+     "overhang_mm": null
+    },
+    "dormer_front_height_mm": null,
+    "grade_mm": null,
+    "missing": [
+     "MB-1 front = recessed porch wall; front roof plane extends over the open porch (RF-11) to the wing front line",
+     "back wall assumed flush with wing backs"
+    ]
+   },
+   {
+    "id": "MB-2",
+    "role": "wing",
+    "attachment_id": null,
+    "wall_ids": [
+     "WL-1",
+     "WL-4",
+     "WL-6",
+     "WL-10"
+    ],
+    "roof_face_ids": [
+     "RF-3",
+     "RF-4",
+     "RF-9"
+    ],
+    "footprint_mm": {
+     "width_mm": 5505,
+     "depth_mm": 17200
+    },
+    "attach": {
+     "to": "MB-1",
+     "side": "left",
+     "flush": [
+      "back"
+     ],
+     "offset_mm": -2440,
+     "offset_from": "front",
+     "gap_mm": null
+    },
+    "roof": {
+     "form": "gable",
+     "ridge_axis": "y",
+     "low_side": null,
+     "runs_into": [
+      {
+       "side": "right",
+       "body": "MB-1"
+      }
+     ],
+     "overhang_mm": null
+    },
+    "dormer_front_height_mm": null,
+    "grade_mm": null,
+    "missing": [
+     "back end of this wing roof is hipped (photo 4), front end is a gable - no single form fits",
+     "garage (G-1, G-2) inside this wing; a wider rear garage volume cannot be excluded"
+    ]
+   },
+   {
+    "id": "MB-3",
+    "role": "wing",
+    "attachment_id": null,
+    "wall_ids": [
+     "WL-3",
+     "WL-5",
+     "WL-7",
+     "WL-8"
+    ],
+    "roof_face_ids": [
+     "RF-5",
+     "RF-6",
+     "RF-10"
+    ],
+    "footprint_mm": {
+     "width_mm": 5505,
+     "depth_mm": 17200
+    },
+    "attach": {
+     "to": "MB-1",
+     "side": "right",
+     "flush": [
+      "back"
+     ],
+     "offset_mm": -2440,
+     "offset_from": "front",
+     "gap_mm": null
+    },
+    "roof": {
+     "form": "gable",
+     "ridge_axis": "y",
+     "low_side": null,
+     "runs_into": [
+      {
+       "side": "left",
+       "body": "MB-1"
+      }
+     ],
+     "overhang_mm": null
+    },
+    "dormer_front_height_mm": null,
+    "grade_mm": null,
+    "missing": [
+     "back end hipped (photo 4), front end gable",
+     "possible step in the right elevation near the back (photo 4) not modeled"
+    ]
+   }
+  ],
+  "missing": [
+   "open front porch AT-3 has no walls and is not a body; its roof RF-11 is listed under MB-1 because it is the same plane",
+   "exact garage volume and rear layout not determinable from one rear oblique photo"
+  ]
+ },
+ "downspouts": [],
+ "condition_areas": [],
+ "quality": {
+  "references_used": 7,
+  "spread_percent": 8.5,
+  "warnings": [
+   "depth_basis oblique_only: no frontal or slightly angled view of the left or right elevation - footprint depth confidence capped at low.",
+   "Reference disagreement >8%: entry door pair width chain (2 x 914, horizontal) gives 21400 mm vs bay window height chain (1524, vertical) 19640 mm - both kept, width confidence low.",
+   "Images are renderings, not photographs; no license plate, vehicle, brick coursing (plinth courses not countable) or other INVARIANT object available - scale rests on US door/window/garage catalog sizes only.",
+   "Left elevation: garage doors G-1/G-2 sit in the outer 10%% of photo 2 - positions and depth chain possibly compressed by lens distortion.",
+   "Wing roofs (MB-2, MB-3) are gable at the front and hipped at the back; massing form recorded as gable.",
+   "Covered porch roof RF-11 is the same plane as main roof RF-1 (split per attachment rule).",
+   "Wall assignment of W-11, W-12, D-2 (second plane in photo 4) uncertain - assigned to back wall of right wing WL-8.",
+   "Center back wall assumed flush with wing backs; a recessed patio cannot be excluded from photo 4.",
+   "Opening sizes on left/right/back elevations taken from US market catalog sizes and checked only roughly against the oblique photos (confidence low)."
+  ],
+  "raw_estimates": [
+   {
+    "target": "total_width",
+    "photo_index": 1,
+    "reference_object": "entry door height (vertical, corrected to bay plane)",
+    "assumed_size_mm": 2032,
+    "estimate_mm": 20350,
+    "reliability": "high",
+    "via_transfer": false
+   },
+   {
+    "target": "total_width",
+    "photo_index": 1,
+    "reference_object": "bay window W-1 height 1524 (vertical)",
+    "assumed_size_mm": 1524,
+    "estimate_mm": 19640,
+    "reliability": "medium",
+    "via_transfer": false
+   },
+   {
+    "target": "total_width",
+    "photo_index": 1,
+    "reference_object": "window-sum chain: 4-unit bay windows 4 x 762 + piers + porch wall (horizontal)",
+    "assumed_size_mm": 762,
+    "estimate_mm": 20760,
+    "reliability": "medium",
+    "via_transfer": false
+   },
+   {
+    "target": "total_width",
+    "photo_index": 1,
+    "reference_object": "entry door pair width 2 x 914 (horizontal)",
+    "assumed_size_mm": 1828,
+    "estimate_mm": 21400,
+    "reliability": "medium",
+    "via_transfer": false
+   },
+   {
+    "target": "total_width",
+    "photo_index": 3,
+    "reference_object": "window-sum chain via W-2 width from photo 1, yaw ~30 deg corrected (horizontal)",
+    "assumed_size_mm": 762,
+    "estimate_mm": 20100,
+    "reliability": "low",
+    "via_transfer": true
+   },
+   {
+    "target": "total_depth",
+    "photo_index": 2,
+    "reference_object": "left elevation chain: 2 garage doors 2 x 2743 + 3 windows 762 + piers, yaw ~65 deg corrected (horizontal)",
+    "assumed_size_mm": 2743,
+    "estimate_mm": 17800,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "total_depth",
+    "photo_index": 4,
+    "reference_object": "right elevation window chain 762 units + piers, yaw ~60 deg corrected (horizontal)",
+    "assumed_size_mm": 762,
+    "estimate_mm": 16400,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "total_depth",
+    "photo_index": 2,
+    "reference_object": "roof geometry: left wing ridge length + back hip run, scaled from entry door",
+    "assumed_size_mm": 2032,
+    "estimate_mm": 17200,
+    "reliability": "low",
+    "via_transfer": false
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 1,
+    "reference_object": "entry door 2032 + porch floor (4 risers)",
+    "assumed_size_mm": 2032,
+    "estimate_mm": 3340,
+    "reliability": "high",
+    "via_transfer": false
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 1,
+    "reference_object": "bay window W-1 height 1524",
+    "assumed_size_mm": 1524,
+    "estimate_mm": 3160,
+    "reliability": "medium",
+    "via_transfer": false
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 1,
+    "reference_object": "porch stair risers 4 x 178 + door head to soffit",
+    "assumed_size_mm": 178,
+    "estimate_mm": 3290,
+    "reliability": "medium",
+    "via_transfer": false
+   },
+   {
+    "target": "eave_height",
+    "photo_index": 3,
+    "reference_object": "entry door 2032",
+    "assumed_size_mm": 2032,
+    "estimate_mm": 3250,
+    "reliability": "high",
+    "via_transfer": false
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 1,
+    "reference_object": "entry door 2032",
+    "assumed_size_mm": 2032,
+    "estimate_mm": 6450,
+    "reliability": "high",
+    "via_transfer": false
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 1,
+    "reference_object": "bay window W-1 height 1524",
+    "assumed_size_mm": 1524,
+    "estimate_mm": 6050,
+    "reliability": "medium",
+    "via_transfer": false
+   },
+   {
+    "target": "ridge_height",
+    "photo_index": 3,
+    "reference_object": "entry door 2032",
+    "assumed_size_mm": 2032,
+    "estimate_mm": 6300,
+    "reliability": "high",
+    "via_transfer": false
+   }
+  ],
+  "dimension_chains": []
+ }
+}

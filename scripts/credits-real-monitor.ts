@@ -2,6 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { pool } from "../lib/db/src/index";
 
 const context = JSON.parse(await readFile("scripts/credits-test-context.json", "utf8"));
+const outputPath = process.argv[2] ?? "docs/credits-real-verification.json";
 const deadline = Date.now() + 65 * 60_000;
 try {
   while (Date.now() < deadline) {
@@ -21,7 +22,7 @@ try {
         [context.userUuid],
       );
       const result = { project, runs, ledger, checkedAt: new Date().toISOString() };
-      await writeFile("docs/credits-real-verification.json", JSON.stringify(result, null, 2) + "\n");
+      await writeFile(outputPath, JSON.stringify(result, null, 2) + "\n");
       console.log(JSON.stringify(result, null, 2));
       break;
     }

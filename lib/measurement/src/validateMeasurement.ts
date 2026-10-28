@@ -21,6 +21,7 @@ export interface ValidationResult {
 const SCHEMA_REL_PATHS: Record<SupportedSchemaVersion, string> = {
   "1.6": join("shared", "schema", "measurement-v1.6.json"),
   "1.7": join("shared", "schema", "measurement-v1.7.json"),
+  "1.8": join("shared", "schema", "measurement-v1.8.json"),
 };
 
 /** Walk upward from `startDir` until the workspace root is found. */

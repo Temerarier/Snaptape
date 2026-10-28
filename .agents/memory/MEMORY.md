@@ -1,4 +1,4 @@
-- [Aufmaß-App conventions](aufmass-app-conventions.md) — fixed stack; viewer cutover must not migrate stored data or remove shared dependencies; fixture acceptance decisions; Next.js quirks.
+- [Aufmaß-App conventions](aufmass-app-conventions.md) — viewer cutover must not migrate stored data or remove shared dependencies; fixture acceptance decisions; Next.js quirks.
 - [Tracked build output crashes dev server](tracked-build-output.md) — git-tracked .next files let checkpoints rewrite the live webpack cache → "reading 'call'" client crashes; fix via .gitignore + rm on disk.
 - [Viewer v1.2 Baukasten strictness](viewer-v12-baukasten-strictness.md) — 3D viewer throws on anything beyond an exact simple-gable set; reduce richer JSON via display adapter, don't touch viewer.
 - [LLM extraction model quirks](llm-extraction-models.md) — kimi-k3: temp=1 only, streaming+include_usage mandatory (300 s fetch timeout trap); claude-fable-5: no temperature param; use ≥64k output caps.
@@ -8,3 +8,4 @@
 - [Viewer reference provenance](viewer-conformance-decisions.md) — design-route history was unproven; missing reference tokens need labelled proposals, not blocked work.
 - [Billing evidence boundaries](billing-evidence-boundaries.md) — rejected Admin credentials stop access; balance intervals are not model-level bills; pricing needs exact-model evidence.
 - [Clerk verification boundaries](clerk-verification.md) — fresh bundles avoid false provider errors; successful login does not prove CAPTCHA-blocked self-service signup.
+- [Live measurement verification](live-measurement-verification.md) — finish builds before paid runs; retain interrupted-run evidence and respect the authorized run count.
