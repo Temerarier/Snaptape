@@ -56,3 +56,4 @@ Thumbs.db
 .cache/
 .local/
 test-results/
+/generated-artifacts/

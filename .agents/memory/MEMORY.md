@@ -4,7 +4,7 @@
 - [LLM extraction model quirks](llm-extraction-models.md) — transport constraints; Opus can exhaust 64k on thinking alone, so diagnose empty text from stop reason and content types.
 - [Background processes die with the shell](background-process-reaping.md) — nohup/setsid processes are reaped when ShellExec ends; run long dev jobs inside the dev-server process (dev-only route) instead.
 - [Artifact path routing traps](artifact-path-routing.md) — /api/* on the shared proxy belongs to the api-server artifact; Next routes under app/api/ are unreachable (Express 404), use another prefix.
-- [Viewport verification](viewport-verification.md) — counts alone miss geometry errors; test SVG axes, contact, permutation stability and snapping with the real camera.
+- [Viewport verification](viewport-verification.md) — reuse the proven SwiftShader inventory harness; verify visible geometry, picking and snapping with the real camera.
 - [Viewer reference provenance](viewer-conformance-decisions.md) — design-route history was unproven; missing reference tokens need labelled proposals, not blocked work.
 - [Billing evidence boundaries](billing-evidence-boundaries.md) — rejected Admin credentials stop access; balance intervals are not model-level bills; pricing needs exact-model evidence.
 - [Clerk verification boundaries](clerk-verification.md) — fresh bundles avoid false provider errors; successful login does not prove CAPTCHA-blocked self-service signup.

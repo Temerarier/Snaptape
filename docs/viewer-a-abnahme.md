@@ -1,5 +1,11 @@
 # Variante-A-Geometrie im bestehenden Viewer
 
+> Nachtrag 28.10.2026: Das vorhandene Inventory-Harness kann echtes WebGL mit
+> SwiftShader ausführen. Zwölf Renderbilder und gezielte Interaktionsnachweise
+> liegen inzwischen vor. DS-1 wählt fälschlich WL-10 und ist nicht abgenommen.
+> Der aktuelle Befund steht in `viewer-a-swiftshader-abnahme.md`; die folgende
+> frühere Browser-Einschränkung gilt nur für den damaligen Testbrowser.
+
 ## Umfang
 
 Kunden- und Staff-Projektviewer verwenden gespeicherte Variante-A-Geometrie,

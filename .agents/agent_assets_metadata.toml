@@ -294,3 +294,45 @@ mtime_ms = 1793216864694
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/19a0dc41-0f46-489e-a9fe-6a352cf25974/99257803-3457-4e3d-b188-5cf41076f158"
 storage_version_token = "1793216886842328"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "y8KjMKQHTFC5dizUjj-Hq"
+uri = "file://generated-artifacts/viewer-a/overview-1.jpg"
+type = "image"
+title = "Vorder- und Rückansichten – Farmhouses und Leipzig"
+description = "Echte SwiftShader-Aufnahmen der beiden Farmhouse-Fixtures und der Leipzig Villa; je links Vorder-, rechts Rückansicht."
+logical_id = "134db6bb-65c6-4141-8eaf-04083f67aeff"
+content_hash = "sha256:bb96009a41ab3ef1a3650fc57c110da574ee68809c66d255c4ba0dede3592d25"
+size = 379539
+mtime_ms = 1793218015330
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/134db6bb-65c6-4141-8eaf-04083f67aeff/3ea191f8-908b-4130-b3e6-f6e9ed9d987d"
+storage_version_token = "1793218179624080"
+content_type = "image/jpeg"
+
+[[outputs]]
+id = "qH_s91ttR8YQBWr0SfHT8"
+uri = "file://generated-artifacts/viewer-a/overview-2.jpg"
+type = "image"
+title = "Vorder- und Rückansichten – Triplex, Tudor, echtes Projekt"
+description = "Echte SwiftShader-Aufnahmen der weiteren zwei Testhäuser und des gespeicherten echten Projekts."
+logical_id = "f9349e74-73bc-4bb2-8ce4-0549192da166"
+content_hash = "sha256:51ab3414d7ddc30a2d91aaf0580c6269288a878f231af0b7120a3d8b670badf8"
+size = 391881
+mtime_ms = 1793218016046
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/f9349e74-73bc-4bb2-8ce4-0549192da166/189d2ecc-5ef1-4a4d-ad8f-73dee15a1c3e"
+storage_version_token = "1793218180491479"
+content_type = "image/jpeg"
+
+[[outputs]]
+id = "kVkARcquFiqNn8Q4v3vr1"
+uri = "file://generated-artifacts/viewer-a/viewer-a-sichtpruefung.zip"
+type = "unspecified"
+title = "Visuelle Prüfung – Screenshots und Ergebnisbericht"
+description = "17 Original-Screenshots, zwei Übersichten, Bericht und Ergebnis-JSON. WL-1, CA-1 und Farmhouse-Messlinie geprüft; DS-1-Klick wählt WL-10 und bleibt fehlgeschlagen. Keine App-Codeänderungen oder Modellaufrufe."
+logical_id = "601c5863-29d7-4f37-bd26-43bc09ef45f6"
+content_hash = "sha256:53ed6c516e55287cff030cb48088a4f26d0a895cde9582e837dc2519e606fa77"
+size = 5534553
+mtime_ms = 1793218171062
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/601c5863-29d7-4f37-bd26-43bc09ef45f6/e0974294-7e05-4232-98b2-6f45e6a6ec06"
+storage_version_token = "1793218181773996"
+content_type = "application/octet-stream"

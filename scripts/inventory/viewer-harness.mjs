@@ -5,19 +5,26 @@ import { readFile, writeFile, readdir, mkdir, rm, mkdtemp } from "node:fs/promis
 import { createRequire } from "node:module";
 import path from "node:path";
 import { connectBrowser, pause, waitUntil } from "../../artifacts/aufmass-app/scripts/viewer-browser-cdp.mjs";
+import { checkVarianteA } from "./viewer-a-checks.mjs";
 const base=process.cwd(),directory=path.join(base,"scripts/inventory");
-const inputFile=process.argv[2] ?? path.join(directory,"ready-projects.json");
-const outputFile=process.argv[2] ? path.join(directory,`${path.basename(inputFile,".json")}-viewer-results.json`) : path.join(directory,"viewer-results.json");
+const varianteA=process.argv.includes("--variante-a");
+const args=process.argv.slice(2).filter(arg=>arg!=="--variante-a");
+const inputFile=args[0] ?? path.join(directory,"ready-projects.json");
+const outputFile=varianteA ? args[1]??"generated-artifacts/viewer-a/results.json" : args[0] ? path.join(directory,`${path.basename(inputFile,".json")}-viewer-results.json`) : path.join(directory,"viewer-results.json");
 const require=createRequire(import.meta.url);
 const vr=createRequire(require.resolve("vitest/package.json"));
 const ar=createRequire(path.join(base,"artifacts/aufmass-app/package.json"));
 const three=path.join(path.dirname(ar.resolve("three")),"three.module.js");
 const {build}=vr("esbuild");
 const {outputFiles}=await build({
-  entryPoints:[path.join(directory,"viewer-entry.tsx")],bundle:true,write:false,format:"iife",platform:"browser",jsx:"automatic",
+  entryPoints:[path.join(directory,varianteA?"viewer-a-entry.tsx":"viewer-entry.tsx")],bundle:true,write:false,format:"iife",platform:"browser",jsx:"automatic",
   alias:{"@":path.join(base,"artifacts/aufmass-app"),"@workspace/measurement":path.join(base,"scripts/diagnose/measurement-browser.ts")},
   nodePaths:[path.join(base,"artifacts/aufmass-app/node_modules")],define:{"process.env.NODE_ENV":'"production"'},
   plugins:[{name:"observe-three",setup(b){
+    if(varianteA) {
+      b.onResolve({filter:/^three\/examples\/jsm\/controls\/OrbitControls\.js$/},()=>({path:"controls",namespace:"inventory-controls"}));
+      b.onLoad({filter:/.*/,namespace:"inventory-controls"},()=>({contents:`import {OrbitControls as C} from ${JSON.stringify(ar.resolve("three/examples/jsm/controls/OrbitControls.js"))};export class OrbitControls extends C{constructor(...a){super(...a);window.inventoryControls=this}}`,loader:"js",resolveDir:base}));
+    }
     b.onResolve({filter:/^three$/},()=>({path:"observer",namespace:"inventory"}));
     b.onLoad({filter:/.*/,namespace:"inventory"},()=>({contents:`export * from ${JSON.stringify(three)};import {WebGLRenderer as R} from ${JSON.stringify(three)};export class WebGLRenderer extends R{constructor(...a){super(...a);const r=this.render.bind(this);this.render=(s,c)=>{r(s,c);window.observeRender?.call(this,s,c)}}}`,loader:"js",resolveDir:base}));
   }}]
@@ -29,7 +36,7 @@ const server=createServer((req,res)=>{res.setHeader("Content-Type",req.url==="/b
 await new Promise(resolve=>server.listen(0,"127.0.0.1",resolve));
 const profile=await mkdtemp("/tmp/snaptape-inventory-chromium-");
 const chromium=spawn("/repl/tools/bin/chromium",["--headless=new","--no-sandbox","--disable-dev-shm-usage","--enable-unsafe-swiftshader","--use-gl=angle","--use-angle=swiftshader","--remote-debugging-address=127.0.0.1","--remote-debugging-port=9223",`--user-data-dir=${profile}`,"--no-first-run","--no-default-browser-check","about:blank"],{stdio:"ignore"});
-const shots="screenshots/inventory-2026-10-25";
+const shots=varianteA?"generated-artifacts/viewer-a":"screenshots/inventory-2026-10-25";
 await mkdir(shots,{recursive:true});
 let browser;
 const results=[];
@@ -44,8 +51,13 @@ try{
     browser.exceptions.length=0;browser.consoleMessages.length=0;
     const r={id:c.id};
     try{
-      Object.assign(r,await browser.evaluate(`window.mountInventory(${JSON.stringify(c.id)},${JSON.stringify(c.measurement)})`));
+      Object.assign(r,await browser.evaluate(`window.mountInventory(${JSON.stringify(c.id)},${JSON.stringify(c.measurement)},${JSON.stringify(c.model3d??null)})`));
       if(r.preparation==="viewer" && !r.modelError)await waitUntil(browser,"window.inventoryRender?.triangles>0",20000);
+      if(varianteA) {
+        r.checks=await checkVarianteA(browser,c,shots);
+        r.render=await browser.evaluate("window.inventoryRender");
+        r.state=await browser.evaluate("window.inventoryState()");
+      }
       await pause(700);
       r.render=await browser.evaluate("window.inventoryRender");
       r.pageState=await browser.evaluate("document.querySelector('[data-project-viewer-state]')?.getAttribute('data-project-viewer-state') ?? 'viewer'");
@@ -68,8 +80,10 @@ try{
     r.exceptions=[...browser.exceptions];
     r.console=[...browser.consoleMessages].map(m=>({type:m.type,args:m.args.map(a=>a.value ?? a.description).filter(Boolean)}));
     results.push(r);
-    await writeFile(outputFile,JSON.stringify({method:"Actual ProjectViewer, ViewerNextClient, preparation, builder, materials and compiled production CSS; isolated loopback component host with system font fallback, no authenticated route ownership bypass. Full inherited app layout and owner-specific locale not tested. Software WebGL SwiftShader, desktop1280x900; optional phone390x844.",cases:results},null,2)+"\n");
+    await writeFile(outputFile,JSON.stringify({method:"Actual ProjectViewer, ViewerNextClient, preparation, builder/Variante-A adapter, materials and compiled production CSS; isolated loopback component host with system font fallback, no authenticated route ownership bypass. Full inherited app layout and owner-specific locale not tested. Software WebGL SwiftShader, desktop1280x900; optional phone390x844. Test-only Three wrappers expose the live renderer/camera/controls for repeatable views; selection and measuring use actual DOM/CDP events.",cases:results},null,2)+"\n");
     console.log(c.id,r.preparation,r.modeled,r.error??"OK");
+    if(r.checks?.interactionError) { console.error(r.checks.interactionError); process.exitCode=1; }
+    if(varianteA && r.error) { process.exitCode=1; break; }
   }
 }finally{
   browser?.close();chromium.kill("SIGTERM");server.close();await pause(400);await rm(profile,{recursive:true,force:true});
