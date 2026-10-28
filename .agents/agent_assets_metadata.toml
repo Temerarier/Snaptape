@@ -350,3 +350,31 @@ mtime_ms = 1793221280939
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/30e44a19-ac61-46b7-8293-2c1917a9c233/50214db0-466c-4d92-9faf-1a1718cbb6ef"
 storage_version_token = "1793221333641554"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "xvHnNRxkT7da1FU0lrSsh"
+uri = "file://generated-artifacts/trial-readiness/snaptape-trial-abnahme.zip"
+type = "unspecified"
+title = "Trial-Abnahme: Screenshots und Prüfbericht"
+description = "Landingpage 1440/390, AGB mobil, Messblatt, Browserdruck und die korrigierten mobilen WebGL-Hinweise. Nur Abnahmebelege, kein Kundenbericht."
+logical_id = "6f011e1c-e5e5-4f5d-82ce-1c2fd2b9bae1"
+content_hash = "sha256:ffd4704c695c20d44f39338588c9cdb7f2ac83dc7f2cdce84c4d49fadc10b645"
+size = 1856417
+mtime_ms = 1793223970202
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/6f011e1c-e5e5-4f5d-82ce-1c2fd2b9bae1/8e2d5535-f94d-4b85-a7e2-8505a6686022"
+storage_version_token = "1793224017830089"
+content_type = "application/octet-stream"
+
+[[outputs]]
+id = "um2kZt2D5MyFpO2_mV83D"
+uri = "file://generated-artifacts/trial-readiness/garage-house-browser-print.pdf"
+type = "pdf"
+title = "Garage-House – Messblatt aus dem Browserdruck"
+description = "12 Seiten mit Testdaten aus dem Produktionsrenderer; keine serverseitige PDF-Funktion in der App."
+logical_id = "2a3e9bcb-28c3-4585-bc89-b9003fb5d9d2"
+content_hash = "sha256:bb6ce7d13e75fb3cc371bab6e8add60ca3cc4eb22f7e7eecea479b5c3c550130"
+size = 258318
+mtime_ms = 1793222990146
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/2a3e9bcb-28c3-4585-bc89-b9003fb5d9d2/0c26e05e-a909-4302-834e-b5560b1c3cc7"
+storage_version_token = "1793224018796783"
+content_type = "application/pdf"
