@@ -336,3 +336,17 @@ mtime_ms = 1793218171062
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/601c5863-29d7-4f37-bd26-43bc09ef45f6/e0974294-7e05-4232-98b2-6f45e6a6ec06"
 storage_version_token = "1793218181773996"
 content_type = "application/octet-stream"
+
+[[outputs]]
+id = "4pr6tvUfS-k-Pc-HmRRF2"
+uri = "file://docs/admin-step2-abnahme.md"
+type = "text"
+title = "Staff-Übersicht Schritt 2 – Abnahmebericht"
+description = "413 Tests, Produktionsbuild und Staff-/Kundenzugriff geprüft. Echtes Projekt mit 3D-Checks und Kosten nachgewiesen; Credit-Ledger vor/nach unverändert."
+logical_id = "30e44a19-ac61-46b7-8293-2c1917a9c233"
+content_hash = "sha256:98d88f28dd1c970e120b86d399222b5060fe1cb164d86b45b2f2533f1377b39f"
+size = 5590
+mtime_ms = 1793221280939
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/30e44a19-ac61-46b7-8293-2c1917a9c233/50214db0-466c-4d92-9faf-1a1718cbb6ef"
+storage_version_token = "1793221333641554"
+content_type = "text/markdown"

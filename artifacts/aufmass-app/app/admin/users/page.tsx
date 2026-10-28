@@ -1,9 +1,9 @@
 // Admin: Nutzerübersicht mit Guthaben, Messungen, Kosten und Buchungen.
-// Vorher werden hängende Messungen aller Nutzer bereinigt.
+// Read-only page load; credit bookings require the existing explicit form action.
 import { getDictionary, toLocale } from "@/i18n";
 import { requireStaff } from "@/lib/auth/staff";
 import { ladeNutzerUebersicht } from "@/lib/credits/admin";
-import { raeumeHaengendeMessungenAuf } from "@/lib/messung/aufraeumen";
+import { formatAuditCost } from "@/lib/admin/model3d";
 import { StaffCreditsForm } from "@/components/credits/StaffCreditsForm";
 import Link from "next/link";
 
@@ -11,10 +11,10 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminUsersPage() {
   const staff = await requireStaff();
-  await raeumeHaengendeMessungenAuf();
   const nutzer = await ladeNutzerUebersicht();
   const locale = toLocale(staff.locale);
   const t = getDictionary(locale).admin.users;
+  const a = getDictionary(locale).admin.model3d;
   const fmt = (d: Date | null) =>
     d
       ? new Intl.DateTimeFormat(locale, { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }).format(d)
@@ -43,6 +43,7 @@ export default async function AdminUsersPage() {
                 <th className={th}>{t.spalten.fertig}</th>
                 <th className={th}>{t.spalten.fehlgeschlagen}</th>
                 <th className={th}>{t.spalten.kosten}</th>
+                <th className={th}>{a.total}</th>
                 <th className={th}>{t.spalten.letzteMessung}</th>
               </tr>
             </thead>
@@ -59,10 +60,13 @@ export default async function AdminUsersPage() {
                   <td className={`${td} font-mono text-ok`}>{n.readyCount}</td>
                   <td className={`${td} font-mono ${n.failedCount > 0 ? "text-fehler" : "text-schrift-tertiaer"}`}>{n.failedCount}</td>
                   <td className={`${td} font-mono text-schrift`}>${n.costUsd.toFixed(2)}</td>
+                  <td className={`${td} font-mono text-schrift`}>
+                    {formatAuditCost({ known: n.costTotalUsd, unknown: n.unknownCosts }, a.partial)}
+                  </td>
                   <td className={`${td} font-mono text-schrift-sekundaer`}>{fmt(n.lastMeasurementAt)}</td>
                 </tr>
                 <tr>
-                  <td colSpan={8} className="px-3 pb-4">
+                  <td colSpan={9} className="px-3 pb-4">
                     <details className="rounded-eingabe border border-linie bg-hintergrund">
                       <summary className="cursor-pointer px-3 py-2 text-xs font-semibold text-schrift-sekundaer">
                         {t.ledgerAnzeigen} <span className="font-mono">({n.ledger.length})</span>

@@ -305,6 +305,21 @@ export const enUS = {
   admin: {
     navLink: "Admin",
     zurueckZurApp: "Back to app",
+    model3d: {
+      status: "3D", correction: "Correction", model: "Model step 2",
+      cost: "Cost step 2", total: "Cost total", check: "3D check",
+      yes: "yes", no: "no", partial: "partial",
+      onlyIssues: "Only 3D stufe merken / stopp", apply: "Apply", all: "All",
+      noIssues: "No projects with 3D stufe merken / stopp.",
+      projectCosts: "3D and total costs cover all attempts per project; step-1 cost is per listed run.",
+      empty: "No stored 3D check yet.", code: "Stored AI code (last attempt)",
+      built: "IDs built", notBuilt: "IDs not built", missing: "IDs missing",
+      edges: "Edges", downspouts: "Downspouts", conditions: "Condition areas",
+      additions: "Additions (ergaenzt)", conflicts: "Conflicts (konflikte)",
+      omitted: "Not built (nicht_gebaut)", id: "ID", test: "Check", text: "Text",
+      duration: "Duration", sandbox: "Sandbox", tokens: "Tokens (in / out)",
+      effort: "Effort", lastAttempt: "Last stored attempt", none: "No entries.",
+    },
     billing: {
       title: "Billing Reconciliation",
       subtitle: "Honest auditable AI expenses per provider.",
@@ -362,7 +377,7 @@ export const enUS = {
     },
     users: {
       title: "Users",
-      subtitle: "All accounts with credits, measurements and ledger. Hanging measurements are cleaned up on load.",
+      subtitle: "All accounts with credits, measurements, estimated AI costs and ledger.",
       navLink: "Users",
       leer: "No users yet.",
       spalten: {
@@ -372,7 +387,7 @@ export const enUS = {
         guthaben: "Balance",
         fertig: "Ready",
         fehlgeschlagen: "Failed",
-        kosten: "Cost",
+        kosten: "Cost step 1",
         letzteMessung: "Last measurement",
       },
       nie: "never",

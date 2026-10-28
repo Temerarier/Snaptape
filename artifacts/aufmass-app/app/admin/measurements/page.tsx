@@ -4,12 +4,12 @@
 // Eine Zeile pro Lauf, horizontal scrollbar; Warnungen/Fehler als
 // aufklappbare Zähler-Badges (<details>), damit Zeilen nie hoch werden.
 import Link from "next/link";
-import { desc, eq } from "drizzle-orm";
-import { db, measureRunsTable, projectsTable, usersTable } from "@workspace/db";
+import { desc, eq, inArray } from "drizzle-orm";
+import { db, measureRunsTable, modelRunsTable, projectsTable, usersTable } from "@workspace/db";
 import { CopyJsonButton } from "@/components/admin/CopyJsonButton";
 import { getDictionary, toLocale } from "@/i18n";
 import { requireStaff } from "@/lib/auth/staff";
-import { raeumeHaengendeMessungenAuf } from "@/lib/messung/aufraeumen";
+import { addCost, formatAuditCost, isModel3dIssue, model3dState, summarizeModelRuns, type CostSum } from "@/lib/admin/model3d";
 
 export const dynamic = "force-dynamic";
 
@@ -25,11 +25,14 @@ function formatFlaecheSqFt(mm2: number | null): string {
   return `${Math.round(mm2 / MM2_PRO_SQFT).toLocaleString("en-US")} ft²`;
 }
 
-export default async function AdminMessungenSeite() {
+export default async function AdminMessungenSeite({ searchParams }: {
+  searchParams: Promise<{ model3d?: string }>;
+}) {
   const user = await requireStaff();
-  await raeumeHaengendeMessungenAuf();
+  const onlyIssues = (await searchParams).model3d === "issues";
   const dict = getDictionary(toLocale(user.locale));
   const t = dict.admin.measurements;
+  const a = dict.admin.model3d;
 
   const runs = await db
     .select({
@@ -54,6 +57,8 @@ export default async function AdminMessungenSeite() {
       projektId: projectsTable.id,
       projektName: projectsTable.name,
       projektStatus: projectsTable.status,
+      model3dStatus: projectsTable.model3dStatus,
+      model3dReport: projectsTable.model3dReport,
       hatMeasurement: projectsTable.measurement,
       kundeEmail: usersTable.email,
       kundeFirstName: usersTable.firstName,
@@ -65,6 +70,20 @@ export default async function AdminMessungenSeite() {
     .innerJoin(projectsTable, eq(measureRunsTable.projectId, projectsTable.id))
     .innerJoin(usersTable, eq(projectsTable.userId, usersTable.id))
     .orderBy(desc(measureRunsTable.createdAt));
+
+  const projectIds = [...new Set(runs.map(run => run.projektId))];
+  const modelRuns = projectIds.length ? await db.select({
+    id: modelRunsTable.id, projectId: modelRunsTable.projectId,
+    model: modelRunsTable.model, stufe: modelRunsTable.stufe,
+    korrekturGenutzt: modelRunsTable.korrekturGenutzt, costUsd: modelRunsTable.costUsd,
+  }).from(modelRunsTable).where(inArray(modelRunsTable.projectId, projectIds))
+    .orderBy(desc(modelRunsTable.createdAt), desc(modelRunsTable.id)) : [];
+  const models = summarizeModelRuns(modelRuns);
+  const step1 = new Map<string, CostSum>();
+  for (const run of runs) step1.set(run.projektId,
+    addCost(step1.get(run.projektId) ?? { known: 0, unknown: 0 }, run.costUsd));
+  const visibleRuns = onlyIssues ? runs.filter(run =>
+    isModel3dIssue(model3dState(run.model3dStatus, run.model3dReport, models.get(run.projektId)?.latest))) : runs;
 
   const datumFormat = new Intl.DateTimeFormat(toLocale(user.locale), {
     dateStyle: "medium",
@@ -128,9 +147,18 @@ export default async function AdminMessungenSeite() {
         </Link>
       </div>
 
-      {runs.length === 0 ? (
+      <form method="get" className="mt-6 flex flex-wrap items-center gap-3 text-sm">
+        <label className="flex items-center gap-2">
+          <input type="checkbox" name="model3d" value="issues" defaultChecked={onlyIssues} />
+          {a.onlyIssues}
+        </label>
+        <button type="submit" className="rounded-eingabe border border-linie bg-flaeche px-3 py-1.5">{a.apply}</button>
+        {onlyIssues && <a href="/admin/measurements" className="underline">{a.all}</a>}
+        <span className="text-schrift-tertiaer">{a.projectCosts}</span>
+      </form>
+      {visibleRuns.length === 0 ? (
         <p className="mt-8 rounded-lg border border-linie bg-flaeche p-6 text-sm text-schrift-sekundaer">
-          {t.leer}
+          {onlyIssues ? a.noIssues : t.leer}
         </p>
       ) : (
         <div className="mt-6 overflow-x-auto rounded-lg border border-linie bg-flaeche">
@@ -145,6 +173,8 @@ export default async function AdminMessungenSeite() {
                 <th className="px-4 py-3 font-medium">{t.spalten.modell}</th>
                 <th className="px-4 py-3 font-medium">{t.spalten.tokens}</th>
                 <th className="px-4 py-3 font-medium">{t.spalten.kosten}</th>
+                {[a.status, a.correction, a.model, a.cost, a.total].map(label =>
+                  <th key={label} className="px-4 py-3 font-medium">{label}</th>)}
                 <th className="px-4 py-3 font-medium">
                   {t.spalten.retryRepair}
                 </th>
@@ -165,7 +195,13 @@ export default async function AdminMessungenSeite() {
               </tr>
             </thead>
             <tbody>
-              {runs.map((run) => (
+              {visibleRuns.map((run) => {
+                const model = models.get(run.projektId);
+                const one = step1.get(run.projektId)!;
+                const two = model?.cost ?? { known: 0, unknown: 0 };
+                const correction = run.model3dStatus === "pending" ? null :
+                  run.model3dReport?.korrektur_genutzt ?? model?.latest.korrekturGenutzt;
+                return (
                 <tr
                   key={run.id}
                   className="border-b border-linie/60 last:border-b-0"
@@ -197,6 +233,17 @@ export default async function AdminMessungenSeite() {
                     {run.costUsd !== null && run.costUsd !== undefined
                       ? `$${run.costUsd.toFixed(3)}`
                       : "—"}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3">
+                    <Link className="underline" href={`/admin/projekt/${run.projektId}`}>
+                      {model3dState(run.model3dStatus, run.model3dReport, model?.latest)}
+                    </Link>
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3">{correction == null ? "—" : correction ? a.yes : a.no}</td>
+                  <td className="whitespace-nowrap px-4 py-3">{run.model3dReport?.modell ?? model?.latest.model ?? "—"}</td>
+                  <td className="whitespace-nowrap px-4 py-3">{model ? formatAuditCost(two, a.partial) : "—"}</td>
+                  <td className="whitespace-nowrap px-4 py-3">
+                    {formatAuditCost({ known: one.known + two.known, unknown: one.unknown + two.unknown }, a.partial)}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-schrift-sekundaer">
                     {run.retryUsed === null && run.repairUsed === null ? (
@@ -232,6 +279,7 @@ export default async function AdminMessungenSeite() {
                     {formatDauer(run.durationMs)}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3">
+                    <Link href={`/admin/projekt/${run.projektId}`} className="mr-3 underline">{a.check}</Link>
                     {run.outcome === "model_ready" ? (
                       <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800">
                         {t.ausgangModelReady}
@@ -303,7 +351,7 @@ export default async function AdminMessungenSeite() {
                     )}
                   </td>
                 </tr>
-              ))}
+              ); })}
             </tbody>
           </table>
         </div>

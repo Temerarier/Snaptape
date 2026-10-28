@@ -316,6 +316,21 @@ export const deDE: Dictionary = {
   admin: {
     navLink: "Admin",
     zurueckZurApp: "Zurück zur App",
+    model3d: {
+      status: "3D", correction: "Korrektur", model: "Modell Schritt 2",
+      cost: "Kosten Schritt 2", total: "Kosten gesamt", check: "3D-Prüfung",
+      yes: "ja", no: "nein", partial: "unvollständig",
+      onlyIssues: "Nur 3D-Stufe merken / stopp", apply: "Anwenden", all: "Alle",
+      noIssues: "Keine Projekte mit 3D-Stufe merken / stopp.",
+      projectCosts: "3D- und Gesamtkosten umfassen alle Versuche je Projekt; Schritt-1-Kosten gelten je gelistetem Lauf.",
+      empty: "Noch keine gespeicherte 3D-Prüfung.", code: "Gespeicherter KI-Code (letzter Versuch)",
+      built: "IDs gebaut", notBuilt: "IDs nicht gebaut", missing: "IDs fehlen",
+      edges: "Kanten", downspouts: "Fallrohre", conditions: "Schadensflächen",
+      additions: "Ergänzt (ergaenzt)", conflicts: "Konflikte (konflikte)",
+      omitted: "Nicht gebaut (nicht_gebaut)", id: "ID", test: "Prüfung", text: "Text",
+      duration: "Dauer", sandbox: "Sandbox", tokens: "Tokens (ein / aus)",
+      effort: "Effort", lastAttempt: "Letzter gespeicherter Versuch", none: "Keine Einträge.",
+    },
     billing: {
       title: "Rechnungskontrolle",
       subtitle: "Ehrliche, überprüfbare KI-Kosten pro Anbieter.",
@@ -373,7 +388,7 @@ export const deDE: Dictionary = {
     },
     users: {
       title: "Nutzer",
-      subtitle: "Alle Konten mit Credits, Messungen und Buchungen. Hängende Messungen werden beim Laden bereinigt.",
+      subtitle: "Alle Konten mit Credits, Messungen, geschätzten KI-Kosten und Buchungen.",
       navLink: "Nutzer",
       leer: "Noch keine Nutzer.",
       spalten: {
@@ -383,7 +398,7 @@ export const deDE: Dictionary = {
         guthaben: "Guthaben",
         fertig: "Fertig",
         fehlgeschlagen: "Fehlgeschlagen",
-        kosten: "Kosten",
+        kosten: "Kosten Schritt 1",
         letzteMessung: "Letzte Messung",
       },
       nie: "nie",

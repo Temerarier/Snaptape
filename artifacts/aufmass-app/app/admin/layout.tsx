@@ -33,6 +33,12 @@ export default async function AdminLayout({
             {dict.admin.navLink}
           </span>
           <nav className="flex items-center gap-3 text-sm">
+            <Link href="/admin/measurements" className="text-schrift-sekundaer hover:text-schrift">
+              {dict.admin.measurements.title}
+            </Link>
+            <Link href="/admin/billing" className="text-schrift-sekundaer hover:text-schrift">
+              {dict.admin.billing.linkFromMeasurements}
+            </Link>
             <Link href="/admin/users" className="text-schrift-sekundaer hover:text-schrift">
               {dict.admin.users.navLink}
             </Link>

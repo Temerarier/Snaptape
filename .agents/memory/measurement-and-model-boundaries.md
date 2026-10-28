@@ -53,3 +53,16 @@ change purchased measurements.
 **How to apply:** Keep data joins and measured numeric fields separate from
 polygon bounds, positions and camera/snap calculations. Preserve the legacy
 viewer path for historical projects rather than migrating their stored data.
+
+Staff inspection of step 2 is read-only: no run/retry controls or model switching,
+and no cleanup or credit settlement caused by viewing the audit pages.
+Cost totals include every stored attempt, including failed and corrective ones;
+unknown costs must remain visibly incomplete.
+
+**Why:** The user needs complete trial-customer costs and an explanation of the
+optional model result without opening the database, not another execution or
+billing control surface.
+
+**How to apply:** Keep audit details staff-gated and separate expense aggregation
+from credit accounting. Aggregate measurement and model attempts independently
+before adding them, so a join cannot multiply costs.
