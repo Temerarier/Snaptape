@@ -30,6 +30,8 @@ export default async function AdminProjektViewerSeite({
       adresse: projectsTable.adresse,
       status: projectsTable.status,
       measurement: projectsTable.measurement,
+      model3d: projectsTable.model3d,
+      model3dStatus: projectsTable.model3dStatus,
     })
     .from(projectsTable)
     .where(eq(projectsTable.id, id))
@@ -49,6 +51,8 @@ export default async function AdminProjektViewerSeite({
   }
   return (
     <ProjectViewer
+      model3d={project.model3d}
+      model3dStatus={project.model3dStatus}
       measurement={project.measurement}
       projectName={project.name}
       projectAddress={project.adresse}

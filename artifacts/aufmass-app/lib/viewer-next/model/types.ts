@@ -46,6 +46,7 @@ export interface ModelSegment {
 }
 
 export interface ModelPolygon {
+  readonly displayUnit?: "mm";
   readonly id: string;
   readonly corners: readonly Point3[];
   readonly triangles: readonly Triangle[];
@@ -58,9 +59,9 @@ export interface ModelPolygon {
 
 export interface ModelWall extends ModelPolygon {
   readonly faceClass: "wall";
-  readonly widthMm: number;
-  readonly heightMm: number;
-  readonly gableHeightMm: number;
+  readonly widthMm: number | null;
+  readonly heightMm: number | null;
+  readonly gableHeightMm: number | null;
   readonly areaMm2: number | null;
   readonly netAreaMm2: number | null;
 }
@@ -72,11 +73,12 @@ export interface ModelRoofFace extends ModelPolygon {
 }
 
 export interface ModelEdge {
+  readonly displayUnit?: "mm";
   readonly id: string;
   readonly edgeClass: string;
   readonly elevation: string | null;
   readonly corners: readonly [Point3, Point3];
-  readonly lengthMm: number;
+  readonly lengthMm: number | null;
   readonly normal: Vector3;
   readonly frame: Frame3;
   readonly bounds: Bounds3;
@@ -86,16 +88,16 @@ export interface ModelEdge {
 export interface ModelOpening extends ModelPolygon {
   readonly type: string;
   readonly parentFaceId: string;
-  readonly widthMm: number;
-  readonly heightMm: number;
+  readonly widthMm: number | null;
+  readonly heightMm: number | null;
   readonly areaMm2: number | null;
 }
 
 export interface ModelAttachment extends ModelPolygon {
   readonly type: string;
-  readonly widthMm: number;
-  readonly heightMm: number;
-  readonly depthMm: number;
+  readonly widthMm: number | null;
+  readonly heightMm: number | null;
+  readonly depthMm: number | null;
   readonly parentFaceId: string | null;
   /** Physical box edges; unlike polygon corners these never imply diagonals. */
   readonly segments?: readonly ModelSegment[];

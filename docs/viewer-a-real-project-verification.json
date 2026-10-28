@@ -1,0 +1,14 @@
+{
+  "projectId": "8c12e2b9-7cd3-48a9-b1dd-799e5e05bd9a",
+  "readOnly": true,
+  "providerCalls": 0,
+  "source": "stored-model3d",
+  "walls": 13,
+  "roofs": 9,
+  "openings": 26,
+  "attachments": 136,
+  "conditions": 2,
+  "edges": 41,
+  "decorations": 0,
+  "geometryIdsRetained": true
+}

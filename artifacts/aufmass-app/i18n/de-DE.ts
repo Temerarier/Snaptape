@@ -453,8 +453,9 @@ export const deDE: Dictionary = {
     },
   },
   viewerNext: {
-    model3dPending: "3D-Modell wird erstellt. Deine Messung ist bereits verfügbar.",
-    model3dUnavailable: "Das zusätzliche 3D-Modell ist nicht verfügbar. Deine Messung bleibt verfügbar.",
+    model3dPending: "3D-Modell wird erstellt …",
+    model3dUnavailable: "3D-Modell nicht verfügbar. Alle Werte im Panel stammen aus der Messung.",
+    testHouse: "Testhaus",
     measurements: "Maße",
     overlayConstraintMessage: "Begrenzter Platz für Maße in dieser Ansicht",
     demoProject: "Demoprojekt",

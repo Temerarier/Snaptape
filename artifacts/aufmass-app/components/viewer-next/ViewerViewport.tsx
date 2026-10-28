@@ -37,6 +37,7 @@ export interface ViewerViewportProps {
   webglMessage: string;
   layoutMode: "split" | "model";
   modelState?: "ready" | "notready";
+  usesModel3d?: boolean;
 }
 
 interface PainterState {
@@ -254,6 +255,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
   webglMessage,
   layoutMode,
   modelState = "ready",
+  usesModel3d = false,
 }, ref) {
   const dict = useDictionary();
   const hostRef = useRef<HTMLDivElement>(null);
@@ -510,8 +512,9 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
       updateOverlays();
       return;
     }
-    const target = painter.interactiveMeshes.find(item => item.userData.elementId === selected.id);
-    if (target instanceof THREE.Mesh || target instanceof THREE.Line) painter.selectionGroup.add(createSelectionVisual(target));
+    for (const target of painter.interactiveMeshes.filter(item => item.userData.elementId === selected.id)) {
+      if (target instanceof THREE.Mesh || target instanceof THREE.Line) painter.selectionGroup.add(createSelectionVisual(target));
+    }
     updateOverlays();
   };
 
@@ -629,7 +632,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
     for (const opening of model.openings) addPolygon(opening, geometryGroup, interactiveMeshes, true);
     for (const attachment of model.attachments) addPolygon(attachment, geometryGroup, interactiveMeshes, true);
     for (const mass of model.massing) addPolygon(mass, geometryGroup, interactiveMeshes, false);
-    for (const closure of buildPresentationClosure(model)) {
+    for (const closure of usesModel3d ? [] : buildPresentationClosure(model)) {
       presentationOccluders.push(addPolygon(closure, geometryGroup, [], false));
     }
     for (const edge of model.edges) addEdge(edge, geometryGroup, interactiveMeshes);
@@ -869,7 +872,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
     };
     // The model is the painter's immutable source for this lifecycle.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [model, modelState]);
+  }, [model, modelState, usesModel3d]);
 
   useEffect(() => {
     const painter = painterRef.current;
@@ -910,6 +913,7 @@ export const ViewerViewport = forwardRef<ViewerViewportHandle, ViewerViewportPro
       ref={hostRef}
       className="viewer-next-viewport relative min-h-0 min-w-0 flex-1 overflow-hidden"
       data-testid="viewer-viewport"
+      data-geometry-source={usesModel3d ? "model3d" : "buildModel"}
       data-overlay-status={overlayConstraint ? "constrained" : "clear"}
       data-overlay-constraint={overlayConstraint || undefined}
       data-webgl-state={modelState === "notready" ? "notready" : webglFailed ? "unavailable" : "ready"}

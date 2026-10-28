@@ -1,0 +1,80 @@
+{
+  "sourceProjectId": "dbc4aede-680e-4747-992e-0d69a19e1cfa",
+  "projectId": "8c12e2b9-7cd3-48a9-b1dd-799e5e05bd9a",
+  "startedAt": "2026-10-28T19:00:36.165Z",
+  "measurementModel": "claude-opus-5-5",
+  "measurementEffort": "medium",
+  "step2Model": "claude-opus-5-5",
+  "step2Effort": "medium",
+  "maxOutputTokens": 128000,
+  "balanceBefore": 2,
+  "state": "finished",
+  "completedAt": "2026-10-28T19:23:02.015Z",
+  "paidRunStarted": true,
+  "copiedObjects": 16,
+  "status": "model_ready",
+  "model3dStatus": "ready",
+  "measurementErrors": null,
+  "measurementUnchanged": true,
+  "measurementSha256": "76d064acdd7570f71875f28eac8b500998eb8b499dfce2e8864a3a184dd23fc2",
+  "originalUnchanged": true,
+  "debitRows": 1,
+  "refundRows": 0,
+  "balanceAfter": 1,
+  "measurementRuns": [
+    {
+      "id": "a6c80fcc-5713-4798-8b92-d52b709b8911",
+      "outcome": "model_ready",
+      "schemaVersion": "1.8",
+      "model": "claude-opus-5-5",
+      "inputTokens": 44384,
+      "outputTokens": 91285,
+      "costUsd": 2.003236,
+      "durationMs": 871530,
+      "retryUsed": false,
+      "repairUsed": false,
+      "errors": [],
+      "modelDiagnostics": {
+        "effort": "medium",
+        "responses": [
+          {
+            "model": "claude-opus-5-5",
+            "phase": "extract",
+            "responseId": "msg_011CgV9iPJUCGXZQEH8fGXeJ",
+            "stopReason": "end_turn",
+            "inputTokens": 44384,
+            "contentTypes": [
+              "thinking",
+              "text"
+            ],
+            "outputTokens": 91285,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          }
+        ],
+        "usageComplete": true
+      }
+    }
+  ],
+  "step2": {
+    "stufe": "merken",
+    "correctionUsed": false,
+    "effort": "medium",
+    "durationMs": 471753
+  },
+  "modelRuns": [
+    {
+      "id": "fcf3cc0b-b7fb-452d-8185-d2989c3ba240",
+      "stufe": "merken",
+      "correctionUsed": false,
+      "model": "claude-opus-5-5",
+      "effort": "medium",
+      "inputTokens": 55251,
+      "outputTokens": 49919,
+      "costUsd": 1.219384,
+      "durationMs": 455940,
+      "sandboxMs": 19,
+      "codeChars": 19983
+    }
+  ]
+}

@@ -36,6 +36,9 @@ import { ViewerViewport, type ViewerViewportHandle } from "./ViewerViewport";
 import { presentViewerWarnings } from "./warningPresentation";
 import { CalcBubble } from "./CalcBubble";
 import { viewerTokenStyles } from "@/lib/viewer-next/tokens";
+import type { Model3dData } from "@workspace/db";
+import { modelFromModel3d, type Model3dStatus } from "@/lib/viewer-next/model/fromModel3d";
+import { AutoRefresh } from "@/components/projekte/AutoRefresh";
 
 export const DEFAULT_SHOW_DIMENSIONS = true;
 
@@ -82,8 +85,10 @@ function emptyViewerModel(
 function safeBuildModel(
   measurement: MinimalMeasurement,
   derived: DerivedMeasurement,
+  model3d?: Model3dData | null,
 ): ViewerModel {
   try {
+    if (model3d) return modelFromModel3d(model3d, measurement as unknown as ViewerMeasurement, derived);
     return buildModel(measurement as unknown as ViewerMeasurement, derived);
   } catch {
     return emptyViewerModel(
@@ -187,6 +192,8 @@ export function ViewerNextClient({
   webglMessage,
   projectName,
   projectAddress,
+  model3d,
+  model3dStatus = null,
 }: {
   measurement: MinimalMeasurement;
   derived: DerivedMeasurement;
@@ -195,6 +202,8 @@ export function ViewerNextClient({
   webglMessage?: string;
   projectName?: string;
   projectAddress?: string | null;
+  model3d?: Model3dData | null;
+  model3dStatus?: Model3dStatus;
 }) {
   const [filter, setFilter] = useState<TradeFilter>("all");
   const [openCards, setOpenCards] = useState<Set<string>>(new Set());
@@ -213,7 +222,9 @@ export function ViewerNextClient({
   const viewportRef = useRef<ViewerViewportHandle>(null);
   const rowRefs = useRef(new Map<string, HTMLDivElement>());
   const visibleCards = filterCards(cards, filter);
-  const model = useMemo(() => safeBuildModel(measurement, derived), [measurement, derived]);
+  const usesModel3d = model3dStatus === "ready" && Boolean(model3d);
+  const model = useMemo(() => safeBuildModel(measurement, derived, usesModel3d ? model3d : null),
+    [measurement, derived, model3d, usesModel3d]);
 
   const toggleCard = (id: string) => {
     setOpenCards((prev) => {
@@ -480,9 +491,16 @@ export function ViewerNextClient({
           onWheel={() => setGestureHintVisible(false)}
         >
           <ViewportErrorBoundary message={viewportMessage}>
-            <ViewerViewport
+            {model3dStatus === "pending" || model3dStatus === "unavailable" ? (
+              <div className="viewer-next-viewport relative flex min-h-0 min-w-0 flex-1 items-center justify-center px-8 text-center text-sm text-schrift-sekundaer"
+                data-model3d-state={model3dStatus} role="status">
+                {model3dStatus === "pending" ? dict.model3dPending : dict.model3dUnavailable}
+                {model3dStatus === "pending" ? <AutoRefresh intervalMs={10000} /> : null}
+              </div>
+            ) : <ViewerViewport
               ref={viewportRef}
               model={model}
+              usesModel3d={usesModel3d}
               selectedId={selectedId}
               onSelect={(id) => selectElement(id, false)}
               measureArmed={measureArmed}
@@ -494,7 +512,7 @@ export function ViewerNextClient({
               webglMessage={viewportMessage}
               layoutMode={layoutMode}
               modelState={modelState}
-            />
+            />}
           </ViewportErrorBoundary>
 
           <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center">

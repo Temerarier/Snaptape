@@ -17,7 +17,7 @@ describe("viewer-next interaction", () => {
     const wall = getSelectionDetails(model.walls[0]);
     expect(wall.dimensions[0]).toContain("×");
     expect(wall.value).toContain("net");
-    const gableWall = model.walls.find(item => item.gableHeightMm > 0);
+    const gableWall = model.walls.find(item => (item.gableHeightMm ?? 0) > 0);
     expect(gableWall).toBeDefined();
     expect(getSelectionDetails(gableWall!).dimensions[1]).toContain("+ gable");
     expect(getSelectionDetails(gableWall!).dimensions[1]).toContain("/ 2");

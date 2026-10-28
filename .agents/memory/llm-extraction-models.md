@@ -21,3 +21,25 @@ content types and stop reason, proving reasoning-only exhaustion for that run.
 Do not attribute historical failures without evidence. Lower effort or more
 output budget are possible experiments, not proven fixes; extra paid attempts
 need authorization and increased budget can increase cost.
+
+For the token-exhaustion remediation, the user explicitly rejected reducing
+effort to low and chose a larger output budget while retaining medium.
+
+**Why:** Preserving reasoning effort was an explicit requirement, even with the
+potential increase in runtime and provider cost.
+
+**How to apply:** Do not replace this approach with low effort without a new
+instruction. The official Opus 5.5 overview documents a 128k Messages API output
+limit; larger Batch API beta limits do not apply to this streaming pipeline.
+
+The authorized higher-budget measurement subsequently completed at medium
+effort with output exceeding the old 64k cap; the optional 3D stage completed
+too, with geometry warnings rather than a hard stop.
+
+**Why:** This is real-provider evidence that the higher shared thinking/answer
+budget can resolve this observed exhaustion without lowering effort. It does
+not establish that every input will fit or that generated geometry is exact.
+
+**How to apply:** Preserve the chosen budget/effort combination unless changed
+explicitly. Report actual usage and geometry warnings; do not equate `ready`
+with a warning-free 3D model.

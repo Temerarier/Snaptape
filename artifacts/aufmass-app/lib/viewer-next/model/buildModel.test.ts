@@ -298,9 +298,9 @@ describe("viewer-next pure model", () => {
     const ridgeY = 6705.6 / 2;
     const ridgeZ = gable.bounds.max.z;
     const gableProfile = [
-      { x: 18897.6, y: 0, z: gable.bounds.max.z - gable.gableHeightMm },
+      { x: 18897.6, y: 0, z: gable.bounds.max.z - gable.gableHeightMm! },
       { x: 18897.6, y: ridgeY, z: ridgeZ },
-      { x: 18897.6, y: 6705.6, z: gable.bounds.max.z - gable.gableHeightMm },
+      { x: 18897.6, y: 6705.6, z: gable.bounds.max.z - gable.gableHeightMm! },
     ];
 
     expect(garageRoofs).toHaveLength(2);

@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["isolated-vm"],
   outputFileTracingIncludes: {
     "/**": ["./lib/modell3d/core.js", "./lib/modell3d/sandbox-worker.cjs", "../../docs/pipeline/buildhouse*-prompt.md"],
+    "/viewer-next": ["../../test-fixtures/variante-a/*/messung.json", "../../test-fixtures/variante-a/*/buildhouse.js", "../../fixtures/garage-house.json"],
   },
   transpilePackages: ["@workspace/db"],
   allowedDevOrigins: [

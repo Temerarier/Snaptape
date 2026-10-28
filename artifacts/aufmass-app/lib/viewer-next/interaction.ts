@@ -157,7 +157,8 @@ function add(a: Point3, b: Vector3): Point3 {
   return point(a.x + b.x, a.y + b.y, a.z + b.z);
 }
 
-function formatFeetInches(mm: number): string {
+function formatFeetInches(mm: number | null): string {
+  if (mm === null || !finite(mm)) return "—";
   const inches = Math.max(0, Math.round((finite(mm) ? mm : 0) / MM_PER_INCH));
   const feet = Math.floor(inches / 12);
   return `${feet}' ${inches % 12}"`;
@@ -187,6 +188,9 @@ function selectionKind(element: SelectableElement): SelectionDetails["kind"] {
  */
 export function getSelectionDetails(element: SelectableElement): SelectionDetails {
   const kind = selectionKind(element);
+  const formatLength = element.displayUnit === "mm"
+    ? (value: number | null) => value === null || !finite(value) ? "—" : `${value.toLocaleString("en-US")} mm`
+    : formatFeetInches;
   const target = centerOf(element);
   const anchor = add(centerOf(element), {
     x: element.normal.x * 120,
@@ -205,10 +209,10 @@ export function getSelectionDetails(element: SelectableElement): SelectionDetail
   }
   if (kind === "wall") {
     const wall = element as ModelWall;
-    const dimensions = [`${formatFeetInches(wall.widthMm)} × ${formatFeetInches(wall.heightMm)}`];
-    if (wall.gableHeightMm > EPSILON) {
+    const dimensions = [`${formatLength(wall.widthMm)} × ${formatLength(wall.heightMm)}`];
+    if (wall.gableHeightMm !== null && wall.gableHeightMm > EPSILON) {
       dimensions.push(
-        `+ gable ${formatFeetInches(wall.widthMm)} × ${formatFeetInches(wall.gableHeightMm)} / 2`,
+        `+ gable ${formatLength(wall.widthMm)} × ${formatLength(wall.gableHeightMm)} / 2`,
       );
     }
     return {
@@ -239,8 +243,8 @@ export function getSelectionDetails(element: SelectableElement): SelectionDetail
       id: edge.id,
       kind,
       title: edge.edgeClass.replace(/_/g, " "),
-      dimensions: [`${formatFeetInches(edge.lengthMm)} length`],
-      value: formatFeetInches(edge.lengthMm),
+      dimensions: [`${formatLength(edge.lengthMm)} length`],
+      value: formatLength(edge.lengthMm),
       target,
       anchor,
     };
@@ -251,7 +255,7 @@ export function getSelectionDetails(element: SelectableElement): SelectionDetail
       id: opening.id,
       kind,
       title: `${opening.type.replace(/_/g, " ")} · ${opening.id}`,
-      dimensions: [`${formatFeetInches(opening.widthMm)} × ${formatFeetInches(opening.heightMm)}`],
+      dimensions: [`${formatLength(opening.widthMm)} × ${formatLength(opening.heightMm)}`],
       value: `${formatArea(opening.areaMm2)} area`,
       target,
       anchor,
@@ -263,7 +267,7 @@ export function getSelectionDetails(element: SelectableElement): SelectionDetail
     kind,
     title: `${attachment.type.replace(/_/g, " ")} · ${attachment.id}`,
     dimensions: [
-      `${formatFeetInches(attachment.widthMm)} × ${formatFeetInches(attachment.heightMm)} × ${formatFeetInches(attachment.depthMm)}`,
+      `${formatLength(attachment.widthMm)} × ${formatLength(attachment.heightMm)} × ${formatLength(attachment.depthMm)}`,
     ],
     value: attachment.type,
     target,

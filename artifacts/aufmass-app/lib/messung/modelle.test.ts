@@ -15,6 +15,7 @@ describe("single measurement model", () => {
     const body = mocks.stream.mock.calls[0]![0];
     expect(body.model).toBe("step2-model");
     expect(body.output_config).toEqual({ effort: "medium" });
+    expect(body.max_tokens).toBe(128000);
     expect(body).not.toHaveProperty("temperature");
     expect(body).not.toHaveProperty("thinking");
   });
@@ -28,7 +29,7 @@ describe("single measurement model", () => {
       .resolves.toMatchObject({ text: "{}", inputTokens: 100, outputTokens: 200,
         diagnostic: { responseId: "msg_test", model: MESS_MODELL, stopReason: "end_turn", contentTypes: ["text"] } });
     const body = mocks.stream.mock.calls[0]![0];
-    expect(body).toEqual({ model: MESS_MODELL, max_tokens: 64000, system: "sys",
+    expect(body).toEqual({ model: MESS_MODELL, max_tokens: 128000, system: "sys",
       messages: [{ role: "user", content: [{ type: "text", text: "text" }] }],
       output_config: { effort: MESS_EFFORT } });
     expect(Object.keys(body).sort()).toEqual(["max_tokens", "messages", "model", "output_config", "system"]);

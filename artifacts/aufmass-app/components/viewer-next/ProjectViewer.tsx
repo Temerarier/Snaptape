@@ -2,6 +2,8 @@ import React from "react";
 import type { Dictionary } from "@/i18n";
 import { prepareProjectMeasurement } from "@/lib/viewer-next/projectMeasurement";
 import { ViewerNextClient } from "./ViewerNextClient";
+import type { Model3dData } from "@workspace/db";
+import type { Model3dStatus } from "@/lib/viewer-next/model/fromModel3d";
 
 export function ProjectViewer({
   measurement,
@@ -9,12 +11,16 @@ export function ProjectViewer({
   projectAddress,
   dict,
   webglMessage,
+  model3d,
+  model3dStatus = null,
 }: {
   measurement: unknown;
   projectName: string;
   projectAddress: string | null;
   dict: Dictionary["viewerNext"];
   webglMessage: string;
+  model3d?: Model3dData | null;
+  model3dStatus?: Model3dStatus;
 }) {
   const prepared = prepareProjectMeasurement(measurement, dict);
 
@@ -46,6 +52,8 @@ export function ProjectViewer({
       webglMessage={webglMessage}
       projectName={projectName}
       projectAddress={projectAddress}
+      model3d={model3d}
+      model3dStatus={model3dStatus}
     />
   );
 }

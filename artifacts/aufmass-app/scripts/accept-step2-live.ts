@@ -10,13 +10,13 @@ import {
 import { holeGuthaben, verbucheMessung } from "../lib/credits/service";
 import { dateiFuerPfad, getPrivateObjectDir } from "../lib/storage/objectStorage";
 import { fuehreMessLaufAus } from "../lib/messung/pipeline";
-import { MESS_MODELL, MESS_EFFORT } from "../lib/messung/modelle";
+import { MESS_MODELL, MESS_EFFORT, MESS_MAX_TOKENS } from "../lib/messung/modelle";
 import { SCHRITT2_MODELL, SCHRITT2_EFFORT } from "../lib/modell3d/schritt2";
 
 const sourceId = "dbc4aede-680e-4747-992e-0d69a19e1cfa";
 // Fixed ID deliberately prevents a second paid run after restart or accidental rerun.
-const copyId = "0782db46-7e84-4996-a149-e08f7c6a4baf";
-const evidencePath = "docs/step2-live-verification.json";
+const copyId = "8c12e2b9-7cd3-48a9-b1dd-799e5e05bd9a";
+const evidencePath = "docs/step2-live-128k-verification.json";
 const digest = (value: unknown) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
 
@@ -31,6 +31,9 @@ async function sourceSnapshot() {
 
 async function main() {
   assert.equal(process.env.EXTRAKTOR_STUB === "1", false, "Real extraction required");
+  assert.equal(MESS_EFFORT, "medium", "User requires unchanged measurement effort");
+  assert.equal(SCHRITT2_EFFORT, "medium", "Keep step 2 effort unchanged");
+  assert.equal(MESS_MAX_TOKENS, 128000, "User authorized a higher output budget");
   assert.equal((await db.select({ id: projectsTable.id }).from(projectsTable)
     .where(eq(projectsTable.id, copyId))).length, 0, "Acceptance copy already exists; DO NOT repeat");
   const original = await sourceSnapshot();
@@ -42,9 +45,10 @@ async function main() {
   const startedAt = new Date().toISOString();
   const base = { sourceProjectId: sourceId, projectId: copyId, startedAt,
     measurementModel: MESS_MODELL, measurementEffort: MESS_EFFORT,
-    step2Model: SCHRITT2_MODELL, step2Effort: SCHRITT2_EFFORT, balanceBefore };
+    step2Model: SCHRITT2_MODELL, step2Effort: SCHRITT2_EFFORT,
+    maxOutputTokens: MESS_MAX_TOKENS, balanceBefore };
   await db.insert(projectsTable).values({
-    id: copyId, userId: source.userId, name: "Schritt-2-Abnahme – separate Testkopie",
+    id: copyId, userId: source.userId, name: "Schritt-2-Abnahme – 128k / medium",
     adresse: source.adresse, quality: source.quality, status: "classified",
     classification: source.classification, referenceObject: source.referenceObject,
     referenceValue: source.referenceValue, referenceUnit: source.referenceUnit,

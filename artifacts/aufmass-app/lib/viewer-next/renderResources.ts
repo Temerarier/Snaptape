@@ -55,7 +55,7 @@ export function createConditionVisual(part: ModelConditionArea): THREE.Mesh {
   }));
   mesh.renderOrder = 1;
   mesh.userData = { elementId: part.id, elementKind: "condition" };
-  placeSurfaceVisual(mesh, part, viewerTokens.conditionOffsetMm);
+  placeSurfaceVisual(mesh, part, part.displayUnit === "mm" ? 0 : viewerTokens.conditionOffsetMm);
   const outline = new THREE.LineLoop(
     new THREE.BufferGeometry().setFromPoints(part.corners.map(p => new THREE.Vector3(p.x, p.y, p.z))),
     new THREE.LineBasicMaterial({ color: viewerTokens.danger, depthWrite: false }),

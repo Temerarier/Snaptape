@@ -12,4 +12,8 @@ export default clerkMiddleware(async (_auth, request) => {
   signUpUrl: "/sign-up",
 }));
 
-export const config = { matcher: ["/((?!_next|.*\\.(?:css|js|jpg|jpeg|png|gif|svg|ico|woff2?)).*)"] };
+export const config = { matcher: [
+  // Staff routes may have file extensions (debug.svg); they still need Clerk.
+  "/viewer-next/:path*",
+  "/((?!_next|.*\\.(?:css|js|jpg|jpeg|png|gif|svg|ico|woff2?)).*)",
+] };

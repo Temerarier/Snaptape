@@ -149,7 +149,7 @@ function distance(a: Point3, b: Point3): number {
   return magnitude(subtract(a, b));
 }
 
-function colorFor(face: MeasurementFaceLike | null | undefined): ModelColor {
+export function colorFor(face: MeasurementFaceLike | null | undefined): ModelColor {
   const color = face?.color ?? {};
   const confident = color?.confidence !== "low";
   const hex = typeof color?.hex === "string" && /^#[0-9a-f]{6}$/i.test(color.hex)
@@ -216,7 +216,7 @@ function frameFor(corners: readonly Point3[], expectedNormal?: Vector3): Frame3 
   return { origin, tangent, up, normal: unit(normal, vector(0, -1, 0)) };
 }
 
-function boundsFor(corners: readonly Point3[]): Bounds3 {
+export function boundsFor(corners: readonly Point3[]): Bounds3 {
   const safe = corners.length > 0 ? corners : [point(0, 0, 0)];
   const min = point(
     Math.min(...safe.map(item => item.x)),
@@ -258,7 +258,7 @@ function orientedCorners(
   return dot(normal, expectedNormal) >= 0 ? corners : [...corners].reverse();
 }
 
-function polygon(
+export function polygon(
   id: string,
   corners: readonly Point3[],
   color: ModelColor,
@@ -527,7 +527,7 @@ function formatFeetInches(mm: number): string {
   return `${feet}' ${inches}"`;
 }
 
-function makeDimension(
+export function makeDimension(
   kind: PermanentDimension["kind"],
   valueMm: number,
   segments: readonly DimensionSegment[],
@@ -859,7 +859,7 @@ function buildEdge(
   };
 }
 
-function openingTypeColor(type: string): ModelColor {
+export function openingTypeColor(type: string): ModelColor {
   const hex = type === "garage_door"
     ? viewerTokens.modelOpeningGarage
     : type === "skylight"
@@ -963,7 +963,7 @@ function buildOpenings(
   return models;
 }
 
-function attachmentColor(type: string): ModelColor {
+export function attachmentColor(type: string): ModelColor {
   if (type === "addition" || type === "bay" || type === "dormer") {
     return {
       hex: viewerTokens.modelAttachmentPrimary,

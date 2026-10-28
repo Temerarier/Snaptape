@@ -19,6 +19,9 @@ export class ModellAntwortFehler extends Error {
 
 export const MESS_MODELL = process.env.MESS_MODELL ?? "claude-opus-5-5";
 export const MESS_EFFORT = (process.env.MESS_EFFORT ?? "medium") as "low" | "medium" | "high" | "xhigh" | "max";
+// Opus 5.5 Messages API maximum; thinking and answer share this budget.
+// https://platform.claude.com/docs/en/models/opus-5-5/overview (2026-10-28)
+export const MESS_MAX_TOKENS = 128_000;
 
 // Official standard pricing checked 2026-10-25: $4 input / $20 output per
 // million tokens. This is an estimate, not a provider invoice. Thinking
@@ -40,7 +43,7 @@ async function rufeAnthropic(aufruf: ModellAufruf, optionen: ModellOptionen = {}
   }
   const stream = client.messages.stream({
     model,
-    max_tokens: 64_000,
+    max_tokens: MESS_MAX_TOKENS,
     system: aufruf.system,
     messages: [{ role: "user", content }],
     output_config: { effort },

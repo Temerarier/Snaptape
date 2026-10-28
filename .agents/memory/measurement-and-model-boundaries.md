@@ -39,3 +39,17 @@ not generated JavaScript or private check reports.
 **How to apply:** Use explicit public-field projections/DTOs at customer
 boundaries. Do not pass full database project/model-run objects through component
 props or actions.
+
+The viewer must treat stored generated geometry as placement, never as a
+replacement measurement. Unknown measurement IDs display dashes, not inferred
+widths, areas or lengths. Decorations are never selectable. A successful model
+status is not a guarantee of geometric accuracy.
+
+**Why:** The user explicitly required panel and selection-card values to remain
+measurement-backed when adopting generated geometry, including mismatched IDs
+and split polygons. Warnings in the accepted optional model must not silently
+change purchased measurements.
+
+**How to apply:** Keep data joins and measured numeric fields separate from
+polygon bounds, positions and camera/snap calculations. Preserve the legacy
+viewer path for historical projects rather than migrating their stored data.

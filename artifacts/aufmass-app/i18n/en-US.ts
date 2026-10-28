@@ -442,8 +442,9 @@ export const enUS = {
     },
   },
   viewerNext: {
-    model3dPending: "Creating 3D model. Your measurement is already available.",
-    model3dUnavailable: "The additional 3D model is unavailable. Your measurement remains available.",
+    model3dPending: "3D model is being created …",
+    model3dUnavailable: "3D model not available. All values in the panel come from the measurement.",
+    testHouse: "Test house",
     measurements: "Measurements",
     overlayConstraintMessage: "Limited label space at this view",
     demoProject: "Demo project",

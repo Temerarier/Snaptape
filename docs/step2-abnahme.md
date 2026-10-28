@@ -141,3 +141,65 @@ veraltete generierte Bibliotheks-Typdefinitionen über `typecheck:libs` aktualis
 anschließend bestand der App-Typecheck. Während des echten Laufs gab es keine
 Builds oder Workflow-Neustarts. Der temporäre Abnahme-Workflow wird entfernt,
 die Kopie und die vollständigen Diagnose-/Buchungsdaten bleiben erhalten.
+
+## Autorisierte Wiederholung mit größerem Tokenlimit
+
+Der Nutzer hat eine Reduzierung auf `low` ausdrücklich abgelehnt und einen
+weiteren echten Lauf mit erhöhtem Tokenlimit freigegeben. Das gemeinsame
+Outputbudget für Denken und Antwort wurde von 64.000 auf **128.000** angehoben.
+Modell, Effort `medium`, Prompts und fachliche Verarbeitung bleiben unverändert.
+Quelle für die unterstützte Obergrenze:
+https://platform.claude.com/docs/en/models/opus-5-5/overview
+(abgerufen am 28.10.2026).
+
+Vor diesem Lauf bestanden erneut alle **384 Tests** und der Produktionsbuild
+einschließlich Typprüfung. Der Web-Workflow wurde vor dem Start neu gestartet
+und lief sauber an; während der Messung keine Builds oder Neustarts.
+
+Eine weitere unabhängige Kopie mit eigener einmaliger Start-Sperre wird
+verwendet: `8c12e2b9-7cd3-48a9-b1dd-799e5e05bd9a`.
+Frühere Testkopien, Original und sämtliche historischen Buchungen bleiben
+erhalten. Neue Evidenz, ohne Überschreiben des 64k-Nachweises:
+`step2-live-128k-verification.json`.
+### Ergebnis: reale Gesamtkette erfolgreich
+
+| Merkmal | Messung (Schritt 1) | 3D-Modell (Schritt 2) |
+|---|---|---|
+| Modell | claude-opus-5-5 | claude-opus-5-5 |
+| Effort | medium | medium |
+| Outputlimit | 128.000 | 128.000 |
+| Ergebnis | model_ready, Schema 1.8 | ready, Prüfstufe merken |
+| Eingabetokens | 44.384 | 55.251 |
+| Ausgabetokens | 91.285 | 49.919 |
+| Aus Usage berechnete Kosten | 2,003236 USD | 1,219384 USD |
+| Gesamtdauer der Stufe | 871.530 ms (14 min 31,53 s) | 471.753 ms (7 min 51,75 s) |
+| Zusätzlicher Versuch / Korrektur | kein Retry, kein Repair | keine Korrektur |
+
+Gesamtkosten dieses Wiederholungslaufs: **3,222620 USD** nach dem
+4/20-USD-pro-Million-Tarif, keine Anbieterrechnung. Gesamtlaufzeit mit Kopieren
+und Abschlussprüfung etwa **22 min 26 s**. Die Messungsantwort endete regulär
+mit `end_turn` und enthielt `thinking` und `text`. Die 91.285 Ausgabetokens
+überschreiten das alte 64k-Limit; die Budgeterhöhung hat diesen Lauf ermöglicht.
+Dies garantiert keinen Erfolg für jede zukünftige Eingabe.
+
+- Genau eine neue Messungsabbuchung −1, keine Erstattung, keine Buchung aus
+  Schritt 2. Guthaben vorher 2, nachher 1.
+- Messung nach Schritt 2 identisch mit dem vor Schritt 2 gespeicherten
+  Messlauf-JSON. SHA-256:
+  `76d064acdd7570f71875f28eac8b500998eb8b499dfce2e8864a3a184dd23fc2`.
+- Originalprojekt mit Dateien, Messläufen und Buchungen unverändert.
+- Ein echter Modellaufruf, eine `model_runs`-Zeile mit Usage und Kosten.
+  Sandboxdauer 19 ms; generierter Code ausschließlich in der Isolate ausgeführt.
+- Gespeichertes 3D-JSON: 32 Flächen, 26 Öffnungen, 37 Kanten.
+- Core-Prüfung: **0 Fehler, 11 Warnungen, 0 fehlende IDs**, Dachflächenabweichung
+  Modell zu Messung 4,5 %. `merken` ist kein fehlerfreier Geometrienachweis:
+  Hinweise betreffen u. a. Gaubenwandbreiten/-höhen, zwei Öffnungsunterkanten und
+  zwei Ortganglängen. Zwei Elemente sind ausdrücklich als nicht gebaut erfasst.
+  Die Messung wird dadurch nicht verändert.
+- Keine weitere kostenpflichtige Wiederholung gestartet; temporärer
+  Abnahme-Workflow nach Abschluss entfernt.
+
+Die Änderung dieses Auftrags betrifft nur das Outputlimit sowie zugehörige
+Tests und den einmaligen Abnahmerunner. Keine Änderung an Effort, Messprompts,
+Core, fachlicher Auswertung, Credits oder Viewer. Die reale Erzeugung und
+Speicherung ist nachgewiesen; keine neue visuelle Geometrieabnahme behauptet.
