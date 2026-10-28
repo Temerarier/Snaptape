@@ -1,0 +1,63 @@
+{
+  "sourceProjectId": "dbc4aede-680e-4747-992e-0d69a19e1cfa",
+  "projectId": "0782db46-7e84-4996-a149-e08f7c6a4baf",
+  "startedAt": "2026-10-28T18:42:29.270Z",
+  "measurementModel": "claude-opus-5-5",
+  "measurementEffort": "medium",
+  "step2Model": "claude-opus-5-5",
+  "step2Effort": "medium",
+  "balanceBefore": 2,
+  "state": "finished",
+  "completedAt": "2026-10-28T18:54:14.500Z",
+  "paidRunStarted": true,
+  "copiedObjects": 16,
+  "status": "failed",
+  "model3dStatus": null,
+  "measurementErrors": [
+    "Anthropic API returned no text content."
+  ],
+  "measurementUnchanged": false,
+  "measurementSha256": null,
+  "originalUnchanged": true,
+  "debitRows": 1,
+  "refundRows": 1,
+  "balanceAfter": 2,
+  "measurementRuns": [
+    {
+      "id": "6d9e52ab-23fa-474a-80db-48cc7899ed28",
+      "outcome": "failed",
+      "schemaVersion": "unknown",
+      "model": "claude-opus-5-5",
+      "inputTokens": 44384,
+      "outputTokens": 64000,
+      "costUsd": 1.457536,
+      "durationMs": 701950,
+      "retryUsed": false,
+      "repairUsed": false,
+      "errors": [
+        "Anthropic API returned no text content."
+      ],
+      "modelDiagnostics": {
+        "effort": "medium",
+        "responses": [
+          {
+            "model": "claude-opus-5-5",
+            "phase": "extract",
+            "responseId": "msg_011CgV8Kn2hNvrs9mNcgEgvt",
+            "stopReason": "max_tokens",
+            "inputTokens": 44384,
+            "contentTypes": [
+              "thinking"
+            ],
+            "outputTokens": 64000,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          }
+        ],
+        "usageComplete": true
+      }
+    }
+  ],
+  "step2": null,
+  "modelRuns": []
+}

@@ -86,19 +86,58 @@ Eine neue synthetische Clerk-Testidentität, ausschließlich eigene Testdaten:
   Gerätehinweis erschien. Das Messpanel war trotzdem vollständig verfügbar.
   Dies ist keine visuelle Abnahme neu generierter Geometrie.
 
-## Build und offene reale Abnahme
+## Build und reale Abnahme
 
 - `pnpm test`: **40 Dateien / 384 Tests bestanden**.
 - Typecheck und Produktionsbuild bestanden; Runtime-Dateien und native
   ABI137/glibc-Bindung sind in Nexts Produktionstraces enthalten.
-- Bis hierhin **0 bezahlte Modellaufrufe** in diesem Auftrag.
+- Offline- und Browserprüfungen oben verwenden **0 bezahlte Modellaufrufe**.
 
-Der echte Messlauf ist noch offen. Das vorhandene Testprojekt besitzt bereits
-zwei ältere −1-Buchungen samt Erstattungen. Vor dem neuen kostenpflichtigen Lauf
-ist zu entscheiden, ob eine separate Kopie ohne Altbuchungen oder das bestehende
-Projekt verwendet wird. Historische Buchungen werden nicht geändert.
+Der Nutzer hat eine separate Kopie ohne Altbuchungen für genau einen echten
+Abnahmelauf gewählt. Der Lauf wurde am 28.10.2026 abgeschlossen:
+`0782db46-7e84-4996-a149-e08f7c6a4baf`.
+Sieben Dateizeilen und ihre Speicherobjekte wurden unabhängig kopiert; die
+vorhandene Klassifizierung wurde übernommen. Originalprojekt und historische
+Buchungen werden nicht geändert. Die Kopie sperrt einen versehentlichen zweiten
+Start des Abnahmeskripts über ihre feste Projekt-ID.
+Vollständige Diagnose: `step2-live-verification.json`.
 
-Dieser Offline-/Browsernachweis behauptet weder einen erfolgreichen echten
-Opus-Messlauf noch bereits vorhandene reale Schritt-2-Usage/Kosten. Reale Stufe,
-Korrektur, Effort, Tokens, Kosten und Gesamtdauer werden erst nach diesem Lauf
-ergänzt; echte Testfehler sind mit den tatsächlichen Diagnosemetadaten zu melden.
+### Ergebnis des einmaligen echten Laufs
+
+**Schritt 1 fehlgeschlagen; Schritt 2 nicht erreicht. Die reale Gesamtabnahme
+ist damit nicht bestanden.**
+
+| Merkmal | Ergebnis |
+|---|---|
+| Modell / Effort | claude-opus-5-5 / medium |
+| Dauer Schritt 1 | 701.950 ms (11 min 41,95 s) |
+| Input-/Outputtokens | 44.384 / 64.000 |
+| Stop-Grund | `max_tokens` |
+| Antwortblöcke | ausschließlich `thinking`, kein `text` |
+| Fehler | `Anthropic API returned no text content.` |
+| Usage vollständig | ja |
+| Aus Usage berechnete Kosten | 1,457536 USD bei 4/20 USD pro Million Input-/Outputtokens |
+| Messungsabbuchungen / Rückerstattungen | genau 1 × −1 / 1 × +1 |
+| Guthaben vorher / nachher | 2 / 2 |
+| Originalprojekt inkl. Dateien, Messläufen und Buchungen | unverändert |
+| Kopierte Dateien / eigenständige Speicherobjekte | 7 / 16 |
+| Schritt-2-Aufrufe / Modellzeilen | 0 / 0 |
+| Schritt-2-Stufe, Korrektur, Tokens, Kosten, Dauer | nicht anwendbar; Schritt 2 nicht gestartet |
+| Measurement-Vergleich vorher/nachher Schritt 2 | nicht möglich; keine gültige Messung entstanden |
+
+Die Ursache dieses Laufs ist nun belegt: Das gemeinsame Outputbudget war mit
+64.000 Denktokens ausgeschöpft, bevor Antworttext ausgegeben wurde. Es gab keinen
+Schemafehler und keinen Sandboxfehler, weil diese Stufen nicht erreicht wurden.
+Das beweist nicht rückwirkend den Stop-Grund früherer Läufe ohne Metadaten.
+
+Keine automatische Wiederholung, keine Änderung an Effort, Tokenlimit oder
+Produktcode. Für einen nächsten Versuch ist ein geringerer Denkaufwand eine
+gezielte mögliche Anpassung, aber noch kein nachgewiesener Fix. Mehr
+Outputbudget erhöht potenziell Dauer und Kosten und garantiert ebenfalls keinen
+Erfolg. Ein weiterer kostenpflichtiger Lauf benötigt erneute Freigabe.
+
+Der zusätzliche Abnahmerunner wurde vor dem Start typgeprüft. Dabei wurden
+veraltete generierte Bibliotheks-Typdefinitionen über `typecheck:libs` aktualisiert;
+anschließend bestand der App-Typecheck. Während des echten Laufs gab es keine
+Builds oder Workflow-Neustarts. Der temporäre Abnahme-Workflow wird entfernt,
+die Kopie und die vollständigen Diagnose-/Buchungsdaten bleiben erhalten.
