@@ -5,7 +5,9 @@
 - PostgreSQL (Replit-DB), Replit Object Storage für Dateien
 - three.js für den 3D-Viewer
 - Anthropic API für Bildanalyse (Secret: ANTHROPIC_API_KEY)
-- Stripe für Bezahlung (erst Etappe 6)
+- Clerk Auth (Replit-managed) für eigene SnapTape-Kundenkonten; keine lokalen Passwörter/Sessions
+- Ein Messmodell: claude-opus-5-5, Effort über Env; Klassifizierung unverändert
+- Credits: 1 Messung = 1 Credit, Ledger statt Balance-Spalte, Rückerstattung bei fehlgeschlagener aktueller Messung
 - Hosting/Datenspeicherung: US-Region (Zielmarkt USA)
 
 ## Eiserne Regeln
@@ -74,7 +76,8 @@ Werte (verbindlich):
   (`text-fehler` / `bg-fehler-flaeche`)
 
 ## Architektur-Überblick
-Upload → Qualitätscheck (Sonnet) → Messung (Fable, JSON, 2–3 Läufe) →
+Clerk Auth → Upload → Qualitätscheck (Sonnet) → Credit-Abbuchung →
+Messung (claude-opus-5-5, JSON, bestehender Retry/Repair-Ablauf) →
 Edge-Case-Warnungen (Code) → 3D-Viewer + Report. Der Nutzer KANN
 optional ein eigenes Referenzmaß angeben (übersteuert Annahmen), muss
 aber nicht. Kein Pflicht-Review, kein Edit-Modus im MVP.
@@ -96,10 +99,30 @@ aber nicht. Kein Pflicht-Review, kein Edit-Modus im MVP.
 - Status-Maschine: draft → files_uploaded (beim „Messung starten") →
   processing → model_ready | failed; alte Werte reviewing/ready bleiben
   vorerst. Werden alle Dateien entfernt, fällt files_uploaded auf draft
-  zurück. Qualität (standard/premium) + optionales Referenzmaß werden
-  erst beim Start gespeichert.
+  zurück. Neue Projekte/Läufe speichern historisch kompatibel `quality=premium`;
+  keine Kunden-Qualitätswahl. Optionales Referenzmaß wird beim Start gespeichert.
 - System-Abhängigkeiten: poppler-utils (pdftoppm/pdfinfo) und vips
   sind deklariert (auch fürs Deployment nötig).
+
+### Testkunden, Credits und Timeouts
+- Anmeldung über den Replit-managed Clerk-Tenant. Development und Production haben
+  getrennte Konten. Lokale UUIDs/Projektzuordnung bleiben erhalten; eine bestätigte
+  Clerk-E-Mail kann ein altes, noch nicht verknüpftes Konto übernehmen.
+- `users.replit_user_id` enthält aus Kompatibilitätsgründen nun die Clerk-ID.
+  Neue Nutzer erhalten immer eine externe ID, historische Zeilen bleiben nullable.
+- Staff unverändert über `STAFF_EMAILS`, case-insensitive, ohne Credit-Ausnahme.
+  Verwaltung und manuelle Buchungen unter `/admin/users`.
+- Guthaben = SUM(credit_ledger.delta). Fehlgeschlagene aktuelle Läufe werden genau
+  einmal erstattet; veraltete Läufe nicht. Details: `docs/credits.md`.
+- Keine Cronjobs: Listen-/Projekt-/Admin-Seiten bereinigen aktive Läufe älter als
+  60 Minuten anhand `processing_since`, samt Rückerstattung belegter Abbuchungen.
+- Optionale Env-Variablen: `MESS_MODELL` (Default `claude-opus-5-5`),
+  `MESS_EFFORT` (`low|medium|high|xhigh|max`, Default `medium`),
+  `SUPPORT_EMAIL` (nur wenn gesetzt wird ein echter Mailto-Link angezeigt).
+  Modellwechsel erfolgen ausschließlich über Env, ohne Provider-Fallback.
+- Clerk-Schlüssel provisioniert Replit. Der Produktions-Frontend-API-Proxy
+  `/api/__clerk` liegt im API-Server vor Body-Parsern; Next verwendet das
+  offizielle `@clerk/nextjs`-SDK mit App-Router-Middleware und eigenem Login-Design.
 
 ## Etappe 4: Neuer Viewer (Fahrplan — immer nur den aktuellen Schritt bauen)
 

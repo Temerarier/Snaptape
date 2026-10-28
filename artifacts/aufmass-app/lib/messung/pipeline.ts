@@ -8,6 +8,7 @@ import {
   db,
   measureRunsTable,
   projectsTable,
+  usersTable,
   type ProjectClassification,
   type ProjectFile,
 } from "@workspace/db";
@@ -16,6 +17,8 @@ import { heileNullFelder } from "./berechnung";
 import { ExtraktionsFehler } from "./echterExtraktor";
 import { standardExtraktor, type ExtraktionsErgebnis } from "./extraktor";
 import type { NutzerReferenz } from "./prompts";
+import { erstatteMessung } from "@/lib/credits/service";
+import { MESS_MODELL } from "./modelle";
 
 // Ajv-Fehler in lesbare Sätze übersetzen (für Anzeige + Protokoll).
 function lesbareFehler(
@@ -81,6 +84,7 @@ export async function fuehreMessLaufAus(args: {
   projektId: string;
   runId: string;
   quality: "standard" | "premium";
+  creditLedgerId?: string;
   klassifizierung: ProjectClassification;
   dateien: ProjectFile[];
   referenz?: NutzerReferenz | null;
@@ -132,14 +136,14 @@ export async function fuehreMessLaufAus(args: {
       const geheilt = heileNullFelder(roh, validierung.errors ?? []);
       if (geheilt > 0) validierung = validateMeasurement(roh);
     }
-    if (validierung.valid) {
+    if (validierung.valid && roh !== null) {
       ausgang = "model_ready";
       const q = (roh as { quality?: { warnings?: unknown } }).quality;
       warnungen = Array.isArray(q?.warnings)
         ? q.warnings.filter((w): w is string => typeof w === "string")
         : [];
     } else {
-      fehlerListe = lesbareFehler(validierung.errors ?? []);
+      fehlerListe = roh === null ? ["Measurement returned null"] : lesbareFehler(validierung.errors ?? []);
     }
   } catch (fehler) {
     // Extraktor selbst gescheitert: explizit als failed protokollieren.
@@ -156,7 +160,10 @@ export async function fuehreMessLaufAus(args: {
     eq(projectsTable.currentRunId, args.runId),
     eq(projectsTable.status, "processing"),
   );
-  const angewendet = await db
+  await db.transaction(async (tx) => {
+  const [owner] = await tx.select({ userId: projectsTable.userId }).from(projectsTable).where(eq(projectsTable.id, args.projektId));
+  if (owner) await tx.select({ id: usersTable.id }).from(usersTable).where(eq(usersTable.id, owner.userId)).for("update");
+  const angewendet = await tx
     .update(projectsTable)
     .set(
       ausgang === "model_ready"
@@ -165,12 +172,16 @@ export async function fuehreMessLaufAus(args: {
             measurement: roh,
             measurementErrors: null,
             currentRunId: null,
+            processingSince: null,
+            currentCreditLedgerId: null,
           }
         : {
             status: "failed" as const,
             measurement: null,
             measurementErrors: fehlerListe,
             currentRunId: null,
+            processingSince: null,
+            currentCreditLedgerId: null,
           },
     )
     .where(guard)
@@ -187,16 +198,16 @@ export async function fuehreMessLaufAus(args: {
     netWallAreaMm2: null,
     openingCount: null,
   };
-  await db.insert(measureRunsTable).values({
+  const [run] = await tx.insert(measureRunsTable).values({
     projectId: args.projektId,
     schemaVersion: schemaVersionFuerProtokoll(roh),
     measureJson: roh,
-    quality: args.quality,
+    quality: "premium",
     durationMs: Date.now() - start,
     outcome: ausgang,
     warnings: warnungen,
     errors: fehlerListe,
-    model: ergebnis?.model ?? fehlerMeta?.model ?? null,
+    model: ergebnis?.model ?? fehlerMeta?.model ?? MESS_MODELL,
     route: ergebnis?.route ?? fehlerMeta?.route ?? null,
     inputTokens: ergebnis?.inputTokens ?? fehlerMeta?.inputTokens ?? null,
     outputTokens: ergebnis?.outputTokens ?? fehlerMeta?.outputTokens ?? null,
@@ -206,5 +217,11 @@ export async function fuehreMessLaufAus(args: {
     roofAreaMm2: zahlen.roofAreaMm2,
     netWallAreaMm2: zahlen.netWallAreaMm2,
     openingCount: zahlen.openingCount,
+  }).returning({ id: measureRunsTable.id });
+  // Superseded runs never refund: only the still-current guarded run owns
+  // the debit; timeout cleanup may already have refunded that same charge.
+  if (ausgang === "failed" && angewendet.length > 0 && args.creditLedgerId) {
+    await erstatteMessung(tx, args.creditLedgerId, run!.id, "measurement failed");
+  }
   });
 }

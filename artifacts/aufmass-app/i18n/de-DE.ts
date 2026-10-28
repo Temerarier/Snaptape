@@ -27,6 +27,7 @@ export const deDE: Dictionary = {
     storageMissing: "Object Storage nicht konfiguriert",
   },
   auth: {
+    signInOrCreate: "Anmelden oder Konto erstellen",
     loginTitle: "Willkommen zurück.",
     loginSubtitle: "Melden Sie sich an – für Ihre Projekte und Berichte.",
     registerTitle: "Häuser aus Fotos vermessen.",
@@ -75,6 +76,9 @@ export const deDE: Dictionary = {
     emptyText:
       "Legen Sie Ihr erstes Projekt an – laden Sie später Fotos und Pläne hoch und erhalten Sie Messwerte und ein 3D-Modell.",
     emptyCta: "Erstes Projekt anlegen",
+    willkommenTitel: "Willkommen bei Snaptape",
+    willkommenKeineCredits: "Du hast noch keine Mess-Credits. Testkonten werden persönlich freigeschaltet - wir melden uns in Kürze.",
+    willkommenSupport: "Fragen? E-Mail an",
     emptyArchiveTitle: "Archiv ist leer",
     emptyArchiveText: "Hier erscheinen Projekte, die Sie archiviert haben.",
     noSearchResultsTitle: "Keine Treffer",
@@ -136,7 +140,7 @@ export const deDE: Dictionary = {
       inch: "Zoll",
       feet: "Fuß",
     },
-    startButton: "Messung starten",
+    startButton: "Messung starten · 1 Credit",
     startLaeuft: "Wird gespeichert …",
     pruefungLaeuft: "Ihre Dateien werden geprüft …",
     ablehnung: {
@@ -176,6 +180,13 @@ export const deDE: Dictionary = {
       generisch: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
       keineBilderGewaehlt:
         "Keine für die Messung ausgewählten Bilder vorhanden.",
+      keineCredits: "Sie haben keine Mess-Credits mehr. Wenden Sie sich an den Support, um weitere zu erhalten.",
+    },
+    credits: {
+      pill: "Credits:",
+      keineTitel: "Keine Mess-Credits mehr",
+      keineText: "Du hast noch keine Mess-Credits. Testkonten werden persönlich freigeschaltet - wir melden uns in Kürze.",
+      supportLink: "Fragen? E-Mail an",
     },
   },
   viewer: {
@@ -359,6 +370,41 @@ export const deDE: Dictionary = {
         provisional: "Vorläufig",
         no_data: "Keine Daten",
       }
+    },
+    users: {
+      title: "Nutzer",
+      subtitle: "Alle Konten mit Credits, Messungen und Buchungen. Hängende Messungen werden beim Laden bereinigt.",
+      navLink: "Nutzer",
+      leer: "Noch keine Nutzer.",
+      spalten: {
+        nutzer: "Nutzer",
+        erstellt: "Erstellt",
+        letzterLogin: "Letzter Login",
+        guthaben: "Guthaben",
+        fertig: "Fertig",
+        fehlgeschlagen: "Fehlgeschlagen",
+        kosten: "Kosten",
+        letzteMessung: "Letzte Messung",
+      },
+      nie: "nie",
+      ledgerAnzeigen: "Buchungen",
+      ledgerLeer: "Keine Buchungen.",
+      ledger: {
+        zeitpunkt: "Zeitpunkt",
+        delta: "Änderung",
+        grund: "Grund",
+        notiz: "Notiz",
+        projekt: "Projekt",
+        staff: "Staff",
+      },
+      form: {
+        titel: "Credits buchen",
+        delta: "Änderung (-100 bis 100, nicht 0)",
+        notiz: "Notiz (Pflicht)",
+        buchen: "Buchen",
+        invalid: "Gib eine ganze Zahl von -100 bis 100 (nicht 0) und eine Notiz mit bis zu 500 Zeichen ein.",
+        saved: "Credits gebucht.",
+      },
     },
     measurements: {
       title: "Messläufe",

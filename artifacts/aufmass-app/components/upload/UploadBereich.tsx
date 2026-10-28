@@ -12,6 +12,7 @@ import type { Dictionary } from "@/i18n";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/components/ui/hilfen";
 import { AblehnungsModal } from "@/components/upload/AblehnungsModal";
+import { KeineCreditsHinweis } from "@/components/credits/KeineCreditsHinweis";
 import {
   entferneDateiAction,
   entferneDateienAction,
@@ -35,7 +36,8 @@ interface LaufenderUpload {
 export interface UploadBereichProps {
   projektId: string;
   initialeDateien: DateiInfo[];
-  initialeQualitaet: "standard" | "premium";
+  guthaben: number;
+  supportEmail?: string | null;
   initialesReferenzObjekt: string;
   initialerReferenzWert: string;
   initialeReferenzEinheit: string;
@@ -79,7 +81,8 @@ function dateiEndungLabel(name: string): string {
 export function UploadBereich({
   projektId,
   initialeDateien,
-  initialeQualitaet,
+  guthaben,
+  supportEmail,
   initialesReferenzObjekt,
   initialerReferenzWert,
   initialeReferenzEinheit,
@@ -93,9 +96,6 @@ export function UploadBereich({
   const [uploadFehler, setUploadFehler] = useState<string[]>([]);
   const [dragAktiv, setDragAktiv] = useState(false);
 
-  const [qualitaet, setQualitaet] = useState<"standard" | "premium">(
-    initialeQualitaet,
-  );
   const [referenzObjekt, setReferenzObjekt] = useState(
     initialesReferenzObjekt,
   );
@@ -228,9 +228,12 @@ export function UploadBereich({
       setStartFehler(t.fehler.referenzUnvollstaendig);
       return;
     }
+    if (guthaben <= 0) {
+      setStartFehler(t.fehler.keineCredits);
+      return;
+    }
     setStartLaeuft(true);
     const ergebnis = await starteMessungAction(projektId, {
-      quality: qualitaet,
       referenceObject: referenzObjekt,
       referenceValue: referenzWert,
       referenceUnit: referenzEinheit,
@@ -415,45 +418,6 @@ export function UploadBereich({
         </div>
       ) : null}
 
-      {/* Messqualität */}
-      <section>
-        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-schrift-sekundaer">
-          {t.qualitaetLabel}
-        </p>
-        <div className="mt-2.5 grid grid-cols-1 overflow-hidden rounded-[14px] border border-linie bg-flaeche sm:grid-cols-2">
-          {(
-            [
-              ["standard", t.qualitaetStandard, t.qualitaetStandardHinweis],
-              ["premium", t.qualitaetPremium, t.qualitaetPremiumHinweis],
-            ] as const
-          ).map(([wert, titel, hinweis], index) => (
-            <button
-              key={wert}
-              type="button"
-              onClick={() => setQualitaet(wert)}
-              aria-pressed={qualitaet === wert}
-              className={cn(
-                "flex flex-col items-start gap-1 px-[18px] py-3.5 text-left transition",
-                index === 1 && "border-t border-linie sm:border-l sm:border-t-0",
-                qualitaet === wert
-                  ? "bg-akzent/5 ring-[1.5px] ring-inset ring-akzent"
-                  : "hover:bg-hintergrund",
-              )}
-            >
-              <span
-                className={cn(
-                  "text-sm font-semibold",
-                  qualitaet === wert ? "text-akzent" : "text-schrift",
-                )}
-              >
-                {titel}
-              </span>
-              <span className="text-xs text-schrift-sekundaer">{hinweis}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-
       {/* Referenzmaß (optional) */}
       <section>
         <p className="text-sm font-semibold text-schrift">
@@ -520,10 +484,13 @@ export function UploadBereich({
             {startFehler}
           </p>
         ) : null}
+        {guthaben <= 0 ? (
+          <KeineCreditsHinweis t={t.credits} supportEmail={supportEmail} />
+        ) : null}
         <div>
           <Button
             variante="primaer"
-            disabled={startLaeuft || uploadsAktiv}
+            disabled={startLaeuft || uploadsAktiv || guthaben <= 0}
             onClick={() => void starten()}
             className="px-7 py-3.5 text-[15px]"
           >

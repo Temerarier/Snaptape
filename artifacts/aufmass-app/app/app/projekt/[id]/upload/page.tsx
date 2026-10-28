@@ -1,5 +1,5 @@
 // Upload-Seite eines Projekts (Etappe 1): Fotos & Plan-PDFs hochladen,
-// Messqualität wählen, optional ein Referenzmaß angeben und die Messung
+// optional ein Referenzmaß angeben und die Messung
 // starten. Layout nach docs/upload-reference.html (760-px-Spalte).
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -10,6 +10,7 @@ import { requireUser } from "@/lib/auth/session";
 import { UploadBereich } from "@/components/upload/UploadBereich";
 import { ProjektTitelInput } from "@/components/projekte/ProjektTitelInput";
 import type { DateiInfo } from "@/lib/upload/actions";
+import { holeGuthaben } from "@/lib/credits/service";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -48,6 +49,7 @@ export default async function UploadPage({
     hatVorschau: zeile.previewPath !== null,
   }));
 
+  const guthaben = await holeGuthaben(user.id);
   const dict = getDictionary(toLocale(user.locale));
   const t = dict.upload;
 
@@ -86,7 +88,8 @@ export default async function UploadPage({
         <UploadBereich
           projektId={projekt.id}
           initialeDateien={dateien}
-          initialeQualitaet={projekt.quality}
+          guthaben={guthaben}
+          supportEmail={process.env.SUPPORT_EMAIL || null}
           initialesReferenzObjekt={projekt.referenceObject ?? ""}
           initialerReferenzWert={
             projekt.referenceValue !== null ? String(projekt.referenceValue) : ""

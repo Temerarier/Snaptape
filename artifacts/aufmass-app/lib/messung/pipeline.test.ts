@@ -5,6 +5,7 @@ const mocks = vi.hoisted(() => ({
   validateMeasurement: vi.fn(),
   updateReturning: vi.fn(),
   insertValues: vi.fn(),
+  erstatte: vi.fn(),
 }));
 
 vi.mock("drizzle-orm", () => ({
@@ -14,6 +15,14 @@ vi.mock("drizzle-orm", () => ({
 
 vi.mock("@workspace/db", () => ({
   db: {
+    transaction: async (fn: (tx: unknown) => unknown) => fn({
+      select: () => ({ from: () => ({ where: () => Object.assign(Promise.resolve([{ userId: "owner" }]), { for: () => Promise.resolve([]) }) }) }),
+      update: () => ({ set: () => ({ where: () => ({ returning: mocks.updateReturning }) }) }),
+      insert: () => ({ values: (value: unknown) => {
+        mocks.insertValues(value);
+        return { returning: async () => [{ id: "run" }] };
+      } }),
+    }),
     update: vi.fn(() => ({
       set: vi.fn(() => ({
         where: vi.fn(() => ({
@@ -26,12 +35,14 @@ vi.mock("@workspace/db", () => ({
     })),
   },
   measureRunsTable: {},
+  usersTable: {},
   projectsTable: {
     id: "id",
     currentRunId: "currentRunId",
     status: "status",
   },
 }));
+vi.mock("@/lib/credits/service", () => ({ erstatteMessung: mocks.erstatte }));
 
 vi.mock("@workspace/measurement", () => ({
   validateMeasurement: mocks.validateMeasurement,
@@ -62,6 +73,7 @@ beforeEach(() => {
     .mockReset()
     .mockResolvedValue([{ id: laufArgs.projektId }]);
   mocks.insertValues.mockReset().mockResolvedValue(undefined);
+  mocks.erstatte.mockReset().mockResolvedValue(undefined);
 });
 
 afterEach(() => {
@@ -99,6 +111,31 @@ describe("schemaVersionFuerProtokoll", () => {
 });
 
 describe("Messlauf-Protokoll", () => {
+  it("refunds only the still-current failed run", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    mocks.standardExtraktor.mockRejectedValue(new Error("forced failure"));
+    await fuehreMessLaufAus({ ...laufArgs, creditLedgerId: "charge" });
+    expect(mocks.erstatte).toHaveBeenCalledWith(expect.anything(), "charge", "run", "measurement failed");
+  });
+  it("does not refund a superseded failed run", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    mocks.standardExtraktor.mockRejectedValue(new Error("forced failure"));
+    mocks.updateReturning.mockResolvedValue([]);
+    await fuehreMessLaufAus({ ...laufArgs, creditLedgerId: "charge" });
+    expect(mocks.erstatte).not.toHaveBeenCalled();
+  });
+  it("never refunds a successful run", async () => {
+    mocks.standardExtraktor.mockResolvedValue({ roh: { meta: { schema_version: "1.7" } } });
+    mocks.validateMeasurement.mockReturnValue({ valid: true });
+    await fuehreMessLaufAus({ ...laufArgs, creditLedgerId: "charge" });
+    expect(mocks.erstatte).not.toHaveBeenCalled();
+  });
+  it("does not write model_ready with null even if validator accepts it", async () => {
+    mocks.standardExtraktor.mockResolvedValue({ roh: null });
+    mocks.validateMeasurement.mockReturnValue({ valid: true });
+    await fuehreMessLaufAus(laufArgs);
+    expect(mocks.insertValues).toHaveBeenCalledWith(expect.objectContaining({ outcome: "failed", errors: ["Measurement returned null"] }));
+  });
   it("speichert meta.schema_version des validierten Measurements", async () => {
     mocks.standardExtraktor.mockResolvedValue({
       roh: {

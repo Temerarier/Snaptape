@@ -1,0 +1,51 @@
+{
+  "forcedFailure": {
+    "projectId": "46a4e4db-7bf9-4bbf-bf1e-33650ea11854",
+    "status": "failed",
+    "entries": [
+      {
+        "delta": -1,
+        "reason": "measurement",
+        "note": null
+      },
+      {
+        "delta": 1,
+        "reason": "refund",
+        "note": "measurement failed"
+      }
+    ]
+  },
+  "timeout": {
+    "projectId": "63e88349-af3a-47f2-a26f-298f13847cb5",
+    "status": "failed",
+    "errors": [
+      "Measurement timed out after 60 minutes"
+    ],
+    "runRows": 1,
+    "entries": [
+      {
+        "delta": -1,
+        "reason": "measurement",
+        "note": null
+      },
+      {
+        "delta": 1,
+        "reason": "refund",
+        "note": "timeout"
+      }
+    ]
+  },
+  "young": {
+    "projectId": "d49dcb4a-6c6f-4eed-97f9-c2f896d23d90",
+    "statusBeforeFinalization": "processing"
+  },
+  "nullMeasurement": {
+    "projectId": "62e7a740-378a-4451-86d7-89ed4fa6f45f",
+    "status": "failed"
+  },
+  "balance": {
+    "before": 1,
+    "after": 1
+  },
+  "pass": true
+}

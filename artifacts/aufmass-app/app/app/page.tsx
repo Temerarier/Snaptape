@@ -6,6 +6,9 @@ import { requireUser } from "@/lib/auth/session";
 import { NewProjectDialog } from "@/components/projekte/NewProjectDialog";
 import { ProjectCard } from "@/components/projekte/ProjectCard";
 import { SortSelect } from "@/components/projekte/SortSelect";
+import { CreditsPill } from "@/components/credits/CreditsPill";
+import { holeGuthaben } from "@/lib/credits/service";
+import { raeumeHaengendeMessungenAuf } from "@/lib/messung/aufraeumen";
 
 // Reihenfolge folgt der Status-Maschine (Etappe 1); die alten Werte
 // reviewing/ready bleiben, bis der Viewer-Fluss migriert ist.
@@ -48,6 +51,9 @@ export default async function ProjectListPage({
   }>;
 }) {
   const user = await requireUser();
+  await raeumeHaengendeMessungenAuf(user.id);
+  const guthaben = await holeGuthaben(user.id);
+  const supportEmail = process.env.SUPPORT_EMAIL || null;
   const params = await searchParams;
   const query = (params.q ?? "").trim();
   const showArchive = params.archiv === "1";
@@ -106,6 +112,9 @@ export default async function ProjectListPage({
           {t.title}
         </h1>
         <p className="text-sm text-schrift-tertiaer">{anzahlText}</p>
+        <div className="ml-auto">
+          <CreditsPill label={getDictionary(locale).upload.credits.pill} guthaben={guthaben} />
+        </div>
       </div>
 
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
@@ -177,11 +186,19 @@ export default async function ProjectListPage({
           ) : (
             <>
               <h2 className="text-lg font-semibold text-schrift">
-                {t.emptyTitle}
+                {guthaben <= 0 ? t.willkommenTitel : t.emptyTitle}
               </h2>
               <p className="mt-1 max-w-md text-schrift-sekundaer">
-                {t.emptyText}
+                {guthaben <= 0 ? t.willkommenKeineCredits : t.emptyText}
               </p>
+              {guthaben <= 0 && supportEmail ? (
+                <a
+                  href={`mailto:${supportEmail}`}
+                  className="mt-2 text-sm font-medium text-akzent underline-offset-4 hover:underline"
+                >
+                  {t.willkommenSupport} {supportEmail}.
+                </a>
+              ) : null}
               <div className="mt-6">
                 <NewProjectDialog ctaLabel={t.emptyCta} />
               </div>

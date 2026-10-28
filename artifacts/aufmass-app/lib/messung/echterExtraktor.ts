@@ -16,11 +16,10 @@ import {
   validiereUndAssembliere,
 } from "./berechnung";
 import {
-  MODELL_IDS,
-  rufeExtraktionsModell,
+  MESS_MODELL,
+  rufeMessModell,
   schaetzeKostenUsd,
   type BildTeil,
-  type Qualitaet,
 } from "./modelle";
 import {
   baueRepairSystemText,
@@ -195,25 +194,24 @@ function istDegeneriert(roh: unknown): boolean {
 export async function extrahiereEcht(
   dateien: ProjectFile[],
   klassifizierung: ProjectClassification,
-  optionen: { quality: Qualitaet; referenz: NutzerReferenz | null },
+  optionen: { quality: "standard" | "premium"; referenz: NutzerReferenz | null },
 ): Promise<ExtraktionsErgebnis> {
   const route = bestimmeRoute(klassifizierung);
   const system = baueSystemText(route, optionen.referenz);
   const bilder = await baueBildTeile(dateien);
   const triage = baueTriageFakten(klassifizierung, dateien);
-  const model = MODELL_IDS[optionen.quality];
+  const model = MESS_MODELL;
 
   let inputTokens = 0;
   let outputTokens = 0;
   let retryUsed = false;
   let repairUsed = false;
 
-  const rufeAb = async (temperature: number) => {
-    const antwort = await rufeExtraktionsModell(optionen.quality, {
+  const rufeAb = async () => {
+    const antwort = await rufeMessModell({
       system,
       userText: triage,
       bilder,
-      temperature,
     });
     inputTokens += antwort.inputTokens;
     outputTokens += antwort.outputTokens;
@@ -221,7 +219,7 @@ export async function extrahiereEcht(
   };
 
   // 1. Extraktion; degenerierte Ausgabe → EIN Retry mit frischem Sampling.
-  let text = await rufeAb(0.2);
+  let text = await rufeAb();
   let roh: unknown | null = null;
   let parseFehler: string | null = null;
   try {
@@ -231,7 +229,7 @@ export async function extrahiereEcht(
   }
   if (roh !== null && istDegeneriert(roh)) {
     retryUsed = true;
-    text = await rufeAb(1);
+    text = await rufeAb();
     roh = null;
     parseFehler = null;
     try {
@@ -249,7 +247,7 @@ export async function extrahiereEcht(
       route,
       inputTokens,
       outputTokens,
-      costUsd: schaetzeKostenUsd(optionen.quality, inputTokens, outputTokens),
+      costUsd: schaetzeKostenUsd(inputTokens, outputTokens),
       retryUsed,
       repairUsed,
     });
@@ -262,11 +260,10 @@ export async function extrahiereEcht(
     const repairText =
       `${REPAIR_VORTEXT}${parseFehler}\n\n${REPAIR_AUSGABE_MARKER}\n` +
       text.slice(0, REPAIR_MAX_ZEICHEN);
-    const antwort = await rufeExtraktionsModell(optionen.quality, {
+    const antwort = await rufeMessModell({
       system: repairSystem,
       userText: repairText,
       bilder: [],
-      temperature: 0,
     });
     inputTokens += antwort.inputTokens;
     outputTokens += antwort.outputTokens;
@@ -297,7 +294,7 @@ export async function extrahiereEcht(
     route,
     inputTokens,
     outputTokens,
-    costUsd: schaetzeKostenUsd(optionen.quality, inputTokens, outputTokens),
+    costUsd: schaetzeKostenUsd(inputTokens, outputTokens),
     retryUsed,
     repairUsed,
     zusammenfassung: geprueft.summary,

@@ -32,6 +32,11 @@ export default async function AdminLayout({
           <span className="rounded-full border border-linie bg-hintergrund px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-schrift-tertiaer">
             {dict.admin.navLink}
           </span>
+          <nav className="flex items-center gap-3 text-sm">
+            <Link href="/admin/users" className="text-schrift-sekundaer hover:text-schrift">
+              {dict.admin.users.navLink}
+            </Link>
+          </nav>
           <div className="flex-1" />
           <Link
             href="/app"

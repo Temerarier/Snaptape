@@ -72,7 +72,7 @@ export const projectsTable = pgTable("projects", {
   status: projectStatusEnum("status").notNull().default("draft"),
   paid: boolean("paid").notNull().default(false),
   // Upload-Einstellungen (Etappe 1).
-  quality: measureQualityEnum("quality").notNull().default("standard"),
+  quality: measureQualityEnum("quality").notNull().default("premium"),
   // Referenzobjekt als Freitext (z. B. "entry door height") – kein
   // Foto-Bezug; die Pipeline findet das Objekt selbst in den Fotos.
   referenceObject: text("reference_object"),
@@ -88,6 +88,8 @@ export const projectsTable = pgTable("projects", {
   measurement: jsonb("measurement"),
   measurementErrors: jsonb("measurement_errors").$type<string[] | null>(),
   currentRunId: uuid("current_run_id"),
+  processingSince: timestamp("processing_since", { withTimezone: true }),
+  currentCreditLedgerId: uuid("current_credit_ledger_id"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

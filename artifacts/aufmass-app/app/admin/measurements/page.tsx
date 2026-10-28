@@ -9,6 +9,7 @@ import { db, measureRunsTable, projectsTable, usersTable } from "@workspace/db";
 import { CopyJsonButton } from "@/components/admin/CopyJsonButton";
 import { getDictionary, toLocale } from "@/i18n";
 import { requireStaff } from "@/lib/auth/staff";
+import { raeumeHaengendeMessungenAuf } from "@/lib/messung/aufraeumen";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,7 @@ function formatFlaecheSqFt(mm2: number | null): string {
 
 export default async function AdminMessungenSeite() {
   const user = await requireStaff();
+  await raeumeHaengendeMessungenAuf();
   const dict = getDictionary(toLocale(user.locale));
   const t = dict.admin.measurements;
 
@@ -53,6 +55,10 @@ export default async function AdminMessungenSeite() {
       projektStatus: projectsTable.status,
       hatMeasurement: projectsTable.measurement,
       kundeEmail: usersTable.email,
+      kundeFirstName: usersTable.firstName,
+      kundeLastName: usersTable.lastName,
+      kundeAuthId: usersTable.replitUserId,
+      kundeId: usersTable.id,
     })
     .from(measureRunsTable)
     .innerJoin(projectsTable, eq(measureRunsTable.projectId, projectsTable.id))
@@ -170,7 +176,7 @@ export default async function AdminMessungenSeite() {
                     {run.projektName}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-schrift-sekundaer">
-                    {run.kundeEmail}
+                    {run.kundeEmail || [run.kundeFirstName, run.kundeLastName].filter(Boolean).join(" ") || run.kundeAuthId || run.kundeId}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-schrift-sekundaer">
                     {run.quality ?? "—"}

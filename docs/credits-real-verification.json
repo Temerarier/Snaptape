@@ -1,0 +1,46 @@
+{
+  "project": {
+    "id": "dbc4aede-680e-4747-992e-0d69a19e1cfa",
+    "status": "failed",
+    "errors": [
+      "Measurement interrupted by workspace restart during verification"
+    ]
+  },
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "runs": [
+    {
+      "id": "e078187b-3060-40c6-a945-2463cdacf903",
+      "model": "claude-opus-5-5",
+      "outcome": "failed",
+      "durationMs": 394094,
+      "inputTokens": null,
+      "outputTokens": null,
+      "costUsd": null
+    }
+  ],
+  "ledger": [
+    {
+      "delta": 2,
+      "reason": "staff_grant",
+      "note": "trial",
+      "projectId": null
+    },
+    {
+      "delta": -1,
+      "reason": "measurement",
+      "note": null,
+      "projectId": "dbc4aede-680e-4747-992e-0d69a19e1cfa"
+    },
+    {
+      "delta": 1,
+      "reason": "refund",
+      "note": "measurement failed",
+      "projectId": "dbc4aede-680e-4747-992e-0d69a19e1cfa"
+    }
+  ],
+  "balance": 2,
+  "usageRecoverable": false,
+  "paidMeasurementStarts": 1,
+  "note": "Workspace restart destroyed the only authorized live stream; no second run was started."
+}

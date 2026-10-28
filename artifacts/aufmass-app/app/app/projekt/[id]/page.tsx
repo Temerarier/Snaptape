@@ -7,6 +7,7 @@ import { requireUser } from "@/lib/auth/session";
 import { AutoRefresh } from "@/components/projekte/AutoRefresh";
 import { StatusBadge } from "@/components/projekte/StatusBadge";
 import { projectMeasurementState } from "@/lib/projekte/measurementState";
+import { raeumeHaengendeMessungenAuf } from "@/lib/messung/aufraeumen";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -32,6 +33,7 @@ export default async function ProjectDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const user = await requireUser();
+  await raeumeHaengendeMessungenAuf(user.id);
   const { id } = await params;
 
   if (!UUID_PATTERN.test(id)) notFound();

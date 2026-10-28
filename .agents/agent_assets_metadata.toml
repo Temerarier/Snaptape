@@ -224,3 +224,17 @@ mtime_ms = 1792978095014
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/2bc88d20-87a0-4317-ad0b-3ff19df817d6/79c01a59-b856-4507-92c4-bca18beaca13"
 storage_version_token = "1792978111558186"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "ZfCzRZFQjmE8DGRb_y0OQ"
+uri = "file://docs/trial-readiness-verification.md"
+type = "text"
+title = "SnapTape – Prüfbericht"
+description = "Umsetzung, tatsächliche Testbelege, Anbieter-Schritte und die zwei offenen Abnahmegrenzen."
+logical_id = "0851cebc-7887-4244-a82e-7b1677b0ec9b"
+content_hash = "sha256:06982439a300f9e94857a83ecd2199f07a312958df1e445cbcb41c9ad777083c"
+size = 12272
+mtime_ms = 1793200985906
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/0851cebc-7887-4244-a82e-7b1677b0ec9b/58885c85-6714-4830-9811-a20557b245a0"
+storage_version_token = "1793201104770532"
+content_type = "text/markdown"

@@ -6,6 +6,7 @@ import { istStaff } from "@/lib/auth/staff";
 import { HeaderSuche } from "@/components/projekte/HeaderSuche";
 import { NewProjectButton } from "@/components/projekte/NewProjectButton";
 import { UserMenu } from "@/components/auth/UserMenu";
+import { nutzerName } from "@/lib/auth/display";
 
 export default async function AppLayout({
   children,
@@ -45,7 +46,7 @@ export default async function AppLayout({
               </Link>
             ) : null}
             <NewProjectButton />
-            <UserMenu email={user.email} />
+            <UserMenu email={nutzerName(user)} />
           </div>
         </div>
       </header>

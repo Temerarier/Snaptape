@@ -27,6 +27,7 @@ export const enUS = {
     storageMissing: "Object storage not configured",
   },
   auth: {
+    signInOrCreate: "Sign in or create account",
     loginTitle: "Welcome back.",
     loginSubtitle: "Sign in to access your projects and reports.",
     registerTitle: "Measure houses from photos.",
@@ -75,6 +76,9 @@ export const enUS = {
     emptyText:
       "Create your first project – upload photos and plans later and get measurements and a 3D model.",
     emptyCta: "Create your first project",
+    willkommenTitel: "Welcome to Snaptape",
+    willkommenKeineCredits: "You have no measurement credits yet. Trial accounts are activated personally - we'll be in touch shortly.",
+    willkommenSupport: "Questions? Email",
     emptyArchiveTitle: "Archive is empty",
     emptyArchiveText: "Projects you archive will appear here.",
     noSearchResultsTitle: "No results",
@@ -134,7 +138,7 @@ export const enUS = {
       inch: "inch",
       feet: "feet",
     },
-    startButton: "Start measurement",
+    startButton: "Start measurement · 1 credit",
     startLaeuft: "Saving …",
     pruefungLaeuft: "Checking your files …",
     ablehnung: {
@@ -171,6 +175,13 @@ export const enUS = {
       klassifizierung: "The file check failed. Please try again in a moment.",
       generisch: "Something went wrong. Please try again.",
       keineBilderGewaehlt: "No images selected for measurement.",
+      keineCredits: "You have no measurement credits left. Contact support to add more.",
+    },
+    credits: {
+      pill: "Credits:",
+      keineTitel: "No measurement credits left",
+      keineText: "You have no measurement credits yet. Trial accounts are activated personally - we'll be in touch shortly.",
+      supportLink: "Questions? Email",
     },
   },
   viewer: {
@@ -348,6 +359,41 @@ export const enUS = {
         provisional: "Provisional",
         no_data: "No Data",
       }
+    },
+    users: {
+      title: "Users",
+      subtitle: "All accounts with credits, measurements and ledger. Hanging measurements are cleaned up on load.",
+      navLink: "Users",
+      leer: "No users yet.",
+      spalten: {
+        nutzer: "User",
+        erstellt: "Created",
+        letzterLogin: "Last login",
+        guthaben: "Balance",
+        fertig: "Ready",
+        fehlgeschlagen: "Failed",
+        kosten: "Cost",
+        letzteMessung: "Last measurement",
+      },
+      nie: "never",
+      ledgerAnzeigen: "Ledger",
+      ledgerLeer: "No ledger entries.",
+      ledger: {
+        zeitpunkt: "Time",
+        delta: "Change",
+        grund: "Reason",
+        notiz: "Note",
+        projekt: "Project",
+        staff: "Staff",
+      },
+      form: {
+        titel: "Book credits",
+        delta: "Change (-100 to 100, not 0)",
+        notiz: "Note (required)",
+        buchen: "Book",
+        invalid: "Enter a nonzero whole number from -100 to 100 and a note (up to 500 characters).",
+        saved: "Credits booked.",
+      },
     },
     measurements: {
       title: "Measurement runs",

@@ -14,6 +14,7 @@ import {
 } from "@workspace/db";
 import { getDictionary, toLocale, type Dictionary } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
+import { holeGuthaben, verbucheMessung, KeineCreditsFehler } from "@/lib/credits/service";
 import {
   erzeugeUploadUrl,
   getPrivateObjectDir,
@@ -118,7 +119,7 @@ async function invalidiereKlassifizierung(projekt: {
   // und kann kein Ergebnis für inzwischen geänderte Dateien speichern.
   const zurueckgesetzt = await db
     .update(projectsTable)
-    .set({ status: "files_uploaded", classification: null, currentRunId: null })
+    .set({ status: "files_uploaded", classification: null, currentRunId: null, processingSince: null, currentCreditLedgerId: null })
     .where(
       and(
         eq(projectsTable.id, projekt.id),
@@ -424,13 +425,17 @@ function ablehnungsGrund(
 export async function starteMessungAction(
   projektId: string,
   eingabe: {
-    quality: string;
     referenceObject: string;
     referenceValue: string;
     referenceUnit: string;
   },
 ): Promise<StartErgebnis> {
   const { user, t } = await uploadWoerterbuch();
+  // This guard precedes every paid classification request (including staff).
+  if (await holeGuthaben(user.id) < 1) {
+    console.info("Measurement start blocked: no credits; classification not called");
+    return { error: t.fehler.keineCredits };
+  }
   const projekt = await ladeEigenesProjekt(projektId, user.id);
   if (!projekt) return { error: t.fehler.generisch };
 
@@ -447,11 +452,7 @@ export async function starteMessungAction(
     return { error: t.fehler.statusUngueltig };
   }
 
-  // Keine stille Korrektur unbekannter Werte (explizit scheitern).
-  if (eingabe.quality !== "standard" && eingabe.quality !== "premium") {
-    return { error: t.fehler.generisch };
-  }
-  const quality = eingabe.quality;
+  const quality = "premium" as const;
 
   const referenzText = String(eingabe.referenceObject ?? "")
     .trim()
@@ -600,12 +601,18 @@ export async function starteMessungAction(
     raw: ergebnis.raw,
     classifiedAt: new Date().toISOString(),
   };
-  const abgeschlossen = await db
+  let creditLedgerId: string;
+  try {
+  creditLedgerId = await db.transaction(async (tx) => {
+  const ledgerId = await verbucheMessung(user.id, projektId, tx);
+  const abgeschlossen = await tx
     .update(projectsTable)
     .set({
       status: "processing",
       classification: klassifizierung,
       currentRunId: runId,
+      currentCreditLedgerId: ledgerId,
+      processingSince: new Date(),
       measurement: null,
       measurementErrors: null,
     })
@@ -616,7 +623,17 @@ export async function starteMessungAction(
       ),
     )
     .returning({ id: projectsTable.id });
-  if (abgeschlossen.length === 0) {
+  if (abgeschlossen.length === 0) throw new Error("MEASUREMENT_START_CONFLICT");
+  return ledgerId;
+  });
+  } catch (error) {
+    if (error instanceof KeineCreditsFehler) {
+      await db.update(projectsTable).set({ status: projekt.status })
+        .where(and(eq(projectsTable.id, projektId), eq(projectsTable.status, "files_uploaded")));
+      revalidiereProjekt(projektId);
+      return { error: t.fehler.keineCredits };
+    }
+    if (!(error instanceof Error && error.message === "MEASUREMENT_START_CONFLICT")) throw error;
     revalidiereProjekt(projektId);
     return { error: t.fehler.statusUngueltig };
   }
@@ -629,6 +646,7 @@ export async function starteMessungAction(
       projektId,
       runId,
       quality,
+      creditLedgerId,
       klassifizierung,
       dateien: dateitenMitKlassi,
     }),

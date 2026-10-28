@@ -7,7 +7,8 @@ import { notFound } from "next/navigation";
 import type { User } from "@workspace/db";
 import { requireUser } from "@/lib/auth/session";
 
-export function istStaff(email: string): boolean {
+export function istStaff(email: string | null): boolean {
+  if (!email) return false;
   const roh = process.env.STAFF_EMAILS ?? "";
   const liste = roh
     .split(",")
