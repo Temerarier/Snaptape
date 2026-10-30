@@ -17,6 +17,7 @@ export interface MeasurementColorLike {
 }
 
 export interface MeasurementFaceLike {
+  readonly material?: string | null;
   readonly id?: string;
   readonly face_class?: string;
   readonly elevation?: string | null;

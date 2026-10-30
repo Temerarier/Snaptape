@@ -26,6 +26,39 @@ export async function checkVarianteA(browser,c,shots) {
     assert.ok(render.triangles>0 && render.glError===0 && !render.contextLost,JSON.stringify(render));
     result.views.push({view,camera,render,screenshot:await capture(view)});
   }
+  if(c.presentationOnly) {
+    result.colors=await browser.evaluate("window.inventoryColors()");
+    assert.ok(result.colors.walls.length && result.colors.roofs.length,"Missing colored roof/walls");
+    assert.ok(result.colors.walls.every(w=>/^#[0-9a-f]{6}$/i.test(w.hex) && !w.neutral));
+    assert.ok(result.colors.roofs.every(w=>/^#[0-9a-f]{6}$/i.test(w.hex) && !w.neutral));
+    const link=await browser.evaluate(`(()=>{const a=document.querySelector('a[aria-label="Projects"]');return {href:a?.getAttribute("href"),text:a?.innerText}})()`);
+    assert.equal(link.href,"/app");
+    assert.ok(link.text.includes("Projects"));
+    await browser.send("Emulation.setDeviceMetricsOverride",{width:390,height:844,deviceScaleFactor:1,mobile:true});
+    await pause(700);
+    result.mobileScreenshot=await capture("ready-390");
+    result.mobile=await browser.evaluate(`(()=>{const a=document.querySelector('a[aria-label="Projects"]');return {overflow:document.documentElement.scrollWidth>innerWidth,backText:a?.innerText,backLabel:a?.getAttribute("aria-label")}})()`);
+    assert.equal(result.mobile.overflow,false);
+    assert.equal(result.mobile.backText.trim(),"←");
+    if(c.id==="leipzig-villa") {
+      await browser.evaluate(`window.mountInventory(${JSON.stringify(c.id)},${JSON.stringify(c.measurement)},${JSON.stringify(c.model3d)},"pending")`);
+      await pause(300);
+      assert.ok(await browser.evaluate(`!!document.querySelector('[data-model3d-state="pending"] .animate-spin')`));
+      assert.ok(await browser.evaluate(`document.body.innerText.includes("This usually takes 1–3 minutes.")`));
+      result.pendingMobileScreenshot=await capture("pending-390");
+      await browser.send("Emulation.setDeviceMetricsOverride",{width:1280,height:900,deviceScaleFactor:1,mobile:false});
+      await pause(300);
+      result.pendingDesktopScreenshot=await capture("pending-desktop");
+      await waitUntil(browser,"window.inventoryRefreshes>0",12000);
+      result.pendingRefreshes=await browser.evaluate("window.inventoryRefreshes");
+      await browser.evaluate(`window.mountInventory(${JSON.stringify(c.id)},${JSON.stringify(c.measurement)},${JSON.stringify(c.model3d)},"ready")`);
+      await waitUntil(browser,"window.inventoryState().webgl==='ready' && window.inventoryRender?.triangles>0",20000);
+      assert.equal(await browser.evaluate(`!!document.querySelector('[data-model3d-state="pending"]')`),false);
+      result.readyAfterPendingScreenshot=await capture("ready-after-pending");
+    }
+    await browser.send("Emulation.setDeviceMetricsOverride",{width:1280,height:900,deviceScaleFactor:1,mobile:false});
+    return result;
+  }
   try {
   if(c.id==="leipzig-villa") {
     await browser.evaluate("document.querySelector('[data-control=\"conditions\"]').click()");

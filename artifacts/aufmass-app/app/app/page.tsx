@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { and, asc, desc, eq, ilike, isNull, isNotNull, or } from "drizzle-orm";
-import { db, projectsTable, type ProjectStatus } from "@workspace/db";
+import { and, asc, desc, eq, ilike, isNull, isNotNull, or, sql } from "drizzle-orm";
+import { db, projectsTable } from "@workspace/db";
 import { getDictionary, toLocale } from "@/i18n";
 import { requireUser } from "@/lib/auth/session";
 import { NewProjectDialog } from "@/components/projekte/NewProjectDialog";
@@ -10,30 +10,16 @@ import { CreditsPill } from "@/components/credits/CreditsPill";
 import { holeGuthaben } from "@/lib/credits/service";
 import { raeumeHaengendeMessungenAuf } from "@/lib/messung/aufraeumen";
 
-// Reihenfolge folgt der Status-Maschine (Etappe 1); die alten Werte
-// reviewing/ready bleiben, bis der Viewer-Fluss migriert ist.
-const STATUS_WERTE: readonly ProjectStatus[] = [
-  "draft",
-  "files_uploaded",
-  "processing",
-  "model_ready",
-  "reviewing",
-  "ready",
-  "failed",
-];
-
 type SortWert = "neueste" | "aelteste";
 
 // Baut die Listen-URL und erhält dabei Suche/Sortierung/Archiv-Ansicht.
 function listenUrl(teile: {
   q: string;
-  status: ProjectStatus | null;
   sort: SortWert;
   archiv: boolean;
 }): string {
   const p = new URLSearchParams();
   if (teile.q) p.set("q", teile.q);
-  if (teile.status) p.set("status", teile.status);
   if (teile.sort !== "neueste") p.set("sort", teile.sort);
   if (teile.archiv) p.set("archiv", "1");
   const s = p.toString();
@@ -57,9 +43,6 @@ export default async function ProjectListPage({
   const params = await searchParams;
   const query = (params.q ?? "").trim();
   const showArchive = params.archiv === "1";
-  const statusFilter = STATUS_WERTE.includes(params.status as ProjectStatus)
-    ? (params.status as ProjectStatus)
-    : null;
   const sort: SortWert = params.sort === "aelteste" ? "aelteste" : "neueste";
   const locale = toLocale(user.locale);
   const t = getDictionary(locale).projects;
@@ -70,10 +53,6 @@ export default async function ProjectListPage({
       ? isNotNull(projectsTable.archivedAt)
       : isNull(projectsTable.archivedAt),
   ];
-
-  if (statusFilter) {
-    conditions.push(eq(projectsTable.status, statusFilter));
-  }
 
   if (query.length > 0) {
     const pattern = `%${query.replace(/[%_\\]/g, "\\$&")}%`;
@@ -89,6 +68,17 @@ export default async function ProjectListPage({
     .select({
       id: projectsTable.id, name: projectsTable.name, adresse: projectsTable.adresse,
       status: projectsTable.status, archivedAt: projectsTable.archivedAt, createdAt: projectsTable.createdAt,
+      // One scalar subquery, not one DB request per card. The delivery route
+      // still checks the session and ownership; never expose storage paths.
+      previewUrl: sql<string | null>`(
+        select case
+          when f.kind = 'pdf' and jsonb_array_length(coalesce(f.page_image_paths, '[]'::jsonb)) > 0
+            then '/dateien/' || f.id || '?v=seite&nr=1'
+          when f.preview_path is not null then '/dateien/' || f.id || '?v=vorschau'
+          else null end
+        from project_files f where f.project_id = ${sql.identifier("projects")}.${sql.identifier("id")}
+        order by f.created_at asc, f.id asc limit 1
+      )`,
     })
     .from(projectsTable)
     .where(and(...conditions))
@@ -103,11 +93,6 @@ export default async function ProjectListPage({
     projects.length === 1 ? t.anzahlEinzahl : t.anzahlMehrzahl
   }`;
 
-  const chips: { status: ProjectStatus | null; label: string }[] = [
-    { status: null, label: t.filterAlle },
-    ...STATUS_WERTE.map((s) => ({ status: s as ProjectStatus | null, label: t.status[s] })),
-  ];
-
   return (
     <main className="mx-auto max-w-6xl px-6 py-8">
       <div className="flex flex-wrap items-baseline gap-3">
@@ -121,41 +106,15 @@ export default async function ProjectListPage({
       </div>
 
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          {chips.map((chip) => {
-            const aktiv = chip.status === statusFilter;
-            return (
-              <Link
-                key={chip.label}
-                href={listenUrl({
-                  q: query,
-                  status: chip.status,
-                  sort,
-                  archiv: showArchive,
-                })}
-                aria-current={aktiv ? "true" : undefined}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
-                  aktiv
-                    ? "bg-akzent text-white shadow-akzent"
-                    : "border border-linie bg-flaeche text-schrift-sekundaer hover:text-schrift"
-                }`}
-              >
-                {chip.label}
-              </Link>
-            );
-          })}
-        </div>
         <div className="flex flex-wrap items-center gap-3">
           <SortSelect
             q={query}
-            status={statusFilter}
             sort={sort}
             archiv={showArchive}
           />
           <Link
             href={listenUrl({
               q: query,
-              status: statusFilter,
               sort,
               archiv: !showArchive,
             })}
@@ -168,7 +127,7 @@ export default async function ProjectListPage({
 
       {projects.length === 0 ? (
         <div className="mt-14 flex flex-col items-center rounded-karte border border-dashed border-linie bg-flaeche px-6 py-16 text-center">
-          {isSearching || statusFilter ? (
+          {isSearching ? (
             <>
               <h2 className="text-lg font-semibold text-schrift">
                 {t.noSearchResultsTitle}

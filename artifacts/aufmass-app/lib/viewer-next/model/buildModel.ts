@@ -151,16 +151,27 @@ function distance(a: Point3, b: Point3): number {
 
 export function colorFor(face: MeasurementFaceLike | null | undefined): ModelColor {
   const color = face?.color ?? {};
-  const confident = color?.confidence !== "low";
   const hex = typeof color?.hex === "string" && /^#[0-9a-f]{6}$/i.test(color.hex)
     ? color.hex
     : null;
-  if (!hex || !confident) {
+  if (!hex) {
+    const walls: Record<string, string> = {
+      stucco: viewerTokens.materialWallStucco,
+      brick: viewerTokens.materialWallBrick,
+      siding: viewerTokens.materialWallSiding,
+      wood: viewerTokens.materialWallWood,
+      concrete: viewerTokens.materialWallConcrete,
+      eifs: viewerTokens.materialWallEifs,
+    };
+    const palette = face?.face_class === "roof_face" ? viewerTokens.materialRoof
+      : face?.face_class === "soffit" ? viewerTokens.materialSoffit
+      : face?.face_class === "fascia" ? viewerTokens.materialFascia
+      : walls[face?.material ?? "unknown"] ?? viewerTokens.materialWallUnknown;
     return {
-      hex: NEUTRAL_HEX,
+      hex: palette,
       secondaryHex: null,
       confidence: color?.confidence ?? null,
-      neutral: true,
+      neutral: false,
     };
   }
   const secondaryHex = typeof color.secondary_hex === "string" &&

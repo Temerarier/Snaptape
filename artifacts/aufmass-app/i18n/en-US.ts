@@ -66,7 +66,7 @@ export const enUS = {
     sortLabel: "Sort:",
     sortNeueste: "Newest first",
     sortAelteste: "Oldest first",
-    thumbnailPlatzhalter: "3D model preview",
+    thumbnailPlatzhalter: "No photos yet",
     kartenMenue: "Open project menu",
     detailsOeffnen: "Project details",
     showArchive: "Show archive",
@@ -160,7 +160,7 @@ export const enUS = {
     messFehler: {
       titel: "Measurement failed",
       hinweis:
-        "The last measurement did not produce a valid result. Check your files and start the measurement again.",
+        "The last measurement did not produce a valid result. Check your files and start again. A new attempt costs 1 credit.",
     },
     fehler: {
       typ: "Only JPG, PNG or HEIC photos and PDF plans are allowed.",
@@ -460,6 +460,8 @@ export const enUS = {
   },
   viewerNext: {
     model3dPending: "3D model is being created …",
+    model3dPendingHint: "This usually takes 1–3 minutes. The measurements on the right are already final.",
+    backToProjects: "Projects",
     model3dUnavailable: "3D model not available. All values in the panel come from the measurement.",
     testHouse: "Test house",
     measurements: "Measurements",

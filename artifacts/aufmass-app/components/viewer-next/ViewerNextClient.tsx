@@ -419,6 +419,10 @@ export function ViewerNextClient({
     >
       <div className="viewer-next-model-section relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         <div className="viewer-next-header flex min-h-[56px] flex-none items-center gap-2 border-b border-linie bg-flaeche px-4 py-2">
+          <a href="/app" aria-label={dict.backToProjects} className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-lg px-2 text-sm font-medium text-akzent">
+            <span aria-hidden="true">←</span>
+            <span className="hidden md:inline">{dict.backToProjects}</span>
+          </a>
           <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
             <div className="truncate text-sm font-semibold">{headerProjectName}</div>
             <div className="font-mono text-xs text-schrift-sekundaer">
@@ -506,7 +510,13 @@ export function ViewerNextClient({
             {model3dStatus === "pending" || model3dStatus === "unavailable" ? (
               <div className="viewer-next-viewport relative flex min-h-0 min-w-0 flex-1 items-center justify-center px-8 text-center text-sm text-schrift-sekundaer"
                 data-model3d-state={model3dStatus} role="status">
-                {model3dStatus === "pending" ? dict.model3dPending : dict.model3dUnavailable}
+                {model3dStatus === "pending" ? (
+                  <div className="max-w-sm" aria-busy="true">
+                    <span className="mx-auto mb-4 block h-8 w-8 animate-spin rounded-full border-2 border-linie border-t-akzent motion-reduce:animate-none" aria-hidden="true" />
+                    <p className="font-semibold text-schrift">{dict.model3dPending}</p>
+                    <p className="mt-2">{dict.model3dPendingHint}</p>
+                  </div>
+                ) : dict.model3dUnavailable}
                 {model3dStatus === "pending" ? <AutoRefresh intervalMs={10000} /> : null}
               </div>
             ) : <ViewerViewport

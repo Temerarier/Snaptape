@@ -378,3 +378,17 @@ mtime_ms = 1793222990146
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/2a3e9bcb-28c3-4585-bc89-b9003fb5d9d2/0c26e05e-a909-4302-834e-b5560b1c3cc7"
 storage_version_token = "1793224018796783"
 content_type = "application/pdf"
+
+[[outputs]]
+id = "JufSJBf2TtejjXYopw7gh"
+uri = "file://generated-artifacts/first-hands-on/snaptape-six-changes-evidence.zip"
+type = "unspecified"
+title = "Six changes — screenshots and acceptance report"
+description = "Front/back views of all six models, mobile views, pending/ready states, and verified photo cards. No model calls or credit use."
+logical_id = "c942f187-9957-4420-ad81-990fe0404990"
+content_hash = "sha256:5b1354127d38ea418dd4b51072dc65f4a829335cfd8a974ed66dcafadf0b6d16"
+size = 5593469
+mtime_ms = 1793372829932
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:abace559-efe4-499d-9533-58f62eb5f7b4/c942f187-9957-4420-ad81-990fe0404990/177d11b7-a1c7-4886-8a1e-832653df0a7f"
+storage_version_token = "1793372839225179"
+content_type = "application/octet-stream"

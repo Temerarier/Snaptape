@@ -9,7 +9,7 @@ export default defineConfig({
     },
   },
   test: {
-    include: ["artifacts/**/*.test.ts", "lib/**/src/**/*.test.ts"],
+    include: ["artifacts/**/*.test.{ts,tsx}", "lib/**/src/**/*.test.ts"],
     exclude: ["**/node_modules/**", "**/.next/**", "**/dist/**"],
   },
 });

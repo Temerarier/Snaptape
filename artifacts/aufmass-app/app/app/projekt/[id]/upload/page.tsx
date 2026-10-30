@@ -11,6 +11,8 @@ import { UploadBereich } from "@/components/upload/UploadBereich";
 import { ProjektTitelInput } from "@/components/projekte/ProjektTitelInput";
 import type { DateiInfo } from "@/lib/upload/actions";
 import { holeGuthaben } from "@/lib/credits/service";
+import { UploadMeasurementProgress } from "@/components/projekte/UploadMeasurementProgress";
+import { raeumeHaengendeMessungenAuf } from "@/lib/messung/aufraeumen";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -23,6 +25,7 @@ export default async function UploadPage({
   const user = await requireUser();
   const { id } = await params;
   if (!UUID_PATTERN.test(id)) notFound();
+  await raeumeHaengendeMessungenAuf(user.id);
 
   const zeilen = await db
     .select()
@@ -68,7 +71,10 @@ export default async function UploadPage({
       />
       <p className="mt-1.5 text-[15px] text-schrift-sekundaer">{t.subtitle}</p>
 
-      {projekt.status === "failed" && projekt.measurementErrors ? (
+      <UploadMeasurementProgress status={projekt.status} viewerHref={`/app/projekt/${id}/viewer`}
+        message={dict.projectDetail.messungLaeuft} />
+
+      {projekt.status === "failed" ? (
         <div className="mt-5 rounded-lg border border-fehler/30 bg-fehler/5 px-4 py-3">
           <p className="text-sm font-semibold text-fehler">
             {t.messFehler.titel}
@@ -77,14 +83,14 @@ export default async function UploadPage({
             {t.messFehler.hinweis}
           </p>
           <ul className="mt-2 list-disc space-y-0.5 pl-5 text-[13px] text-schrift-tertiaer">
-            {projekt.measurementErrors.map((fehler, i) => (
+            {(projekt.measurementErrors ?? []).map((fehler, i) => (
               <li key={i}>{fehler}</li>
             ))}
           </ul>
         </div>
       ) : null}
 
-      <div className="mt-7">
+      {projekt.status !== "processing" ? <div className="mt-7">
         <UploadBereich
           projektId={projekt.id}
           initialeDateien={dateien}
@@ -97,7 +103,7 @@ export default async function UploadPage({
           initialeReferenzEinheit={projekt.referenceUnit ?? ""}
           t={t}
         />
-      </div>
+      </div> : null}
     </main>
   );
 }

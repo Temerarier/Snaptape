@@ -71,6 +71,17 @@ export const viewerTokens = {
 
   // proposed — not derived from reference: preserves buildModel's low-confidence fallback.
   modelNeutral: "#8B9299",
+  // proposed — not derived from reference: material palette for unmeasured colors.
+  materialWallStucco: "#D9D2C5",
+  materialWallBrick: "#9E5A44",
+  materialWallSiding: "#C9CFD3",
+  materialWallWood: "#B08A5B",
+  materialWallConcrete: "#B8B8B4",
+  materialWallEifs: "#E1DCD2",
+  materialWallUnknown: "#CFCBC3",
+  materialRoof: "#4A4F55",
+  materialSoffit: "#E8E6E1",
+  materialFascia: "#F2F1ED",
   // proposed — not derived from reference: preserves buildModel's condition fallback.
   modelConditionFallback: "#D97706",
   // proposed — not derived from reference: preserves buildModel's semantic opening colors.

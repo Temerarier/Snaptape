@@ -8,7 +8,8 @@ import { connectBrowser, pause, waitUntil } from "../../artifacts/aufmass-app/sc
 import { checkVarianteA } from "./viewer-a-checks.mjs";
 const base=process.cwd(),directory=path.join(base,"scripts/inventory");
 const varianteA=process.argv.includes("--variante-a");
-const args=process.argv.slice(2).filter(arg=>arg!=="--variante-a");
+const presentationOnly=process.argv.includes("--presentation");
+const args=process.argv.slice(2).filter(arg=>arg!=="--variante-a" && arg!=="--presentation");
 const inputFile=args[0] ?? path.join(directory,"ready-projects.json");
 const outputFile=varianteA ? args[1]??"generated-artifacts/viewer-a/results.json" : args[0] ? path.join(directory,`${path.basename(inputFile,".json")}-viewer-results.json`) : path.join(directory,"viewer-results.json");
 const require=createRequire(import.meta.url);
@@ -21,6 +22,12 @@ const {outputFiles}=await build({
   alias:{"@":path.join(base,"artifacts/aufmass-app"),"@workspace/measurement":path.join(base,"scripts/diagnose/measurement-browser.ts")},
   nodePaths:[path.join(base,"artifacts/aufmass-app/node_modules")],define:{"process.env.NODE_ENV":'"production"'},
   plugins:[{name:"observe-three",setup(b){
+    if(presentationOnly) {
+      // Isolated host has no Next router. Keep the real AutoRefresh interval,
+      // recording its refresh request rather than navigating this test host.
+      b.onResolve({filter:/^next\/navigation$/},()=>({path:"router",namespace:"inventory-router"}));
+      b.onLoad({filter:/.*/,namespace:"inventory-router"},()=>({contents:`const router={refresh:()=>{window.inventoryRefreshes=(window.inventoryRefreshes||0)+1}};export const useRouter=()=>router;`}));
+    }
     if(varianteA) {
       b.onResolve({filter:/^three\/examples\/jsm\/controls\/OrbitControls\.js$/},()=>({path:"controls",namespace:"inventory-controls"}));
       b.onLoad({filter:/.*/,namespace:"inventory-controls"},()=>({contents:`import {OrbitControls as C} from ${JSON.stringify(ar.resolve("three/examples/jsm/controls/OrbitControls.js"))};export class OrbitControls extends C{constructor(...a){super(...a);window.inventoryControls=this}}`,loader:"js",resolveDir:base}));
@@ -36,7 +43,7 @@ const server=createServer((req,res)=>{res.setHeader("Content-Type",req.url==="/b
 await new Promise(resolve=>server.listen(0,"127.0.0.1",resolve));
 const profile=await mkdtemp("/tmp/snaptape-inventory-chromium-");
 const chromium=spawn("/repl/tools/bin/chromium",["--headless=new","--no-sandbox","--disable-dev-shm-usage","--enable-unsafe-swiftshader","--use-gl=angle","--use-angle=swiftshader","--remote-debugging-address=127.0.0.1","--remote-debugging-port=9223",`--user-data-dir=${profile}`,"--no-first-run","--no-default-browser-check","about:blank"],{stdio:"ignore"});
-const shots=varianteA?"generated-artifacts/viewer-a":"screenshots/inventory-2026-10-25";
+const shots=presentationOnly?"generated-artifacts/first-hands-on":varianteA?"generated-artifacts/viewer-a":"screenshots/inventory-2026-10-25";
 await mkdir(shots,{recursive:true});
 let browser;
 const results=[];
@@ -54,7 +61,7 @@ try{
       Object.assign(r,await browser.evaluate(`window.mountInventory(${JSON.stringify(c.id)},${JSON.stringify(c.measurement)},${JSON.stringify(c.model3d??null)})`));
       if(r.preparation==="viewer" && !r.modelError)await waitUntil(browser,"window.inventoryRender?.triangles>0",20000);
       if(varianteA) {
-        r.checks=await checkVarianteA(browser,c,shots);
+        r.checks=await checkVarianteA(browser,{...c,presentationOnly},shots);
         r.render=await browser.evaluate("window.inventoryRender");
         r.state=await browser.evaluate("window.inventoryState()");
       }

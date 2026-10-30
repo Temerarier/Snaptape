@@ -24,15 +24,15 @@ export function ProjectCard({
   locale,
   t,
 }: {
-  project: Pick<Project, "id" | "name" | "adresse" | "status" | "archivedAt" | "createdAt">;
+  project: Pick<Project, "id" | "name" | "adresse" | "status" | "archivedAt" | "createdAt"> & { previewUrl?: string | null };
   locale: Locale;
   t: Dictionary["projects"];
 }) {
   const isArchived = project.archivedAt !== null;
 
   return (
-    <li className="list-none">
-      <Card className="relative flex h-full flex-col transition hover:shadow-md">
+    <li className="min-w-0 list-none">
+      <Card className="relative flex h-full min-w-0 flex-col transition hover:shadow-md">
         {/* Unsichtbarer Flächen-Link: ganze Karte öffnet das Projekt;
             die Detailseite leitet statusabhängig weiter (Upload/Viewer). */}
         <Link
@@ -40,10 +40,16 @@ export function ProjectCard({
           aria-label={project.name}
           className="absolute inset-0 rounded-karte"
         />
-        <div className="schraffur flex h-40 items-center justify-center overflow-hidden rounded-eingabe border border-linie">
-          <span className="rounded-full bg-flaeche px-3 py-1 font-mono text-xs text-schrift-tertiaer">
-            {t.thumbnailPlatzhalter}
-          </span>
+        <div className="pointer-events-none flex h-40 items-center justify-center overflow-hidden rounded-eingabe border border-linie bg-hintergrund">
+          {project.previewUrl ? (
+            // Protected same-origin file endpoint, including rendered PDF page one.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={project.previewUrl} alt="" loading="lazy" className="h-full w-full object-cover" />
+          ) : (
+            <span className="px-3 py-1 font-mono text-xs text-schrift-tertiaer">
+              {t.thumbnailPlatzhalter}
+            </span>
+          )}
         </div>
         <div className="mt-3 flex items-start justify-between gap-2">
           <h2 className="min-w-0 truncate font-semibold text-schrift">

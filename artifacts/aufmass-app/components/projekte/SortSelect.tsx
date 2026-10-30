@@ -4,17 +4,14 @@
 // Wechsel navigiert sofort und erhält Suche/Filter/Archiv-Ansicht.
 import { useRouter } from "next/navigation";
 import { useId } from "react";
-import type { ProjectStatus } from "@workspace/db";
 import { useDictionary } from "@/i18n/LocaleProvider";
 
 export function SortSelect({
   q,
-  status,
   sort,
   archiv,
 }: {
   q: string;
-  status: ProjectStatus | null;
   sort: "neueste" | "aelteste";
   archiv: boolean;
 }) {
@@ -25,7 +22,6 @@ export function SortSelect({
   function beiWechsel(neuerSort: string) {
     const p = new URLSearchParams();
     if (q) p.set("q", q);
-    if (status) p.set("status", status);
     if (neuerSort !== "neueste") p.set("sort", neuerSort);
     if (archiv) p.set("archiv", "1");
     const s = p.toString();

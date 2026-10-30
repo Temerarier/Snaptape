@@ -13,18 +13,22 @@ const root = createRoot(document.getElementById("root")!);
 const dict = getDictionary("en-US");
 let model: ReturnType<typeof modelFromModel3d>;
 let live: { scene: THREE.Scene; camera: THREE.PerspectiveCamera; renderer: THREE.WebGLRenderer };
-w.mountInventory = (id: string, measurement: any, model3d: any) => {
+w.mountInventory = (id: string, measurement: any, model3d: any, status: "ready" | "pending" = "ready") => {
   w.inventoryRender = null;
   const p = prepareProjectMeasurement(measurement, dict.viewerNext);
   if (p.kind !== "viewer") throw new Error(`Preparation: ${p.kind}`);
   model = modelFromModel3d(model3d, p.measurement, p.derived);
   flushSync(() => root.render(<LocaleProvider locale="en-US" dict={dict}><ProjectViewer key={id}
-    measurement={measurement} model3d={model3d} model3dStatus="ready" projectName={`Acceptance ${id}`}
+    measurement={measurement} model3d={status === "ready" ? model3d : null} model3dStatus={status} projectName={`Acceptance ${id}`}
     projectAddress={null} dict={dict.viewerNext} webglMessage={dict.viewer.webglFehler}/></LocaleProvider>));
   return { preparation: p.kind, modeled: {
     walls: model.walls.length, roofs: model.roofFaces.length, openings: model.openings.length,
   } };
 };
+w.inventoryColors = () => ({
+  walls: model.walls.map(part => ({ id: part.id, ...part.color })),
+  roofs: model.roofFaces.map(part => ({ id: part.id, ...part.color })),
+});
 w.observeRender = function(this: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.PerspectiveCamera) {
   live = { scene, camera, renderer: this };
   const gl = this.getContext();

@@ -66,7 +66,7 @@ export const deDE: Dictionary = {
     sortLabel: "Sortierung:",
     sortNeueste: "Neueste zuerst",
     sortAelteste: "Älteste zuerst",
-    thumbnailPlatzhalter: "3D-Modell-Vorschau",
+    thumbnailPlatzhalter: "Noch keine Fotos",
     kartenMenue: "Projekt-Menü öffnen",
     detailsOeffnen: "Projektdetails",
     showArchive: "Archiv anzeigen",
@@ -162,7 +162,7 @@ export const deDE: Dictionary = {
     messFehler: {
       titel: "Messung fehlgeschlagen",
       hinweis:
-        "Die letzte Messung hat kein gültiges Ergebnis geliefert. Prüfen Sie Ihre Dateien und starten Sie die Messung erneut.",
+        "Die letzte Messung hat kein gültiges Ergebnis geliefert. Prüfen Sie Ihre Dateien und starten Sie erneut. Ein neuer Versuch kostet 1 Credit.",
     },
     fehler: {
       typ: "Nur Fotos (JPG, PNG, HEIC) und Pläne als PDF sind erlaubt.",
@@ -471,6 +471,8 @@ export const deDE: Dictionary = {
   },
   viewerNext: {
     model3dPending: "3D-Modell wird erstellt …",
+    model3dPendingHint: "Das dauert normalerweise 1–3 Minuten. Die Messwerte rechts sind bereits endgültig.",
+    backToProjects: "Projekte",
     model3dUnavailable: "3D-Modell nicht verfügbar. Alle Werte im Panel stammen aus der Messung.",
     testHouse: "Testhaus",
     measurements: "Maße",

@@ -201,7 +201,7 @@ describe("viewer-next pure model", () => {
     expect(model.notes.length).toBeGreaterThan(0);
     expect(model.notes.some(note => note.includes("v1.5 export accepted"))).toBe(true);
     expect(model.notes.some(note => note.includes('Roof type "other"'))).toBe(true);
-    expect(model.walls.some(wall => wall.color.neutral)).toBe(true);
+    expect(model.walls.every(wall => !wall.color.neutral)).toBe(true);
     expect(model.massing.some(part => part.id === "SF-1" || part.id === "FC-1")).toBe(false);
     expect(model.notes.some(note => note.includes("SF-1") && note.includes("omitted"))).toBe(true);
     expect(model.notes.some(note => note.includes("FC-1") && note.includes("omitted"))).toBe(true);
@@ -211,7 +211,7 @@ describe("viewer-next pure model", () => {
     assertFiniteModel(model);
   });
 
-  it("degrades a required-fields-only measurement to neutral massing", () => {
+  it("degrades a required-fields-only measurement to material-colored massing", () => {
     const minimal = {
       meta: { country: "US", unit: "mm", schema_version: "1.7" },
       building: { roof_type: "other" },
@@ -228,8 +228,8 @@ describe("viewer-next pure model", () => {
 
     expect(model.massing.length).toBeGreaterThan(0);
     expect(model.notes.length).toBeGreaterThan(0);
-    expect(model.roofFaces[0]?.color.neutral).toBe(true);
-    expect(model.walls[0]?.color.neutral).toBe(true);
+    expect(model.roofFaces[0]?.color.hex).toBe("#4A4F55");
+    expect(model.walls[0]?.color.hex).toBe("#CFCBC3");
     expect(model.bounds.main.widthMm).toBeGreaterThan(0);
     assertFiniteModel(model);
   });
