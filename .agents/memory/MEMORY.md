@@ -11,3 +11,4 @@
 - [Live measurement verification](live-measurement-verification.md) — finish builds before paid runs; retain interrupted-run evidence and respect the authorized run count.
 - [Measurement vs. 3D extra](measurement-and-model-boundaries.md) — panel numbers/credits belong to measurement; untrusted buildHouse stays isolated and code/reports stay server-only.
 - [Public pages and reports](public-pages-and-reports.md) — reload across provider boundaries; printable HTML must exclude app/RSC billing context and reuse existing panel values.
+- [Dependency remediation boundaries](dependency-remediation.md) — preserve CommonJS storage transports when patching transitive dependencies; avoid unrelated framework migrations.
