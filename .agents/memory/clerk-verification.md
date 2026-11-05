@@ -27,3 +27,15 @@ authentication redirect or nonstaff 404.
 **How to apply:** Explicitly include protected route subtrees even when they
 contain file extensions. Verify the actual matcher and both anonymous and
 nonstaff responses, without removing staff authorization.
+
+A browser-SDK sign-out can still emit a Next-Action request for Clerk's cache
+invalidation. Its presence alone does not prove the application is using a
+server-side logout action.
+
+**Why:** A sign-out verification initially flagged a working client sign-out as
+failed because it observed a Server Action POST. Mapping the action to the active
+development manifest identified Clerk's cache invalidator, not application logout.
+
+**How to apply:** Identify the action using the active development manifest, not
+an older production build. Verify session clearance, full-page navigation and
+protected-route rejection rather than asserting that no Next-Action POST occurs.

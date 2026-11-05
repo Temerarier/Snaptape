@@ -4,10 +4,11 @@
 // Menü mit Link zum Testhaus-Viewer, Sprachumschalter (en-US/de-DE,
 // gespeichert am Nutzer) und Abmelden.
 import Link from "next/link";
+import { useClerk } from "@clerk/nextjs";
 import { useEffect, useRef, useState } from "react";
 import { LOCALES, type Locale } from "@/i18n";
 import { useDictionary, useLocale } from "@/i18n/LocaleProvider";
-import { logoutAction, setLocaleAction } from "@/lib/auth/actions";
+import { setLocaleAction } from "@/lib/auth/actions";
 
 function initialen(email: string): string {
   const lokal = email.split("@")[0] ?? "";
@@ -16,10 +17,28 @@ function initialen(email: string): string {
 
 export function UserMenu({ email }: { email: string }) {
   const [offen, setOffen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+  const [signOutFailed, setSignOutFailed] = useState(false);
+  const { signOut } = useClerk();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const anzeigeName = email.split("@")[0] ?? email;
   const dict = useDictionary();
   const locale = useLocale();
+
+  async function handleSignOut() {
+    if (signingOut) return;
+    setSigningOut(true);
+    setSignOutFailed(false);
+    try {
+      // Clear Clerk's browser session before leaving the authenticated shell.
+      // A document navigation also discards stale Next/Clerk provider state.
+      await signOut(() => window.location.assign("/"));
+    } catch {
+      setSignOutFailed(true);
+    } finally {
+      setSigningOut(false);
+    }
+  }
 
   const spracheLabel: Record<Locale, string> = {
     "en-US": dict.common.spracheEnglisch,
@@ -116,15 +135,17 @@ export function UserMenu({ email }: { email: string }) {
             </form>
           </div>
           <div className="mt-1 border-t border-linie pt-1">
-            <form action={logoutAction}>
               <button
-                type="submit"
+                type="button"
+                onClick={handleSignOut}
+                disabled={signingOut}
+                aria-busy={signingOut}
                 role="menuitem"
-                className="block w-full rounded-lg px-2.5 py-1.5 text-left text-sm text-schrift transition hover:bg-hintergrund"
+                className="block w-full rounded-lg px-2.5 py-1.5 text-left text-sm text-schrift transition hover:bg-hintergrund disabled:opacity-50"
               >
                 {dict.common.logout}
               </button>
-            </form>
+              {signOutFailed && <p role="alert" className="px-2.5 py-1.5 text-sm text-schrift-sekundaer">{dict.auth.errorGeneric}</p>}
           </div>
         </div>
       ) : null}

@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
-    "@clerk/localizations": "^4.24.2",
-    "@clerk/nextjs": "^7.9.21",
+    "@clerk/localizations": "^4.24.5",
+    "@clerk/nextjs": "^7.9.24",
     "@google-cloud/storage": "^7.14.0",
     "@workspace/db": "workspace:*",
     "@workspace/measurement": "workspace:*",
