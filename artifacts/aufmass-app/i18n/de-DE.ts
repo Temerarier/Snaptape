@@ -618,5 +618,24 @@ export const deDE: Dictionary = {
     noScale: "Kein Maßstab",
     photo: "Foto",
   },
+  publicMedia: {
+    device: {
+      eyebrow: "Auf jedem Gerät",
+      title: "Vor Ort fotografieren. Am Schreibtisch kalkulieren.",
+      text: "Dasselbe Projekt, dieselben Zahlen – auf dem Handy im Auto oder am großen Bildschirm im Büro.",
+    },
+    sources: {
+      title: "Fotos, Pläne – oder beides.",
+      items: [
+        { title: "Aus den Fotos Ihres Kunden", text: "Fünf bis zwölf Handyfotos von allen Seiten des Hauses. SnapTape misst Dach, Wände, Öffnungen und Verkleidung und baut ein 3D-Modell zum Drehen.", alt: "Vier Hausfotos, aus denen ein vermessenes 3D-Modell entsteht" },
+        { title: "Aus Bauplänen", text: "Grundrisse oder Ansichten vorhanden? PDF, Scan oder ein Foto vom Papierplan hochladen – Fotos vom Haus braucht es dann nicht.", alt: "Ein Grundriss auf Papier, aus dem ein vermessenes 3D-Modell entsteht" },
+        { title: "Fotos und Grundriss zusammen", text: "Beides kombinieren für das vollständigste Ergebnis. Alles in einem Rutsch hochladen, in beliebiger Reihenfolge – direkt vom Handy.", alt: "Fotos und ein Grundriss werden am Handy hochgeladen und anschließend vermessen" },
+      ],
+    },
+    result: {
+      caption: "3D-Modell drehen – oder einfach die Zahlen ins Angebot übernehmen.",
+      alt: "3D-Modell neben dem Messblatt",
+    },
+  },
   publicPages,
 };

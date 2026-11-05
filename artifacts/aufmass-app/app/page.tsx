@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/lib/auth/session";
 import { enUS } from "@/i18n/en-US";
 import { MEASUREMENT_DISCLAIMER } from "@/lib/config/haftung";
 import { PublicHeader, btnPrimary, btnSecondary } from "@/components/public/PublicHeader";
+import { MarketingVideo } from "@/components/public/MarketingVideo";
 
 const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/;
 
@@ -27,13 +28,12 @@ export default async function RootPage() {
 
   const t = enUS.publicPages;
   const email = supportEmail();
-  const c = t.hero.card;
-  const rows: [string, string][] = [
-    [c.facets, c.facetsValue],
-    [c.walls, c.wallsValue],
-    [c.windows, c.windowsValue],
-    [c.eaves, c.eavesValue],
-    [c.ridge, c.ridgeValue],
+  const M = "/marketing/";
+  const m = enUS.publicMedia;
+  const features = [
+    { src: "feature-01-photos-to-measurements_1793903234264.webp", w: 2400, h: 1350 },
+    { src: "feature-02-plans-to-measurements_1793903234265.webp", w: 2400, h: 1350 },
+    { src: "feature-03-photos-plus-plan-mobile_1793903234265.webp", w: 2400, h: 1500 },
   ];
 
   return (
@@ -42,7 +42,7 @@ export default async function RootPage() {
       <main className="overflow-x-clip">
         {/* Hero */}
         <section className="border-b border-linie">
-          <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1.15fr_0.85fr] md:items-center md:py-20">
+          <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[0.9fr_1.1fr] md:items-center md:py-20">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.14em] text-akzent">{t.hero.eyebrow}</p>
               <h1 className="mt-4 text-[2.1rem] font-semibold leading-[1.1] tracking-tight text-schrift md:text-5xl">{t.hero.title}</h1>
@@ -54,31 +54,45 @@ export default async function RootPage() {
               <p className="mt-5 font-mono text-xs text-schrift-tertiaer">{t.hero.small}</p>
             </div>
 
-            <figure aria-label={c.label} className="rounded-karte-gross border border-linie bg-flaeche shadow-karte">
-              <div className="flex items-center justify-between border-b border-linie px-5 py-3">
-                <span className="text-sm font-semibold text-schrift">{c.title}</span>
-                <span className="h-2 w-2 rounded-full bg-ok" aria-hidden="true" />
+            <div className="flex justify-center">
+              <MarketingVideo
+                className="aspect-[516/1032] max-h-[560px] w-full max-w-[280px]"
+                width={516}
+                height={1032}
+                poster={`${M}snaptape-hero-mobile-poster_1793903234264.jpg`}
+                webm={`${M}snaptape-hero-mobile_1793903234264.webm`}
+                mp4={`${M}snaptape-hero-mobile_1793903214097.mp4`}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* On any device */}
+        <section className="border-b border-linie bg-flaeche">
+          <div className="mx-auto max-w-6xl px-5 py-16">
+            <p className="font-mono text-xs uppercase tracking-[0.14em] text-akzent">{m.device.eyebrow}</p>
+            <h2 className={`mt-3 ${sectionTitle}`}>{m.device.title}</h2>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-schrift-sekundaer">{m.device.text}</p>
+            <div className="mt-10 overflow-hidden rounded-karte-gross border border-linie bg-flaeche shadow-karte">
+              <div aria-hidden="true" className="flex h-9 items-center gap-1.5 border-b border-linie bg-hintergrund px-4">
+                <span className="h-2.5 w-2.5 rounded-full bg-linie" />
+                <span className="h-2.5 w-2.5 rounded-full bg-linie" />
+                <span className="h-2.5 w-2.5 rounded-full bg-linie" />
               </div>
-              <div className="px-5 pt-5">
-                <div className="rounded-karte border-l-[3px] border-viewer-roof bg-hintergrund px-4 py-3">
-                  <div className="text-xs uppercase tracking-wide text-schrift-tertiaer">{c.roof}</div>
-                  <div className="mt-1 font-mono text-3xl font-semibold text-schrift">{c.roofValue}</div>
-                </div>
-              </div>
-              <dl className="divide-y divide-linie px-5 py-3">
-                {rows.map(([k, v]) => (
-                  <div key={k} className="flex items-baseline justify-between gap-4 py-2.5">
-                    <dt className="text-sm text-schrift-sekundaer">{k}</dt>
-                    <dd className="font-mono text-sm font-medium text-schrift">{v}</dd>
-                  </div>
-                ))}
-              </dl>
-            </figure>
+              <MarketingVideo
+                className="aspect-[1512/736] w-full"
+                width={1512}
+                height={736}
+                poster={`${M}snaptape-hero-desktop-poster_1793903234264.jpg`}
+                webm={`${M}snaptape-hero-desktop_1793903234264.webm`}
+                mp4={`${M}snaptape-hero-desktop_1793903234264.mp4`}
+              />
+            </div>
           </div>
         </section>
 
         {/* How it works */}
-        <section id="how-it-works" className="scroll-mt-20 border-b border-linie bg-flaeche">
+        <section id="how-it-works" className="scroll-mt-20 border-b border-linie">
           <div className="mx-auto max-w-6xl px-5 py-16">
             <h2 className={sectionTitle}>{t.how.title}</h2>
             <ol className="mt-10 grid gap-8 md:grid-cols-3 md:gap-0 md:divide-x md:divide-linie">
@@ -93,10 +107,54 @@ export default async function RootPage() {
           </div>
         </section>
 
+        {/* Photos, plans – or both */}
+        <section className="border-b border-linie bg-flaeche">
+          <div className="mx-auto max-w-6xl px-5 py-16">
+            <h2 className={sectionTitle}>{m.sources.title}</h2>
+            <ul className="mt-10 space-y-14 md:space-y-20">
+              {m.sources.items.map((it, i) => {
+                const f = features[i];
+                return (
+                  <li key={f.src} className={`grid gap-6 md:items-center md:gap-12 ${i % 2 === 1 ? "md:grid-cols-[2fr_3fr]" : "md:grid-cols-[3fr_2fr]"}`}>
+                    <img
+                      src={`${M}${f.src}`}
+                      alt={it.alt}
+                      width={f.w}
+                      height={f.h}
+                      loading="lazy"
+                      decoding="async"
+                      style={{ aspectRatio: `${f.w} / ${f.h}` }}
+                      className={`block h-auto w-full rounded-karte-gross border border-linie ${i % 2 === 1 ? "md:order-2" : ""}`}
+                    />
+                    <div className={i % 2 === 1 ? "md:order-1" : ""}>
+                      <span className="font-mono text-sm text-akzent">{String(i + 1).padStart(2, "0")}</span>
+                      <h3 className="mt-2 text-lg font-semibold text-schrift md:text-xl">{it.title}</h3>
+                      <p className="mt-3 text-[15px] leading-7 text-schrift-sekundaer">{it.text}</p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </section>
+
         {/* What you get */}
         <section id="see-what-you-get" className="scroll-mt-20 border-b border-linie">
           <div className="mx-auto max-w-6xl px-5 py-16">
             <h2 className={sectionTitle}>{t.get.title}</h2>
+            <figure className="mt-10">
+              <img
+                src={`${M}feature-04-3d-model-or-numbers-only_1793903234265.webp`}
+                alt={m.result.alt}
+                width={2400}
+                height={1500}
+                loading="lazy"
+                decoding="async"
+                style={{ aspectRatio: "2400 / 1500" }}
+                className="block h-auto w-full rounded-karte-gross border border-linie"
+              />
+              <figcaption className="mt-3 text-sm text-schrift-sekundaer">{m.result.caption}</figcaption>
+            </figure>
             <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {t.get.items.map((it, i) => {
                 const isModel = i === t.get.items.length - 1;

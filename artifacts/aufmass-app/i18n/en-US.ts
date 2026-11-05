@@ -605,6 +605,25 @@ export const enUS = {
     noScale: "No scale",
     photo: "Photo",
   },
+  publicMedia: {
+    device: {
+      eyebrow: "On any device",
+      title: "Snap it on site. Quote it at your desk.",
+      text: "Same project, same numbers – on your phone in the truck or on the big screen in the office.",
+    },
+    sources: {
+      title: "Photos, plans – or both.",
+      items: [
+        { title: "From your customer's photos", text: "Five to twelve phone photos covering every side of the house. SnapTape measures roof, walls, openings and trim, and builds a 3D model you can rotate.", alt: "Four house photos turned into a measured 3D model" },
+        { title: "From building plans", text: "Have floor plans or elevations? Upload the PDF, a scan or a photo of the paper plan – no site photos needed.", alt: "A paper floor plan turned into a measured 3D model" },
+        { title: "Photos and a floor plan together", text: "Combine both for the most complete result. Upload everything in one go, in any order – right from your phone.", alt: "Photos and a floor plan uploaded on a phone, then measured" },
+      ],
+    },
+    result: {
+      caption: "Rotate the 3D model – or just copy the numbers into your quote.",
+      alt: "3D model next to the measurement sheet",
+    },
+  },
   publicPages,
 };
 
