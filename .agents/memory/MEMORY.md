@@ -13,3 +13,4 @@
 - [Public pages and reports](public-pages-and-reports.md) — reload across provider boundaries; printable HTML must exclude app/RSC billing context and reuse existing panel values.
 - [Dependency remediation boundaries](dependency-remediation.md) — preserve CommonJS storage transports when patching transitive dependencies; avoid unrelated framework migrations.
 - [Correlated Drizzle queries](drizzle-correlated-subqueries.md) — single-table selects can strip outer Column qualifiers; test the complete SELECT and use explicit outer identifiers.
+- [Trial credit policy](trial-credit-policy.md) — new accounts only; no retroactive grants; daily allocation and staff counter use UTC days.

@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { and, eq, isNull, sql } from "drizzle-orm";
 import { db, usersTable, type User } from "@workspace/db";
+import { grantNewUserTrial } from "../credits/trial";
 
 export interface AuthProfile {
   id: string; email: string | null; firstName: string | null; lastName: string | null; sessionId: string;
@@ -34,6 +35,7 @@ export async function upsertAuthUser(profile: AuthProfile): Promise<User> {
     const [created] = await tx.insert(usersTable).values({
       ...values, lastLoginAt: new Date(), lastAuthSessionId: profile.sessionId,
     }).returning();
+    await grantNewUserTrial(tx, created!.id);
     return created!;
   });
 }

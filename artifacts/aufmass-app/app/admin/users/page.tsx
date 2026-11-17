@@ -6,12 +6,14 @@ import { ladeNutzerUebersicht } from "@/lib/credits/admin";
 import { formatAuditCost } from "@/lib/admin/model3d";
 import { StaffCreditsForm } from "@/components/credits/StaffCreditsForm";
 import Link from "next/link";
+import { trialStatus } from "@/lib/credits/trial";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminUsersPage() {
   const staff = await requireStaff();
   const nutzer = await ladeNutzerUebersicht();
+  const trial = await trialStatus();
   const locale = toLocale(staff.locale);
   const t = getDictionary(locale).admin.users;
   const a = getDictionary(locale).admin.model3d;
@@ -26,6 +28,9 @@ export default async function AdminUsersPage() {
     <main className="mx-auto max-w-6xl px-6 py-8">
       <h1 className="text-3xl font-bold tracking-tight text-schrift">{t.title}</h1>
       <p className="mt-1 text-sm text-schrift-sekundaer">{t.subtitle}</p>
+      <p className="mt-3 text-sm text-schrift-sekundaer">
+        {t.trialToday.replace("{count}", String(trial.granted)).replace("{limit}", String(trial.limit))}
+      </p>
 
       {nutzer.length === 0 ? (
         <div className="mt-8 rounded-karte border border-dashed border-linie bg-flaeche px-6 py-12 text-center text-schrift-sekundaer">

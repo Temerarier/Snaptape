@@ -391,6 +391,7 @@ export const deDE: Dictionary = {
     users: {
       title: "Nutzer",
       subtitle: "Alle Konten mit Credits, Messungen, geschätzten KI-Kosten und Buchungen.",
+      trialToday: "Heute vergebene kostenlose Test-Credits: {count} / {limit}",
       navLink: "Nutzer",
       leer: "Noch keine Nutzer.",
       spalten: {

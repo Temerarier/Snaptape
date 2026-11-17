@@ -13,24 +13,30 @@ vi.mock("@workspace/db", () => ({
   }) },
 }));
 import { upsertAuthUser } from "./session";
+import { grantNewUserTrial } from "../credits/trial";
+vi.mock("../credits/trial", () => ({ grantNewUserTrial: vi.fn() }));
 const profile = { id: "user_clerk", email: "TRIAL@EXAMPLE.COM", firstName: "Trial", lastName: null, sessionId: "session" };
-beforeEach(() => { m.existing = []; m.attached = []; m.updates.mockReset(); m.inserts.mockReset(); });
+beforeEach(() => { m.existing = []; m.attached = []; m.updates.mockReset(); m.inserts.mockReset(); vi.mocked(grantNewUserTrial).mockReset(); });
 describe("Clerk to local user bridge", () => {
   it("maps external ID and login time on first signup", async () => {
     await upsertAuthUser(profile);
     expect(m.inserts).toHaveBeenCalledWith(expect.objectContaining({
       email: "trial@example.com", replitUserId: "user_clerk", lastLoginAt: expect.any(Date), lastAuthSessionId: "session",
     }));
+    expect(grantNewUserTrial).toHaveBeenCalledOnce();
+    expect(grantNewUserTrial).toHaveBeenCalledWith(expect.anything(), "new");
   });
   it("attaches the verified old email row without a duplicate", async () => {
     m.attached = [{ id: "old" }];
     expect(await upsertAuthUser(profile)).toEqual({ id: "old" });
     expect(m.inserts).not.toHaveBeenCalled();
+    expect(grantNewUserTrial).not.toHaveBeenCalled();
     expect(m.updates).toHaveBeenCalledWith(expect.objectContaining({ replitUserId: "user_clerk", lastLoginAt: expect.any(Date) }));
   });
   it("updates login time for a new session", async () => {
     m.existing = [{ id: "old", lastAuthSessionId: "previous" }]; m.attached = [{ id: "old" }];
     await upsertAuthUser(profile);
     expect(m.updates).toHaveBeenCalledWith(expect.objectContaining({ lastLoginAt: expect.any(Date) }));
+    expect(grantNewUserTrial).not.toHaveBeenCalled();
   });
 });

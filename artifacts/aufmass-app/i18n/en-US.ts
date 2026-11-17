@@ -380,6 +380,7 @@ export const enUS = {
     users: {
       title: "Users",
       subtitle: "All accounts with credits, measurements, estimated AI costs and ledger.",
+      trialToday: "Free trial credits granted today: {count} / {limit}",
       navLink: "Users",
       leer: "No users yet.",
       spalten: {

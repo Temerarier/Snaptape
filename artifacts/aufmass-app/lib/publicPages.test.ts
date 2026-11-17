@@ -24,7 +24,8 @@ describe("public trial pages", () => {
     expect(html).toContain('id="pricing"');
     expect(html).toContain('id="faq"');
     expect(html.match(/<details\b/g)).toHaveLength(7);
-    expect(html).not.toMatch(/<canvas|<img|<script|typical accuracy|laser|newsletter/i);
+    expect(html).not.toMatch(/<canvas|<script|typical accuracy|laser|newsletter/i);
+    expect(html).toContain("/marketing/feature-01-photos-to-measurements");
   });
   it("redirects signed-in users to the existing app", async () => {
     vi.mocked(getCurrentUser).mockResolvedValue({ id: "existing-user" } as NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>);
