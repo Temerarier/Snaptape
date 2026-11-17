@@ -12,12 +12,12 @@ limit. Nothing about this global cap is exposed to customers.
 
 The existing per-identity transaction lock prevents simultaneous first logins
 from creating two accounts. A separate global transaction lock serializes the
-daily count and trial booking across processes. A partial unique index additionally
-allows only one trial ledger entry per user. The user and credit commit together.
+daily count and trial booking across processes. Only the transaction that creates
+the user books the trial credit. The user and credit commit together.
 
 ## Publishing
 
-The Drizzle schema adds the `trial_grant` enum value and the partial unique index.
+The Drizzle schema adds the `trial_grant` enum value without an index that uses it.
 Apply it to development with `pnpm --filter @workspace/db run push`.
 Replit's normal Publish flow compares the managed development and production
 schemas and applies this additive schema change to production when publishing.

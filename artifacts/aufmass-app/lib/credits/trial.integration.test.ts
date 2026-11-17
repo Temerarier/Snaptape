@@ -34,8 +34,10 @@ describe.skipIf(!enabled)("trial grants against real PostgreSQL", () => {
     expect(new Set(results.map(r => r.id)).size).toBe(1);
     const user = results[0]!;
     expect(await holeGuthaben(user.id)).toBe(1);
-    const [grant] = await db.select().from(creditLedgerTable).where(eq(creditLedgerTable.userId, user.id));
-    expect(grant).toMatchObject({ reason: "trial_grant", delta: 1, note: "free trial" });
+    await upsertAuthUser({ ...first, sessionId: `${first.sessionId}-next-login` });
+    const grants = await db.select().from(creditLedgerTable).where(eq(creditLedgerTable.userId, user.id));
+    expect(grants).toHaveLength(1);
+    expect(grants[0]).toMatchObject({ reason: "trial_grant", delta: 1, note: "free trial" });
 
     const old = profile();
     await db.insert(usersTable).values({ email: old.email, replitUserId: old.id });

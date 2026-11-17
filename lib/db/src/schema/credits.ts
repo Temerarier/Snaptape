@@ -23,7 +23,6 @@ export const creditLedgerTable = pgTable("credit_ledger", {
   index("credit_ledger_user_created_idx").on(t.userId, t.createdAt),
   // A charge can be refunded once, even across concurrent sweep/finalizer requests.
   uniqueIndex("credit_refund_charge_unique").on(t.refundOf),
-  uniqueIndex("credit_trial_user_unique").on(t.userId).where(sql`${t.reason} = 'trial_grant'`),
 ]);
 
 export type CreditReason = typeof creditReasonEnum.enumValues[number];
